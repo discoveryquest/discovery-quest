@@ -1,0 +1,3529 @@
+course:
+  formatVersion: 1
+  id: math
+  title: Luna's Math Quest
+  subject: Mathematics
+  companion: luna
+  voice:
+    id: jessica
+    profile: teaching-slow
+  engine: ">=1.0"
+  worlds:
+    - id: number-meadow
+      title: Number Meadow
+      emoji: 🌼
+      color: "#4ADE80"
+      stations:
+        - id: nm-counting
+          title: Counting
+          icon: 🔢
+          board: counting
+          bands:
+            - 0
+            - 2
+          lesson: counting
+          concept: counting
+        - id: nm-compare
+          title: Bigger or Smaller
+          icon: ⚖️
+          board: compare
+          bands:
+            - 0
+            - 2
+          lesson: compare
+          concept: compare-numbers
+        - id: nm-bonds10
+          title: Friends of 10
+          icon: 🤝
+          board: bonds
+          bands:
+            - 0
+            - 2
+          lesson: bonds
+          concept: bonds
+        - id: nm-add20
+          title: Adding to 20
+          icon: ➕
+          board: fact-add
+          bands:
+            - 0
+            - 2
+          lesson: addition
+          concept: addition
+        - id: nm-sub20
+          title: Taking Away
+          icon: ➖
+          board: fact-sub
+          bands:
+            - 0
+            - 2
+          lesson: subtraction
+          concept: subtraction
+    - id: place-value-peaks
+      title: Place Value Peaks
+      emoji: 🏔️
+      color: "#22D3EE"
+      stations:
+        - id: pv-tens-ones
+          title: Tens & Ones
+          icon: 🧱
+          board: tens-ones
+          bands:
+            - 0
+            - 1
+          lesson: place-value
+          concept: place-value
+        - id: pv-hundreds
+          title: Hundreds
+          icon: 💯
+          board: tens-ones
+          bands:
+            - 2
+            - 2
+          lesson: hundreds
+          concept: place-value
+        - id: pv-2digit
+          title: Two-Digit + and −
+          icon: 🔣
+          board: twodigit-nr
+          bands:
+            - 0
+            - 2
+          lesson: addition
+          concept: addition
+        - id: pv-skip
+          title: Skip Counting
+          icon: 🦘
+          board: skip
+          bands:
+            - 0
+            - 2
+          lesson: skip-counting
+          concept: skip-counting
+        - id: pv-evenodd
+          title: Even or Odd
+          icon: 🎭
+          board: even-odd
+          bands:
+            - 0
+            - 2
+          lesson: even-odd
+          concept: even-odd
+    - id: carry-canyon
+      title: Carry Canyon
+      emoji: 🏜️
+      color: "#FFE066"
+      stations:
+        - id: cc-add
+          title: Long Addition
+          icon: ➕
+          board: long-add
+          bands:
+            - 0
+            - 2
+          lesson: long-add
+          concept: addition
+        - id: cc-sub
+          title: Long Subtraction
+          icon: ➖
+          board: long-sub
+          bands:
+            - 0
+            - 2
+          lesson: long-sub
+          concept: subtraction
+        - id: cc-round
+          title: Rounding
+          icon: 🎯
+          board: rounding
+          bands:
+            - 0
+            - 2
+          lesson: rounding
+          concept: rounding
+        - id: cc-words
+          title: Story Problems
+          icon: 📖
+          board: word-1step
+          bands:
+            - 0
+            - 2
+          lesson: word-problems
+          concept: word-problems
+    - id: times-table-trail
+      title: Times Table Trail
+      emoji: 🛤️
+      color: "#FB923C"
+      stations:
+        - id: tt-concept
+          title: Groups & Arrays
+          icon: 🟪
+          board: mul-concept
+          bands:
+            - 0
+            - 2
+          lesson: multiply
+          concept: multiply
+        - id: tt-2510
+          title: Tables 2, 5, 10
+          icon: ✌️
+          board: tables
+          bands:
+            - 0
+            - 0
+          lesson: times-2510
+          concept: multiply
+        - id: tt-346
+          title: Tables 3, 4, 6
+          icon: 🎲
+          board: tables
+          bands:
+            - 1
+            - 1
+          lesson: times-346
+          concept: multiply
+        - id: tt-789
+          title: Tables 7, 8, 9
+          icon: 🎪
+          board: tables
+          bands:
+            - 2
+            - 2
+          lesson: times-789
+          concept: multiply
+        - id: tt-divfacts
+          title: Division Facts
+          icon: ➗
+          board: div-facts
+          bands:
+            - 0
+            - 2
+          lesson: division
+          concept: division
+    - id: multiplication-mountain
+      title: Multiplication Mountain
+      emoji: ⛰️
+      color: "#A78BFA"
+      stations:
+        - id: mm-mul1
+          title: Multiply ×1 Digit
+          icon: ✖️
+          board: long-mul
+          bands:
+            - 0
+            - 1
+          lesson: long-multiply
+          concept: multiply
+        - id: mm-mul2
+          title: Multiply ×2 Digits
+          icon: 🧮
+          board: long-mul
+          bands:
+            - 2
+            - 2
+          lesson: long-multiply2
+          concept: multiply
+        - id: mm-div
+          title: Long Division
+          icon: ➗
+          board: long-div
+          bands:
+            - 0
+            - 2
+          lesson: long-division
+          concept: division
+        - id: mm-multi
+          title: Multi-Step Puzzles
+          icon: 🧩
+          board: word-2step
+          bands:
+            - 0
+            - 2
+          lesson: word-problems
+          concept: word-problems
+    - id: fraction-forest
+      title: Fraction Forest
+      emoji: 🌳
+      color: "#4ADE80"
+      stations:
+        - id: ff-concept
+          title: What is a Fraction?
+          icon: 🍕
+          board: frac-concept
+          bands:
+            - 0
+            - 2
+          lesson: fractions
+          concept: fractions
+        - id: ff-equiv
+          title: Equivalent Fractions
+          icon: 🪞
+          board: frac-equiv
+          bands:
+            - 0
+            - 2
+          lesson: equivalent-fractions
+          concept: equivalent-fractions
+        - id: ff-compare
+          title: Compare Fractions
+          icon: ⚖️
+          board: frac-compare
+          bands:
+            - 0
+            - 2
+          lesson: compare-fractions
+          concept: compare-fractions
+        - id: ff-addlike
+          title: Add Alike Fractions
+          icon: ➕
+          board: frac-addlike
+          bands:
+            - 0
+            - 2
+          lesson: add-fractions
+          concept: add-fractions
+        - id: ff-addunlike
+          title: Mixed Denominators
+          icon: 🔀
+          board: frac-unlike
+          bands:
+            - 0
+            - 2
+          lesson: add-fractions
+          concept: add-fractions
+        - id: ff-mixed
+          title: Mixed Numbers
+          icon: 🥪
+          board: frac-mixed
+          bands:
+            - 0
+            - 2
+          lesson: mixed-numbers
+          concept: fractions
+        - id: ff-mulwhole
+          title: Fraction × Whole
+          icon: ✖️
+          board: frac-mulwhole
+          bands:
+            - 0
+            - 2
+          lesson: frac-times-whole
+          concept: fractions
+    - id: decimal-docks
+      title: Decimal Docks
+      emoji: ⚓
+      color: "#22D3EE"
+      stations:
+        - id: dd-place
+          title: Decimal Places
+          icon: 🔬
+          board: dec-place
+          bands:
+            - 0
+            - 2
+          lesson: decimal-place
+          concept: decimal-place
+        - id: dd-compare
+          title: Compare Decimals
+          icon: ⚖️
+          board: dec-compare
+          bands:
+            - 0
+            - 2
+          lesson: compare-decimals
+          concept: compare-decimals
+        - id: dd-addsub
+          title: Add & Subtract
+          icon: ➕
+          board: dec-addsub
+          bands:
+            - 0
+            - 2
+          lesson: add-decimals
+          concept: add-decimals
+        - id: dd-pow10
+          title: × and ÷ by 10, 100
+          icon: 🚀
+          board: dec-pow10
+          bands:
+            - 0
+            - 2
+          lesson: decimal-pow10
+          concept: decimal-pow10
+        - id: dd-mulwhole
+          title: Decimal × Whole
+          icon: ✖️
+          soon: true
+        - id: dd-convert
+          title: Fractions ↔ Decimals
+          icon: 🔁
+          board: dec-convert
+          bands:
+            - 0
+            - 2
+          lesson: decimal-place
+          concept: decimal-place
+    - id: measure-marsh
+      title: Measure Marsh
+      emoji: 📏
+      color: "#F472B6"
+      stations:
+        - id: ms-money
+          title: Money & Change
+          icon: 💰
+          board: money
+          bands:
+            - 0
+            - 2
+          lesson: money
+          concept: money
+        - id: ms-time
+          title: Telling Time
+          icon: 🕒
+          board: time
+          bands:
+            - 0
+            - 2
+          lesson: time
+          concept: time
+        - id: ms-elapsed
+          title: Elapsed Time
+          icon: ⏳
+          board: elapsed
+          bands:
+            - 0
+            - 2
+          lesson: elapsed
+          concept: elapsed
+        - id: ms-units
+          title: Length & Weight
+          icon: ⚖️
+          board: units
+          bands:
+            - 0
+            - 2
+          lesson: units
+          concept: units
+        - id: ms-convert
+          title: Unit Conversions
+          icon: 🔁
+          board: unit-convert
+          bands:
+            - 0
+            - 2
+          lesson: units
+          concept: units
+    - id: geometry-galaxy
+      title: Geometry Galaxy
+      emoji: 🌌
+      color: "#A78BFA"
+      stations:
+        - id: gg-shapes
+          title: Name the Shapes
+          icon: 🔷
+          board: shapes
+          bands:
+            - 0
+            - 2
+          lesson: shapes
+          concept: shapes
+        - id: gg-symmetry
+          title: Symmetry
+          icon: 🦋
+          board: symmetry
+          bands:
+            - 0
+            - 2
+          lesson: symmetry
+          concept: symmetry
+        - id: gg-angles
+          title: Angles
+          icon: 📐
+          board: angles
+          bands:
+            - 0
+            - 2
+          lesson: angles
+          concept: angles
+        - id: gg-perimeter
+          title: Perimeter
+          icon: 🧵
+          board: perimeter
+          bands:
+            - 0
+            - 2
+          lesson: perimeter
+          concept: perimeter
+        - id: gg-area
+          title: Area
+          icon: 🟩
+          board: area
+          bands:
+            - 0
+            - 2
+          lesson: area
+          concept: area
+        - id: gg-volume
+          title: Volume
+          icon: 📦
+          board: volume
+          bands:
+            - 0
+            - 2
+          lesson: volume
+          concept: volume
+    - id: word-problem-wilds
+      title: Word Problem Wilds
+      emoji: 🦁
+      color: "#FB923C"
+      stations:
+        - id: wp-onestep
+          title: One-Step Stories
+          icon: 📗
+          board: word-1step
+          bands:
+            - 1
+            - 2
+          concept: word-problems
+        - id: wp-twostep
+          title: Two-Step Stories
+          icon: 📘
+          board: word-2step
+          bands:
+            - 0
+            - 2
+          concept: word-problems
+        - id: wp-master
+          title: Grand Challenge
+          icon: 🏆
+          board: word-master
+          bands:
+            - 0
+            - 2
+          concept: word-problems
+  lessons:
+    counting:
+      title: Counting
+      sections:
+        - id: what
+          label: What counting is
+          beats:
+            - say: lcount-intro
+              caption: Counting is how we find out how many. Let's count these apples together!
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: -1
+        - id: count5
+          label: Count to 5
+          beats:
+            - say: lc-1
+              caption: One.
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: 0
+            - say: lc-2
+              caption: Two.
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: 1
+            - say: lc-3
+              caption: Three.
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: 2
+            - say: lc-4
+              caption: Four.
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: 3
+            - say: lc-5
+              caption: Five!
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: 4
+        - id: idea
+          label: How many?
+          beats:
+            - say: lcount-howmany
+              caption: The last number we say tells us how many. There are five apples!
+              view:
+                kind: objects
+                key: apples
+                emoji: 🍎
+                "n": 5
+                highlight: 4
+                numeral: 5
+        - id: again
+          label: Try again
+          beats:
+            - say: lcount-again
+              caption: Let's try again. Count these stars.
+              view:
+                kind: objects
+                key: stars
+                emoji: ⭐
+                "n": 3
+                highlight: -1
+            - say: lc-1
+              caption: One.
+              view:
+                kind: objects
+                key: stars
+                emoji: ⭐
+                "n": 3
+                highlight: 0
+            - say: lc-2
+              caption: Two.
+              view:
+                kind: objects
+                key: stars
+                emoji: ⭐
+                "n": 3
+                highlight: 1
+            - say: lc-3
+              caption: Three.
+              view:
+                kind: objects
+                key: stars
+                emoji: ⭐
+                "n": 3
+                highlight: 2
+            - say: lcount-three
+              caption: Three stars! Count each one, and the last number is how many.
+              view:
+                kind: objects
+                key: stars
+                emoji: ⭐
+                "n": 3
+                highlight: 2
+                numeral: 3
+        - id: go
+          label: Your turn
+          beats:
+            - say: lcount-star
+              caption: You're a counting star! Tap Play and count some yourself.
+              view:
+                kind: objects
+                key: go
+                emoji: 🌟
+                "n": 5
+                highlight: 4
+    compare:
+      title: Bigger or Smaller
+      sections:
+        - id: intro
+          label: Compare
+          beats:
+            - say: lcmp-1
+              caption: Sometimes we want to know which group has more. Let's compare two plates of cookies!
+              view:
+                kind: compare
+                key: cookies
+                emoji: 🍪
+                left: 3
+                right: 5
+            - say: lcmp-2
+              caption: This plate has three cookies. This one has five.
+              view:
+                kind: compare
+                key: cookies
+                emoji: 🍪
+                left: 3
+                right: 5
+            - say: lcmp-3
+              caption: Five is more than three — see how this side is taller?
+              view:
+                kind: compare
+                key: cookies
+                emoji: 🍪
+                left: 3
+                right: 5
+        - id: sign
+          label: The sign
+          beats:
+            - say: lcmp-4
+              caption: >-
+                We show it with this sign. Think of it as a hungry mouth that always opens to eat
+                the bigger number. Chomp!
+              view:
+                kind: compare
+                key: cookies
+                emoji: 🍪
+                left: 3
+                right: 5
+                sign: <
+            - say: lcmp-5
+              caption: So three is less than five.
+              view:
+                kind: compare
+                key: cookies
+                emoji: 🍪
+                left: 3
+                right: 5
+                sign: <
+        - id: equal
+          label: Equal
+          beats:
+            - say: lcmp-6
+              caption: What if both sides are the same? Here are four and four.
+              view:
+                kind: compare
+                key: apples
+                emoji: 🍎
+                left: 4
+                right: 4
+            - say: lcmp-7
+              caption: When they match, we use the equals sign.
+              view:
+                kind: compare
+                key: apples
+                emoji: 🍎
+                left: 4
+                right: 4
+                sign: "="
+        - id: other
+          label: Other way
+          beats:
+            - say: lcmp-8
+              caption: And here, six is more than two, so the mouth opens the other way.
+              view:
+                kind: compare
+                key: berries
+                emoji: 🫐
+                left: 6
+                right: 2
+                sign: ">"
+        - id: go
+          label: Your turn
+          beats:
+            - say: lcmp-9
+              caption: "Remember: the open mouth always points at the bigger number. Now you try!"
+              view:
+                kind: compare
+                key: berries
+                emoji: 🫐
+                left: 6
+                right: 2
+                sign: ">"
+    bonds:
+      title: Friends of 10
+      sections:
+        - id: what
+          label: Ten-frame
+          beats:
+            - say: lbnd-1
+              caption: >-
+                Friends of ten are two numbers that add up to exactly ten. Here is a ten-frame — ten
+                little boxes.
+              view:
+                kind: tenframe
+                key: tf0
+                filled: 0
+                showEq: false
+        - id: six
+          label: Six
+          beats:
+            - say: lbnd-2
+              caption: Let's drop in six counters.
+              view:
+                kind: tenframe
+                key: tf6
+                filled: 6
+            - say: lbnd-3
+              caption: "Now count the empty boxes: one, two, three, four. Four are left!"
+              view:
+                kind: tenframe
+                key: tf6
+                filled: 6
+            - say: lbnd-4
+              caption: Six and four make ten. They are friends of ten!
+              view:
+                kind: tenframe
+                key: tf6
+                filled: 6
+        - id: seven
+          label: Seven
+          beats:
+            - say: lbnd-5
+              caption: Let's find another pair. This time we put in seven.
+              view:
+                kind: tenframe
+                key: tf7
+                filled: 7
+            - say: lbnd-6
+              caption: Three empty boxes. So seven and three make ten too.
+              view:
+                kind: tenframe
+                key: tf7
+                filled: 7
+        - id: two
+          label: Two
+          beats:
+            - say: lbnd-7
+              caption: One more — just two counters.
+              view:
+                kind: tenframe
+                key: tf2
+                filled: 2
+            - say: lbnd-8
+              caption: Eight empty boxes. Two and eight are friends of ten!
+              view:
+                kind: tenframe
+                key: tf2
+                filled: 2
+        - id: go
+          label: Your turn
+          beats:
+            - say: lbnd-9
+              caption: Every pair that fills the whole frame is a friend of ten. Now you try!
+              view:
+                kind: tenframe
+                key: tf10
+                filled: 10
+                showEq: false
+    addition:
+      title: Adding to 20
+      sections:
+        - id: together
+          label: Put together
+          beats:
+            - say: ladd-1
+              caption: Adding means putting groups together to find how many there are in all.
+              view:
+                kind: combine
+                key: c43
+                a: 4
+                b: 3
+            - say: ladd-2
+              caption: Four blocks and three blocks, pushed together, make seven.
+              view:
+                kind: combine
+                key: c43
+                a: 4
+                b: 3
+        - id: bigger
+          label: A bigger one
+          beats:
+            - say: ladd-3
+              caption: "Let's try a bigger one: eight blocks and five blocks."
+              view:
+                kind: combine
+                key: c85
+                a: 8
+                b: 5
+            - say: ladd-4
+              caption: Altogether that is thirteen.
+              view:
+                kind: combine
+                key: c85
+                a: 8
+                b: 5
+        - id: counton
+          label: Count on
+          beats:
+            - say: ladd-5
+              caption: There is another way — counting on. Start at nine and hop up four.
+              view:
+                kind: numberline
+                key: nl
+                hint:
+                  kind: numberline
+                  start: 9
+                  op: add
+                  delta: 4
+            - say: ladd-6
+              caption: Ten, eleven, twelve, thirteen. Nine plus four is thirteen!
+              view:
+                kind: numberline
+                key: nl
+                hint:
+                  kind: numberline
+                  start: 9
+                  op: add
+                  delta: 4
+        - id: go
+          label: Your turn
+          beats:
+            - say: ladd-7
+              caption: Put together, or count on — both find the total. Your turn!
+              view:
+                kind: big
+                key: plus
+                text: ➕
+                color: "#22d3ee"
+    subtraction:
+      title: Taking Away
+      sections:
+        - id: takeaway
+          label: Take away
+          beats:
+            - say: lsub-1
+              caption: Subtracting means taking some away and seeing what is left.
+              view:
+                kind: takeaway
+                key: t83
+                a: 8
+                b: 3
+            - say: lsub-2
+              caption: Eight blocks, take away three, and five are left.
+              view:
+                kind: takeaway
+                key: t83
+                a: 8
+                b: 3
+        - id: another
+          label: Another
+          beats:
+            - say: lsub-3
+              caption: "Another one: ten blocks, take away four."
+              view:
+                kind: takeaway
+                key: t104
+                a: 10
+                b: 4
+            - say: lsub-4
+              caption: Six are left. Ten minus four is six.
+              view:
+                kind: takeaway
+                key: t104
+                a: 10
+                b: 4
+        - id: hopback
+          label: Hop back
+          beats:
+            - say: lsub-5
+              caption: We can also hop backward. Start at twelve and hop back five.
+              view:
+                kind: numberline
+                key: nl
+                hint:
+                  kind: numberline
+                  start: 12
+                  op: sub
+                  delta: 5
+            - say: lsub-6
+              caption: Eleven, ten, nine, eight, seven. Twelve minus five is seven!
+              view:
+                kind: numberline
+                key: nl
+                hint:
+                  kind: numberline
+                  start: 12
+                  op: sub
+                  delta: 5
+        - id: go
+          label: Your turn
+          beats:
+            - say: lsub-7
+              caption: Take away, or hop back — both show what is left. You try!
+              view:
+                kind: big
+                key: minus
+                text: ➖
+                color: "#fb923c"
+    place-value:
+      title: Tens & Ones
+      sections:
+        - id: build
+          label: Build 23
+          beats:
+            - say: lpv-1
+              caption: Big numbers are built from tens and ones. Let's build twenty-three.
+              view:
+                kind: baseten
+                key: bt23
+                t: 2
+                o: 3
+            - say: lpv-2
+              caption: Two tall ten-rods make twenty, and three little ones make three.
+              view:
+                kind: baseten
+                key: bt23
+                t: 2
+                o: 3
+            - say: lpv-3
+              caption: Two tens and three ones — that's twenty-three!
+              view:
+                kind: baseten
+                key: bt23
+                t: 2
+                o: 3
+        - id: forty
+          label: Forty
+          beats:
+            - say: lpv-4
+              caption: Let's build forty. Four ten-rods, and no ones at all.
+              view:
+                kind: baseten
+                key: bt40
+                t: 4
+                o: 0
+            - say: lpv-5
+              caption: Four tens is forty.
+              view:
+                kind: baseten
+                key: bt40
+                t: 4
+                o: 0
+        - id: seven
+          label: Just ones
+          beats:
+            - say: lpv-6
+              caption: And the number seven is just seven ones — no tens yet.
+              view:
+                kind: baseten
+                key: bt7
+                t: 0
+                o: 7
+        - id: go
+          label: Your turn
+          beats:
+            - say: lpv-7
+              caption: The left digit counts the tens, the right digit counts the ones. Now you try!
+              view:
+                kind: baseten
+                key: bt35
+                t: 3
+                o: 5
+    hundreds:
+      title: Hundreds
+      sections:
+        - id: bundle
+          label: Make 100
+          beats:
+            - say: lhun-1
+              caption: When we gather ten ten-rods together, they bundle into one hundred.
+              view:
+                kind: baseten
+                key: bt100
+                t: 10
+                o: 0
+        - id: read
+          label: Read 345
+          beats:
+            - say: lhun-2
+              caption: >-
+                Big numbers have three places: hundreds, tens, and ones. Here is three hundred
+                forty-five.
+              view:
+                kind: placedigits
+                key: pd345
+                value: 345
+            - say: lhun-3
+              caption: >-
+                The three means three hundreds, the four means four tens, and the five means five
+                ones.
+              view:
+                kind: placedigits
+                key: pd345
+                value: 345
+            - say: lhun-4
+              caption: Three hundred, plus forty, plus five, makes three hundred forty-five.
+              view:
+                kind: placedigits
+                key: pd345
+                value: 345
+        - id: zero
+          label: Zero holder
+          beats:
+            - say: lhun-5
+              caption: >-
+                Now read two hundred eight. Two hundreds, zero tens, and eight ones. The zero holds
+                the tens place open.
+              view:
+                kind: placedigits
+                key: pd208
+                value: 208
+        - id: go
+          label: Your turn
+          beats:
+            - say: lhun-6
+              caption: Each place is ten times bigger than the one to its right. Now you try!
+              view:
+                kind: placedigits
+                key: pd345b
+                value: 345
+    skip-counting:
+      title: Skip Counting
+      sections:
+        - id: fives
+          label: By 5s
+          beats:
+            - say: lskip-1
+              caption: Skip counting means hopping by the same amount each time. Let's hop by fives.
+              view:
+                kind: skip
+                key: s5
+                step: 5
+                count: 4
+            - say: lskip-2
+              caption: Five, ten, fifteen, twenty! Much faster than counting by ones.
+              view:
+                kind: skip
+                key: s5
+                step: 5
+                count: 4
+        - id: twos
+          label: By 2s
+          beats:
+            - say: lskip-3
+              caption: Now we hop by twos.
+              view:
+                kind: skip
+                key: s2
+                step: 2
+                count: 5
+            - say: lskip-4
+              caption: Two, four, six, eight, ten.
+              view:
+                kind: skip
+                key: s2
+                step: 2
+                count: 5
+        - id: tens
+          label: By 10s
+          beats:
+            - say: lskip-5
+              caption: And by tens — the longest hops of all.
+              view:
+                kind: skip
+                key: s10
+                step: 10
+                count: 5
+            - say: lskip-6
+              caption: Ten, twenty, thirty, forty, fifty!
+              view:
+                kind: skip
+                key: s10
+                step: 10
+                count: 5
+        - id: go
+          label: Your turn
+          beats:
+            - say: lskip-7
+              caption: >-
+                Skip counting helps you count fast — and it gets you ready for times tables. You
+                try!
+              view:
+                kind: skip
+                key: s5b
+                step: 5
+                count: 4
+    even-odd:
+      title: Even or Odd
+      sections:
+        - id: even8
+          label: Even
+          beats:
+            - say: leo-1
+              caption: A number is even if it splits into perfect pairs, with none left over.
+              view:
+                kind: evenodd
+                key: e8
+                "n": 8
+            - say: leo-2
+              caption: Eight splits into four pairs — even!
+              view:
+                kind: evenodd
+                key: e8
+                "n": 8
+        - id: odd7
+          label: Odd
+          beats:
+            - say: leo-3
+              caption: But seven leaves one little dot all alone.
+              view:
+                kind: evenodd
+                key: e7
+                "n": 7
+            - say: leo-4
+              caption: Seven is odd — one left over.
+              view:
+                kind: evenodd
+                key: e7
+                "n": 7
+        - id: even6
+          label: Even again
+          beats:
+            - say: leo-5
+              caption: Six makes three pairs with none left — so six is even.
+              view:
+                kind: evenodd
+                key: e6
+                "n": 6
+        - id: go
+          label: Your turn
+          beats:
+            - say: leo-6
+              caption: >-
+                A quick trick: even numbers end in 0, 2, 4, 6, or 8. Odd ones end in 1, 3, 5, 7, or
+                9. You try!
+              view:
+                kind: evenodd
+                key: e6b
+                "n": 6
+    long-add:
+      title: Long Addition
+      sections:
+        - id: lineup
+          label: Stack them
+          beats:
+            - say: lla-1
+              caption: For bigger numbers, we stack them — ones under ones, tens under tens.
+              view:
+                kind: column
+                key: a1
+                op: +
+                result: ""
+                carry: {}
+                active: null
+                top: 34
+                bottom: 12
+        - id: nocarry
+          label: Add columns
+          beats:
+            - say: lla-2
+              caption: Always start on the right, with the ones. Four plus two is six.
+              view:
+                kind: column
+                key: a1
+                op: +
+                result: "6"
+                carry: {}
+                active: 0
+                top: 34
+                bottom: 12
+            - say: lla-3
+              caption: Then the tens. Three plus one is four.
+              view:
+                kind: column
+                key: a1
+                op: +
+                result: "46"
+                carry: {}
+                active: 1
+                top: 34
+                bottom: 12
+            - say: lla-4
+              caption: Thirty-four plus twelve is forty-six!
+              view:
+                kind: column
+                key: a1
+                op: +
+                result: "46"
+                carry: {}
+                active: null
+                top: 34
+                bottom: 12
+        - id: carry
+          label: Carrying
+          beats:
+            - say: lla-5
+              caption: >-
+                Now, what if the ones add up to ten or more? Let's try twenty-seven plus
+                forty-eight.
+              view:
+                kind: column
+                key: a2
+                op: +
+                result: ""
+                carry: {}
+                active: null
+                top: 27
+                bottom: 48
+            - say: lla-6
+              caption: >-
+                Seven plus eight is fifteen. Fifteen is too big for one box, so we write the five
+                and carry the one ten up to the tens column.
+              view:
+                kind: column
+                key: a2
+                op: +
+                result: "5"
+                carry:
+                  "1": "1"
+                active: 0
+                top: 27
+                bottom: 48
+            - say: lla-7
+              caption: "Now the tens: the carried one, plus two, plus four, makes seven."
+              view:
+                kind: column
+                key: a2
+                op: +
+                result: "75"
+                carry:
+                  "1": "1"
+                active: 1
+                top: 27
+                bottom: 48
+            - say: lla-8
+              caption: Twenty-seven plus forty-eight is seventy-five!
+              view:
+                kind: column
+                key: a2
+                op: +
+                result: "75"
+                carry:
+                  "1": "1"
+                active: null
+                top: 27
+                bottom: 48
+        - id: go
+          label: Your turn
+          beats:
+            - say: lla-9
+              caption: Line up the digits, add each column, and carry whenever you reach ten. You try!
+              view:
+                kind: column
+                key: a2
+                op: +
+                result: "75"
+                carry:
+                  "1": "1"
+                active: null
+                top: 27
+                bottom: 48
+    long-sub:
+      title: Long Subtraction
+      sections:
+        - id: lineup
+          label: Stack them
+          beats:
+            - say: lls-1
+              caption: We stack subtraction the same way — ones under ones — and start on the right.
+              view:
+                kind: column
+                key: s1
+                op: −
+                result: ""
+                carry: {}
+                active: null
+                top: 48
+                bottom: 23
+        - id: noborrow
+          label: Subtract
+          beats:
+            - say: lls-2
+              caption: Eight minus three is five.
+              view:
+                kind: column
+                key: s1
+                op: −
+                result: "5"
+                carry: {}
+                active: 0
+                top: 48
+                bottom: 23
+            - say: lls-3
+              caption: "Then the tens: four minus two is two."
+              view:
+                kind: column
+                key: s1
+                op: −
+                result: "25"
+                carry: {}
+                active: 1
+                top: 48
+                bottom: 23
+            - say: lls-4
+              caption: Forty-eight minus twenty-three is twenty-five.
+              view:
+                kind: column
+                key: s1
+                op: −
+                result: "25"
+                carry: {}
+                active: null
+                top: 48
+                bottom: 23
+        - id: borrow
+          label: Borrowing
+          beats:
+            - say: lls-5
+              caption: Sometimes the top digit is too small. Try fifty-two minus twenty-seven.
+              view:
+                kind: column
+                key: s2
+                op: −
+                result: ""
+                carry: {}
+                active: null
+                top: 52
+                bottom: 27
+            - say: lls-6
+              caption: >-
+                Two minus seven? We can't do that, so we borrow. We take one ten from the five, so
+                it becomes four, and the two ones become twelve.
+              view:
+                kind: column
+                key: s2
+                op: −
+                result: ""
+                carry:
+                  "0": "12"
+                  "1": "4"
+                active: 0
+                top: 52
+                bottom: 27
+            - say: lls-7
+              caption: Now twelve minus seven is five.
+              view:
+                kind: column
+                key: s2
+                op: −
+                result: "5"
+                carry:
+                  "0": "12"
+                  "1": "4"
+                active: 0
+                top: 52
+                bottom: 27
+            - say: lls-8
+              caption: And four minus two is two.
+              view:
+                kind: column
+                key: s2
+                op: −
+                result: "25"
+                carry:
+                  "0": "12"
+                  "1": "4"
+                active: 1
+                top: 52
+                bottom: 27
+        - id: go
+          label: Your turn
+          beats:
+            - say: lls-9
+              caption: >-
+                Fifty-two minus twenty-seven is twenty-five! Borrow whenever the top digit is too
+                small. You try!
+              view:
+                kind: column
+                key: s2
+                op: −
+                result: "25"
+                carry:
+                  "0": "12"
+                  "1": "4"
+                active: null
+                top: 52
+                bottom: 27
+    rounding:
+      title: Rounding
+      sections:
+        - id: what
+          label: Round numbers
+          beats:
+            - say: lrnd-1
+              caption: >-
+                A round number ends in zero — like ten, twenty, thirty. They are nice and tidy to
+                work with.
+              view:
+                kind: big
+                key: rn
+                text: 10  20  30  40
+                color: "#22d3ee"
+        - id: up
+          label: Round up
+          beats:
+            - say: lrnd-2
+              caption: >-
+                Rounding finds the nearest round number. Is forty-seven closer to forty, or to
+                fifty?
+              view:
+                kind: roundline
+                key: r47
+                v: 47
+                unit: 10
+            - say: lrnd-3
+              caption: Forty-seven is past the middle, so it rounds up to fifty.
+              view:
+                kind: roundline
+                key: r47
+                v: 47
+                unit: 10
+        - id: down
+          label: Round down
+          beats:
+            - say: lrnd-4
+              caption: Now forty-three. It sits below the middle, so it rounds down to forty.
+              view:
+                kind: roundline
+                key: r43
+                v: 43
+                unit: 10
+        - id: half
+          label: Halfway
+          beats:
+            - say: lrnd-5
+              caption: >-
+                And exactly halfway, like forty-five? The rule is: halfway always rounds up — to
+                fifty.
+              view:
+                kind: roundline
+                key: r45
+                v: 45
+                unit: 10
+        - id: go
+          label: Your turn
+          beats:
+            - say: lrnd-6
+              caption: "Look at the ones digit: five or more rounds up, less than five rounds down. You try!"
+              view:
+                kind: roundline
+                key: r47b
+                v: 47
+                unit: 10
+    word-problems:
+      title: Story Problems
+      sections:
+        - id: readA
+          label: Read it
+          beats:
+            - say: lwp-1
+              caption: Story problems hide math inside words. Maya has three apples.
+              view:
+                kind: story
+                key: wA
+                words:
+                  - t: Maya
+                  - t: has
+                  - t: "3"
+                    kind: num
+                  - t: apples.
+                  - t: She
+                  - t: gets
+                  - t: "5"
+                    kind: num
+                  - t: more.
+                    kind: add
+                  - t: How
+                  - t: many
+                  - t: now?
+                revealed: 4
+            - say: lwp-2
+              caption: She gets five more.
+              view:
+                kind: story
+                key: wA
+                words:
+                  - t: Maya
+                  - t: has
+                  - t: "3"
+                    kind: num
+                  - t: apples.
+                  - t: She
+                  - t: gets
+                  - t: "5"
+                    kind: num
+                  - t: more.
+                    kind: add
+                  - t: How
+                  - t: many
+                  - t: now?
+                revealed: 8
+            - say: lwp-3
+              caption: How many apples does she have now?
+              view:
+                kind: story
+                key: wA
+                words:
+                  - t: Maya
+                  - t: has
+                  - t: "3"
+                    kind: num
+                  - t: apples.
+                  - t: She
+                  - t: gets
+                  - t: "5"
+                    kind: num
+                  - t: more.
+                    kind: add
+                  - t: How
+                  - t: many
+                  - t: now?
+                revealed: 11
+        - id: solveA
+          label: Find the math
+          beats:
+            - say: lwp-4
+              caption: The word 'more' tells us to add. So we add three and five.
+              view:
+                kind: big
+                key: eqA
+                text: 3 + 5 = 8
+                color: "#4ade80"
+            - say: lwp-5
+              caption: Three plus five is eight apples!
+              view:
+                kind: big
+                key: eqA
+                text: 3 + 5 = 8
+                color: "#4ade80"
+        - id: readB
+          label: Another
+          beats:
+            - say: lwp-6
+              caption: Here is a different one. Sam had eight stickers.
+              view:
+                kind: story
+                key: wB
+                words:
+                  - t: Sam
+                  - t: had
+                  - t: "8"
+                    kind: num
+                  - t: stickers.
+                  - t: He
+                  - t: gave
+                    kind: sub
+                  - t: away
+                    kind: sub
+                  - t: "3."
+                    kind: num
+                  - t: How
+                  - t: many
+                  - t: left?
+                    kind: sub
+                revealed: 4
+            - say: lwp-7
+              caption: He gave away three.
+              view:
+                kind: story
+                key: wB
+                words:
+                  - t: Sam
+                  - t: had
+                  - t: "8"
+                    kind: num
+                  - t: stickers.
+                  - t: He
+                  - t: gave
+                    kind: sub
+                  - t: away
+                    kind: sub
+                  - t: "3."
+                    kind: num
+                  - t: How
+                  - t: many
+                  - t: left?
+                    kind: sub
+                revealed: 8
+            - say: lwp-8
+              caption: How many stickers are left?
+              view:
+                kind: story
+                key: wB
+                words:
+                  - t: Sam
+                  - t: had
+                  - t: "8"
+                    kind: num
+                  - t: stickers.
+                  - t: He
+                  - t: gave
+                    kind: sub
+                  - t: away
+                    kind: sub
+                  - t: "3."
+                    kind: num
+                  - t: How
+                  - t: many
+                  - t: left?
+                    kind: sub
+                revealed: 11
+        - id: solveB
+          label: Subtract
+          beats:
+            - say: lwp-9
+              caption: "'Gave away' and 'left' tell us to subtract. Eight minus three is five."
+              view:
+                kind: big
+                key: eqB
+                text: 8 − 3 = 5
+                color: "#fb923c"
+        - id: go
+          label: Your turn
+          beats:
+            - say: lwp-10
+              caption: Read slowly, find the numbers, and look for the action word. You try!
+              view:
+                kind: story
+                key: wB
+                words:
+                  - t: Sam
+                  - t: had
+                  - t: "8"
+                    kind: num
+                  - t: stickers.
+                  - t: He
+                  - t: gave
+                    kind: sub
+                  - t: away
+                    kind: sub
+                  - t: "3."
+                    kind: num
+                  - t: How
+                  - t: many
+                  - t: left?
+                    kind: sub
+                revealed: 11
+    multiply:
+      title: Groups & Arrays
+      sections:
+        - id: groups
+          label: Equal groups
+          beats:
+            - say: lmul-1
+              caption: Multiplying is a fast way to add equal groups. Here are three groups of four.
+              view:
+                kind: repeatadd
+                key: ra34
+                a: 3
+                b: 4
+            - say: lmul-2
+              caption: Four plus four plus four is twelve. That's the same as three times four.
+              view:
+                kind: repeatadd
+                key: ra34
+                a: 3
+                b: 4
+        - id: array
+          label: A rectangle
+          beats:
+            - say: lmul-3
+              caption: We can line the same dots up in a neat rectangle — three rows of four.
+              view:
+                kind: array
+                key: ar34
+                a: 3
+                b: 4
+            - say: lmul-4
+              caption: Three rows of four is twelve. Rows times columns!
+              view:
+                kind: array
+                key: ar34
+                a: 3
+                b: 4
+        - id: fast
+          label: Another
+          beats:
+            - say: lmul-5
+              caption: Multiplying just counts equal groups really fast. What is two times five?
+              view:
+                kind: repeatadd
+                key: ra25
+                a: 2
+                b: 5
+            - say: lmul-6
+              caption: Two groups of five is ten.
+              view:
+                kind: repeatadd
+                key: ra25
+                a: 2
+                b: 5
+        - id: go
+          label: Your turn
+          beats:
+            - say: lmul-7
+              caption: Equal groups, or a rectangle — both show what times means. You try!
+              view:
+                kind: array
+                key: ar25
+                a: 2
+                b: 5
+    times-2510:
+      title: Tables 2, 5, 10
+      sections:
+        - id: what
+          label: The table
+          beats:
+            - say: ltt-1
+              caption: >-
+                A times table is just the list of answers for one number. Don't worry — it looks
+                big, but it's really your friend.
+              view:
+                kind: table
+                key: t5
+                "n": 5
+                reveal: 3
+        - id: fives
+          label: Fives
+          beats:
+            - say: ltt-2
+              caption: >-
+                Here is the five times table. The answers are just skip counting by five: five, ten,
+                fifteen,
+              view:
+                kind: table
+                key: t5
+                "n": 5
+                reveal: 6
+            - say: ltt-3
+              caption: twenty, twenty-five, and all the way up to fifty.
+              view:
+                kind: table
+                key: t5
+                "n": 5
+                reveal: 10
+        - id: twos
+          label: Twos
+          beats:
+            - say: ltt-4
+              caption: "The two times table is simply doubling: two, four, six, eight."
+              view:
+                kind: table
+                key: t2
+                "n": 2
+                reveal: 4
+        - id: tens
+          label: Tens
+          beats:
+            - say: ltt-5
+              caption: Tens are the easiest of all — just add a zero. Ten, twenty, thirty.
+              view:
+                kind: table
+                key: t10
+                "n": 10
+                reveal: 3
+            - say: ltt-6
+              caption: And the very biggest fact, ten times ten, is one hundred.
+              view:
+                kind: big
+                key: tt100
+                text: 10 × 10 = 100
+                color: "#22d3ee"
+        - id: go
+          label: Your turn
+          beats:
+            - say: ltt-7
+              caption: You'll learn these by heart, and then big multiplying becomes easy. You try!
+              view:
+                kind: table
+                key: t5b
+                "n": 5
+                reveal: 10
+    times-346:
+      title: Tables 3, 4, 6
+      sections:
+        - id: intro
+          label: Tricks
+          beats:
+            - say: lt36-1
+              caption: The threes, fours, and sixes each have a handy trick. Let me show you.
+              view:
+                kind: table
+                key: t3
+                "n": 3
+                reveal: 10
+        - id: threes
+          label: Threes
+          beats:
+            - say: lt36-2
+              caption: "Threes are skip counting by three: three, six, nine, twelve."
+              view:
+                kind: table
+                key: t3
+                "n": 3
+                reveal: 4
+        - id: fours
+          label: Fours
+          beats:
+            - say: lt36-3
+              caption: >-
+                Fours are double-doubles — double the number, then double again. Six, twelve,
+                twenty-four.
+              view:
+                kind: table
+                key: t4
+                "n": 4
+                reveal: 6
+        - id: sixes
+          label: Sixes
+          beats:
+            - say: lt36-4
+              caption: >-
+                And sixes are just double the threes! Three fours are twelve, so six fours are
+                twenty-four.
+              view:
+                kind: table
+                key: t6
+                "n": 6
+                reveal: 4
+        - id: go
+          label: Your turn
+          beats:
+            - say: lt36-5
+              caption: >-
+                Skip count for threes, double-double for fours, and double the threes for sixes. You
+                try!
+              view:
+                kind: table
+                key: t6b
+                "n": 6
+                reveal: 10
+    times-789:
+      title: Tables 7, 8, 9
+      sections:
+        - id: intro
+          label: Tricky ones
+          beats:
+            - say: lt79-1
+              caption: Sevens, eights, and nines feel tricky — but they hide some cool tricks.
+              view:
+                kind: table
+                key: t9
+                "n": 9
+                reveal: 10
+        - id: nine1
+          label: Nine magic
+          beats:
+            - say: lt79-2
+              caption: >-
+                The nine times table is magic: every answer's two digits add up to nine. Eighteen —
+                one plus eight is nine!
+              view:
+                kind: table
+                key: t9
+                "n": 9
+                reveal: 5
+        - id: nine2
+          label: Nine trick
+          beats:
+            - say: lt79-3
+              caption: >-
+                Here's the other nine trick: the tens digit is always one less than the number you
+                times by. Nine fours — the four drops to three, so thirty-six.
+              view:
+                kind: big
+                key: n94
+                text: 9 × 4 = 36
+                color: "#a78bfa"
+        - id: eightseven
+          label: Eights & sevens
+          beats:
+            - say: lt79-4
+              caption: >-
+                Eights are double the fours. And you already know lots of sevens — seven times two
+                is just the twos table!
+              view:
+                kind: table
+                key: t8
+                "n": 8
+                reveal: 5
+        - id: go
+          label: Your turn
+          beats:
+            - say: lt79-5
+              caption: >-
+                Use the nine tricks, double the fours for eights, and remember you already know half
+                your sevens. You try!
+              view:
+                kind: table
+                key: t7
+                "n": 7
+                reveal: 10
+    division:
+      title: Division Facts
+      sections:
+        - id: share
+          label: Share fairly
+          beats:
+            - say: ldiv-1
+              caption: >-
+                Dividing means splitting into equal groups. Twelve cookies shared among three
+                friends.
+              view:
+                kind: groups
+                key: g123
+                total: 12
+                groups: 3
+            - say: ldiv-2
+              caption: Each friend gets four. Twelve divided by three is four.
+              view:
+                kind: groups
+                key: g123
+                total: 12
+                groups: 3
+        - id: opposite
+          label: Opposite of ×
+          beats:
+            - say: ldiv-3
+              caption: >-
+                Division is the opposite of multiplying. Three times four is twelve, so twelve
+                divided by three is four.
+              view:
+                kind: multable
+                key: mt34
+                hint:
+                  kind: multable
+                  row: 3
+                  col: 4
+                  mode: div
+        - id: use
+          label: Use the table
+          beats:
+            - say: ldiv-4
+              caption: That means your times tables help you divide! What is fifteen divided by five?
+              view:
+                kind: groups
+                key: g153
+                total: 15
+                groups: 5
+            - say: ldiv-5
+              caption: Five groups of three — so fifteen divided by five is three.
+              view:
+                kind: groups
+                key: g153
+                total: 15
+                groups: 5
+        - id: go
+          label: Your turn
+          beats:
+            - say: ldiv-6
+              caption: "To divide, just ask: what number times the divisor gives this? You try!"
+              view:
+                kind: multable
+                key: mt53
+                hint:
+                  kind: multable
+                  row: 5
+                  col: 3
+                  mode: div
+    long-multiply:
+      title: Multiply ×1 Digit
+      sections:
+        - id: setup
+          label: Set it up
+          beats:
+            - say: llm-1
+              caption: To multiply a big number, we go column by column. Let's do twenty-three times four.
+              view:
+                kind: column
+                key: m1
+                op: ×
+                result: ""
+                carry: {}
+                active: null
+                top: 23
+                bottom: 4
+        - id: ones
+          label: Ones
+          beats:
+            - say: llm-2
+              caption: "Start with the ones: four times three is twelve. Write the two, carry the one."
+              view:
+                kind: column
+                key: m1
+                op: ×
+                result: "2"
+                carry:
+                  "1": "1"
+                active: 0
+                top: 23
+                bottom: 4
+        - id: tens
+          label: Tens
+          beats:
+            - say: llm-3
+              caption: "Now the tens: four times two is eight, plus the carried one makes nine."
+              view:
+                kind: column
+                key: m1
+                op: ×
+                result: "92"
+                carry:
+                  "1": "1"
+                active: 1
+                top: 23
+                bottom: 4
+            - say: llm-4
+              caption: Twenty-three times four is ninety-two!
+              view:
+                kind: column
+                key: m1
+                op: ×
+                result: "92"
+                carry:
+                  "1": "1"
+                active: null
+                top: 23
+                bottom: 4
+        - id: go
+          label: Your turn
+          beats:
+            - say: llm-5
+              caption: >-
+                Always multiply the ones first, then the tens, carrying when you go over nine. You
+                try!
+              view:
+                kind: column
+                key: m1
+                op: ×
+                result: "92"
+                carry:
+                  "1": "1"
+                active: null
+                top: 23
+                bottom: 4
+    long-multiply2:
+      title: Multiply ×2 Digits
+      sections:
+        - id: split
+          label: Split it
+          beats:
+            - say: llm2-1
+              caption: For two big numbers, we split the job in two. Let's do twenty-three times fourteen.
+              view:
+                kind: big
+                key: s
+                text: 23 × 14
+                color: "#a78bfa"
+        - id: byfour
+          label: × 4
+          beats:
+            - say: llm2-2
+              caption: >-
+                Fourteen is ten and four. First multiply by the four: twenty-three times four is
+                ninety-two.
+              view:
+                kind: big
+                key: p1
+                text: 23 × 4 = 92
+                color: "#22d3ee"
+        - id: byten
+          label: × 10
+          beats:
+            - say: llm2-3
+              caption: "Then multiply by the ten: twenty-three times ten is two hundred thirty."
+              view:
+                kind: big
+                key: p2
+                text: 23 × 10 = 230
+                color: "#22d3ee"
+        - id: add
+          label: Add parts
+          beats:
+            - say: llm2-4
+              caption: "Last, add the two parts together: ninety-two plus two hundred thirty."
+              view:
+                kind: column
+                key: addp
+                op: +
+                top: 92
+                bottom: 230
+                result: ""
+                active: null
+            - say: llm2-5
+              caption: >-
+                Twenty-three times fourteen is three hundred twenty-two! Split, multiply each part,
+                then add. You try!
+              view:
+                kind: column
+                key: addp
+                op: +
+                top: 92
+                bottom: 230
+                result: "322"
+    long-division:
+      title: Long Division
+      sections:
+        - id: setup
+          label: Set it up
+          beats:
+            - say: lld-1
+              caption: >-
+                Long division shares a big number step by step. Let's do eighty-four divided by
+                four.
+              view:
+                kind: longdiv
+                key: d84
+                step: 0
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+        - id: d1
+          label: Divide
+          beats:
+            - say: lld-2
+              caption: "Divide: how many fours fit in eight? Two. We write the two up on top."
+              view:
+                kind: longdiv
+                key: d84
+                step: 1
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+        - id: m1
+          label: Multiply
+          beats:
+            - say: lld-3
+              caption: "Multiply: two times four is eight, and we write it underneath."
+              view:
+                kind: longdiv
+                key: d84
+                step: 2
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+        - id: s1
+          label: Subtract & bring
+          beats:
+            - say: lld-4
+              caption: "Subtract: eight minus eight is zero. Then bring down the next digit, the four."
+              view:
+                kind: longdiv
+                key: d84
+                step: 4
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+        - id: d2
+          label: Divide again
+          beats:
+            - say: lld-5
+              caption: "Divide again: how many fours fit in four? One. Write it on top."
+              view:
+                kind: longdiv
+                key: d84
+                step: 5
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+        - id: finish
+          label: Finish
+          beats:
+            - say: lld-6
+              caption: >-
+                Multiply one by four, subtract, and nothing is left. Eighty-four divided by four is
+                twenty-one!
+              view:
+                kind: longdiv
+                key: d84
+                step: 8
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+        - id: go
+          label: Your turn
+          beats:
+            - say: lld-7
+              caption: "Just repeat the steps: Divide, Multiply, Subtract, Bring down. You try!"
+              view:
+                kind: longdiv
+                key: d84
+                step: 8
+                divisor: "4"
+                dividend: "84"
+                quotient: "21"
+                quoSteps:
+                  - 1
+                  - 5
+                rows:
+                  - s: "-8"
+                    step: 2
+                    c: rose
+                  - s: "--"
+                    step: 3
+                    c: line
+                  - s: "04"
+                    step: 4
+                  - s: "-4"
+                    step: 6
+                    c: rose
+                  - s: "--"
+                    step: 7
+                    c: line
+                  - s: " 0"
+                    step: 8
+    fractions:
+      title: What is a Fraction?
+      sections:
+        - id: slice
+          label: Slices
+          beats:
+            - say: lfr-1
+              caption: A fraction is a piece of a whole. Imagine cutting a pizza into four equal slices.
+              view:
+                kind: fracpie
+                key: q14
+                k: 1
+                "n": 4
+            - say: lfr-2
+              caption: Now take three of those four slices — that is three-quarters.
+              view:
+                kind: fracpie
+                key: q34
+                k: 3
+                "n": 4
+            - say: lfr-3
+              caption: >-
+                The bottom number, four, says how many equal parts. The top number, three, says how
+                many we have.
+              view:
+                kind: fracpie
+                key: q34
+                k: 3
+                "n": 4
+        - id: half
+          label: One-half
+          beats:
+            - say: lfr-4
+              caption: Here is one-half — just one of two equal parts.
+              view:
+                kind: fracpie
+                key: q12
+                k: 1
+                "n": 2
+        - id: go
+          label: Your turn
+          beats:
+            - say: lfr-5
+              caption: Bottom tells the equal parts, top tells how many you have. You try!
+              view:
+                kind: fracbar
+                key: fb34
+                "n": 4
+                k: 3
+    equivalent-fractions:
+      title: Equivalent Fractions
+      sections:
+        - id: half
+          label: Half
+          beats:
+            - say: leq-1
+              caption: Equivalent fractions look different but are exactly the same amount. Watch one-half.
+              view:
+                kind: equiv
+                key: eq12
+                a: 1
+                b: 2
+                m: 2
+            - say: leq-2
+              caption: >-
+                Slice each half into two — now it reads two-quarters, but the shaded part is the
+                same!
+              view:
+                kind: equiv
+                key: eq12
+                a: 1
+                b: 2
+                m: 2
+            - say: leq-3
+              caption: The trick is to multiply the top and the bottom by the same number.
+              view:
+                kind: equiv
+                key: eq12
+                a: 1
+                b: 2
+                m: 2
+        - id: third
+          label: Third
+          beats:
+            - say: leq-4
+              caption: One-third becomes two-sixths the very same way.
+              view:
+                kind: equiv
+                key: eq13
+                a: 1
+                b: 3
+                m: 2
+        - id: go
+          label: Your turn
+          beats:
+            - say: leq-5
+              caption: Multiply top and bottom by the same number and the value never changes. You try!
+              view:
+                kind: equiv
+                key: eq12b
+                a: 1
+                b: 2
+                m: 3
+    compare-fractions:
+      title: Compare Fractions
+      sections:
+        - id: pieces
+          label: Piece size
+          beats:
+            - say: lcf-1
+              caption: "To compare fractions, picture the pieces. Which is bigger: one-half or one-third?"
+              view:
+                kind: compfrac
+                key: c1213
+                k1: 1
+                n1: 2
+                k2: 1
+                n2: 3
+            - say: lcf-2
+              caption: Same one slice, but halves are bigger than thirds — so one-half is more.
+              view:
+                kind: compfrac
+                key: c1213
+                k1: 1
+                n1: 2
+                k2: 1
+                n2: 3
+        - id: samebottom
+          label: Same bottom
+          beats:
+            - say: lcf-3
+              caption: When the bottoms match, just compare the tops. Three-fifths beats two-fifths.
+              view:
+                kind: compfrac
+                key: c3525
+                k1: 3
+                n1: 5
+                k2: 2
+                n2: 5
+        - id: go
+          label: Your turn
+          beats:
+            - say: lcf-4
+              caption: Bigger pieces, or more pieces — picture it. You try!
+              view:
+                kind: compfrac
+                key: c1214
+                k1: 1
+                n1: 2
+                k2: 1
+                n2: 4
+    add-fractions:
+      title: Add Fractions
+      sections:
+        - id: like
+          label: Same bottom
+          beats:
+            - say: laf-1
+              caption: >-
+                To add fractions with the same bottom, we just add the tops. One-quarter plus
+                two-quarters.
+              view:
+                kind: addfrac
+                key: a124
+                a: 1
+                b: 2
+                "n": 4
+            - say: laf-2
+              caption: >-
+                One piece plus two pieces is three pieces — three-quarters. The bottom stays the
+                same!
+              view:
+                kind: addfrac
+                key: a124
+                a: 1
+                b: 2
+                "n": 4
+        - id: like2
+          label: Another
+          beats:
+            - say: laf-3
+              caption: "Another one: two-fifths plus one-fifth makes three-fifths."
+              view:
+                kind: addfrac
+                key: a215
+                a: 2
+                b: 1
+                "n": 5
+        - id: unlike
+          label: Make them match
+          beats:
+            - say: laf-4
+              caption: >-
+                What if the bottoms are different, like one-half plus one-quarter? First we make
+                them match.
+              view:
+                kind: equiv
+                key: eqm
+                a: 1
+                b: 2
+                m: 2
+            - say: laf-5
+              caption: >-
+                Change one-half into two-quarters. Now two-quarters plus one-quarter is
+                three-quarters.
+              view:
+                kind: addfrac
+                key: a214
+                a: 2
+                b: 1
+                "n": 4
+        - id: go
+          label: Your turn
+          beats:
+            - say: laf-6
+              caption: "Same bottoms: add the tops. Different bottoms: make them match first. You try!"
+              view:
+                kind: addfrac
+                key: a124b
+                a: 1
+                b: 2
+                "n": 4
+    mixed-numbers:
+      title: Mixed Numbers
+      sections:
+        - id: what
+          label: A whole + part
+          beats:
+            - say: lmx-1
+              caption: A mixed number is a whole number and a fraction together — like one and a half.
+              view:
+                kind: big
+                key: m1
+                text: 1½
+                color: "#4ade80"
+            - say: lmx-2
+              caption: One whole, plus one-half of another, makes one and a half.
+              view:
+                kind: big
+                key: m1
+                text: 1 + ½ = 1½
+                color: "#4ade80"
+        - id: more
+          label: Bigger
+          beats:
+            - say: lmx-3
+              caption: Two and three-quarters means two whole ones and three-quarter slices.
+              view:
+                kind: big
+                key: m2
+                text: 2¾
+                color: "#4ade80"
+        - id: go
+          label: Your turn
+          beats:
+            - say: lmx-4
+              caption: A whole number sitting next to a fraction — that is a mixed number. You try!
+              view:
+                kind: fracbar
+                key: mx34
+                "n": 4
+                k: 3
+    frac-times-whole:
+      title: Fraction × Whole
+      sections:
+        - id: repeat
+          label: Repeated adding
+          beats:
+            - say: lmw-1
+              caption: >-
+                Multiplying a fraction by a whole number is just repeated adding. Three times
+                one-quarter.
+              view:
+                kind: big
+                key: w1
+                text: 3 × ¼
+                color: "#22d3ee"
+            - say: lmw-2
+              caption: One-quarter, plus one-quarter, plus one-quarter — that is three-quarters.
+              view:
+                kind: fracbar
+                key: fbw
+                "n": 4
+                k: 3
+        - id: result
+          label: The answer
+          beats:
+            - say: lmw-3
+              caption: >-
+                So three times one-quarter is three-quarters. Just multiply the top by the whole
+                number.
+              view:
+                kind: big
+                key: w2
+                text: 3 × ¼ = ¾
+                color: "#22d3ee"
+        - id: go
+          label: Your turn
+          beats:
+            - say: lmw-4
+              caption: Multiply the top by the whole number and keep the bottom. You try!
+              view:
+                kind: fracbar
+                key: fbw2
+                "n": 4
+                k: 3
+    decimal-place:
+      title: Decimal Places
+      sections:
+        - id: tenths
+          label: Tenths
+          beats:
+            - say: ldp-1
+              caption: >-
+                A decimal shows a part smaller than one. The point separates the whole from the
+                part.
+              view:
+                kind: decgrid
+                key: d03
+                value: 0.3
+            - say: ldp-2
+              caption: >-
+                This whole square is split into a hundred. Three shaded columns are three tenths —
+                zero point three.
+              view:
+                kind: decgrid
+                key: d03
+                value: 0.3
+        - id: hundredths
+          label: Hundredths
+          beats:
+            - say: ldp-3
+              caption: Each tiny square is one hundredth. Forty-five squares is zero point four five.
+              view:
+                kind: decgrid
+                key: d045
+                value: 0.45
+        - id: convert
+          label: Same as ½
+          beats:
+            - say: ldp-4
+              caption: >-
+                Decimals and fractions name the same part two ways. Zero point five is the same as
+                one-half.
+              view:
+                kind: decgrid
+                key: d05
+                value: 0.5
+        - id: go
+          label: Your turn
+          beats:
+            - say: ldp-5
+              caption: The first place after the point is tenths, the next is hundredths. You try!
+              view:
+                kind: decgrid
+                key: d03b
+                value: 0.3
+    compare-decimals:
+      title: Compare Decimals
+      sections:
+        - id: which
+          label: Which is bigger
+          beats:
+            - say: lcd-1
+              caption: >-
+                To compare decimals, line up the points and look place by place. Which is bigger:
+                zero point five, or zero point four five?
+              view:
+                kind: compdec
+                key: c5045
+                a: 0.5
+                b: 0.45
+            - say: lcd-2
+              caption: >-
+                Five tenths fills more than forty-five hundredths, so zero point five wins. Don't be
+                fooled by extra digits!
+              view:
+                kind: compdec
+                key: c5045
+                a: 0.5
+                b: 0.45
+        - id: go
+          label: Your turn
+          beats:
+            - say: lcd-3
+              caption: Compare the tenths first, then the hundredths. You try!
+              view:
+                kind: compdec
+                key: c7068
+                a: 0.7
+                b: 0.68
+    add-decimals:
+      title: Add & Subtract
+      sections:
+        - id: lineup
+          label: Line up points
+          beats:
+            - say: lad-1
+              caption: >-
+                To add decimals, line up the decimal points so tenths sit under tenths. One point
+                two plus three point four.
+              view:
+                kind: adddec
+                key: a1234
+                a: 1.2
+                b: 3.4
+            - say: lad-2
+              caption: >-
+                Then add just like whole numbers. One point two plus three point four is four point
+                six.
+              view:
+                kind: adddec
+                key: a1234
+                a: 1.2
+                b: 3.4
+        - id: go
+          label: Your turn
+          beats:
+            - say: lad-3
+              caption: Line up the points, then add. You try!
+              view:
+                kind: adddec
+                key: a2513
+                a: 2.5
+                b: 1.3
+    decimal-pow10:
+      title: × and ÷ by 10, 100
+      sections:
+        - id: times
+          label: × 10
+          beats:
+            - say: lpw-1
+              caption: >-
+                Multiplying by ten makes a number ten times bigger — the point hops one place to the
+                right.
+              view:
+                kind: dechop
+                key: hx
+                from: 3.4
+                factor: 10
+                op: ×
+            - say: lpw-2
+              caption: So three point four times ten becomes thirty-four.
+              view:
+                kind: dechop
+                key: hx
+                from: 3.4
+                factor: 10
+                op: ×
+        - id: divide
+          label: ÷ 10
+          beats:
+            - say: lpw-3
+              caption: Dividing by ten makes it ten times smaller — the point hops to the left.
+              view:
+                kind: dechop
+                key: hd
+                from: 3.4
+                factor: 10
+                op: ÷
+        - id: go
+          label: Your turn
+          beats:
+            - say: lpw-4
+              caption: Times ten hops right, divide by ten hops left. By a hundred, hop twice! You try!
+              view:
+                kind: dechop
+                key: hx100
+                from: 3.4
+                factor: 100
+                op: ×
+    money:
+      title: Money & Change
+      sections:
+        - id: count
+          label: Count up
+          beats:
+            - say: lmo-1
+              caption: Money is counted in cents. Let's add up coins, starting with the biggest.
+              view:
+                kind: coins
+                key: c2
+                coins:
+                  - 25
+                  - 10
+            - say: lmo-2
+              caption: A quarter is twenty-five cents, plus a dime is ten more — thirty-five cents.
+              view:
+                kind: coins
+                key: c2
+                coins:
+                  - 25
+                  - 10
+        - id: more
+          label: Add more
+          beats:
+            - say: lmo-3
+              caption: Add a nickel and three pennies to keep counting up.
+              view:
+                kind: coins
+                key: c6
+                coins:
+                  - 25
+                  - 10
+                  - 5
+                  - 1
+                  - 1
+                  - 1
+        - id: go
+          label: Your turn
+          beats:
+            - say: lmo-4
+              caption: Start with the biggest coins and count up. You try!
+              view:
+                kind: coins
+                key: c3
+                coins:
+                  - 25
+                  - 25
+                  - 10
+    time:
+      title: Telling Time
+      sections:
+        - id: hands
+          label: The hands
+          beats:
+            - say: lti-1
+              caption: >-
+                A clock has two hands. The short hand points to the hour, the long hand to the
+                minutes.
+              view:
+                kind: clock
+                key: t3
+                h: 3
+                m: 0
+            - say: lti-2
+              caption: Short hand on three, long hand straight up on twelve — that is three o-clock.
+              view:
+                kind: clock
+                key: t3
+                h: 3
+                m: 0
+        - id: half
+          label: Half past
+          beats:
+            - say: lti-3
+              caption: When the long hand points straight down at the six, it is half past.
+              view:
+                kind: clock
+                key: t330
+                h: 3
+                m: 30
+        - id: go
+          label: Your turn
+          beats:
+            - say: lti-4
+              caption: Short hand is the hour, long hand is the minutes. You try!
+              view:
+                kind: clock
+                key: t9
+                h: 9
+                m: 0
+    elapsed:
+      title: Elapsed Time
+      sections:
+        - id: count
+          label: Count on
+          beats:
+            - say: lel-1
+              caption: Elapsed time is how long something takes — from a start time to an end time.
+              view:
+                kind: elapsed
+                key: e1
+                h1: 2
+                m1: 0
+                dh: 1
+                dm: 30
+            - say: lel-2
+              caption: >-
+                From two o-clock, count on one hour to three, then thirty more minutes — one and a
+                half hours.
+              view:
+                kind: elapsed
+                key: e1
+                h1: 2
+                m1: 0
+                dh: 1
+                dm: 30
+        - id: go
+          label: Your turn
+          beats:
+            - say: lel-3
+              caption: Count on from the start time to the end time. You try!
+              view:
+                kind: elapsed
+                key: e2
+                h1: 4
+                m1: 0
+                dh: 2
+                dm: 0
+    units:
+      title: Length & Weight
+      sections:
+        - id: meter
+          label: Meters
+          beats:
+            - say: lun-1
+              caption: >-
+                We measure with units, and we pick the right size. One meter is a hundred
+                centimeters.
+              view:
+                kind: unitladder
+                key: um
+                big: m
+                small: cm
+                per: 100
+                "n": 2
+            - say: lun-2
+              caption: So two meters is two hundred centimeters.
+              view:
+                kind: unitladder
+                key: um
+                big: m
+                small: cm
+                per: 100
+                "n": 2
+        - id: kilo
+          label: Kilograms
+          beats:
+            - say: lun-3
+              caption: >-
+                To change a big unit into a small one, we multiply. One kilogram is a thousand
+                grams.
+              view:
+                kind: unitladder
+                key: uk
+                big: kg
+                small: g
+                per: 1000
+                "n": 1
+        - id: go
+          label: Your turn
+          beats:
+            - say: lun-4
+              caption: "Big unit to small unit: multiply. You try!"
+              view:
+                kind: unitladder
+                key: um3
+                big: m
+                small: cm
+                per: 100
+                "n": 3
+    shapes:
+      title: Name the Shapes
+      sections:
+        - id: tri
+          label: Triangle
+          beats:
+            - say: lsh-1
+              caption: Shapes are named by how many sides they have. Count the sides!
+              view:
+                kind: shape
+                key: tri
+                sides: 3
+                name: triangle
+            - say: lsh-2
+              caption: Three sides make a triangle.
+              view:
+                kind: shape
+                key: tri
+                sides: 3
+                name: triangle
+        - id: sq
+          label: Square
+          beats:
+            - say: lsh-3
+              caption: Four equal sides make a square.
+              view:
+                kind: shape
+                key: sq
+                sides: 4
+                name: square
+        - id: pent
+          label: Pentagon
+          beats:
+            - say: lsh-4
+              caption: Five sides make a pentagon.
+              view:
+                kind: shape
+                key: pent
+                sides: 5
+                name: pentagon
+        - id: go
+          label: Your turn
+          beats:
+            - say: lsh-5
+              caption: Count the sides to name the shape. You try!
+              view:
+                kind: shape
+                key: hex
+                sides: 6
+                name: hexagon
+    symmetry:
+      title: Symmetry
+      sections:
+        - id: fold
+          label: Fold line
+          beats:
+            - say: lsy-1
+              caption: A shape has symmetry if you can fold it so both halves match exactly.
+              view:
+                kind: symmetry
+                key: bf
+                emoji: 🦋
+            - say: lsy-2
+              caption: >-
+                Fold the butterfly down the middle — the wings line up perfectly. That fold is a
+                line of symmetry.
+              view:
+                kind: symmetry
+                key: bf
+                emoji: 🦋
+        - id: heart
+          label: Heart
+          beats:
+            - say: lsy-3
+              caption: A heart is symmetric too — its two halves match.
+              view:
+                kind: symmetry
+                key: ht
+                emoji: ❤️
+        - id: go
+          label: Your turn
+          beats:
+            - say: lsy-4
+              caption: If the halves match across a fold, the shape is symmetric. You try!
+              view:
+                kind: symmetry
+                key: st
+                emoji: ⭐
+    angles:
+      title: Angles
+      sections:
+        - id: right
+          label: Right angle
+          beats:
+            - say: lan-1
+              caption: An angle measures how far something turns, in degrees.
+              view:
+                kind: angle
+                key: a90
+                deg: 90
+            - say: lan-2
+              caption: A square corner is a right angle — exactly ninety degrees.
+              view:
+                kind: angle
+                key: a90
+                deg: 90
+        - id: acute
+          label: Acute
+          beats:
+            - say: lan-3
+              caption: A smaller turn, less than a corner, is an acute angle.
+              view:
+                kind: angle
+                key: a45
+                deg: 45
+        - id: obtuse
+          label: Obtuse
+          beats:
+            - say: lan-4
+              caption: A bigger turn, more than a corner, is an obtuse angle.
+              view:
+                kind: angle
+                key: a130
+                deg: 130
+        - id: go
+          label: Your turn
+          beats:
+            - say: lan-5
+              caption: Right is ninety, acute is smaller, obtuse is bigger. You try!
+              view:
+                kind: angle
+                key: a90b
+                deg: 90
+    perimeter:
+      title: Perimeter
+      sections:
+        - id: edge
+          label: Around the edge
+          beats:
+            - say: lpe-1
+              caption: Perimeter is the distance all the way around a shape. Walk along every edge.
+              view:
+                kind: perimeter
+                key: p32
+                w: 3
+                h: 2
+            - say: lpe-2
+              caption: "Add the four sides: three plus two plus three plus two is ten."
+              view:
+                kind: perimeter
+                key: p32
+                w: 3
+                h: 2
+        - id: go
+          label: Your turn
+          beats:
+            - say: lpe-3
+              caption: Add up all the sides to find the perimeter. You try!
+              view:
+                kind: perimeter
+                key: p43
+                w: 4
+                h: 3
+    area:
+      title: Area
+      sections:
+        - id: fill
+          label: Fill it
+          beats:
+            - say: lar-1
+              caption: Area is how much space fits inside a shape. Count the unit squares.
+              view:
+                kind: area
+                key: ar32
+                w: 3
+                h: 2
+            - say: lar-2
+              caption: Three columns and two rows make six squares. Area is rows times columns.
+              view:
+                kind: area
+                key: ar32
+                w: 3
+                h: 2
+        - id: go
+          label: Your turn
+          beats:
+            - say: lar-3
+              caption: Multiply the rows by the columns to find area. You try!
+              view:
+                kind: area
+                key: ar43
+                w: 4
+                h: 3
+    volume:
+      title: Volume
+      sections:
+        - id: stack
+          label: Stack cubes
+          beats:
+            - say: lvo-1
+              caption: Volume is how much space a solid fills. Count the unit cubes.
+              view:
+                kind: volume
+                key: v322
+                l: 3
+                w: 2
+                h: 2
+            - say: lvo-2
+              caption: Each layer has six cubes, and there are two layers — twelve cubes in all.
+              view:
+                kind: volume
+                key: v322
+                l: 3
+                w: 2
+                h: 2
+        - id: go
+          label: Your turn
+          beats:
+            - say: lvo-3
+              caption: Cubes in one layer, times the number of layers, gives the volume. You try!
+              view:
+                kind: volume
+                key: v223
+                l: 2
+                w: 2
+                h: 3
+  narration:
+    lc-1: One.
+    lc-2: Two.
+    lc-3: Three.
+    lc-4: Four.
+    lc-5: Five!
+    lcount-intro: Counting is how we find out how many. Let's count these apples together!
+    lcount-howmany: The last number we say tells us how many. There are five apples!
+    lcount-again: Let's try again. Count these stars.
+    lcount-three: Three stars! Count each one, and the last number is how many.
+    lcount-star: You're a counting star! Tap Play and count some yourself.
+    lcmp-1: Sometimes we want to know which group has more. Let's compare two plates of cookies!
+    lcmp-2: This plate has three cookies. This one has five.
+    lcmp-3: Five is more than three — see how this side is taller?
+    lcmp-4: >-
+      We show it with this sign. Think of it as a hungry mouth that always opens to eat the bigger
+      number. Chomp!
+    lcmp-5: So three is less than five.
+    lcmp-6: What if both sides are the same? Here are four and four.
+    lcmp-7: When they match, we use the equals sign.
+    lcmp-8: And here, six is more than two, so the mouth opens the other way.
+    lcmp-9: "Remember: the open mouth always points at the bigger number. Now you try!"
+    lbnd-1: >-
+      Friends of ten are two numbers that add up to exactly ten. Here is a ten-frame — ten little
+      boxes.
+    lbnd-2: Let's drop in six counters.
+    lbnd-3: "Now count the empty boxes: one, two, three, four. Four are left!"
+    lbnd-4: Six and four make ten. They are friends of ten!
+    lbnd-5: Let's find another pair. This time we put in seven.
+    lbnd-6: Three empty boxes. So seven and three make ten too.
+    lbnd-7: One more — just two counters.
+    lbnd-8: Eight empty boxes. Two and eight are friends of ten!
+    lbnd-9: Every pair that fills the whole frame is a friend of ten. Now you try!
+    ladd-1: Adding means putting groups together to find how many there are in all.
+    ladd-2: Four blocks and three blocks, pushed together, make seven.
+    ladd-3: "Let's try a bigger one: eight blocks and five blocks."
+    ladd-4: Altogether that is thirteen.
+    ladd-5: There is another way — counting on. Start at nine and hop up four.
+    ladd-6: Ten, eleven, twelve, thirteen. Nine plus four is thirteen!
+    ladd-7: Put together, or count on — both find the total. Your turn!
+    lsub-1: Subtracting means taking some away and seeing what is left.
+    lsub-2: Eight blocks, take away three, and five are left.
+    lsub-3: "Another one: ten blocks, take away four."
+    lsub-4: Six are left. Ten minus four is six.
+    lsub-5: We can also hop backward. Start at twelve and hop back five.
+    lsub-6: Eleven, ten, nine, eight, seven. Twelve minus five is seven!
+    lsub-7: Take away, or hop back — both show what is left. You try!
+    lpv-1: Big numbers are built from tens and ones. Let's build twenty-three.
+    lpv-2: Two tall ten-rods make twenty, and three little ones make three.
+    lpv-3: Two tens and three ones — that's twenty-three!
+    lpv-4: Let's build forty. Four ten-rods, and no ones at all.
+    lpv-5: Four tens is forty.
+    lpv-6: And the number seven is just seven ones — no tens yet.
+    lpv-7: The left digit counts the tens, the right digit counts the ones. Now you try!
+    lhun-1: When we gather ten ten-rods together, they bundle into one hundred.
+    lhun-2: "Big numbers have three places: hundreds, tens, and ones. Here is three hundred forty-five."
+    lhun-3: The three means three hundreds, the four means four tens, and the five means five ones.
+    lhun-4: Three hundred, plus forty, plus five, makes three hundred forty-five.
+    lhun-5: >-
+      Now read two hundred eight. Two hundreds, zero tens, and eight ones. The zero holds the tens
+      place open.
+    lhun-6: Each place is ten times bigger than the one to its right. Now you try!
+    lskip-1: Skip counting means hopping by the same amount each time. Let's hop by fives.
+    lskip-2: Five, ten, fifteen, twenty! Much faster than counting by ones.
+    lskip-3: Now we hop by twos.
+    lskip-4: Two, four, six, eight, ten.
+    lskip-5: And by tens — the longest hops of all.
+    lskip-6: Ten, twenty, thirty, forty, fifty!
+    lskip-7: Skip counting helps you count fast — and it gets you ready for times tables. You try!
+    leo-1: A number is even if it splits into perfect pairs, with none left over.
+    leo-2: Eight splits into four pairs — even!
+    leo-3: But seven leaves one little dot all alone.
+    leo-4: Seven is odd — one left over.
+    leo-5: Six makes three pairs with none left — so six is even.
+    leo-6: >-
+      A quick trick: even numbers end in 0, 2, 4, 6, or 8. Odd ones end in 1, 3, 5, 7, or 9. You
+      try!
+    lla-1: For bigger numbers, we stack them — ones under ones, tens under tens.
+    lla-2: Always start on the right, with the ones. Four plus two is six.
+    lla-3: Then the tens. Three plus one is four.
+    lla-4: Thirty-four plus twelve is forty-six!
+    lla-5: Now, what if the ones add up to ten or more? Let's try twenty-seven plus forty-eight.
+    lla-6: >-
+      Seven plus eight is fifteen. Fifteen is too big for one box, so we write the five and carry
+      the one ten up to the tens column.
+    lla-7: "Now the tens: the carried one, plus two, plus four, makes seven."
+    lla-8: Twenty-seven plus forty-eight is seventy-five!
+    lla-9: Line up the digits, add each column, and carry whenever you reach ten. You try!
+    lls-1: We stack subtraction the same way — ones under ones — and start on the right.
+    lls-2: Eight minus three is five.
+    lls-3: "Then the tens: four minus two is two."
+    lls-4: Forty-eight minus twenty-three is twenty-five.
+    lls-5: Sometimes the top digit is too small. Try fifty-two minus twenty-seven.
+    lls-6: >-
+      Two minus seven? We can't do that, so we borrow. We take one ten from the five, so it becomes
+      four, and the two ones become twelve.
+    lls-7: Now twelve minus seven is five.
+    lls-8: And four minus two is two.
+    lls-9: >-
+      Fifty-two minus twenty-seven is twenty-five! Borrow whenever the top digit is too small. You
+      try!
+    lrnd-1: A round number ends in zero — like ten, twenty, thirty. They are nice and tidy to work with.
+    lrnd-2: Rounding finds the nearest round number. Is forty-seven closer to forty, or to fifty?
+    lrnd-3: Forty-seven is past the middle, so it rounds up to fifty.
+    lrnd-4: Now forty-three. It sits below the middle, so it rounds down to forty.
+    lrnd-5: "And exactly halfway, like forty-five? The rule is: halfway always rounds up — to fifty."
+    lrnd-6: "Look at the ones digit: five or more rounds up, less than five rounds down. You try!"
+    lwp-1: Story problems hide math inside words. Maya has three apples.
+    lwp-2: She gets five more.
+    lwp-3: How many apples does she have now?
+    lwp-4: The word 'more' tells us to add. So we add three and five.
+    lwp-5: Three plus five is eight apples!
+    lwp-6: Here is a different one. Sam had eight stickers.
+    lwp-7: He gave away three.
+    lwp-8: How many stickers are left?
+    lwp-9: "'Gave away' and 'left' tell us to subtract. Eight minus three is five."
+    lwp-10: Read slowly, find the numbers, and look for the action word. You try!
+    lmul-1: Multiplying is a fast way to add equal groups. Here are three groups of four.
+    lmul-2: Four plus four plus four is twelve. That's the same as three times four.
+    lmul-3: We can line the same dots up in a neat rectangle — three rows of four.
+    lmul-4: Three rows of four is twelve. Rows times columns!
+    lmul-5: Multiplying just counts equal groups really fast. What is two times five?
+    lmul-6: Two groups of five is ten.
+    lmul-7: Equal groups, or a rectangle — both show what times means. You try!
+    ltt-1: >-
+      A times table is just the list of answers for one number. Don't worry — it looks big, but it's
+      really your friend.
+    ltt-2: "Here is the five times table. The answers are just skip counting by five: five, ten, fifteen,"
+    ltt-3: twenty, twenty-five, and all the way up to fifty.
+    ltt-4: "The two times table is simply doubling: two, four, six, eight."
+    ltt-5: Tens are the easiest of all — just add a zero. Ten, twenty, thirty.
+    ltt-6: And the very biggest fact, ten times ten, is one hundred.
+    ltt-7: You'll learn these by heart, and then big multiplying becomes easy. You try!
+    lt36-1: The threes, fours, and sixes each have a handy trick. Let me show you.
+    lt36-2: "Threes are skip counting by three: three, six, nine, twelve."
+    lt36-3: Fours are double-doubles — double the number, then double again. Six, twelve, twenty-four.
+    lt36-4: And sixes are just double the threes! Three fours are twelve, so six fours are twenty-four.
+    lt36-5: Skip count for threes, double-double for fours, and double the threes for sixes. You try!
+    lt79-1: Sevens, eights, and nines feel tricky — but they hide some cool tricks.
+    lt79-2: >-
+      The nine times table is magic: every answer's two digits add up to nine. Eighteen — one plus
+      eight is nine!
+    lt79-3: >-
+      Here's the other nine trick: the tens digit is always one less than the number you times by.
+      Nine fours — the four drops to three, so thirty-six.
+    lt79-4: >-
+      Eights are double the fours. And you already know lots of sevens — seven times two is just the
+      twos table!
+    lt79-5: >-
+      Use the nine tricks, double the fours for eights, and remember you already know half your
+      sevens. You try!
+    ldiv-1: Dividing means splitting into equal groups. Twelve cookies shared among three friends.
+    ldiv-2: Each friend gets four. Twelve divided by three is four.
+    ldiv-3: >-
+      Division is the opposite of multiplying. Three times four is twelve, so twelve divided by
+      three is four.
+    ldiv-4: That means your times tables help you divide! What is fifteen divided by five?
+    ldiv-5: Five groups of three — so fifteen divided by five is three.
+    ldiv-6: "To divide, just ask: what number times the divisor gives this? You try!"
+    llm-1: To multiply a big number, we go column by column. Let's do twenty-three times four.
+    llm-2: "Start with the ones: four times three is twelve. Write the two, carry the one."
+    llm-3: "Now the tens: four times two is eight, plus the carried one makes nine."
+    llm-4: Twenty-three times four is ninety-two!
+    llm-5: Always multiply the ones first, then the tens, carrying when you go over nine. You try!
+    llm2-1: For two big numbers, we split the job in two. Let's do twenty-three times fourteen.
+    llm2-2: "Fourteen is ten and four. First multiply by the four: twenty-three times four is ninety-two."
+    llm2-3: "Then multiply by the ten: twenty-three times ten is two hundred thirty."
+    llm2-4: "Last, add the two parts together: ninety-two plus two hundred thirty."
+    llm2-5: >-
+      Twenty-three times fourteen is three hundred twenty-two! Split, multiply each part, then add.
+      You try!
+    lld-1: Long division shares a big number step by step. Let's do eighty-four divided by four.
+    lld-2: "Divide: how many fours fit in eight? Two. We write the two up on top."
+    lld-3: "Multiply: two times four is eight, and we write it underneath."
+    lld-4: "Subtract: eight minus eight is zero. Then bring down the next digit, the four."
+    lld-5: "Divide again: how many fours fit in four? One. Write it on top."
+    lld-6: >-
+      Multiply one by four, subtract, and nothing is left. Eighty-four divided by four is
+      twenty-one!
+    lld-7: "Just repeat the steps: Divide, Multiply, Subtract, Bring down. You try!"
+    lfr-1: A fraction is a piece of a whole. Imagine cutting a pizza into four equal slices.
+    lfr-2: Now take three of those four slices — that is three-quarters.
+    lfr-3: >-
+      The bottom number, four, says how many equal parts. The top number, three, says how many we
+      have.
+    lfr-4: Here is one-half — just one of two equal parts.
+    lfr-5: Bottom tells the equal parts, top tells how many you have. You try!
+    leq-1: Equivalent fractions look different but are exactly the same amount. Watch one-half.
+    leq-2: Slice each half into two — now it reads two-quarters, but the shaded part is the same!
+    leq-3: The trick is to multiply the top and the bottom by the same number.
+    leq-4: One-third becomes two-sixths the very same way.
+    leq-5: Multiply top and bottom by the same number and the value never changes. You try!
+    lcf-1: "To compare fractions, picture the pieces. Which is bigger: one-half or one-third?"
+    lcf-2: Same one slice, but halves are bigger than thirds — so one-half is more.
+    lcf-3: When the bottoms match, just compare the tops. Three-fifths beats two-fifths.
+    lcf-4: Bigger pieces, or more pieces — picture it. You try!
+    laf-1: To add fractions with the same bottom, we just add the tops. One-quarter plus two-quarters.
+    laf-2: One piece plus two pieces is three pieces — three-quarters. The bottom stays the same!
+    laf-3: "Another one: two-fifths plus one-fifth makes three-fifths."
+    laf-4: What if the bottoms are different, like one-half plus one-quarter? First we make them match.
+    laf-5: Change one-half into two-quarters. Now two-quarters plus one-quarter is three-quarters.
+    laf-6: "Same bottoms: add the tops. Different bottoms: make them match first. You try!"
+    lmx-1: A mixed number is a whole number and a fraction together — like one and a half.
+    lmx-2: One whole, plus one-half of another, makes one and a half.
+    lmx-3: Two and three-quarters means two whole ones and three-quarter slices.
+    lmx-4: A whole number sitting next to a fraction — that is a mixed number. You try!
+    lmw-1: Multiplying a fraction by a whole number is just repeated adding. Three times one-quarter.
+    lmw-2: One-quarter, plus one-quarter, plus one-quarter — that is three-quarters.
+    lmw-3: So three times one-quarter is three-quarters. Just multiply the top by the whole number.
+    lmw-4: Multiply the top by the whole number and keep the bottom. You try!
+    ldp-1: A decimal shows a part smaller than one. The point separates the whole from the part.
+    ldp-2: >-
+      This whole square is split into a hundred. Three shaded columns are three tenths — zero point
+      three.
+    ldp-3: Each tiny square is one hundredth. Forty-five squares is zero point four five.
+    ldp-4: Decimals and fractions name the same part two ways. Zero point five is the same as one-half.
+    ldp-5: The first place after the point is tenths, the next is hundredths. You try!
+    lcd-1: >-
+      To compare decimals, line up the points and look place by place. Which is bigger: zero point
+      five, or zero point four five?
+    lcd-2: >-
+      Five tenths fills more than forty-five hundredths, so zero point five wins. Don't be fooled by
+      extra digits!
+    lcd-3: Compare the tenths first, then the hundredths. You try!
+    lad-1: >-
+      To add decimals, line up the decimal points so tenths sit under tenths. One point two plus
+      three point four.
+    lad-2: Then add just like whole numbers. One point two plus three point four is four point six.
+    lad-3: Line up the points, then add. You try!
+    lpw-1: Multiplying by ten makes a number ten times bigger — the point hops one place to the right.
+    lpw-2: So three point four times ten becomes thirty-four.
+    lpw-3: Dividing by ten makes it ten times smaller — the point hops to the left.
+    lpw-4: Times ten hops right, divide by ten hops left. By a hundred, hop twice! You try!
+    lmo-1: Money is counted in cents. Let's add up coins, starting with the biggest.
+    lmo-2: A quarter is twenty-five cents, plus a dime is ten more — thirty-five cents.
+    lmo-3: Add a nickel and three pennies to keep counting up.
+    lmo-4: Start with the biggest coins and count up. You try!
+    lti-1: A clock has two hands. The short hand points to the hour, the long hand to the minutes.
+    lti-2: Short hand on three, long hand straight up on twelve — that is three o-clock.
+    lti-3: When the long hand points straight down at the six, it is half past.
+    lti-4: Short hand is the hour, long hand is the minutes. You try!
+    lel-1: Elapsed time is how long something takes — from a start time to an end time.
+    lel-2: From two o-clock, count on one hour to three, then thirty more minutes — one and a half hours.
+    lel-3: Count on from the start time to the end time. You try!
+    lun-1: We measure with units, and we pick the right size. One meter is a hundred centimeters.
+    lun-2: So two meters is two hundred centimeters.
+    lun-3: To change a big unit into a small one, we multiply. One kilogram is a thousand grams.
+    lun-4: "Big unit to small unit: multiply. You try!"
+    lsh-1: Shapes are named by how many sides they have. Count the sides!
+    lsh-2: Three sides make a triangle.
+    lsh-3: Four equal sides make a square.
+    lsh-4: Five sides make a pentagon.
+    lsh-5: Count the sides to name the shape. You try!
+    lsy-1: A shape has symmetry if you can fold it so both halves match exactly.
+    lsy-2: >-
+      Fold the butterfly down the middle — the wings line up perfectly. That fold is a line of
+      symmetry.
+    lsy-3: A heart is symmetric too — its two halves match.
+    lsy-4: If the halves match across a fold, the shape is symmetric. You try!
+    lan-1: An angle measures how far something turns, in degrees.
+    lan-2: A square corner is a right angle — exactly ninety degrees.
+    lan-3: A smaller turn, less than a corner, is an acute angle.
+    lan-4: A bigger turn, more than a corner, is an obtuse angle.
+    lan-5: Right is ninety, acute is smaller, obtuse is bigger. You try!
+    lpe-1: Perimeter is the distance all the way around a shape. Walk along every edge.
+    lpe-2: "Add the four sides: three plus two plus three plus two is ten."
+    lpe-3: Add up all the sides to find the perimeter. You try!
+    lar-1: Area is how much space fits inside a shape. Count the unit squares.
+    lar-2: Three columns and two rows make six squares. Area is rows times columns.
+    lar-3: Multiply the rows by the columns to find area. You try!
+    lvo-1: Volume is how much space a solid fills. Count the unit cubes.
+    lvo-2: Each layer has six cubes, and there are two layers — twelve cubes in all.
+    lvo-3: Cubes in one layer, times the number of layers, gives the volume. You try!

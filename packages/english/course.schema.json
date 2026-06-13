@@ -1,0 +1,870 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://discoveryquest.app/schema/english/course.schema.json",
+  "title": "Discovery Quest course — english",
+  "$comment": "GENERATED from engine.capabilities.json v1.0 by gen-schema.mjs. Do not edit by hand.",
+  "type": "object",
+  "required": [
+    "course"
+  ],
+  "properties": {
+    "course": {
+      "$ref": "#/$defs/course"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "course": {
+      "type": "object",
+      "required": [
+        "formatVersion",
+        "id",
+        "title",
+        "subject",
+        "worlds"
+      ],
+      "properties": {
+        "formatVersion": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "companion": {
+          "type": "string"
+        },
+        "voice": {
+          "type": "object"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "worlds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/world"
+          }
+        },
+        "lessons": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/lesson"
+          }
+        },
+        "narration": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "phonemes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "letter": {
+                    "type": "string"
+                  },
+                  "sound": {
+                    "type": "string"
+                  },
+                  "word": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "letter",
+                  "sound",
+                  "word"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "digraphs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "team": {
+                    "type": "string"
+                  },
+                  "sound": {
+                    "type": "string"
+                  },
+                  "word": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "team",
+                  "sound",
+                  "word"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "vocab": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string"
+                  },
+                  "emoji": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "word",
+                  "emoji"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "blendWords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "wordFamilies": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rime": {
+                    "type": "string"
+                  },
+                  "words": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "band": {
+                    "type": "integer",
+                    "description": "difficulty band the family belongs to"
+                  }
+                },
+                "required": [
+                  "rime",
+                  "words",
+                  "band"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "synonyms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string"
+                  },
+                  "match": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "word",
+                  "match"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "antonyms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string"
+                  },
+                  "match": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "word",
+                  "match"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "contextClues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sentence": {
+                    "type": "string",
+                    "description": "must contain the \"___\" blank"
+                  },
+                  "answer": {
+                    "type": "string"
+                  },
+                  "distractors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible choices"
+                  }
+                },
+                "required": [
+                  "sentence",
+                  "answer",
+                  "distractors"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "sightWords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "parts_of_speech": {
+              "type": "object",
+              "properties": {
+                "note": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "words": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "words"
+              ]
+            },
+            "sentences": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "punctuationCores": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "world": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "blurb": {
+          "type": "string"
+        },
+        "soon": {
+          "type": "boolean"
+        },
+        "stations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/station"
+          }
+        }
+      }
+    },
+    "station": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "sub": {
+          "type": "string"
+        },
+        "board": {
+          "enum": [
+            "blendWord",
+            "contextClue",
+            "digraphs",
+            "grammarAdj",
+            "grammarNoun",
+            "grammarVerb",
+            "pictureMatch",
+            "punctuation",
+            "sameOpp",
+            "sentence",
+            "sightWord",
+            "soundToLetter",
+            "wordFamily"
+          ]
+        },
+        "bands": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "lesson": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "concept": {
+          "type": "string"
+        },
+        "soon": {
+          "type": "boolean"
+        }
+      },
+      "if": {
+        "properties": {
+          "soon": {
+            "const": true
+          }
+        },
+        "required": [
+          "soon"
+        ]
+      },
+      "then": true,
+      "else": {
+        "required": [
+          "board",
+          "bands"
+        ]
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "required": [
+        "title",
+        "sections"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        }
+      }
+    },
+    "section": {
+      "type": "object",
+      "required": [
+        "id",
+        "beats"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/beat"
+          }
+        }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "required": [
+        "say",
+        "caption",
+        "view"
+      ],
+      "properties": {
+        "say": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "advance": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "view": {
+          "$ref": "#/$defs/view"
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "blend",
+            "cloze",
+            "examples",
+            "letters",
+            "pair",
+            "phoneme",
+            "picture",
+            "sentence",
+            "soundboard",
+            "team"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "blend"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "blend"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "letters": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "word": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "letters",
+              "word"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "cloze"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "cloze"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "sentence": {
+                "type": "string",
+                "description": "must contain \"___\" where the blank goes"
+              },
+              "answer": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "omit to show the blank empty; set to reveal it"
+              }
+            },
+            "required": [
+              "kind",
+              "sentence"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "examples"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "examples"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "label": {
+                "type": "string"
+              },
+              "words": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "kind",
+              "label",
+              "words"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "letters"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "letters"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "items": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              },
+              "active": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "index of the highlighted letter; -1 for none"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "pair"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "pair"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "string"
+              },
+              "b": {
+                "type": "string"
+              },
+              "rel": {
+                "type": "string",
+                "description": "'same' | 'opposite'"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b",
+              "rel"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "phoneme"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "phoneme"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "letter": {
+                "type": "string"
+              },
+              "word": {
+                "type": "string"
+              },
+              "emoji": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "letter",
+              "word"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "picture"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "picture"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "emoji": {
+                "type": "string"
+              },
+              "word": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "emoji",
+              "word"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "sentence"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "sentence"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "description": "include the capital and end mark; both get highlighted"
+              }
+            },
+            "required": [
+              "kind",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "soundboard"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "soundboard"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "team"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "team"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "team": {
+                "type": "string"
+              },
+              "sound": {
+                "type": "string"
+              },
+              "word": {
+                "type": "string"
+              },
+              "emoji": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "team",
+              "sound",
+              "word"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    }
+  }
+}

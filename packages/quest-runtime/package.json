@@ -1,0 +1,10 @@
+{
+  "name": "@discoveryquest/quest-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Learning Quest runtime rules: quest sizing, star scoring, and adaptive difficulty. Platform-agnostic (no DOM, no subject knowledge) — every quest app applies the same progression rules to its own question types.",
+  "exports": {
+    "./scoring": "./src/scoring.js"
+  }
+}

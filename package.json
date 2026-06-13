@@ -1,0 +1,21 @@
+{
+  "name": "discovery-quest",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Discovery Quest — open learning engine, course format, and official courses.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "course:check": "node scripts/course-check.mjs",
+    "course:export": "node scripts/export-course.mjs",
+    "course:capabilities": "node scripts/gen-capabilities.mjs",
+    "course:schema": "node scripts/gen-schema.mjs",
+    "validate": "node scripts/gen-capabilities.mjs --check && node scripts/gen-schema.mjs --check"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "js-yaml": "^4.2.0"
+  }
+}

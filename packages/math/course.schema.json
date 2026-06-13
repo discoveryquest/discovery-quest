@@ -1,0 +1,1954 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://discoveryquest.app/schema/math/course.schema.json",
+  "title": "Discovery Quest course — math",
+  "$comment": "GENERATED from engine.capabilities.json v1.0 by gen-schema.mjs. Do not edit by hand.",
+  "type": "object",
+  "required": [
+    "course"
+  ],
+  "properties": {
+    "course": {
+      "$ref": "#/$defs/course"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "course": {
+      "type": "object",
+      "required": [
+        "formatVersion",
+        "id",
+        "title",
+        "subject",
+        "worlds"
+      ],
+      "properties": {
+        "formatVersion": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "companion": {
+          "type": "string"
+        },
+        "voice": {
+          "type": "object"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "worlds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/world"
+          }
+        },
+        "lessons": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/lesson"
+          }
+        },
+        "narration": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "content": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "world": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "blurb": {
+          "type": "string"
+        },
+        "soon": {
+          "type": "boolean"
+        },
+        "stations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/station"
+          }
+        }
+      }
+    },
+    "station": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "sub": {
+          "type": "string"
+        },
+        "board": {
+          "enum": [
+            "angles",
+            "area",
+            "bonds",
+            "compare",
+            "counting",
+            "dec-addsub",
+            "dec-compare",
+            "dec-convert",
+            "dec-place",
+            "dec-pow10",
+            "div-facts",
+            "elapsed",
+            "even-odd",
+            "fact-add",
+            "fact-sub",
+            "frac-addlike",
+            "frac-compare",
+            "frac-concept",
+            "frac-equiv",
+            "frac-mixed",
+            "frac-mulwhole",
+            "frac-unlike",
+            "long-add",
+            "long-div",
+            "long-mul",
+            "long-sub",
+            "money",
+            "mul-concept",
+            "perimeter",
+            "rounding",
+            "shapes",
+            "skip",
+            "symmetry",
+            "tables",
+            "tens-ones",
+            "time",
+            "twodigit-nr",
+            "unit-convert",
+            "units",
+            "volume",
+            "word-1step",
+            "word-2step",
+            "word-master"
+          ]
+        },
+        "bands": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "lesson": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "concept": {
+          "type": "string"
+        },
+        "soon": {
+          "type": "boolean"
+        }
+      },
+      "if": {
+        "properties": {
+          "soon": {
+            "const": true
+          }
+        },
+        "required": [
+          "soon"
+        ]
+      },
+      "then": true,
+      "else": {
+        "required": [
+          "board",
+          "bands"
+        ]
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "required": [
+        "title",
+        "sections"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        }
+      }
+    },
+    "section": {
+      "type": "object",
+      "required": [
+        "id",
+        "beats"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/beat"
+          }
+        }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "required": [
+        "say",
+        "caption",
+        "view"
+      ],
+      "properties": {
+        "say": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "advance": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "view": {
+          "$ref": "#/$defs/view"
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "adddec",
+            "addfrac",
+            "angle",
+            "area",
+            "array",
+            "baseten",
+            "big",
+            "clock",
+            "coins",
+            "column",
+            "combine",
+            "compare",
+            "comparecards",
+            "compdec",
+            "compfrac",
+            "decgrid",
+            "dechop",
+            "elapsed",
+            "equiv",
+            "evenodd",
+            "fracbar",
+            "fracpie",
+            "groups",
+            "longdiv",
+            "multable",
+            "numberline",
+            "objects",
+            "perimeter",
+            "placedigits",
+            "repeatadd",
+            "roundline",
+            "shape",
+            "skip",
+            "story",
+            "symmetry",
+            "table",
+            "takeaway",
+            "tenframe",
+            "unitladder",
+            "volume"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "adddec"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "adddec"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "number"
+              },
+              "b": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "addfrac"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "addfrac"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              },
+              "n": {
+                "type": "integer",
+                "description": "shared denominator"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b",
+              "n"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "angle"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "angle"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "deg": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "deg"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "area"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "area"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "w": {
+                "type": "integer"
+              },
+              "h": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "w",
+              "h"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "array"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "array"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "baseten"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "baseten"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "t": {
+                "type": "integer",
+                "description": "tens"
+              },
+              "o": {
+                "type": "integer",
+                "description": "ones"
+              }
+            },
+            "required": [
+              "kind",
+              "t",
+              "o"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "big"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "big"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "color": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "clock"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "clock"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "h": {
+                "type": "integer"
+              },
+              "m": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "h",
+              "m"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "coins"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "coins"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "coins": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "description": "coin values in cents"
+              }
+            },
+            "required": [
+              "kind",
+              "coins"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "column"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "column"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "top": {
+                "type": [
+                  "integer",
+                  "string"
+                ]
+              },
+              "bottom": {
+                "type": [
+                  "integer",
+                  "string"
+                ]
+              },
+              "op": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "'+' | '−' | '×'"
+              },
+              "result": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "digits; use spaces for not-yet-filled places"
+              },
+              "carry": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "{ columnFromRight: digit } shown above"
+              },
+              "active": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "column-from-right to highlight"
+              }
+            },
+            "required": [
+              "kind",
+              "top",
+              "bottom"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "combine"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "combine"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "compare"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "compare"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "emoji": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "left": {
+                "type": "integer"
+              },
+              "right": {
+                "type": "integer"
+              },
+              "sign": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "'<' | '>' | '=' ; null to hide"
+              }
+            },
+            "required": [
+              "kind",
+              "left",
+              "right"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "comparecards"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "comparecards"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "compdec"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "compdec"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "number"
+              },
+              "b": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "compfrac"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "compfrac"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "k1": {
+                "type": "integer"
+              },
+              "n1": {
+                "type": "integer"
+              },
+              "k2": {
+                "type": "integer"
+              },
+              "n2": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "k1",
+              "n1",
+              "k2",
+              "n2"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "decgrid"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "decgrid"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "dechop"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "dechop"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "from": {
+                "type": "number"
+              },
+              "factor": {
+                "type": "integer"
+              },
+              "op": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "'×' | '÷'"
+              }
+            },
+            "required": [
+              "kind",
+              "from",
+              "factor"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "elapsed"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "elapsed"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "h1": {
+                "type": "integer"
+              },
+              "m1": {
+                "type": "integer"
+              },
+              "dh": {
+                "type": "integer",
+                "description": "hours elapsed"
+              },
+              "dm": {
+                "type": "integer",
+                "description": "minutes elapsed"
+              }
+            },
+            "required": [
+              "kind",
+              "h1",
+              "m1",
+              "dh",
+              "dm"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "equiv"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "equiv"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              },
+              "m": {
+                "type": "integer",
+                "description": "multiplier"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b",
+              "m"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "evenodd"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "evenodd"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "n": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "n"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "fracbar"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "fracbar"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "n": {
+                "type": "integer",
+                "description": "total parts"
+              },
+              "k": {
+                "type": "integer",
+                "description": "shaded parts"
+              }
+            },
+            "required": [
+              "kind",
+              "n",
+              "k"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "fracpie"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "fracpie"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "k": {
+                "type": "integer",
+                "description": "shaded parts (numerator)"
+              },
+              "n": {
+                "type": "integer",
+                "description": "total parts (denominator)"
+              }
+            },
+            "required": [
+              "kind",
+              "k",
+              "n"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "groups"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "groups"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "total": {
+                "type": "integer"
+              },
+              "groups": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "total",
+              "groups"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "longdiv"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "longdiv"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "divisor": {
+                "type": "string"
+              },
+              "dividend": {
+                "type": "string"
+              },
+              "quotient": {
+                "type": "string"
+              },
+              "quoSteps": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "integer"
+                },
+                "description": "step at which each quotient digit appears"
+              },
+              "rows": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "object"
+                },
+                "description": "working rows: { s: digits, c: \"rose\"|\"line\", step }"
+              },
+              "step": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "reveal everything up to this step"
+              }
+            },
+            "required": [
+              "kind",
+              "divisor",
+              "dividend",
+              "quotient"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "multable"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "multable"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "hint": {
+                "type": "object",
+                "description": "{ row, col, mode }"
+              }
+            },
+            "required": [
+              "kind",
+              "hint"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "numberline"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "numberline"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "hint": {
+                "type": "object",
+                "description": "{ start, op: 'add'|'sub'|'bondup', delta? , target? }"
+              }
+            },
+            "required": [
+              "kind",
+              "hint"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "objects"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "objects"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "emoji": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "n": {
+                "type": "integer"
+              },
+              "highlight": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "count up to this index; -1 for none"
+              },
+              "numeral": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "show a big total below; null to hide"
+              }
+            },
+            "required": [
+              "kind",
+              "n"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "perimeter"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "perimeter"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "w": {
+                "type": "integer"
+              },
+              "h": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "w",
+              "h"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "placedigits"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "placedigits"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "value": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "repeatadd"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "repeatadd"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              },
+              "run": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "bump to replay the animation"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "roundline"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "roundline"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "v": {
+                "type": "integer"
+              },
+              "unit": {
+                "type": "integer",
+                "description": "round to nearest this (10, 100…)"
+              }
+            },
+            "required": [
+              "kind",
+              "v",
+              "unit"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "shape"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "shape"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "sides": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "sides",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "skip"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "skip"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "step": {
+                "type": "integer"
+              },
+              "count": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "step",
+              "count"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "story"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "story"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "words": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "each { t: text, kind?: \"num\"|\"add\"|\"sub\" }"
+              },
+              "revealed": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "how many words shown so far"
+              }
+            },
+            "required": [
+              "kind",
+              "words"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "symmetry"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "symmetry"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "emoji": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "emoji"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "table"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "table"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "n": {
+                "type": "integer"
+              },
+              "reveal": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "how many rows revealed (1..10)"
+              }
+            },
+            "required": [
+              "kind",
+              "n"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "takeaway"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "takeaway"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "a": {
+                "type": "integer"
+              },
+              "b": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "a",
+              "b"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "tenframe"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "tenframe"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "filled": {
+                "type": "integer"
+              },
+              "showEq": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind",
+              "filled"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "unitladder"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "unitladder"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "big": {
+                "type": "string"
+              },
+              "small": {
+                "type": "string"
+              },
+              "per": {
+                "type": "integer",
+                "description": "small units per big unit"
+              },
+              "n": {
+                "type": "integer",
+                "description": "the quantity to convert"
+              }
+            },
+            "required": [
+              "kind",
+              "big",
+              "small",
+              "per",
+              "n"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "volume"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "volume"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "l": {
+                "type": "integer"
+              },
+              "w": {
+                "type": "integer"
+              },
+              "h": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "kind",
+              "l",
+              "w",
+              "h"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    }
+  }
+}

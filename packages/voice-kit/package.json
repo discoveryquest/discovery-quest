@@ -1,0 +1,14 @@
+{
+  "name": "@discoveryquest/voice-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Learning Quest voice toolkit: the narration playback queue (one utterance at a time, priority + ducking) shared by every quest app. Content-agnostic — the actual voice lines + active voice live in each app.",
+  "exports": {
+    "./audio": "./src/audio.js",
+    "./music": "./src/music.js"
+  },
+  "dependencies": {
+    "@discoveryquest/engine": "*"
+  }
+}

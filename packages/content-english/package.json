@@ -1,0 +1,12 @@
+{
+  "name": "@discoveryquest/content-english",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "English Quest content: generators + boards + authored data, honoring the per-subject quest contract (id/title/boardKind/bands/generate). DOM-free logic.",
+  "exports": {
+    "./phonics": "./src/phonics.js",
+    "./vocab": "./src/vocab.js",
+    "./grammar": "./src/grammar.js"
+  }
+}

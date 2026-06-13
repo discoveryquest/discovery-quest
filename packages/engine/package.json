@@ -1,0 +1,13 @@
+{
+  "name": "@discoveryquest/engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Learning Quest platform engine: progress, spaced-repetition review, telemetry. Platform-agnostic (no DOM imports) so web and React Native apps can share it.",
+  "exports": {
+    "./save": "./src/save.js",
+    "./reviewDeck": "./src/reviewDeck.js",
+    "./telemetry": "./src/telemetry.js",
+    "./syncMerge": "./src/syncMerge.js"
+  }
+}

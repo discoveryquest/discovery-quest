@@ -1,0 +1,26 @@
+{
+  "name": "@discoveryquest/english",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "English Quest course library: the boards, lesson views, curriculum, lessons, narration text, and capability/catalog metadata — the open, reusable implementation a thin app shell composes.",
+  "exports": {
+    ".": "./src/App.jsx",
+    "./voiceLines": "./src/voiceLines.js",
+    "./curriculum": "./src/curriculum.js",
+    "./quest": "./src/PhonicsQuest.jsx",
+    "./lessons": "./src/lessons.jsx"
+  },
+  "dependencies": {
+    "@discoveryquest/engine": "*",
+    "@discoveryquest/engine-ui": "*",
+    "@discoveryquest/voice-kit": "*",
+    "@discoveryquest/quest-runtime": "*",
+    "@discoveryquest/content-english": "*"
+  },
+  "peerDependencies": {
+    "framer-motion": "*",
+    "lucide-react": "*",
+    "react": "*"
+  }
+}

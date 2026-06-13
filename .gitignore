@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.env.*
+*.log
+# audio + art are rendered/owned downstream, never committed here
+**/public/voice/
+**/public/music/
+**/map-art/

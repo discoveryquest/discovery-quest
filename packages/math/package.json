@@ -1,0 +1,25 @@
+{
+  "name": "@discoveryquest/math",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Math Quest course library: the question types (boards) + problem generators, lesson views, concepts, quest/map surfaces, curriculum, lessons, narration text, and capability/catalog metadata — the open, reusable course a thin app shell composes.",
+  "exports": {
+    "./MapScreen": "./src/MapScreen.jsx",
+    "./QuestScreen": "./src/QuestScreen.jsx",
+    "./curriculum": "./src/curriculum.js",
+    "./brand": "./src/brand.js",
+    "./voiceLines": "./src/voiceLines.js"
+  },
+  "dependencies": {
+    "@discoveryquest/engine": "*",
+    "@discoveryquest/engine-ui": "*",
+    "@discoveryquest/voice-kit": "*",
+    "@discoveryquest/quest-runtime": "*"
+  },
+  "peerDependencies": {
+    "framer-motion": "*",
+    "lucide-react": "*",
+    "react": "*"
+  }
+}

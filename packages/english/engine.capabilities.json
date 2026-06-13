@@ -1,0 +1,635 @@
+{
+  "version": "1.0",
+  "boards": [
+    {
+      "kind": "blendWord",
+      "description": "Build a short (CVC) word by choosing its sounds in order.",
+      "content": "blendWords",
+      "item": [
+        {
+          "name": "(word)",
+          "type": "string",
+          "example": "cat",
+          "note": "blendWords is a flat list of decodable words"
+        }
+      ]
+    },
+    {
+      "kind": "contextClue",
+      "description": "Fill the blank in a sentence using context clues — pick the word that makes sense.",
+      "content": "contextClues",
+      "item": [
+        {
+          "name": "sentence",
+          "type": "string",
+          "example": "I sleep in my ___.",
+          "note": "contains the blank"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "example": "bed"
+        }
+      ]
+    },
+    {
+      "kind": "digraphs",
+      "description": "Two letters, one sound: pick the digraph team (sh, ch, th, ck) that spells the sound.",
+      "content": "digraphs",
+      "item": [
+        {
+          "name": "team",
+          "type": "string",
+          "example": "sh"
+        },
+        {
+          "name": "sound",
+          "type": "string",
+          "example": "/sh/"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "example": "ship"
+        }
+      ]
+    },
+    {
+      "kind": "grammarAdj",
+      "description": "Spot the describing word (adjective).",
+      "content": "parts_of_speech (adjectives)",
+      "item": [
+        {
+          "name": "(word)",
+          "type": "string",
+          "example": "happy",
+          "note": "tagged adjective"
+        }
+      ]
+    },
+    {
+      "kind": "grammarNoun",
+      "description": "Spot the naming word (noun) — sorts words by part of speech.",
+      "content": "parts_of_speech (nouns)",
+      "item": [
+        {
+          "name": "(word)",
+          "type": "string",
+          "example": "dog",
+          "note": "tagged noun in the word bank"
+        }
+      ]
+    },
+    {
+      "kind": "grammarVerb",
+      "description": "Spot the doing word (verb).",
+      "content": "parts_of_speech (verbs)",
+      "item": [
+        {
+          "name": "(word)",
+          "type": "string",
+          "example": "run",
+          "note": "tagged verb"
+        }
+      ]
+    },
+    {
+      "kind": "pictureMatch",
+      "description": "Match a picture to its written word (or vice versa). Core vocabulary recognition.",
+      "content": "vocab",
+      "item": [
+        {
+          "name": "word",
+          "type": "string",
+          "example": "cat"
+        },
+        {
+          "name": "emoji",
+          "type": "string",
+          "example": "🐱"
+        }
+      ]
+    },
+    {
+      "kind": "punctuation",
+      "description": "Choose the right end mark for a sentence (. ? !).",
+      "content": "punctuationCores",
+      "item": [
+        {
+          "name": "(core)",
+          "type": "string",
+          "example": "the cat is big",
+          "note": "sentence without its end mark"
+        }
+      ]
+    },
+    {
+      "kind": "sameOpp",
+      "description": "Same or opposite? Pick the synonym or the antonym of the given word.",
+      "content": "synonyms, antonyms",
+      "item": [
+        {
+          "name": "word",
+          "type": "string",
+          "example": "big"
+        },
+        {
+          "name": "match",
+          "type": "string",
+          "example": "large",
+          "note": "the synonym/antonym partner"
+        }
+      ]
+    },
+    {
+      "kind": "sentence",
+      "description": "Build a correct sentence by ordering the words (capital first, period last).",
+      "content": "sentences",
+      "item": [
+        {
+          "name": "(sentence)",
+          "type": "string",
+          "example": "The cat is big.",
+          "note": "a model sentence the words are drawn from"
+        }
+      ]
+    },
+    {
+      "kind": "sightWord",
+      "description": "Choose the high-frequency sight word that was spoken — words you learn by sight, not sounding out.",
+      "content": "sightWords",
+      "item": [
+        {
+          "name": "(word)",
+          "type": "string",
+          "example": "the",
+          "note": "flat list of sight words"
+        }
+      ]
+    },
+    {
+      "kind": "soundToLetter",
+      "description": "Hear a sound, tap the letter that makes it. The first phonics interaction.",
+      "content": "phonemes",
+      "item": [
+        {
+          "name": "letter",
+          "type": "string",
+          "example": "s"
+        },
+        {
+          "name": "sound",
+          "type": "string",
+          "example": "/s/"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "example": "sun"
+        }
+      ]
+    },
+    {
+      "kind": "wordFamily",
+      "description": "Word families: same ending, swap the first sound (-at → cat, hat, mat).",
+      "content": "wordFamilies",
+      "item": [
+        {
+          "name": "(family)",
+          "type": "object",
+          "example": {
+            "rime": "at",
+            "words": [
+              "cat",
+              "hat"
+            ]
+          },
+          "note": "see the wordFamilies content collection"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "kind": "blend",
+      "description": "Sounds blending into a word: letter chips appear one by one, then resolve into the whole word (\"c-a-t → cat\").",
+      "fields": [
+        {
+          "name": "letters",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "c",
+            "a",
+            "t"
+          ]
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "cat"
+        }
+      ]
+    },
+    {
+      "kind": "cloze",
+      "description": "A sentence with a blank (___), optionally shown filled with the answer. For context-clue / fill-in beats.",
+      "fields": [
+        {
+          "name": "sentence",
+          "type": "string",
+          "required": true,
+          "example": "I sleep in my ___.",
+          "note": "must contain \"___\" where the blank goes"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "required": false,
+          "example": "bed",
+          "note": "omit to show the blank empty; set to reveal it"
+        }
+      ]
+    },
+    {
+      "kind": "examples",
+      "description": "A category label plus a few example words — used to teach a part of speech (naming/doing/describing words).",
+      "fields": [
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "example": "naming words"
+        },
+        {
+          "name": "words",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "cat",
+            "hat",
+            "bus"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "letters",
+      "description": "A row of letter tiles; the active one lifts and glows. Good for intro/recap beats that point at a set of letters.",
+      "fields": [
+        {
+          "name": "items",
+          "type": "string[]",
+          "required": false,
+          "example": [
+            "s",
+            "a",
+            "t",
+            "p",
+            "i",
+            "n"
+          ]
+        },
+        {
+          "name": "active",
+          "type": "int",
+          "required": false,
+          "example": 2,
+          "note": "index of the highlighted letter; -1 for none"
+        }
+      ]
+    },
+    {
+      "kind": "pair",
+      "description": "Two words in a relationship: same meaning (=) or opposites (⇄), colour-coded with a label.",
+      "fields": [
+        {
+          "name": "a",
+          "type": "string",
+          "required": true,
+          "example": "big"
+        },
+        {
+          "name": "b",
+          "type": "string",
+          "required": true,
+          "example": "large"
+        },
+        {
+          "name": "rel",
+          "type": "enum",
+          "required": true,
+          "example": "same",
+          "note": "'same' | 'opposite'"
+        }
+      ]
+    },
+    {
+      "kind": "phoneme",
+      "description": "One letter in focus: a big letter card plus an example word and picture, with the first letter coloured.",
+      "fields": [
+        {
+          "name": "letter",
+          "type": "string",
+          "required": true,
+          "example": "s"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "sun"
+        },
+        {
+          "name": "emoji",
+          "type": "string",
+          "required": false,
+          "example": "☀️"
+        }
+      ]
+    },
+    {
+      "kind": "picture",
+      "description": "A picture above its word — the core vocabulary visual (see it, read it).",
+      "fields": [
+        {
+          "name": "emoji",
+          "type": "string",
+          "required": true,
+          "example": "🐱"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "cat"
+        }
+      ]
+    },
+    {
+      "kind": "sentence",
+      "description": "A full sentence with the capital first letter and the end punctuation highlighted — for building/punctuation beats.",
+      "fields": [
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "example": "The cat is big.",
+          "note": "include the capital and end mark; both get highlighted"
+        }
+      ]
+    },
+    {
+      "kind": "soundboard",
+      "description": "Interactive sound wall: every letter and digraph as a tappable tile — tap one to hear its sound. A whole-alphabet \"explore it yourself\" screen.",
+      "fields": []
+    },
+    {
+      "kind": "team",
+      "description": "Two letters teaming up to make one sound (a digraph), shown as letters = sound, then an example word + picture.",
+      "fields": [
+        {
+          "name": "team",
+          "type": "string",
+          "required": true,
+          "example": "sh"
+        },
+        {
+          "name": "sound",
+          "type": "string",
+          "required": true,
+          "example": "/sh/"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "ship"
+        },
+        {
+          "name": "emoji",
+          "type": "string",
+          "required": false,
+          "example": "🚢"
+        }
+      ]
+    }
+  ],
+  "content": [
+    {
+      "id": "phonemes",
+      "description": "Letter → its sound and an example word. Feeds the sound-to-letter board and phoneme lessons.",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "letter",
+          "type": "string",
+          "required": true,
+          "example": "s"
+        },
+        {
+          "name": "sound",
+          "type": "string",
+          "required": true,
+          "example": "/s/"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "sun"
+        }
+      ]
+    },
+    {
+      "id": "digraphs",
+      "description": "Two-letter teams that make one sound (sh, ch, th, ck).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "team",
+          "type": "string",
+          "required": true,
+          "example": "sh"
+        },
+        {
+          "name": "sound",
+          "type": "string",
+          "required": true,
+          "example": "/sh/"
+        },
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "ship"
+        }
+      ]
+    },
+    {
+      "id": "vocab",
+      "description": "Vocabulary words paired with a picture (emoji). Feeds picture-match.",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "cat"
+        },
+        {
+          "name": "emoji",
+          "type": "string",
+          "required": true,
+          "example": "🐱"
+        }
+      ]
+    },
+    {
+      "id": "blendWords",
+      "description": "Decodable CVC words for sound-blending.",
+      "collection": "strings",
+      "example": "cat"
+    },
+    {
+      "id": "wordFamilies",
+      "description": "Word families grouped by rime (-at → cat, hat, mat). Feeds the word-family board.",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "rime",
+          "type": "string",
+          "required": true,
+          "example": "at"
+        },
+        {
+          "name": "words",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "cat",
+            "hat",
+            "mat"
+          ]
+        },
+        {
+          "name": "band",
+          "type": "int",
+          "required": true,
+          "example": 0,
+          "note": "difficulty band the family belongs to"
+        }
+      ]
+    },
+    {
+      "id": "synonyms",
+      "description": "Word pairs that mean the same. Feeds the same/opposite board (same mode).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "big"
+        },
+        {
+          "name": "match",
+          "type": "string",
+          "required": true,
+          "example": "large"
+        }
+      ]
+    },
+    {
+      "id": "antonyms",
+      "description": "Word pairs that are opposites. Feeds the same/opposite board (opposite mode).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "word",
+          "type": "string",
+          "required": true,
+          "example": "hot"
+        },
+        {
+          "name": "match",
+          "type": "string",
+          "required": true,
+          "example": "cold"
+        }
+      ]
+    },
+    {
+      "id": "contextClues",
+      "description": "Cloze sentences with the answer + distractors. Feeds the context-clue board.",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "sentence",
+          "type": "string",
+          "required": true,
+          "example": "I sleep in my ___.",
+          "note": "must contain the \"___\" blank"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "required": true,
+          "example": "bed"
+        },
+        {
+          "name": "distractors",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "cup",
+            "bus",
+            "fish"
+          ],
+          "note": "wrong-but-plausible choices"
+        }
+      ]
+    },
+    {
+      "id": "sightWords",
+      "description": "High-frequency words learned by sight (not sounded out).",
+      "collection": "strings",
+      "example": "the"
+    },
+    {
+      "id": "parts_of_speech",
+      "description": "The grammar word bank; the generator tags each word as noun / verb / adjective.",
+      "collection": "wordbank",
+      "fields": [
+        {
+          "name": "note",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "words",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "cat",
+            "run",
+            "happy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sentences",
+      "description": "Model sentences for the sentence-builder board (capital first, period last).",
+      "collection": "strings",
+      "example": "The cat is big."
+    },
+    {
+      "id": "punctuationCores",
+      "description": "Sentences with no end mark; the punctuation board asks which of . ? ! fits.",
+      "collection": "strings",
+      "example": "the cat is big"
+    }
+  ]
+}
