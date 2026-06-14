@@ -8,6 +8,7 @@
     "./save": "./src/save.js",
     "./reviewDeck": "./src/reviewDeck.js",
     "./telemetry": "./src/telemetry.js",
-    "./syncMerge": "./src/syncMerge.js"
+    "./syncMerge": "./src/syncMerge.js",
+    "./sync": "./src/sync.js"
   }
 }
