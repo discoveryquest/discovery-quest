@@ -50,17 +50,17 @@ test('genSightWords lowercase falls back to band>=2', () => {
   assert.equal(genSightWords(sight, { band: 2 }).steps[0].lower, true);
 });
 
-const synonyms = [['big', 'large'], ['happy', 'glad'], ['small', 'little']];
-const antonyms = [['big', 'small'], ['hot', 'cold'], ['up', 'down']];
+const synonyms = [{ word: 'big', match: 'large' }, { word: 'happy', match: 'glad' }, { word: 'small', match: 'little' }];
+const antonyms = [{ word: 'big', match: 'small' }, { word: 'hot', match: 'cold' }, { word: 'up', match: 'down' }];
 
 test('genSameOpposite takes {synonyms, antonyms}, correct from chosen mode, kind=sameOpp', () => {
-  const allWords = [...new Set([...synonyms, ...antonyms].flat())];
+  const allWords = [...new Set([...synonyms, ...antonyms].flatMap((p) => [p.word, p.match]))];
   for (let i = 0; i < 30; i++) {
     const p = genSameOpposite({ synonyms, antonyms }, { band: 0, lowercase: true });
     assert.equal(p.kind, 'sameOpp');
     const pairs = p.mode === 'same' ? synonyms : antonyms;
     // target+correct must be a pair (in either order) from the chosen mode's collection
-    assert.ok(pairs.some(([a, b]) => (a === p.target && b === p.word) || (b === p.target && a === p.word)));
+    assert.ok(pairs.some(({ word, match }) => (word === p.target && match === p.word) || (match === p.target && word === p.word)));
     assert.equal(p.steps[0].choices.length, 4);
     assert.ok(p.steps[0].choices.includes(p.word));
     // distractors drawn from union of both collections
@@ -75,14 +75,14 @@ test('genSameOpposite lowercase falls back to band>=2', () => {
 });
 
 const context = [
-  { s: 'I sleep in my ___.', a: 'bed', d: ['cup', 'bus', 'fish'] },
-  { s: 'The ___ shines.', a: 'sun', d: ['bed', 'cat', 'box'] },
+  { sentence: 'I sleep in my ___.', answer: 'bed', distractors: ['cup', 'bus', 'fish'] },
+  { sentence: 'The ___ shines.', answer: 'sun', distractors: ['bed', 'cat', 'box'] },
 ];
 
 test('genContextClues draws from injected items, kind=contextClue, 4 choices', () => {
   const p = genContextClues(context, { band: 0 });
   assert.equal(p.kind, 'contextClue');
-  assert.ok(context.some((i) => i.a === p.word));
+  assert.ok(context.some((i) => i.answer === p.word));
   assert.equal(p.steps[0].choices.length, 4);
   assert.ok(p.steps[0].choices.includes(p.word));
   assert.equal(p.steps[0].expected, p.word);

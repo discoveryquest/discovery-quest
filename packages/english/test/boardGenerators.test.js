@@ -40,8 +40,8 @@ test('a generator runs against injected items — soundToLetter', () => {
 
 test('a generator runs against injected items — sameOpp (multi-collection)', () => {
   const content = {
-    synonyms: [['big', 'large'], ['happy', 'glad']],
-    antonyms: [['big', 'small'], ['hot', 'cold']],
+    synonyms: [{ word: 'big', match: 'large' }, { word: 'happy', match: 'glad' }],
+    antonyms: [{ word: 'big', match: 'small' }, { word: 'hot', match: 'cold' }],
   };
   const p = BOARD_GENERATORS.sameOpp.generate(content, { band: 0 });
   assert.ok(p.word);

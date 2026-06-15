@@ -144,18 +144,18 @@ export const sightWords = {
 // ── Same or Opposite (synonyms & antonyms) ─────────────────────────────────
 // Show a word; tap the one that means the SAME (synonym) or the OPPOSITE (antonym).
 export const SYNONYMS = [
-  ['big', 'large'], ['happy', 'glad'], ['small', 'little'], ['fast', 'quick'],
-  ['mad', 'angry'], ['cold', 'chilly'], ['nice', 'kind'], ['scared', 'afraid'],
+  { word: 'big', match: 'large' }, { word: 'happy', match: 'glad' }, { word: 'small', match: 'little' }, { word: 'fast', match: 'quick' },
+  { word: 'mad', match: 'angry' }, { word: 'cold', match: 'chilly' }, { word: 'nice', match: 'kind' }, { word: 'scared', match: 'afraid' },
 ];
 export const ANTONYMS = [
-  ['big', 'small'], ['hot', 'cold'], ['up', 'down'], ['fast', 'slow'], ['happy', 'sad'],
-  ['day', 'night'], ['wet', 'dry'], ['old', 'new'], ['open', 'shut'], ['tall', 'short'],
-  ['hard', 'soft'], ['full', 'empty'],
+  { word: 'big', match: 'small' }, { word: 'hot', match: 'cold' }, { word: 'up', match: 'down' }, { word: 'fast', match: 'slow' }, { word: 'happy', match: 'sad' },
+  { word: 'day', match: 'night' }, { word: 'wet', match: 'dry' }, { word: 'old', match: 'new' }, { word: 'open', match: 'shut' }, { word: 'tall', match: 'short' },
+  { word: 'hard', match: 'soft' }, { word: 'full', match: 'empty' },
 ];
-export const SAMEOPP_WORDS = [...new Set([...SYNONYMS, ...ANTONYMS].flat())];
+export const SAMEOPP_WORDS = [...new Set([...SYNONYMS, ...ANTONYMS].flatMap((p) => [p.word, p.match]))];
 
 // `content` is the multi-collection object { synonyms, antonyms } (each an array of
-// [word, match] pairs). The mode chooses which collection supplies the pair; distractors
+// {word, match} objects). The mode chooses which collection supplies the pair; distractors
 // come from the union of BOTH collections' words.
 export function genSameOpposite(content, ctx = {}) {
   const band = ctx.band ?? 0;
@@ -163,8 +163,8 @@ export function genSameOpposite(content, ctx = {}) {
   const { synonyms, antonyms } = content;
   const mode = Math.random() < 0.5 ? 'same' : 'opposite';
   const pair = pick(mode === 'same' ? synonyms : antonyms);
-  const [target, correct] = Math.random() < 0.5 ? pair : [pair[1], pair[0]];
-  const allWords = [...new Set([...synonyms, ...antonyms].flat())];
+  const [target, correct] = Math.random() < 0.5 ? [pair.word, pair.match] : [pair.match, pair.word];
+  const allWords = [...new Set([...synonyms, ...antonyms].flatMap((p) => [p.word, p.match]))];
   const distractors = shuffle(allWords.filter((w) => w !== target && w !== correct)).slice(0, 3);
   const choices = shuffle([correct, ...distractors]);
   return {
@@ -203,47 +203,47 @@ export const sameOpposite = {
 // Read a sentence with a missing word; the other words are clues. Authored cloze items
 // (`___` marks the blank); answer + distractors all have word-<w> clips.
 export const CONTEXT_ITEMS = [
-  { s: 'I sleep in my ___.', a: 'bed', d: ['cup', 'bus', 'fish'] },
-  { s: 'The ___ shines in the sky.', a: 'sun', d: ['bed', 'cat', 'box'] },
-  { s: 'A ___ says woof.', a: 'dog', d: ['pig', 'fish', 'hen'] },
-  { s: 'A ___ says oink.', a: 'pig', d: ['dog', 'hen', 'cat'] },
-  { s: 'I wear a ___ on my head.', a: 'hat', d: ['cup', 'bus', 'net'] },
-  { s: 'A ___ swims in the sea.', a: 'fish', d: ['cat', 'hen', 'jet'] },
-  { s: 'Ice is very ___.', a: 'cold', d: ['hot', 'big', 'wet'] },
-  { s: 'The fire is very ___.', a: 'hot', d: ['cold', 'wet', 'sad'] },
-  { s: 'A tiny ___ is very small.', a: 'ant', d: ['bus', 'ship', 'zebra'] },
-  { s: 'A ___ flies high in the sky.', a: 'jet', d: ['bus', 'fish', 'bed'] },
-  { s: 'I drink milk from a ___.', a: 'cup', d: ['hat', 'net', 'map'] },
-  { s: 'A ___ has black and white stripes.', a: 'zebra', d: ['cat', 'dog', 'pig'] },
+  { sentence: 'I sleep in my ___.', answer: 'bed', distractors: ['cup', 'bus', 'fish'] },
+  { sentence: 'The ___ shines in the sky.', answer: 'sun', distractors: ['bed', 'cat', 'box'] },
+  { sentence: 'A ___ says woof.', answer: 'dog', distractors: ['pig', 'fish', 'hen'] },
+  { sentence: 'A ___ says oink.', answer: 'pig', distractors: ['dog', 'hen', 'cat'] },
+  { sentence: 'I wear a ___ on my head.', answer: 'hat', distractors: ['cup', 'bus', 'net'] },
+  { sentence: 'A ___ swims in the sea.', answer: 'fish', distractors: ['cat', 'hen', 'jet'] },
+  { sentence: 'Ice is very ___.', answer: 'cold', distractors: ['hot', 'big', 'wet'] },
+  { sentence: 'The fire is very ___.', answer: 'hot', distractors: ['cold', 'wet', 'sad'] },
+  { sentence: 'A tiny ___ is very small.', answer: 'ant', distractors: ['bus', 'ship', 'zebra'] },
+  { sentence: 'A ___ flies high in the sky.', answer: 'jet', distractors: ['bus', 'fish', 'bed'] },
+  { sentence: 'I drink milk from a ___.', answer: 'cup', distractors: ['hat', 'net', 'map'] },
+  { sentence: 'A ___ has black and white stripes.', answer: 'zebra', distractors: ['cat', 'dog', 'pig'] },
 ];
-export const CONTEXT_WORDS = [...new Set(CONTEXT_ITEMS.flatMap((i) => [i.a, ...i.d]))];
+export const CONTEXT_WORDS = [...new Set(CONTEXT_ITEMS.flatMap((i) => [i.answer, ...i.distractors]))];
 
-// `items` is the context-clues array ({ s, a, d } cloze items).
+// `items` is the context-clues array ({ sentence, answer, distractors } cloze items).
 export function genContextClues(items, ctx = {}) {
   const band = ctx.band ?? 0;
   const lower = ctx.lowercase ?? (band >= 2);
   const item = pick(items);
-  const choices = shuffle([item.a, ...item.d]);
+  const choices = shuffle([item.answer, ...item.distractors]);
   return {
     kind: 'contextClue',
-    word: item.a,
-    result: item.a,
-    sentence: item.s,
+    word: item.answer,
+    result: item.answer,
+    sentence: item.sentence,
     steps: [
       {
         focus: [], targets: ['ans-0'], effects: [], preEffects: [],
         chip: { label: 'Context Clues', color: C.green },
         banner: 'Which word completes the sentence?',
         prompt: 'Read it and tap the word that fits',
-        sentence: item.s,
+        sentence: item.sentence,
         audioPrompt: 'q-fill',
         inputKind: 'choice',
         choices,
         lower,
-        expected: item.a,
-        hint: `"${item.a}" fits: ${item.s.replace('___', item.a)}`,
+        expected: item.answer,
+        hint: `"${item.answer}" fits: ${item.sentence.replace('___', item.answer)}`,
         sayQ: ['q-fill'],
-        sayA: [`word-${item.a}`],
+        sayA: [`word-${item.answer}`],
       },
     ],
   };
