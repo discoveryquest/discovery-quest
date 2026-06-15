@@ -119,6 +119,38 @@ export function hushAll() {
   stopUtterance();
 }
 
+// Read-along (karaoke): play word clips one at a time, calling onWord(i) as each clip
+// STARTS so the caller can highlight that word, then onDone() at the end. Returns a
+// controller { pause, resume, stop, isPaused }. Self-contained (its own state) and hushes
+// the narration queue first so the two never overlap. Used by Story Harbor's reader.
+export function playWords(keys, { onWord, onDone } = {}) {
+  hushAll();
+  let i = 0, paused = false, stopped = false, cur = null;
+  function playOne() {
+    if (stopped || paused) return;
+    if (i >= keys.length) { onDone?.(); return; }
+    onWord?.(i);
+    const a = getAudio(keys[i]);
+    cur = a;
+    a.currentTime = 0;
+    const onEnd = () => {
+      a.removeEventListener('ended', onEnd);
+      if (stopped || paused) return;
+      i += 1;
+      playOne();
+    };
+    a.addEventListener('ended', onEnd);
+    a.play().catch(() => {}); // autoplay may be blocked until a gesture
+  }
+  if (soundOn()) playOne(); else onDone?.();
+  return {
+    pause() { if (stopped || paused) return; paused = true; cur?.pause(); },
+    resume() { if (stopped || !paused) return; paused = false; if (cur && !cur.ended) cur.play().catch(() => {}); else playOne(); },
+    stop() { stopped = true; cur?.pause(); if (cur) cur.currentTime = 0; },
+    isPaused: () => paused,
+  };
+}
+
 // speak: accepts one clip key or a sequence of fragment keys.
 // Important lines never interrupt anything — they wait in a FIFO queue.
 // Reactive lines replace other reactive lines (fresh feedback beats stale)
