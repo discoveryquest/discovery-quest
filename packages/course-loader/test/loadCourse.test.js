@@ -76,3 +76,19 @@ test('array content injects an object of sliced collections', () => {
   assert.deepEqual(Object.keys(out), ['syn', 'ant']);
   assert.equal(out.syn[0].match, 'large');
 });
+
+test('soon worlds/stations pass through unbound (no registry lookup)', () => {
+  // A soon station has no board → it must NOT hit the registry (no "no registry entry" throw),
+  // and must carry its display fields + soon flag so the map can render it dimmed.
+  const soonDoc = { course: { worlds: [
+    { id: 'sw', title: 'Soon World', soon: true, stations: [
+      { id: 'z', title: 'Later', icon: '🚧', sub: 'coming', soon: true },
+    ] },
+  ] } };
+  const course = loadCourse(soonDoc, {}); // empty registry — would throw if it tried to bind
+  assert.equal(course.worlds[0].soon, true);
+  const st = course.stationsById.get('z');
+  assert.equal(st.soon, true);
+  assert.equal(st.title, 'Later');
+  assert.equal(st.generate, undefined); // not bound
+});
