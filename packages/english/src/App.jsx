@@ -1,17 +1,20 @@
-// English Quest — P1. Home → Phonics Cove map → Sound→Letter quests, with progress
-// saved via @discoveryquest/engine (its own 'eq-save' key). A lean standalone map for now; the
-// shared engine-ui board-framework surgery comes when a 2nd world justifies it.
-
+// English Quest — Home → map → quests, with an English "Learn it" before a station's first
+// play. Progress saved via @discoveryquest/engine under its own 'eq-save' key.
+//
+// This app is DATA-DRIVEN: everything (worlds, stations, lessons, narration, UI chrome,
+// reaction clips) comes from the loaded course in ./course.js (parsed from the vendored
+// english.course.yml). The map + the Course* hosts read `course`; there is no bespoke
+// runtime. Star-gating lives in ./curriculum.js.
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import { loadSave, setSaveKey, mutateSave } from '@discoveryquest/engine/save';
 import { hushAll } from '@discoveryquest/voice-kit/audio';
-import LessonScreen from '@discoveryquest/engine-ui/LessonScreen';
+import CourseQuest from '@discoveryquest/english/courseQuest';
+import CourseLesson from '@discoveryquest/english/courseLesson';
 import MapScreen from './MapScreen.jsx';
-import PhonicsQuest from './PhonicsQuest.jsx';
-import { LESSONS, renderLessonView } from './lessons.jsx';
+import { course } from './course.js';
 
 setSaveKey('eq-save'); // English Quest's own save slot (never collides with math)
 
@@ -53,21 +56,21 @@ function Home({ onStart }) {
 export default function App() {
   const [screen, setScreen] = useState('home'); // 'home' | 'map' | 'quest'
   const [station, setStation] = useState(null);
-  const [lesson, setLesson] = useState(null); // { id, then } — beat-based "Learn it"
+  const [lesson, setLesson] = useState(null); // { id, then }
   // a counter to re-read the save after a quest persists stars (cheap, no global store)
   const [saveTick, setSaveTick] = useState(0);
   const save = loadSave();
 
+  const hasLesson = (st) => st?.lessonId && course.lessonsById[st.lessonId];
   const startQuest = (st) => { setStation(st); setScreen('quest'); };
   // First visit to a station with a lesson → show "Learn it", then play. Else play.
-  // `lower` carries the station's letter-case stage (capitals first; lowercase at band 2+).
   function onPlay(st) {
-    if (st.lesson && LESSONS[st.lesson] && !save.conceptSeen?.[st.lesson]) {
-      mutateSave((s) => { s.conceptSeen = { ...(s.conceptSeen || {}), [st.lesson]: true }; });
-      setLesson({ id: st.lesson, then: () => startQuest(st), lower: st.band >= 2 });
+    if (hasLesson(st) && !save.conceptSeen?.[st.lessonId]) {
+      mutateSave((s) => { s.conceptSeen = { ...(s.conceptSeen || {}), [st.lessonId]: true }; });
+      setLesson({ id: st.lessonId, then: () => startQuest(st) });
     } else startQuest(st);
   }
-  const onLearn = (st) => setLesson({ id: st.lesson, then: null, lower: st.band >= 2 }); // replay only
+  const onLearn = (st) => setLesson({ id: st.lessonId, then: null }); // replay only
 
   return (
     <div
@@ -78,21 +81,23 @@ export default function App() {
       }}
     >
       {screen === 'quest' ? (
-        <PhonicsQuest
+        <CourseQuest
           key={station?.id}
           station={station}
+          course={course}
           onExit={() => { setSaveTick((t) => t + 1); setScreen('map'); }}
         />
       ) : screen === 'map' ? (
-        <MapScreen key={saveTick} save={save} onPlay={onPlay} onLearn={onLearn} />
+        <MapScreen key={saveTick} worlds={course.worlds} save={save} onPlay={onPlay} onLearn={onLearn} />
       ) : (
         <Home onStart={() => setScreen('map')} />
       )}
 
-      {lesson && LESSONS[lesson.id] && (
-        <LessonScreen
-          lesson={LESSONS[lesson.id]}
-          renderView={(view) => renderLessonView(view, lesson.lower)}
+      {lesson && course.lessonsById[lesson.id] && (
+        <CourseLesson
+          lesson={course.lessonsById[lesson.id]}
+          narration={course.narration}
+          lowercase={course.meta.lowercase}
           onDone={() => { const then = lesson.then; hushAll(); setLesson(null); then?.(); }}
         />
       )}

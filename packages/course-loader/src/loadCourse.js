@@ -17,6 +17,11 @@ function sliceByBand(items, bands) {
 }
 
 function bindStation(s, worldId, course, content, registry) {
+  // "Coming soon" stations are shown on the map but have no board/generator — pass them
+  // through with their display fields so the map can render them dimmed (no binding).
+  if (s.soon) {
+    return { id: s.id, title: s.title, icon: s.icon, sub: s.sub, worldId, soon: true, bands: [] };
+  }
   const entry = registry[s.board];
   if (!entry) throw new Error(`loadCourse: no registry entry for board "${s.board}"`);
   const items = Array.isArray(entry.content)
@@ -37,7 +42,7 @@ export function loadCourse(doc, registry) {
   const c = doc.course || doc;
   const content = c.content || {};
   const worlds = (c.worlds || []).map((w) => ({
-    id: w.id, title: w.title, emoji: w.emoji, color: w.color, blurb: w.blurb,
+    id: w.id, title: w.title, emoji: w.emoji, color: w.color, blurb: w.blurb, soon: w.soon,
     stations: (w.stations || []).map((s) => bindStation(s, w.id, c, content, registry)),
   }));
   const stationsById = new Map();

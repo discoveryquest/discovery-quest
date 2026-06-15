@@ -79,5 +79,26 @@ export function isStationOpen(save, world, index) {
   return !prev.soon && starsOf(save, prev.id) > 0;
 }
 
-export const totalStars = (save) => PLAYABLE.reduce((a, s) => a + starsOf(save, s.id), 0);
+// Star totals over a list of worlds (the loaded course.worlds, or the local WORLDS).
+// `soon` stations don't count toward the max. Defaults to the local WORLDS for callers
+// that don't pass a course (back-compat).
+const playableOf = (worlds) => worlds.flatMap((w) => w.stations).filter((s) => !s.soon);
+export const totalStars = (save, worlds = WORLDS) =>
+  playableOf(worlds).reduce((a, s) => a + starsOf(save, s.id), 0);
+export const maxStars = (worlds = WORLDS) => playableOf(worlds).length * 3;
 export const MAX_STARS = PLAYABLE.length * 3;
+
+// The "hero" / frontier station: the furthest unlocked station that isn't fully
+// starred (mirrors math's heroStation idea over isStationOpen/starsOf). Returns the
+// station id, or null if every open station is maxed (or none are open).
+export function frontierStation(save, worlds) {
+  let id = null;
+  for (let w = 0; w < worlds.length; w++) {
+    const world = worlds[w];
+    for (let k = 0; k < world.stations.length; k++) {
+      if (!isStationOpen(save, world, k)) continue;
+      if (starsOf(save, world.stations[k].id) < 3) id = world.stations[k].id;
+    }
+  }
+  return id;
+}

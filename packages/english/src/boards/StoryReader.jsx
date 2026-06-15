@@ -23,7 +23,7 @@ export default function StoryReader({ step, picked, onPick }) {
   const [paused, setPaused] = useState(false);
   const ctrlRef = useRef(null);
 
-  // (Re)start the read-along whenever the story changes. PhonicsQuest reuses this
+  // (Re)start the read-along whenever the story changes. The quest host reuses this
   // component across questions (no key), so we drive off the story, not mount.
   useEffect(() => {
     setHi(-1); setPhase('reading'); setPaused(false);

@@ -1,0 +1,1537 @@
+course:
+  formatVersion: 1
+  id: english
+  title: English Quest
+  subject: English
+  companion: luna
+  voice:
+    id: jessica
+    profile: teaching-slow
+  ui:
+    done: "Great job!"
+    backToMap: "Back to the map"
+    score: "You got {correct} of {total}!"
+  reactions:
+    praise:
+      - praise-0
+      - praise-1
+      - praise-2
+      - praise-3
+      - praise-4
+      - praise-5
+    oops:
+      - oops-0
+      - oops-1
+      - oops-2
+    solved:
+      - solved-0
+      - solved-1
+  engine: ">=1.0"
+  worlds:
+    - id: phonics
+      title: Phonics Cove
+      emoji: 🐚
+      color: "#22D3EE"
+      blurb: Hear it, find the letter, read your first words.
+      stations:
+        - id: ph-set1
+          title: First Sounds
+          icon: 🅰️
+          sub: s a t p i n
+          board: soundToLetter
+          bands:
+            - 0
+          lesson: letter-sounds
+        - id: ph-set2
+          title: More Sounds
+          icon: 🅱️
+          sub: + m d g o c k
+          board: soundToLetter
+          bands:
+            - 0
+            - 1
+          lesson: letter-sounds
+        - id: ph-all
+          title: All Letter Sounds
+          icon: 🔤
+          sub: every letter
+          board: soundToLetter
+          bands:
+            - 0
+            - 1
+            - 2
+          lesson: letter-sounds
+        - id: ph-blend
+          title: Blending Bay
+          icon: 🫧
+          sub: blend sounds into words
+          board: blendWord
+          bands:
+            - 0
+          lesson: blending
+        - id: ph-families
+          title: Word Families
+          icon: 👨‍👩‍👧
+          sub: "-at, -an, -ig"
+          board: wordFamily
+          bands:
+            - 0
+          lesson: word-families
+        - id: ph-digraphs
+          title: Tricky Teams
+          icon: 🧩
+          sub: sh, ch, th, ck
+          board: digraphs
+          bands:
+            - 0
+          lesson: digraphs
+    - id: vocab
+      title: Word Woods
+      emoji: 🌳
+      color: "#4ADE80"
+      blurb: Grow your word power — meanings, matches, and clues.
+      stations:
+        - id: v-match
+          title: Picture Match
+          icon: 🖼️
+          sub: word ↔ picture
+          board: pictureMatch
+          bands:
+            - 0
+          lesson: picture-match
+        - id: v-sight
+          title: Sight Words
+          icon: 👀
+          sub: the, and, is, you…
+          board: sightWord
+          bands:
+            - 0
+          lesson: sight-words
+        - id: v-synant
+          title: Same or Opposite
+          icon: 🔁
+          sub: synonyms & antonyms
+          board: sameOpp
+          bands:
+            - 0
+          lesson: same-opposite
+        - id: v-context
+          title: Context Clues
+          icon: 🔍
+          sub: guess from the sentence
+          board: contextClue
+          bands:
+            - 0
+          lesson: context-clues
+    - id: grammar
+      title: Grammar Grove
+      emoji: 🌿
+      color: "#A78BFA"
+      blurb: Words have jobs — build sentences that work.
+      stations:
+        - id: g-nouns
+          title: Naming Words
+          icon: 🏷️
+          sub: nouns
+          board: grammarNoun
+          bands:
+            - 0
+          lesson: nouns
+        - id: g-verbs
+          title: Doing Words
+          icon: 🏃
+          sub: verbs
+          board: grammarVerb
+          bands:
+            - 0
+          lesson: verbs
+        - id: g-adj
+          title: Describing Words
+          icon: 🎨
+          sub: adjectives
+          board: grammarAdj
+          bands:
+            - 0
+          lesson: adjectives
+        - id: g-build
+          title: Build a Sentence
+          icon: 🧱
+          sub: word order
+          board: sentence
+          bands:
+            - 0
+          lesson: build-sentence
+        - id: g-caps
+          title: Capitals & Periods
+          icon: 🔠
+          sub: punctuation
+          board: punctuation
+          bands:
+            - 0
+          lesson: punctuation
+    - id: reading
+      title: Story Harbor
+      emoji: ⚓
+      color: "#F472B6"
+      blurb: Read little stories and find the answers inside them.
+      stations:
+        - id: r-first
+          title: First Readers
+          icon: 📖
+          sub: tiny decodable stories
+          board: firstReader
+          bands:
+            - 0
+          lesson: first-readers
+        - id: r-main
+          title: Main Idea
+          icon: 💡
+          sub: what is it about?
+          board: mainIdea
+          bands:
+            - 0
+          lesson: main-idea
+        - id: r-detail
+          title: Find the Detail
+          icon: 🔎
+          sub: answer from the text
+          board: findDetail
+          bands:
+            - 0
+          lesson: find-detail
+        - id: r-infer
+          title: Read Between the Lines
+          icon: 🤔
+          sub: inference
+          board: inference
+          bands:
+            - 0
+          lesson: inference
+    - id: speaking
+      title: Speaking Studio
+      emoji: 🎙️
+      color: "#FB923C"
+      blurb: Talk with Luna — real conversations, just for practice.
+      soon: true
+      stations:
+        - id: s-intro
+          title: Introduce Yourself
+          icon: 👋
+          sub: say hello & your name
+          soon: true
+        - id: s-cafe
+          title: Order at a Café
+          icon: 🧁
+          sub: role-play
+          soon: true
+        - id: s-pet
+          title: Describe Your Pet
+          icon: 🐶
+          sub: talk about something
+          soon: true
+        - id: s-story
+          title: Tell a Story
+          icon: 📚
+          sub: speak in sentences
+          soon: true
+  lessons:
+    letter-sounds:
+      title: Letter Sounds
+      sections:
+        - id: sounds
+          label: All sounds
+          beats:
+            - say: lph-0
+              caption: Here are all our letter sounds. Tap any letter to hear the sound it makes!
+              advance: hold
+              view:
+                kind: soundboard
+                key: board
+        - id: listen
+          label: Listen
+          beats:
+            - say: lph-1
+              caption: >-
+                Reading starts with listening. Every letter makes its own little sound — let's hear
+                a few!
+              view:
+                kind: letters
+                key: intro
+                items:
+                  - s
+                  - a
+                  - t
+                  - p
+                  - i
+                  - "n"
+        - id: s
+          label: S
+          beats:
+            - say: lph-2
+              caption: This is the letter S. It says sss, like at the start of sun.
+              view:
+                kind: phoneme
+                key: s
+                letter: s
+                word: sun
+                emoji: ☀️
+        - id: a
+          label: A
+          beats:
+            - say: lph-3
+              caption: This is the letter A. It says ah, like at the start of ant.
+              view:
+                kind: phoneme
+                key: a
+                letter: a
+                word: ant
+                emoji: 🐜
+        - id: p
+          label: P
+          beats:
+            - say: lph-4
+              caption: This is the letter P. It says puh, like at the start of pig.
+              view:
+                kind: phoneme
+                key: p
+                letter: p
+                word: pig
+                emoji: 🐷
+        - id: go
+          label: Your turn
+          beats:
+            - say: lph-5
+              caption: When you hear a sound, find the letter that makes it and tap it. Now you try!
+              view:
+                kind: letters
+                key: go
+                items:
+                  - s
+                  - a
+                  - t
+                  - p
+                  - i
+                  - "n"
+                active: 0
+    blending:
+      title: Blending
+      sections:
+        - id: cat
+          label: c-a-t
+          beats:
+            - say: lbl-1
+              caption: Letters team up to make words. Listen to these three sounds, one at a time.
+              view:
+                kind: blend
+                key: cat
+                letters:
+                  - c
+                  - a
+                  - t
+                word: cat
+            - say: lbl-2
+              caption: "Now blend them together, nice and smooth: cat!"
+              view:
+                kind: blend
+                key: cat
+                letters:
+                  - c
+                  - a
+                  - t
+                word: cat
+        - id: pig
+          label: p-i-g
+          beats:
+            - say: lbl-3
+              caption: Let's try another word. Sound out each letter.
+              view:
+                kind: blend
+                key: pig
+                letters:
+                  - p
+                  - i
+                  - g
+                word: pig
+            - say: lbl-4
+              caption: "Blend them together: pig!"
+              view:
+                kind: blend
+                key: pig
+                letters:
+                  - p
+                  - i
+                  - g
+                word: pig
+        - id: go
+          label: Your turn
+          beats:
+            - say: lbl-5
+              caption: >-
+                Your turn — listen to the sounds, then tap the letters in order to build the word.
+                You try!
+              view:
+                kind: blend
+                key: cat2
+                letters:
+                  - c
+                  - a
+                  - t
+                word: cat
+    word-families:
+      title: Word Families
+      sections:
+        - id: fam
+          label: The -at family
+          beats:
+            - say: lwf-1
+              caption: Some words are a family — they share the very same ending. Here is the -at family.
+              view:
+                kind: blend
+                key: cat
+                letters:
+                  - c
+                  - a
+                  - t
+                word: cat
+            - say: lwf-2
+              caption: "Keep the ending and swap the first letter: cat becomes hat!"
+              view:
+                kind: blend
+                key: hat
+                letters:
+                  - h
+                  - a
+                  - t
+                word: hat
+        - id: more
+          label: Again
+          beats:
+            - say: lwf-3
+              caption: Swap it again — now it says mat. Same family, new word!
+              view:
+                kind: blend
+                key: mat
+                letters:
+                  - m
+                  - a
+                  - t
+                word: mat
+        - id: go
+          label: Your turn
+          beats:
+            - say: lwf-4
+              caption: Listen to the word, then tap the letter it starts with. You try!
+              view:
+                kind: blend
+                key: sat
+                letters:
+                  - s
+                  - a
+                  - t
+                word: sat
+    digraphs:
+      title: Tricky Teams
+      sections:
+        - id: sh
+          label: sh
+          beats:
+            - say: ldg-1
+              caption: Sometimes two letters team up to make just one new sound.
+              view:
+                kind: team
+                key: sh
+                team: sh
+                sound: /sh/
+                word: ship
+                emoji: 🚢
+            - say: ldg-2
+              caption: S and H together say shh — like at the start of ship.
+              view:
+                kind: team
+                key: sh
+                team: sh
+                sound: /sh/
+                word: ship
+                emoji: 🚢
+        - id: ch
+          label: ch
+          beats:
+            - say: ldg-3
+              caption: C and H together say ch — like at the start of chip.
+              view:
+                kind: team
+                key: ch
+                team: ch
+                sound: /ch/
+                word: chip
+                emoji: 🍟
+        - id: th
+          label: th
+          beats:
+            - say: ldg-4
+              caption: T and H together say th — like at the start of thumb.
+              view:
+                kind: team
+                key: th
+                team: th
+                sound: /th/
+                word: thumb
+                emoji: 👍
+        - id: go
+          label: Your turn
+          beats:
+            - say: ldg-5
+              caption: Listen for the team sound, then tap the two letters that make it. You try!
+              view:
+                kind: team
+                key: ck
+                team: ck
+                sound: /k/
+                word: duck
+                emoji: 🦆
+    picture-match:
+      title: Picture Match
+      sections:
+        - id: cat
+          label: cat
+          beats:
+            - say: lpm-1
+              caption: Welcome to Word Woods! Here we match words to pictures. Look — this is a cat.
+              view:
+                kind: picture
+                key: cat
+                emoji: 🐱
+                word: cat
+        - id: dog
+          label: dog
+          beats:
+            - say: lpm-2
+              caption: And this one is a dog. Every picture has a word that names it.
+              view:
+                kind: picture
+                key: dog
+                emoji: 🐶
+                word: dog
+        - id: go
+          label: Your turn
+          beats:
+            - say: lpm-3
+              caption: Look at the picture, then tap the word that matches it. You try!
+              view:
+                kind: picture
+                key: fish
+                emoji: 🐟
+                word: fish
+    sight-words:
+      title: Sight Words
+      sections:
+        - id: the
+          label: the
+          beats:
+            - say: lsw-1
+              caption: >-
+                Some little words pop up everywhere, so we learn them by sight — quick as a flash!
+                Here's one: the.
+              view:
+                kind: picture
+                key: the
+                emoji: 👀
+                word: the
+        - id: and
+          label: and
+          beats:
+            - say: lsw-2
+              caption: "Here's another we see all the time: and."
+              view:
+                kind: picture
+                key: and
+                emoji: 👀
+                word: and
+        - id: go
+          label: Your turn
+          beats:
+            - say: lsw-3
+              caption: Listen, then tap the word you hear. You'll know these in no time. You try!
+              view:
+                kind: picture
+                key: you
+                emoji: 👀
+                word: you
+    same-opposite:
+      title: Same or Opposite
+      sections:
+        - id: same
+          label: Same
+          beats:
+            - say: lso-1
+              caption: Some words mean almost the same thing. Big and large both mean really big!
+              view:
+                kind: pair
+                key: same
+                a: big
+                b: large
+                rel: same
+        - id: opp
+          label: Opposite
+          beats:
+            - say: lso-2
+              caption: Other words are opposites — they mean the very opposite. Like hot and cold!
+              view:
+                kind: pair
+                key: opp
+                a: hot
+                b: cold
+                rel: opposite
+        - id: go
+          label: Your turn
+          beats:
+            - say: lso-3
+              caption: I'll show you a word. Tap the one that means the same, or the opposite. You try!
+              view:
+                kind: pair
+                key: go
+                a: up
+                b: down
+                rel: opposite
+    context-clues:
+      title: Context Clues
+      sections:
+        - id: clue
+          label: The clue
+          beats:
+            - say: lcc-1
+              caption: Sometimes a word is missing from a sentence — but the other words give you clues!
+              view:
+                kind: cloze
+                key: bed
+                sentence: I sleep in my ___.
+            - say: lcc-2
+              caption: "Read: I sleep in my blank. 'Sleep' is the clue, so the missing word is bed!"
+              view:
+                kind: cloze
+                key: bed
+                sentence: I sleep in my ___.
+                answer: bed
+        - id: go
+          label: Your turn
+          beats:
+            - say: lcc-3
+              caption: Read the whole sentence, look for the clues, then tap the word that fits. You try!
+              view:
+                kind: cloze
+                key: sun
+                sentence: The ___ shines in the sky.
+    nouns:
+      title: Naming Words
+      sections:
+        - id: what
+          label: Nouns
+          beats:
+            - say: lgn-1
+              caption: >-
+                A naming word — a noun — names a person, a place, or a thing. Like cat, hat, and
+                bus!
+              view:
+                kind: examples
+                key: "n"
+                label: naming words
+                words:
+                  - cat
+                  - hat
+                  - bus
+        - id: go
+          label: Your turn
+          beats:
+            - say: lgn-2
+              caption: I'll show some words. Tap the one that names a thing. You try!
+              view:
+                kind: examples
+                key: n2
+                label: naming words
+                words:
+                  - dog
+                  - box
+                  - sun
+    verbs:
+      title: Doing Words
+      sections:
+        - id: what
+          label: Verbs
+          beats:
+            - say: lgv-1
+              caption: A doing word — a verb — is an action you can do. Like run, jump, and eat!
+              view:
+                kind: examples
+                key: v
+                label: doing words
+                words:
+                  - run
+                  - jump
+                  - eat
+        - id: go
+          label: Your turn
+          beats:
+            - say: lgv-2
+              caption: Tap the word that shows an action. You try!
+              view:
+                kind: examples
+                key: v2
+                label: doing words
+                words:
+                  - hop
+                  - swim
+                  - sing
+    adjectives:
+      title: Describing Words
+      sections:
+        - id: what
+          label: Adjectives
+          beats:
+            - say: lga-1
+              caption: >-
+                A describing word — an adjective — tells us more about something. Like big, hot, and
+                happy!
+              view:
+                kind: examples
+                key: a
+                label: describing words
+                words:
+                  - big
+                  - hot
+                  - happy
+        - id: go
+          label: Your turn
+          beats:
+            - say: lga-2
+              caption: Tap the word that describes something. You try!
+              view:
+                kind: examples
+                key: a2
+                label: describing words
+                words:
+                  - small
+                  - cold
+                  - soft
+    build-sentence:
+      title: Build a Sentence
+      sections:
+        - id: order
+          label: Word order
+          beats:
+            - say: lgb-1
+              caption: >-
+                A sentence puts words in an order that makes sense. The cat is big — that sounds
+                right!
+              view:
+                kind: sentence
+                key: s1
+                text: The cat is big.
+        - id: go
+          label: Your turn
+          beats:
+            - say: lgb-2
+              caption: Tap the words one by one, in the right order, to build the sentence. You try!
+              view:
+                kind: sentence
+                key: s2
+                text: I see a dog.
+    punctuation:
+      title: Capitals & Periods
+      sections:
+        - id: rule
+          label: The rule
+          beats:
+            - say: lgc-1
+              caption: Every sentence starts with a capital letter and ends with a period. The dog can run.
+              view:
+                kind: sentence
+                key: c1
+                text: The dog can run.
+        - id: go
+          label: Your turn
+          beats:
+            - say: lgc-2
+              caption: >-
+                Tap the sentence that is written the right way — capital at the start, period at the
+                end. You try!
+              view:
+                kind: sentence
+                key: c2
+                text: The sun is hot.
+    first-readers:
+      title: First Readers
+      sections:
+        - id: read
+          label: Reading
+          beats:
+            - say: lrf-1
+              caption: >-
+                Now we put words together to read a whole sentence! Here is one: the cat sat on the
+                mat.
+              view:
+                kind: sentence
+                key: r1
+                text: The cat sat on the mat.
+            - say: lrf-2
+              caption: Listen as I read it, word by word. The glowing word is the one I am saying — follow along!
+              view:
+                kind: sentence
+                key: r2
+                text: The cat sat on the mat.
+        - id: go
+          label: Your turn
+          beats:
+            - say: lrf-3
+              caption: Your turn! Read along with me, then tap the word you hear. You try!
+              view:
+                kind: sentence
+                key: r3
+                text: You can read!
+    main-idea:
+      title: Main Idea
+      sections:
+        - id: idea
+          label: The big idea
+          beats:
+            - say: lmi-1
+              caption: Every story is ABOUT something. This little story is all about a cat.
+              view:
+                kind: sentence
+                key: m1
+                text: The cat sat. The cat can nap.
+            - say: lmi-2
+              caption: The main idea is the big thing the whole story is about — here, it is the cat!
+              view:
+                kind: picture
+                key: m2
+                emoji: 🐱
+                word: cat
+        - id: go
+          label: Your turn
+          beats:
+            - say: lmi-3
+              caption: "When you read, ask yourself: what is this story about? You try!"
+              view:
+                kind: sentence
+                key: m3
+                text: What is it about?
+    find-detail:
+      title: Find the Detail
+      sections:
+        - id: detail
+          label: The detail
+          beats:
+            - say: lfd-1
+              caption: Stories are full of little details. Read carefully and the answer is right there in the words.
+              view:
+                kind: sentence
+                key: d1
+                text: The hen sat on the egg.
+            - say: lfd-2
+              caption: "The hen sat on the egg. So where did the hen sit? On the egg — we found the detail!"
+              view:
+                kind: sentence
+                key: d2
+                text: The hen sat on the egg.
+        - id: go
+          label: Your turn
+          beats:
+            - say: lfd-3
+              caption: Read the story, then find the detail the question asks for. You try!
+              view:
+                kind: sentence
+                key: d3
+                text: Find the answer!
+    inference:
+      title: Read Between the Lines
+      sections:
+        - id: clue
+          label: Use clues
+          beats:
+            - say: lin-1
+              caption: Sometimes the answer is not written down. We use clues to figure it out.
+              view:
+                kind: sentence
+                key: i1
+                text: The dog can run and jump.
+            - say: lin-2
+              caption: A dog that runs and jumps must feel happy! We read between the lines.
+              view:
+                kind: picture
+                key: i2
+                emoji: 😄
+                word: happy
+        - id: go
+          label: Your turn
+          beats:
+            - say: lin-3
+              caption: Use the clues in the story to guess how someone feels. You try!
+              view:
+                kind: sentence
+                key: i3
+                text: How does it feel?
+  narration:
+    lph-0: Here are all our letter sounds. Tap any letter to hear the sound it makes!
+    lph-1: Reading starts with listening. Every letter makes its own little sound — let's hear a few!
+    lph-2: This is the letter S. It says sss, like at the start of sun.
+    lph-3: This is the letter A. It says ah, like at the start of ant.
+    lph-4: This is the letter P. It says puh, like at the start of pig.
+    lph-5: When you hear a sound, find the letter that makes it and tap it. Now you try!
+    lbl-1: Letters team up to make words. Listen to these three sounds, one at a time.
+    lbl-2: "Now blend them together, nice and smooth: cat!"
+    lbl-3: Let's try another word. Sound out each letter.
+    lbl-4: "Blend them together: pig!"
+    lbl-5: Your turn — listen to the sounds, then tap the letters in order to build the word. You try!
+    lwf-1: Some words are a family — they share the very same ending. Here is the -at family.
+    lwf-2: "Keep the ending and swap the first letter: cat becomes hat!"
+    lwf-3: Swap it again — now it says mat. Same family, new word!
+    lwf-4: Listen to the word, then tap the letter it starts with. You try!
+    ldg-1: Sometimes two letters team up to make just one new sound.
+    ldg-2: S and H together say shh — like at the start of ship.
+    ldg-3: C and H together say ch — like at the start of chip.
+    ldg-4: T and H together say th — like at the start of thumb.
+    ldg-5: Listen for the team sound, then tap the two letters that make it. You try!
+    lpm-1: Welcome to Word Woods! Here we match words to pictures. Look — this is a cat.
+    lpm-2: And this one is a dog. Every picture has a word that names it.
+    lpm-3: Look at the picture, then tap the word that matches it. You try!
+    lsw-1: >-
+      Some little words pop up everywhere, so we learn them by sight — quick as a flash! Here's one:
+      the.
+    lsw-2: "Here's another we see all the time: and."
+    lsw-3: Listen, then tap the word you hear. You'll know these in no time. You try!
+    lso-1: Some words mean almost the same thing. Big and large both mean really big!
+    lso-2: Other words are opposites — they mean the very opposite. Like hot and cold!
+    lso-3: I'll show you a word. Tap the one that means the same, or the opposite. You try!
+    lcc-1: Sometimes a word is missing from a sentence — but the other words give you clues!
+    lcc-2: "Read: I sleep in my blank. 'Sleep' is the clue, so the missing word is bed!"
+    lcc-3: Read the whole sentence, look for the clues, then tap the word that fits. You try!
+    lgn-1: A naming word — a noun — names a person, a place, or a thing. Like cat, hat, and bus!
+    lgn-2: I'll show some words. Tap the one that names a thing. You try!
+    lgv-1: A doing word — a verb — is an action you can do. Like run, jump, and eat!
+    lgv-2: Tap the word that shows an action. You try!
+    lga-1: A describing word — an adjective — tells us more about something. Like big, hot, and happy!
+    lga-2: Tap the word that describes something. You try!
+    lgb-1: A sentence puts words in an order that makes sense. The cat is big — that sounds right!
+    lgb-2: Tap the words one by one, in the right order, to build the sentence. You try!
+    lgc-1: Every sentence starts with a capital letter and ends with a period. The dog can run.
+    lgc-2: >-
+      Tap the sentence that is written the right way — capital at the start, period at the end. You
+      try!
+    lrf-1: >-
+      Now we put words together to read a whole sentence! Here is one: the cat sat on the mat.
+    lrf-2: Listen as I read it, word by word. The glowing word is the one I am saying — follow along!
+    lrf-3: Your turn! Read along with me, then tap the word you hear. You try!
+    lmi-1: Every story is ABOUT something. This little story is all about a cat.
+    lmi-2: The main idea is the big thing the whole story is about — here, it is the cat!
+    lmi-3: "When you read, ask yourself: what is this story about? You try!"
+    lfd-1: Stories are full of little details. Read carefully and the answer is right there in the words.
+    lfd-2: "The hen sat on the egg. So where did the hen sit? On the egg — we found the detail!"
+    lfd-3: Read the story, then find the detail the question asks for. You try!
+    lin-1: Sometimes the answer is not written down. We use clues to figure it out.
+    lin-2: A dog that runs and jumps must feel happy! We read between the lines.
+    lin-3: Use the clues in the story to guess how someone feels. You try!
+    rq-main: What is the story about?
+    rq-where-cat: Where is the cat?
+    rq-dog-see: What can the dog see?
+    rq-hen-sit: What did the hen sit on?
+    rq-where-pig: Where is the pig?
+    rq-feel-dog: How does the dog feel?
+    rq-feel-cat: How does the cat feel?
+  content:
+    phonemes:
+      - letter: s
+        sound: /s/
+        word: sun
+        band: 0
+      - letter: a
+        sound: /a/
+        word: ant
+        band: 0
+      - letter: t
+        sound: /t/
+        word: top
+        band: 0
+      - letter: p
+        sound: /p/
+        word: pig
+        band: 0
+      - letter: i
+        sound: /i/
+        word: igloo
+        band: 0
+      - letter: "n"
+        sound: /n/
+        word: net
+        band: 0
+      - letter: m
+        sound: /m/
+        word: map
+        band: 1
+      - letter: d
+        sound: /d/
+        word: dog
+        band: 1
+      - letter: g
+        sound: /g/
+        word: goat
+        band: 1
+      - letter: o
+        sound: /o/
+        word: octopus
+        band: 1
+      - letter: c
+        sound: /k/
+        word: cat
+        band: 1
+      - letter: k
+        sound: /k/
+        word: kite
+        band: 1
+      - letter: e
+        sound: /e/
+        word: egg
+        band: 2
+      - letter: u
+        sound: /u/
+        word: umbrella
+        band: 2
+      - letter: r
+        sound: /r/
+        word: rat
+        band: 2
+      - letter: h
+        sound: /h/
+        word: hat
+        band: 2
+      - letter: b
+        sound: /b/
+        word: ball
+        band: 2
+      - letter: f
+        sound: /f/
+        word: fish
+        band: 2
+      - letter: l
+        sound: /l/
+        word: leg
+        band: 2
+      - letter: j
+        sound: /j/
+        word: jet
+        band: 2
+      - letter: q
+        sound: /kw/
+        word: queen
+        band: 2
+      - letter: v
+        sound: /v/
+        word: van
+        band: 2
+      - letter: w
+        sound: /w/
+        word: web
+        band: 2
+      - letter: x
+        sound: /ks/
+        word: box
+        band: 2
+      - letter: "y"
+        sound: /y/
+        word: yoyo
+        band: 2
+      - letter: z
+        sound: /z/
+        word: zebra
+        band: 2
+    digraphs:
+      - team: sh
+        sound: /sh/
+        word: ship
+      - team: ch
+        sound: /ch/
+        word: chip
+      - team: th
+        sound: /th/
+        word: thumb
+      - team: ck
+        sound: /k/
+        word: duck
+    blendWords:
+      - word: sat
+        band: 0
+      - word: sit
+        band: 0
+      - word: tip
+        band: 0
+      - word: tin
+        band: 0
+      - word: pin
+        band: 0
+      - word: pit
+        band: 0
+      - word: nap
+        band: 0
+      - word: pan
+        band: 0
+      - word: tap
+        band: 0
+      - word: sip
+        band: 0
+      - word: cat
+        band: 1
+      - word: dog
+        band: 1
+      - word: mat
+        band: 1
+      - word: map
+        band: 1
+      - word: dig
+        band: 1
+      - word: dot
+        band: 1
+      - word: cop
+        band: 1
+      - word: top
+        band: 1
+      - word: pig
+        band: 1
+      - word: can
+        band: 1
+      - word: bed
+        band: 2
+      - word: bus
+        band: 2
+      - word: cup
+        band: 2
+      - word: hat
+        band: 2
+      - word: hen
+        band: 2
+      - word: leg
+        band: 2
+      - word: run
+        band: 2
+      - word: fan
+        band: 2
+      - word: bug
+        band: 2
+      - word: net
+        band: 2
+      - word: sun
+        band: 2
+    wordFamilies:
+      - rime: at
+        words:
+          - cat
+          - hat
+          - mat
+          - sat
+          - rat
+        band: 0
+      - rime: an
+        words:
+          - can
+          - pan
+          - fan
+          - man
+          - ran
+        band: 0
+      - rime: ig
+        words:
+          - pig
+          - dig
+          - big
+          - fig
+          - wig
+        band: 0
+      - rime: op
+        words:
+          - top
+          - cop
+          - mop
+          - hop
+          - pop
+        band: 1
+      - rime: un
+        words:
+          - sun
+          - run
+          - fun
+          - bun
+        band: 2
+    vocab:
+      - word: cat
+        emoji: 🐱
+      - word: dog
+        emoji: 🐶
+      - word: pig
+        emoji: 🐷
+      - word: sun
+        emoji: ☀️
+      - word: hat
+        emoji: 🎩
+      - word: bus
+        emoji: 🚌
+      - word: cup
+        emoji: ☕
+      - word: hen
+        emoji: 🐔
+      - word: fan
+        emoji: 🪭
+      - word: bug
+        emoji: 🐛
+      - word: jet
+        emoji: ✈️
+      - word: van
+        emoji: 🚐
+      - word: box
+        emoji: 📦
+      - word: pin
+        emoji: 📌
+      - word: net
+        emoji: 🥅
+      - word: map
+        emoji: 🗺️
+      - word: ant
+        emoji: 🐜
+      - word: web
+        emoji: 🕸️
+      - word: egg
+        emoji: 🥚
+      - word: fish
+        emoji: 🐟
+      - word: duck
+        emoji: 🦆
+      - word: ship
+        emoji: 🚢
+      - word: kite
+        emoji: 🪁
+      - word: zebra
+        emoji: 🦓
+    sightWords:
+      - the
+      - and
+      - is
+      - you
+      - to
+      - see
+      - go
+      - my
+      - we
+      - he
+      - in
+      - "on"
+      - up
+      - can
+      - like
+      - look
+    synonyms:
+      - word: big
+        match: large
+      - word: happy
+        match: glad
+      - word: small
+        match: little
+      - word: fast
+        match: quick
+      - word: mad
+        match: angry
+      - word: cold
+        match: chilly
+      - word: nice
+        match: kind
+      - word: scared
+        match: afraid
+    antonyms:
+      - word: big
+        match: small
+      - word: hot
+        match: cold
+      - word: up
+        match: down
+      - word: fast
+        match: slow
+      - word: happy
+        match: sad
+      - word: day
+        match: night
+      - word: wet
+        match: dry
+      - word: old
+        match: new
+      - word: open
+        match: shut
+      - word: tall
+        match: short
+      - word: hard
+        match: soft
+      - word: full
+        match: empty
+    contextClues:
+      - sentence: I sleep in my ___.
+        answer: bed
+        distractors:
+          - cup
+          - bus
+          - fish
+      - sentence: The ___ shines in the sky.
+        answer: sun
+        distractors:
+          - bed
+          - cat
+          - box
+      - sentence: A ___ says woof.
+        answer: dog
+        distractors:
+          - pig
+          - fish
+          - hen
+      - sentence: A ___ says oink.
+        answer: pig
+        distractors:
+          - dog
+          - hen
+          - cat
+      - sentence: I wear a ___ on my head.
+        answer: hat
+        distractors:
+          - cup
+          - bus
+          - net
+      - sentence: A ___ swims in the sea.
+        answer: fish
+        distractors:
+          - cat
+          - hen
+          - jet
+      - sentence: Ice is very ___.
+        answer: cold
+        distractors:
+          - hot
+          - big
+          - wet
+      - sentence: The fire is very ___.
+        answer: hot
+        distractors:
+          - cold
+          - wet
+          - sad
+      - sentence: A tiny ___ is very small.
+        answer: ant
+        distractors:
+          - bus
+          - ship
+          - zebra
+      - sentence: A ___ flies high in the sky.
+        answer: jet
+        distractors:
+          - bus
+          - fish
+          - bed
+      - sentence: I drink milk from a ___.
+        answer: cup
+        distractors:
+          - hat
+          - net
+          - map
+      - sentence: A ___ has black and white stripes.
+        answer: zebra
+        distractors:
+          - cat
+          - dog
+          - pig
+    parts_of_speech:
+      nouns:
+        - cat
+        - dog
+        - sun
+        - hat
+        - bus
+        - cup
+        - fish
+        - box
+        - bed
+        - ball
+        - hen
+        - jet
+        - van
+        - ant
+        - pig
+        - map
+        - leg
+        - queen
+        - zebra
+        - duck
+      verbs:
+        - run
+        - jump
+        - sit
+        - hop
+        - eat
+        - swim
+        - sing
+        - read
+        - ride
+        - fly
+        - dig
+        - sleep
+        - look
+        - go
+      adjectives:
+        - big
+        - small
+        - hot
+        - cold
+        - wet
+        - dry
+        - old
+        - new
+        - tall
+        - soft
+        - hard
+        - happy
+        - sad
+        - nice
+    sentences:
+      - The cat is big.
+      - I see a dog.
+      - The sun is hot.
+      - A pig can run.
+      - I like my hat.
+      - The fish is wet.
+      - We go to bed.
+      - The bus is big.
+      - I see the sun.
+      - The dog can run.
+    punctuationCores:
+      - the cat is big
+      - i see a dog
+      - the sun is hot
+      - a pig can run
+      - we go to bed
+      - the dog can run
+    storyItems:
+      - story: The cat is on the mat. The cat can nap.
+        q: cat
+        d:
+          - mat
+          - hat
+          - map
+      - story: The dog can run. We see the dog.
+        q: dog
+        d:
+          - pig
+          - bug
+          - hen
+      - story: The bug is on the web. The bug is little.
+        q: web
+        d:
+          - box
+          - net
+          - cup
+      - story: We can see the sun. The sun is hot.
+        q: sun
+        d:
+          - bed
+          - van
+          - jet
+      - story: The pig is big. The pig sat down.
+        q: pig
+        d:
+          - cat
+          - dog
+          - hen
+      - story: The hen sat on the egg. The egg is little.
+        q: egg
+        d:
+          - box
+          - cup
+          - mat
+    mainIdeaItems:
+      - story: The cat sat on the mat. The cat can nap. The cat is little.
+        q: rq-main
+        text: What is the story about?
+        a: cat
+        d:
+          - dog
+          - sun
+          - bus
+      - story: We can see the sun. The sun is hot. The sun is big.
+        q: rq-main
+        text: What is the story about?
+        a: sun
+        d:
+          - web
+          - hen
+          - jet
+      - story: The dog can run. The dog can dig. The dog is fast.
+        q: rq-main
+        text: What is the story about?
+        a: dog
+        d:
+          - pig
+          - egg
+          - cup
+      - story: The bug is on the web. The bug is little. The bug can sit.
+        q: rq-main
+        text: What is the story about?
+        a: bug
+        d:
+          - sun
+          - van
+          - mat
+    detailItems:
+      - story: The cat is on the mat. The cat is big.
+        q: rq-where-cat
+        text: Where is the cat?
+        a: mat
+        d:
+          - box
+          - bed
+          - web
+      - story: The dog can run. The dog can see the sun.
+        q: rq-dog-see
+        text: What can the dog see?
+        a: sun
+        d:
+          - web
+          - egg
+          - net
+      - story: The hen sat on the egg. The egg is little.
+        q: rq-hen-sit
+        text: What did the hen sit on?
+        a: egg
+        d:
+          - mat
+          - box
+          - cup
+      - story: The pig is in the box. The pig is big.
+        q: rq-where-pig
+        text: Where is the pig?
+        a: box
+        d:
+          - mat
+          - bed
+          - web
+    inferenceItems:
+      - story: The dog can run and jump. The dog can dig.
+        q: rq-feel-dog
+        text: How does the dog feel?
+        a: happy
+        d:
+          - sad
+          - mad
+      - story: The dog is wet. The dog is cold.
+        q: rq-feel-dog
+        text: How does the dog feel?
+        a: sad
+        d:
+          - glad
+          - happy
+      - story: The cat sat in the sun. The cat can nap.
+        q: rq-feel-cat
+        text: How does the cat feel?
+        a: glad
+        d:
+          - sad
+          - mad

@@ -60,11 +60,14 @@ async function mathCaps(errs) {
 
 // ── ENGLISH ──
 async function englishCaps(errs) {
-  // TOPICS lives in PhonicsQuest.jsx (JSX) → read the keys as text.
-  const src = readFileSync(root('../packages/english/src/PhonicsQuest.jsx'), 'utf8');
-  const m = src.match(/const TOPICS = \{([^}]*)\}/);
-  if (!m) throw new Error('english: could not find TOPICS map in PhonicsQuest.jsx');
-  const topicKeys = m[1].split(',').map((s) => s.split(':')[0].trim()).filter(Boolean);
+  // The engine's board kinds = the keys of BOARD_REGISTRY (board kind → generator + .jsx
+  // board). It imports JSX so we can't `import` it here (no JSX transform under node) — read
+  // the keys as text, the same way math reads its sources. This is the single source of
+  // truth a course's `board:` references, and BOARD_META must cover exactly these kinds.
+  const src = readFileSync(root('../packages/english/src/boardRegistry.js'), 'utf8');
+  const body = src.match(/export const BOARD_REGISTRY = \{([\s\S]*?)\n\};/);
+  if (!body) throw new Error('english: could not find BOARD_REGISTRY map in boardRegistry.js');
+  const topicKeys = [...body[1].matchAll(/^\s*([a-zA-Z0-9]+):/gm)].map((m) => m[1]);
   const { BOARD_META } = await import(root('../packages/english/src/boardMeta.js'));
   const { VIEW_META } = await import(root('../packages/english/src/lessons/viewMeta.js'));
   const { CONTENT_META } = await import(root('../packages/english/src/contentMeta.js'));

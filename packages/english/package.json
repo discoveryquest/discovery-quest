@@ -8,7 +8,6 @@
     ".": "./src/App.jsx",
     "./voiceLines": "./src/voiceLines.js",
     "./curriculum": "./src/curriculum.js",
-    "./quest": "./src/PhonicsQuest.jsx",
     "./courseQuest": "./src/CourseQuest.jsx",
     "./courseLesson": "./src/CourseLesson.jsx",
     "./lessons": "./src/lessons.jsx",
@@ -19,7 +18,9 @@
     "@discoveryquest/engine-ui": "*",
     "@discoveryquest/voice-kit": "*",
     "@discoveryquest/quest-runtime": "*",
-    "@discoveryquest/content-english": "*"
+    "@discoveryquest/content-english": "*",
+    "@discoveryquest/course-loader": "*",
+    "js-yaml": "^4.2.0"
   },
   "peerDependencies": {
     "framer-motion": "*",

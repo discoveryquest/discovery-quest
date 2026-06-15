@@ -64,11 +64,11 @@ if (appDir) {
   } else {
     const views = read('src/lessons/views.jsx');
     if (views) viewKinds = new Set([...views.matchAll(/case '([a-z0-9-]+)':/g)].map((m) => m[1]));
-    const quest = read('src/PhonicsQuest.jsx');
-    if (quest) {
-      const m = quest.match(/const TOPICS = \{([^}]*)\}/);
-      // keys are `name: value` or shorthand `name`; split on commas, take the key side
-      if (m) boardKinds = new Set(m[1].split(',').map((s) => s.split(':')[0].trim()).filter(Boolean));
+    const registry = read('src/boardRegistry.js');
+    if (registry) {
+      const body = registry.match(/export const BOARD_REGISTRY = \{([\s\S]*?)\n\};/);
+      // board kinds = the keys of BOARD_REGISTRY (board kind → generator + board)
+      if (body) boardKinds = new Set([...body[1].matchAll(/^\s*([a-zA-Z0-9]+):/gm)].map((m) => m[1]));
     }
     W('no engine.capabilities.json — fell back to parsing source (run gen-capabilities)');
   }

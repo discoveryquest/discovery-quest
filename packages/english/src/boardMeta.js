@@ -1,6 +1,6 @@
 // Catalog metadata for English BOARD kinds — the interactive question types a station can
-// use (`board: <kind>`). One entry per key in PhonicsQuest's TOPICS map; gen-capabilities
-// verifies they stay in lockstep. Unlike math (engine-generated), English boards consume
+// use (`board: <kind>`). One entry per key in BOARD_REGISTRY; gen-capabilities verifies they
+// stay in lockstep. Unlike math (engine-generated), English boards consume
 // AUTHORED content (word banks, sentences), so each entry names the `content` list it draws
 // from and the shape of one item — that's what a content PR adds to. Every station also
 // takes `bands` (difficulty) and an optional `lesson`; those are station fields, not repeated
