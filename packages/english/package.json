@@ -10,6 +10,7 @@
     "./curriculum": "./src/curriculum.js",
     "./quest": "./src/PhonicsQuest.jsx",
     "./courseQuest": "./src/CourseQuest.jsx",
+    "./courseLesson": "./src/CourseLesson.jsx",
     "./lessons": "./src/lessons.jsx",
     "./boardRegistry": "./src/boardRegistry.js"
   },
