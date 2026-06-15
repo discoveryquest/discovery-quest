@@ -24,14 +24,17 @@ export const VOCAB = [
 ];
 export const VOCAB_WORDS = VOCAB.map((v) => v.word);
 
-export function genPictureMatch(band = 0) {
-  const target = pick(VOCAB);
-  const distractors = shuffle(VOCAB.filter((v) => v.word !== target.word)).slice(0, 3);
+export function genPictureMatch(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const target = pick(items);
+  const distractors = shuffle(items.filter((v) => v.word !== target.word)).slice(0, 3);
   const choices = shuffle([target, ...distractors]).map((v) => v.word);
   return {
     kind: 'pictureMatch',
     word: target.word,
     emoji: target.emoji,
+    ru: target.ru,
     result: target.word,
     steps: [
       {
@@ -41,9 +44,10 @@ export function genPictureMatch(band = 0) {
         prompt: 'Tap the word that matches',
         audioPrompt: `word-${target.word}`,
         emoji: target.emoji,
+        ru: target.ru,
         inputKind: 'choice',
         choices,
-        lower: band >= 2, // capitals first; lowercase from band 2 (matches the letter stage)
+        lower, // capitals first; lowercase from band 2 (matches the letter stage), or overridden by ctx.lowercase
         expected: target.word,
         hint: `That's a ${target.word}.`,
         sayQ: [`word-${target.word}`],
@@ -54,7 +58,8 @@ export function genPictureMatch(band = 0) {
 }
 
 export const pictureMatch = {
-  id: 'picture-match', title: 'Picture Match', boardKind: 'pictureMatch', bands: [0], generate: genPictureMatch,
+  id: 'picture-match', title: 'Picture Match', boardKind: 'pictureMatch', bands: [0],
+  generate: (band) => genPictureMatch(VOCAB, { band }),
 };
 
 // Listen-from-vocab: hear the English word, tap it among choices (no picture). Reuses the
