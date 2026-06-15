@@ -107,9 +107,12 @@ export const vocabListen = {
 // matching written word. A WordChoice board (listen + word-text choices).
 export const SIGHT_WORDS = ['the', 'and', 'is', 'you', 'to', 'see', 'go', 'my', 'we', 'he', 'in', 'on', 'up', 'can', 'like', 'look'];
 
-export function genSightWords(band = 0) {
-  const target = pick(SIGHT_WORDS);
-  const distractors = shuffle(SIGHT_WORDS.filter((w) => w !== target)).slice(0, 3);
+// `items` is the sight-words string array.
+export function genSightWords(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const target = pick(items);
+  const distractors = shuffle(items.filter((w) => w !== target)).slice(0, 3);
   const choices = shuffle([target, ...distractors]);
   return {
     kind: 'sightWord',
@@ -124,7 +127,7 @@ export function genSightWords(band = 0) {
         audioPrompt: `word-${target}`,
         inputKind: 'choice',
         choices,
-        lower: band >= 2,
+        lower,
         expected: target,
         hint: `That word is "${target}".`,
         sayQ: [`word-${target}`],
@@ -135,7 +138,7 @@ export function genSightWords(band = 0) {
 }
 
 export const sightWords = {
-  id: 'sight-words', title: 'Sight Words', boardKind: 'sightWord', bands: [0], generate: genSightWords,
+  id: 'sight-words', title: 'Sight Words', boardKind: 'sightWord', bands: [0], generate: (band) => genSightWords(SIGHT_WORDS, { band }),
 };
 
 // ── Same or Opposite (synonyms & antonyms) ─────────────────────────────────
@@ -151,11 +154,18 @@ export const ANTONYMS = [
 ];
 export const SAMEOPP_WORDS = [...new Set([...SYNONYMS, ...ANTONYMS].flat())];
 
-export function genSameOpposite(band = 0) {
+// `content` is the multi-collection object { synonyms, antonyms } (each an array of
+// [word, match] pairs). The mode chooses which collection supplies the pair; distractors
+// come from the union of BOTH collections' words.
+export function genSameOpposite(content, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const { synonyms, antonyms } = content;
   const mode = Math.random() < 0.5 ? 'same' : 'opposite';
-  const pair = pick(mode === 'same' ? SYNONYMS : ANTONYMS);
+  const pair = pick(mode === 'same' ? synonyms : antonyms);
   const [target, correct] = Math.random() < 0.5 ? pair : [pair[1], pair[0]];
-  const distractors = shuffle(SAMEOPP_WORDS.filter((w) => w !== target && w !== correct)).slice(0, 3);
+  const allWords = [...new Set([...synonyms, ...antonyms].flat())];
+  const distractors = shuffle(allWords.filter((w) => w !== target && w !== correct)).slice(0, 3);
   const choices = shuffle([correct, ...distractors]);
   return {
     kind: 'sameOpp',
@@ -174,7 +184,7 @@ export function genSameOpposite(band = 0) {
         audioPrompt: `word-${target}`,
         inputKind: 'choice',
         choices,
-        lower: band >= 2,
+        lower,
         expected: correct,
         hint: mode === 'same' ? `"${target}" and "${correct}" mean about the same.` : `The opposite of "${target}" is "${correct}".`,
         sayQ: [mode === 'same' ? 'q-same' : 'q-opposite', `word-${target}`],
@@ -185,7 +195,8 @@ export function genSameOpposite(band = 0) {
 }
 
 export const sameOpposite = {
-  id: 'same-opposite', title: 'Same or Opposite', boardKind: 'sameOpp', bands: [0], generate: genSameOpposite,
+  id: 'same-opposite', title: 'Same or Opposite', boardKind: 'sameOpp', bands: [0],
+  generate: (band) => genSameOpposite({ synonyms: SYNONYMS, antonyms: ANTONYMS }, { band }),
 };
 
 // ── Context Clues ───────────────────────────────────────────────────────────
@@ -207,8 +218,11 @@ export const CONTEXT_ITEMS = [
 ];
 export const CONTEXT_WORDS = [...new Set(CONTEXT_ITEMS.flatMap((i) => [i.a, ...i.d]))];
 
-export function genContextClues(band = 0) {
-  const item = pick(CONTEXT_ITEMS);
+// `items` is the context-clues array ({ s, a, d } cloze items).
+export function genContextClues(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const item = pick(items);
   const choices = shuffle([item.a, ...item.d]);
   return {
     kind: 'contextClue',
@@ -225,7 +239,7 @@ export function genContextClues(band = 0) {
         audioPrompt: 'q-fill',
         inputKind: 'choice',
         choices,
-        lower: band >= 2,
+        lower,
         expected: item.a,
         hint: `"${item.a}" fits: ${item.s.replace('___', item.a)}`,
         sayQ: ['q-fill'],
@@ -236,7 +250,7 @@ export function genContextClues(band = 0) {
 }
 
 export const contextClues = {
-  id: 'context-clues', title: 'Context Clues', boardKind: 'contextClue', bands: [0], generate: genContextClues,
+  id: 'context-clues', title: 'Context Clues', boardKind: 'contextClue', bands: [0], generate: (band) => genContextClues(CONTEXT_ITEMS, { band }),
 };
 
 export const VOCAB_TOPICS = [pictureMatch, sightWords, sameOpposite, contextClues];
