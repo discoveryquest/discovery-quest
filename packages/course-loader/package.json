@@ -1,0 +1,9 @@
+{
+  "name": "@discoveryquest/course-loader",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Subject-agnostic YAML→runtime course loader: joins a validated course doc + a board registry into a runnable course.",
+  "main": "src/index.js",
+  "exports": { ".": "./src/index.js" },
+  "scripts": { "test": "node --test" }
+}
