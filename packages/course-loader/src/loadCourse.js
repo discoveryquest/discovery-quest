@@ -19,8 +19,10 @@ function sliceByBand(items, bands) {
 function bindStation(s, worldId, course, content, registry) {
   const entry = registry[s.board];
   if (!entry) throw new Error(`loadCourse: no registry entry for board "${s.board}"`);
-  const items = sliceByBand(entry.content ? content[entry.content] : undefined, s.bands);
-  const ctx = { band: (s.bands && s.bands[0]) ?? 0, lowercase: !!course.lowercase };
+  const items = Array.isArray(entry.content)
+    ? Object.fromEntries(entry.content.map((n) => [n, sliceByBand(content[n], s.bands)]))
+    : sliceByBand(entry.content ? content[entry.content] : undefined, s.bands);
+  const ctx = { band: s.bands && s.bands.length ? Math.max(...s.bands) : 0, lowercase: !!course.lowercase };
   return {
     id: s.id, title: s.title, icon: s.icon, sub: s.sub, worldId,
     board: s.board, bands: s.bands || [], lessonId: s.lesson,
