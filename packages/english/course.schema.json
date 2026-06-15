@@ -45,6 +45,15 @@
         "engine": {
           "type": "string"
         },
+        "lowercase": {
+          "type": "boolean"
+        },
+        "ui": {
+          "type": "object"
+        },
+        "reactions": {
+          "type": "object"
+        },
         "worlds": {
           "type": "array",
           "minItems": 1,
