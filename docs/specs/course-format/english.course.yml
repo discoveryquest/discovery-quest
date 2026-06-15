@@ -174,28 +174,39 @@ course:
       emoji: ⚓
       color: "#F472B6"
       blurb: Read little stories and find the answers inside them.
-      soon: true
       stations:
         - id: r-first
           title: First Readers
           icon: 📖
           sub: tiny decodable stories
-          soon: true
+          board: firstReader
+          bands:
+            - 0
+          lesson: first-readers
         - id: r-main
           title: Main Idea
           icon: 💡
           sub: what is it about?
-          soon: true
+          board: mainIdea
+          bands:
+            - 0
+          lesson: main-idea
         - id: r-detail
           title: Find the Detail
           icon: 🔎
           sub: answer from the text
-          soon: true
+          board: findDetail
+          bands:
+            - 0
+          lesson: find-detail
         - id: r-infer
           title: Read Between the Lines
           icon: 🤔
           sub: inference
-          soon: true
+          board: inference
+          bands:
+            - 0
+          lesson: inference
     - id: speaking
       title: Speaking Studio
       emoji: 🎙️
@@ -747,6 +758,118 @@ course:
                 kind: sentence
                 key: c2
                 text: The sun is hot.
+    first-readers:
+      title: First Readers
+      sections:
+        - id: read
+          label: Reading
+          beats:
+            - say: lrf-1
+              caption: >-
+                Now we put words together to read a whole sentence! Here is one: the cat sat on the
+                mat.
+              view:
+                kind: sentence
+                key: r1
+                text: The cat sat on the mat.
+            - say: lrf-2
+              caption: Listen as I read it, word by word. The glowing word is the one I am saying — follow along!
+              view:
+                kind: sentence
+                key: r2
+                text: The cat sat on the mat.
+        - id: go
+          label: Your turn
+          beats:
+            - say: lrf-3
+              caption: Your turn! Read along with me, then tap the word you hear. You try!
+              view:
+                kind: sentence
+                key: r3
+                text: You can read!
+    main-idea:
+      title: Main Idea
+      sections:
+        - id: idea
+          label: The big idea
+          beats:
+            - say: lmi-1
+              caption: Every story is ABOUT something. This little story is all about a cat.
+              view:
+                kind: sentence
+                key: m1
+                text: The cat sat. The cat can nap.
+            - say: lmi-2
+              caption: The main idea is the big thing the whole story is about — here, it is the cat!
+              view:
+                kind: picture
+                key: m2
+                emoji: 🐱
+                word: cat
+        - id: go
+          label: Your turn
+          beats:
+            - say: lmi-3
+              caption: "When you read, ask yourself: what is this story about? You try!"
+              view:
+                kind: sentence
+                key: m3
+                text: What is it about?
+    find-detail:
+      title: Find the Detail
+      sections:
+        - id: detail
+          label: The detail
+          beats:
+            - say: lfd-1
+              caption: Stories are full of little details. Read carefully and the answer is right there in the words.
+              view:
+                kind: sentence
+                key: d1
+                text: The hen sat on the egg.
+            - say: lfd-2
+              caption: "The hen sat on the egg. So where did the hen sit? On the egg — we found the detail!"
+              view:
+                kind: sentence
+                key: d2
+                text: The hen sat on the egg.
+        - id: go
+          label: Your turn
+          beats:
+            - say: lfd-3
+              caption: Read the story, then find the detail the question asks for. You try!
+              view:
+                kind: sentence
+                key: d3
+                text: Find the answer!
+    inference:
+      title: Read Between the Lines
+      sections:
+        - id: clue
+          label: Use clues
+          beats:
+            - say: lin-1
+              caption: Sometimes the answer is not written down. We use clues to figure it out.
+              view:
+                kind: sentence
+                key: i1
+                text: The dog can run and jump.
+            - say: lin-2
+              caption: A dog that runs and jumps must feel happy! We read between the lines.
+              view:
+                kind: picture
+                key: i2
+                emoji: 😄
+                word: happy
+        - id: go
+          label: Your turn
+          beats:
+            - say: lin-3
+              caption: Use the clues in the story to guess how someone feels. You try!
+              view:
+                kind: sentence
+                key: i3
+                text: How does it feel?
   narration:
     lph-0: Here are all our letter sounds. Tap any letter to hear the sound it makes!
     lph-1: Reading starts with listening. Every letter makes its own little sound — let's hear a few!
@@ -794,6 +917,26 @@ course:
     lgc-2: >-
       Tap the sentence that is written the right way — capital at the start, period at the end. You
       try!
+    lrf-1: >-
+      Now we put words together to read a whole sentence! Here is one: the cat sat on the mat.
+    lrf-2: Listen as I read it, word by word. The glowing word is the one I am saying — follow along!
+    lrf-3: Your turn! Read along with me, then tap the word you hear. You try!
+    lmi-1: Every story is ABOUT something. This little story is all about a cat.
+    lmi-2: The main idea is the big thing the whole story is about — here, it is the cat!
+    lmi-3: "When you read, ask yourself: what is this story about? You try!"
+    lfd-1: Stories are full of little details. Read carefully and the answer is right there in the words.
+    lfd-2: "The hen sat on the egg. So where did the hen sit? On the egg — we found the detail!"
+    lfd-3: Read the story, then find the detail the question asks for. You try!
+    lin-1: Sometimes the answer is not written down. We use clues to figure it out.
+    lin-2: A dog that runs and jumps must feel happy! We read between the lines.
+    lin-3: Use the clues in the story to guess how someone feels. You try!
+    rq-main: What is the story about?
+    rq-where-cat: Where is the cat?
+    rq-dog-see: What can the dog see?
+    rq-hen-sit: What did the hen sit on?
+    rq-where-pig: Where is the pig?
+    rq-feel-dog: How does the dog feel?
+    rq-feel-cat: How does the cat feel?
   content:
     phonemes:
       - letter: s
@@ -1267,3 +1410,128 @@ course:
       - a pig can run
       - we go to bed
       - the dog can run
+    storyItems:
+      - story: The cat is on the mat. The cat can nap.
+        q: cat
+        d:
+          - mat
+          - hat
+          - map
+      - story: The dog can run. We see the dog.
+        q: dog
+        d:
+          - pig
+          - bug
+          - hen
+      - story: The bug is on the web. The bug is little.
+        q: web
+        d:
+          - box
+          - net
+          - cup
+      - story: We can see the sun. The sun is hot.
+        q: sun
+        d:
+          - bed
+          - van
+          - jet
+      - story: The pig is big. The pig sat down.
+        q: pig
+        d:
+          - cat
+          - dog
+          - hen
+      - story: The hen sat on the egg. The egg is little.
+        q: egg
+        d:
+          - box
+          - cup
+          - mat
+    mainIdeaItems:
+      - story: The cat sat on the mat. The cat can nap. The cat is little.
+        q: rq-main
+        text: What is the story about?
+        a: cat
+        d:
+          - dog
+          - sun
+          - bus
+      - story: We can see the sun. The sun is hot. The sun is big.
+        q: rq-main
+        text: What is the story about?
+        a: sun
+        d:
+          - web
+          - hen
+          - jet
+      - story: The dog can run. The dog can dig. The dog is fast.
+        q: rq-main
+        text: What is the story about?
+        a: dog
+        d:
+          - pig
+          - egg
+          - cup
+      - story: The bug is on the web. The bug is little. The bug can sit.
+        q: rq-main
+        text: What is the story about?
+        a: bug
+        d:
+          - sun
+          - van
+          - mat
+    detailItems:
+      - story: The cat is on the mat. The cat is big.
+        q: rq-where-cat
+        text: Where is the cat?
+        a: mat
+        d:
+          - box
+          - bed
+          - web
+      - story: The dog can run. The dog can see the sun.
+        q: rq-dog-see
+        text: What can the dog see?
+        a: sun
+        d:
+          - web
+          - egg
+          - net
+      - story: The hen sat on the egg. The egg is little.
+        q: rq-hen-sit
+        text: What did the hen sit on?
+        a: egg
+        d:
+          - mat
+          - box
+          - cup
+      - story: The pig is in the box. The pig is big.
+        q: rq-where-pig
+        text: Where is the pig?
+        a: box
+        d:
+          - mat
+          - bed
+          - web
+    inferenceItems:
+      - story: The dog can run and jump. The dog can dig.
+        q: rq-feel-dog
+        text: How does the dog feel?
+        a: happy
+        d:
+          - sad
+          - mad
+      - story: The dog is wet. The dog is cold.
+        q: rq-feel-dog
+        text: How does the dog feel?
+        a: sad
+        d:
+          - glad
+          - happy
+      - story: The cat sat in the sun. The cat can nap.
+        q: rq-feel-cat
+        text: How does the cat feel?
+        a: glad
+        d:
+          - sad
+          - mad
