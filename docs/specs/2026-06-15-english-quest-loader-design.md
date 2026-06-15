@@ -36,8 +36,11 @@ loader's existing set-membership slice (`item.band ∈ station.bands`) then yiel
 cumulative subset. **One loader tweak:** the difficulty hint passed to the generator
 becomes `ctx.band = max(station.bands)` (not `bands[0]`), so casing/difficulty still scales
 with the station's level. (`blendWord`/`wordFamily` each have a single band-0 station in
-this course, so their grouping is moot here; `blendWords` may also get `band` tags for
-consistency, `wordFamilies` already carry `band`.)
+this course, so their multi-band grouping is moot.) **`blendWords` items get a `band` tag**
+(from the current `BLEND_BANDS` grouping) and its single station stays `bands:[0]`, so the
+blend generator draws from the band-0 word set exactly as today — without tags it would
+silently widen to all 31 words. `wordFamilies` already carry `band`; its single `bands:[0]`
+station yields the band-0 families (unchanged).
 
 ### 2. `parts_of_speech` restructured to role-keyed (it's currently lossy)
 `genWordSort` needs words split by role (it picks a target of the asked role + distractors
@@ -69,14 +72,20 @@ reading `soon`). Port them so Reading is YAML-driven too:
   four board *kinds* that all render via the single `StoryReader` board (problems carry
   `kind: 'storyReader'`) — same pattern as `vocabListen`→`WordChoice`. **Backport
   `StoryReader.jsx`** to open-core `packages/english/src/boards/` (it's platform-only today).
-- **Content collections.** Add to `contentMeta` + `english.course.yml`: `storyItems`
-  (`{story, q, distractors[]}` for First Readers) and a comprehension bank for the other
-  three (`{story, question, answer, distractors[]}` — one collection per board kind, or one
-  `comprehension` collection band/type-tagged). The narrated wh-question prompts
-  (`READING_QUESTION_LINES`, `rq-*`) become `narration` entries (voice clips already planned
-  by gen-voice). All story/answer words reuse existing `word-<w>` clips.
-- **Generators.** `genFirstReaders` + the `comprehension(items,…)` factory (mainIdea/
-  findDetail/inference) refactor to `(items, ctx)` like the rest.
+- **Content collections** (field names match `reading.js` exactly — do not rename/collapse):
+  - `storyItems` (First Readers): `{ story, q, d: [distractors] }` where **`q` is the target
+    word** (e.g. `cat`) and `d` is its distractor words.
+  - **Three separate** comprehension collections — `mainIdeaItems`, `detailItems`,
+    `inferenceItems` (decided; NOT one tagged collection — `sliceByBand` has no type axis).
+    Each item: `{ story, q, text, a, d: [distractors] }` where **`q` is the rq-* clip key**
+    (audio prompt), **`text` is the displayed question**, `a` is the answer word, `d` the
+    distractors. (Verify exact field names against `reading.js`'s `MAIN_IDEA_ITEMS` shape
+    during implementation and mirror them verbatim.)
+  - The wh-question prompts (`READING_QUESTION_LINES`, the `rq-*` keys) become `narration`
+    entries. All story/answer/distractor words reuse existing `word-<w>` clips.
+- **Generators.** `genFirstReaders(items, ctx)` (from `storyItems`) + the three comprehension
+  boards via the `comprehension(label, color)` factory **curried in the registry**:
+  `mainIdea: { generate: (items, ctx) => comprehension('Main Idea', C.pink)(items, ctx), content: 'mainIdeaItems', board: StoryReader }` (detail/inference likewise with their label/color/collection).
 - **Boards/lessons.** `boardMeta` gains the 4 kinds (each `content:` its collection); the 4
   reading lessons (`first-readers`/`main-idea`/`find-detail`/`inference`) are authored as
   YAML lessons; the Reading world is un-`soon`ed with its 4 real stations.
@@ -112,7 +121,14 @@ refactor is TDD'd with a `node:test` like the vocab generators.
 ## Loader changes (small, additive)
 
 1. `bindStation` difficulty hint: `ctx.band = Math.max(...station.bands)` (was `bands[0]`).
-   Verify EFL still behaves (its stations are single-band, so `max` == the one value).
+   **`CourseQuest.jsx` must get the same fix** — its local `const band = station.bands?.[0]`
+   (used for the `bestBand` save) becomes `Math.max(...(station.bands ?? [0]))`, else the
+   `[0,1]`/`[0,1,2]` phonics stations would record `bestBand:0`. EFL stations are single-band
+   so `max` == the one value (unchanged).
+   **Generators use their injected `items` directly** — the YAML's inclusive station `bands`
+   already produce the cumulative slice via `sliceByBand`, so generators must NOT re-filter
+   by band internally (e.g. `genWordFamily`/`genSoundToLetter` drop their old `<=band`/`BANDS[band]`
+   selection; they pick from the `items` they're handed).
 2. Multi-collection: when `registry[board].content` is an array, inject
    `Object.fromEntries(names.map(n => [n, sliceByBand(content[n], bands)]))`; else current
    single-array behavior. Add `node:test` cases.
