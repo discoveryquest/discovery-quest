@@ -10,6 +10,7 @@ import PictureMatch from './boards/PictureMatch.jsx';
 import WordChoice from './boards/WordChoice.jsx';
 import SameOpposite from './boards/SameOpposite.jsx';
 import ContextClue from './boards/ContextClue.jsx';
+import RuleQuiz from './boards/RuleQuiz.jsx';
 import GrammarSort from './boards/GrammarSort.jsx';
 import SentenceBuilder from './boards/SentenceBuilder.jsx';
 import PunctuationChoice from './boards/PunctuationChoice.jsx';
@@ -35,6 +36,7 @@ export const BOARD_REGISTRY = {
   grammarAdj:    { ...BOARD_GENERATORS.grammarAdj,    board: GrammarSort },
   sentence:      { ...BOARD_GENERATORS.sentence,      board: SentenceBuilder },
   sentenceRu:    { ...BOARD_GENERATORS.sentenceRu,    board: SentenceBuilder },
+  ruleQuiz:      { ...BOARD_GENERATORS.ruleQuiz,      board: RuleQuiz },
   punctuation:   { ...BOARD_GENERATORS.punctuation,   board: PunctuationChoice },
 
   // ── Reading (World 4) ──

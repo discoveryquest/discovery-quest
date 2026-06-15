@@ -9,6 +9,7 @@
     "./vocab": "./src/vocab.js",
     "./grammar": "./src/grammar.js",
     "./reading": "./src/reading.js",
-    "./sentencesRu": "./src/sentencesRu.js"
+    "./sentencesRu": "./src/sentencesRu.js",
+    "./rules": "./src/rules.js"
   }
 }
