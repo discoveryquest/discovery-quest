@@ -6,6 +6,10 @@
 
 function sliceByBand(items, bands) {
   if (!Array.isArray(items)) return items; // wordbank/object collections pass through
+  // A collection is "tagged" if ANY item carries `band`. Within a tagged collection every
+  // item must carry `band` — an item missing it is dropped here (Set.has(undefined) is
+  // false). course:check guarantees this (a band-tagged collection is uniformly tagged), so
+  // we don't guard for mixed collections; if you add an item, give it a band.
   const tagged = items.some((it) => it && typeof it === 'object' && 'band' in it);
   if (!tagged) return items; // untagged collection → use all of it; band is difficulty-only
   const set = new Set(bands || []);
@@ -26,6 +30,8 @@ function bindStation(s, worldId, course, content, registry) {
 }
 
 export function loadCourse(doc, registry) {
+  // Accepts either a wrapped `{ course: {...} }` doc (what js-yaml produces from a
+  // <id>.course.yml — the normal caller) or a bare course object (convenience for tests).
   const c = doc.course || doc;
   const content = c.content || {};
   const worlds = (c.worlds || []).map((w) => ({
