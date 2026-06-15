@@ -9,6 +9,7 @@
     "./voiceLines": "./src/voiceLines.js",
     "./curriculum": "./src/curriculum.js",
     "./quest": "./src/PhonicsQuest.jsx",
+    "./courseQuest": "./src/CourseQuest.jsx",
     "./lessons": "./src/lessons.jsx",
     "./boardRegistry": "./src/boardRegistry.js"
   },
