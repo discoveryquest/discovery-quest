@@ -221,6 +221,26 @@ already carries.
   screenshot verified for both apps; then (with owner OK) deploy `discoveryquest-english-ru`
   and verify live.
 
+## Sequencing & a discovered constraint
+
+Implementation is split into **two plans**, EFL first (each ships working software):
+
+- **Plan 1 — loader + EFL app.** Build `course-loader`, refactor the **vocab**
+  generators, the board registry, `CourseQuest` + lesson host, the schema additions,
+  and rewire the platform EFL app to be fully YAML-driven. EFL becomes pure data.
+  `PhonicsQuest` stays in place for English Quest during this plan (the two hosts
+  coexist temporarily).
+- **Plan 2 — migrate English Quest.** Refactor the remaining ~12 generators and move
+  `packages/english`'s App to `loadCourse`/`CourseQuest`, retiring `PhonicsQuest`.
+
+**Discovered constraint (resolve in Plan 2's design addendum):** English Quest's
+`phonemes` and `blendWords` collections carry **no `band`** field; their generators
+select by a **code-side, _cumulative_ `BANDS` array** (band 0 ⊂ band 1 ⊂ band 2). That
+is nested logic, not the flat per-item partition EFL's `vocab` uses. English Quest can
+run through the loader with that band-grouping logic kept **inside the generators**
+(behavior-unchanged, content lists injected from YAML), but expressing cumulative bands
+as *data* needs a small course-format decision — deferred to Plan 2.
+
 ## Out of scope
 
 - Repo-sync automation between `platform` and `discovery-quest` (pre-existing debt;
