@@ -12,6 +12,7 @@ import { mutateSave } from '@discoveryquest/engine/save';
 import { letterSounds, blendWords, wordFamilies, digraphTeams, WORD_EMOJI } from '@discoveryquest/content-english/phonics';
 import { pictureMatch, vocabListen, sightWords, sameOpposite, contextClues } from '@discoveryquest/content-english/vocab';
 import { nouns, verbs, adjectives, buildSentence, punctuation } from '@discoveryquest/content-english/grammar';
+import { firstReaders, mainIdea, findDetail, inference } from '@discoveryquest/content-english/reading';
 import SoundToLetter from './boards/SoundToLetter.jsx';
 import BlendBuilder from './boards/BlendBuilder.jsx';
 import WordFamily from './boards/WordFamily.jsx';
@@ -22,12 +23,13 @@ import ContextClue from './boards/ContextClue.jsx';
 import GrammarSort from './boards/GrammarSort.jsx';
 import SentenceBuilder from './boards/SentenceBuilder.jsx';
 import PunctuationChoice from './boards/PunctuationChoice.jsx';
+import StoryReader from './boards/StoryReader.jsx';
 import { VOICE_LINES, voiceKey } from './voiceLines.js';
 
 const QUEST_LEN = 6;
 // station.boardKind → topic generator; problem.kind → board component
-const TOPICS = { soundToLetter: letterSounds, blendWord: blendWords, wordFamily: wordFamilies, digraphs: digraphTeams, pictureMatch, vocabListen, sightWord: sightWords, sameOpp: sameOpposite, contextClue: contextClues, grammarNoun: nouns, grammarVerb: verbs, grammarAdj: adjectives, sentence: buildSentence, punctuation };
-const BOARDS = { soundToLetter: SoundToLetter, blendWord: BlendBuilder, wordFamily: WordFamily, pictureMatch: PictureMatch, vocabListen: WordChoice, sightWord: WordChoice, sameOpp: SameOpposite, contextClue: ContextClue, grammarSort: GrammarSort, sentence: SentenceBuilder, punctuation: PunctuationChoice };
+const TOPICS = { soundToLetter: letterSounds, blendWord: blendWords, wordFamily: wordFamilies, digraphs: digraphTeams, pictureMatch, vocabListen, sightWord: sightWords, sameOpp: sameOpposite, contextClue: contextClues, grammarNoun: nouns, grammarVerb: verbs, grammarAdj: adjectives, sentence: buildSentence, punctuation, firstReader: firstReaders, mainIdea, findDetail, inference };
+const BOARDS = { soundToLetter: SoundToLetter, blendWord: BlendBuilder, wordFamily: WordFamily, pictureMatch: PictureMatch, vocabListen: WordChoice, sightWord: WordChoice, sameOpp: SameOpposite, contextClue: ContextClue, grammarSort: GrammarSort, sentence: SentenceBuilder, punctuation: PunctuationChoice, storyReader: StoryReader };
 
 export default function PhonicsQuest({ station, onExit }) {
   const band = station?.band ?? 0;

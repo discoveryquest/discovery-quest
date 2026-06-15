@@ -55,9 +55,76 @@
       ]
     },
     {
+      "kind": "findDetail",
+      "description": "Find the Detail: read a short story, then answer a spoken wh-question whose answer is stated in the text. Renders via the StoryReader board.",
+      "content": "detailItems",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "example": "The cat is on the mat. The cat is big."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "example": "rq-where-cat",
+          "note": "rq-* clip key for the spoken question"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "example": "Where is the cat?"
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "example": "mat",
+          "note": "the answer word"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "example": [
+            "box",
+            "bed",
+            "web"
+          ],
+          "note": "distractor words"
+        }
+      ]
+    },
+    {
+      "kind": "firstReader",
+      "description": "First Readers: read along to a short decodable story (narrated word by word), then tap the word you heard. Renders via the StoryReader board.",
+      "content": "storyItems",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "example": "The cat is on the mat. The cat can nap."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "example": "cat",
+          "note": "the target word to tap"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "example": [
+            "mat",
+            "hat",
+            "map"
+          ],
+          "note": "distractor words"
+        }
+      ]
+    },
+    {
       "kind": "grammarAdj",
-      "description": "Spot the describing word (adjective).",
-      "content": "parts_of_speech (adjectives)",
+      "description": "Spot the describing word (adjective). Draws from the adjectives array of the parts_of_speech word bank.",
+      "content": "parts_of_speech",
       "item": [
         {
           "name": "(word)",
@@ -69,8 +136,8 @@
     },
     {
       "kind": "grammarNoun",
-      "description": "Spot the naming word (noun) — sorts words by part of speech.",
-      "content": "parts_of_speech (nouns)",
+      "description": "Spot the naming word (noun) — sorts words by part of speech. Draws from the nouns array of the parts_of_speech word bank.",
+      "content": "parts_of_speech",
       "item": [
         {
           "name": "(word)",
@@ -82,14 +149,91 @@
     },
     {
       "kind": "grammarVerb",
-      "description": "Spot the doing word (verb).",
-      "content": "parts_of_speech (verbs)",
+      "description": "Spot the doing word (verb). Draws from the verbs array of the parts_of_speech word bank.",
+      "content": "parts_of_speech",
       "item": [
         {
           "name": "(word)",
           "type": "string",
           "example": "run",
           "note": "tagged verb"
+        }
+      ]
+    },
+    {
+      "kind": "inference",
+      "description": "Read Between the Lines: read a short story, then infer the answer to a spoken wh-question using clues. Renders via the StoryReader board.",
+      "content": "inferenceItems",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "example": "The dog can run and jump. The dog can dig."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "example": "rq-feel-dog",
+          "note": "rq-* clip key for the spoken question"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "example": "How does the dog feel?"
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "example": "happy",
+          "note": "the inferred answer word"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "example": [
+            "sad",
+            "mad"
+          ],
+          "note": "distractor words"
+        }
+      ]
+    },
+    {
+      "kind": "mainIdea",
+      "description": "Main Idea: read a short story, then answer a spoken wh-question about what it is about. Renders via the StoryReader board.",
+      "content": "mainIdeaItems",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "example": "The cat sat on the mat. The cat can nap. The cat is little."
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "example": "rq-main",
+          "note": "rq-* clip key for the spoken question"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "example": "What is the story about?"
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "example": "cat",
+          "note": "the answer word"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "example": [
+            "dog",
+            "sun",
+            "bus"
+          ],
+          "note": "distractor words"
         }
       ]
     },
@@ -131,8 +275,11 @@
     },
     {
       "kind": "sameOpp",
-      "description": "Same or opposite? Pick the synonym or the antonym of the given word.",
-      "content": "synonyms, antonyms",
+      "description": "Same or opposite? Pick the synonym or the antonym of the given word. Draws from both the synonyms and antonyms collections.",
+      "content": [
+        "synonyms",
+        "antonyms"
+      ],
       "item": [
         {
           "name": "word",
@@ -709,6 +856,175 @@
       "description": "Sentences with no end mark; the punctuation board asks which of . ? ! fits.",
       "collection": "strings",
       "example": "the cat is big"
+    },
+    {
+      "id": "storyItems",
+      "description": "First Readers (recognition): a short decodable story, the target word to hear/tap (q), and word distractors (d). Feeds the firstReader board (StoryReader).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "required": true,
+          "example": "The cat is on the mat. The cat can nap.",
+          "note": "narrated word by word using word-<w> clips"
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": true,
+          "example": "cat",
+          "note": "the target word — the answer to tap"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "mat",
+            "hat",
+            "map"
+          ],
+          "note": "wrong-but-plausible word choices"
+        }
+      ]
+    },
+    {
+      "id": "mainIdeaItems",
+      "description": "Main Idea comprehension: a story + a spoken wh-question (q = rq-* clip key), the displayed question text, the answer (a), and distractors (d). Feeds the mainIdea board (StoryReader).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "required": true,
+          "example": "The cat sat on the mat. The cat can nap. The cat is little.",
+          "note": "narrated word by word using word-<w> clips"
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": true,
+          "example": "rq-main",
+          "note": "clip key for the spoken question (a narration rq-* key)"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "example": "What is the story about?",
+          "note": "the displayed question prompt"
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "required": true,
+          "example": "cat",
+          "note": "the answer word"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "dog",
+            "sun",
+            "bus"
+          ],
+          "note": "wrong-but-plausible word choices"
+        }
+      ]
+    },
+    {
+      "id": "detailItems",
+      "description": "Find the Detail comprehension: a story + a spoken wh-question (q = rq-* clip key), the displayed question text, the answer (a), and distractors (d). Feeds the findDetail board (StoryReader).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "required": true,
+          "example": "The cat is on the mat. The cat is big.",
+          "note": "narrated word by word using word-<w> clips"
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": true,
+          "example": "rq-where-cat",
+          "note": "clip key for the spoken question (a narration rq-* key)"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "example": "Where is the cat?",
+          "note": "the displayed question prompt"
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "required": true,
+          "example": "mat",
+          "note": "the answer word"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "box",
+            "bed",
+            "web"
+          ],
+          "note": "wrong-but-plausible word choices"
+        }
+      ]
+    },
+    {
+      "id": "inferenceItems",
+      "description": "Inference comprehension: a story + a spoken wh-question (q = rq-* clip key), the displayed question text, the answer (a), and distractors (d). Feeds the inference board (StoryReader).",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "story",
+          "type": "string",
+          "required": true,
+          "example": "The dog can run and jump. The dog can dig.",
+          "note": "narrated word by word using word-<w> clips"
+        },
+        {
+          "name": "q",
+          "type": "string",
+          "required": true,
+          "example": "rq-feel-dog",
+          "note": "clip key for the spoken question (a narration rq-* key)"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "example": "How does the dog feel?",
+          "note": "the displayed question prompt"
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "required": true,
+          "example": "happy",
+          "note": "the answer word (inferred, may not appear in the story)"
+        },
+        {
+          "name": "d",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "sad",
+            "mad"
+          ],
+          "note": "wrong-but-plausible word choices"
+        }
+      ]
     }
   ]
 }

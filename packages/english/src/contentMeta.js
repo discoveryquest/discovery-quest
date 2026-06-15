@@ -102,4 +102,46 @@ export const CONTENT_META = {
     collection: 'strings',
     example: 'the cat is big',
   },
+  storyItems: {
+    description: 'First Readers (recognition): a short decodable story, the target word to hear/tap (q), and word distractors (d). Feeds the firstReader board (StoryReader).',
+    collection: 'objects',
+    item: [
+      { name: 'story', type: 'string', required: true, example: 'The cat is on the mat. The cat can nap.', note: 'narrated word by word using word-<w> clips' },
+      { name: 'q', type: 'string', required: true, example: 'cat', note: 'the target word — the answer to tap' },
+      { name: 'd', type: 'string[]', required: true, example: ['mat', 'hat', 'map'], note: 'wrong-but-plausible word choices' },
+    ],
+  },
+  mainIdeaItems: {
+    description: 'Main Idea comprehension: a story + a spoken wh-question (q = rq-* clip key), the displayed question text, the answer (a), and distractors (d). Feeds the mainIdea board (StoryReader).',
+    collection: 'objects',
+    item: [
+      { name: 'story', type: 'string', required: true, example: 'The cat sat on the mat. The cat can nap. The cat is little.', note: 'narrated word by word using word-<w> clips' },
+      { name: 'q', type: 'string', required: true, example: 'rq-main', note: 'clip key for the spoken question (a narration rq-* key)' },
+      { name: 'text', type: 'string', required: true, example: 'What is the story about?', note: 'the displayed question prompt' },
+      { name: 'a', type: 'string', required: true, example: 'cat', note: 'the answer word' },
+      { name: 'd', type: 'string[]', required: true, example: ['dog', 'sun', 'bus'], note: 'wrong-but-plausible word choices' },
+    ],
+  },
+  detailItems: {
+    description: 'Find the Detail comprehension: a story + a spoken wh-question (q = rq-* clip key), the displayed question text, the answer (a), and distractors (d). Feeds the findDetail board (StoryReader).',
+    collection: 'objects',
+    item: [
+      { name: 'story', type: 'string', required: true, example: 'The cat is on the mat. The cat is big.', note: 'narrated word by word using word-<w> clips' },
+      { name: 'q', type: 'string', required: true, example: 'rq-where-cat', note: 'clip key for the spoken question (a narration rq-* key)' },
+      { name: 'text', type: 'string', required: true, example: 'Where is the cat?', note: 'the displayed question prompt' },
+      { name: 'a', type: 'string', required: true, example: 'mat', note: 'the answer word' },
+      { name: 'd', type: 'string[]', required: true, example: ['box', 'bed', 'web'], note: 'wrong-but-plausible word choices' },
+    ],
+  },
+  inferenceItems: {
+    description: 'Inference comprehension: a story + a spoken wh-question (q = rq-* clip key), the displayed question text, the answer (a), and distractors (d). Feeds the inference board (StoryReader).',
+    collection: 'objects',
+    item: [
+      { name: 'story', type: 'string', required: true, example: 'The dog can run and jump. The dog can dig.', note: 'narrated word by word using word-<w> clips' },
+      { name: 'q', type: 'string', required: true, example: 'rq-feel-dog', note: 'clip key for the spoken question (a narration rq-* key)' },
+      { name: 'text', type: 'string', required: true, example: 'How does the dog feel?', note: 'the displayed question prompt' },
+      { name: 'a', type: 'string', required: true, example: 'happy', note: 'the answer word (inferred, may not appear in the story)' },
+      { name: 'd', type: 'string[]', required: true, example: ['sad', 'mad'], note: 'wrong-but-plausible word choices' },
+    ],
+  },
 };

@@ -320,6 +320,152 @@
               "items": {
                 "type": "string"
               }
+            },
+            "storyItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "story": {
+                    "type": "string",
+                    "description": "narrated word by word using word-<w> clips"
+                  },
+                  "q": {
+                    "type": "string",
+                    "description": "the target word — the answer to tap"
+                  },
+                  "d": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible word choices"
+                  }
+                },
+                "required": [
+                  "story",
+                  "q",
+                  "d"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "mainIdeaItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "story": {
+                    "type": "string",
+                    "description": "narrated word by word using word-<w> clips"
+                  },
+                  "q": {
+                    "type": "string",
+                    "description": "clip key for the spoken question (a narration rq-* key)"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "the displayed question prompt"
+                  },
+                  "a": {
+                    "type": "string",
+                    "description": "the answer word"
+                  },
+                  "d": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible word choices"
+                  }
+                },
+                "required": [
+                  "story",
+                  "q",
+                  "text",
+                  "a",
+                  "d"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "detailItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "story": {
+                    "type": "string",
+                    "description": "narrated word by word using word-<w> clips"
+                  },
+                  "q": {
+                    "type": "string",
+                    "description": "clip key for the spoken question (a narration rq-* key)"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "the displayed question prompt"
+                  },
+                  "a": {
+                    "type": "string",
+                    "description": "the answer word"
+                  },
+                  "d": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible word choices"
+                  }
+                },
+                "required": [
+                  "story",
+                  "q",
+                  "text",
+                  "a",
+                  "d"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "inferenceItems": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "story": {
+                    "type": "string",
+                    "description": "narrated word by word using word-<w> clips"
+                  },
+                  "q": {
+                    "type": "string",
+                    "description": "clip key for the spoken question (a narration rq-* key)"
+                  },
+                  "text": {
+                    "type": "string",
+                    "description": "the displayed question prompt"
+                  },
+                  "a": {
+                    "type": "string",
+                    "description": "the answer word (inferred, may not appear in the story)"
+                  },
+                  "d": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible word choices"
+                  }
+                },
+                "required": [
+                  "story",
+                  "q",
+                  "text",
+                  "a",
+                  "d"
+                ],
+                "additionalProperties": false
+              }
             }
           }
         }
@@ -382,9 +528,13 @@
             "blendWord",
             "contextClue",
             "digraphs",
+            "findDetail",
+            "firstReader",
             "grammarAdj",
             "grammarNoun",
             "grammarVerb",
+            "inference",
+            "mainIdea",
             "pictureMatch",
             "punctuation",
             "sameOpp",
