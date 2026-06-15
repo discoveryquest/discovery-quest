@@ -34,6 +34,7 @@ export const BOARD_REGISTRY = {
   grammarVerb:   { ...BOARD_GENERATORS.grammarVerb,   board: GrammarSort },
   grammarAdj:    { ...BOARD_GENERATORS.grammarAdj,    board: GrammarSort },
   sentence:      { ...BOARD_GENERATORS.sentence,      board: SentenceBuilder },
+  sentenceRu:    { ...BOARD_GENERATORS.sentenceRu,    board: SentenceBuilder },
   punctuation:   { ...BOARD_GENERATORS.punctuation,   board: PunctuationChoice },
 
   // ── Reading (World 4) ──

@@ -93,6 +93,14 @@ export const BOARD_META = {
     content: 'sentences',
     item: [{ name: '(sentence)', type: 'string', example: 'The cat is big.', note: 'a model sentence the words are drawn from' }],
   },
+  sentenceRu: {
+    description: 'Build an English sentence from scrambled word tiles, prompted by its native-language meaning; each tile speaks its word. Foreign-language sentence construction (renders via SentenceBuilder).',
+    content: 'sentencesRu',
+    item: [
+      { name: 'en', type: 'string', example: 'I see a cat.', note: 'the target English sentence (words scrambled into tiles)' },
+      { name: 'ru', type: 'string', example: 'Я вижу кошку.', note: 'native-language meaning shown as the prompt' },
+    ],
+  },
   punctuation: {
     description: 'Choose the right end mark for a sentence (. ? !).',
     content: 'punctuationCores',

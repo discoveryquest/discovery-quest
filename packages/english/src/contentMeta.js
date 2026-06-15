@@ -97,6 +97,15 @@ export const CONTENT_META = {
     collection: 'strings',
     example: 'The cat is big.',
   },
+  sentencesRu: {
+    description: 'English sentences paired with a native-language meaning (ru) for foreign-language sentence-building. The learner reads the native-language prompt and orders the scrambled English word tiles to build the English sentence.',
+    collection: 'objects',
+    item: [
+      { name: 'en', type: 'string', required: true, example: 'I see a cat.', note: 'the target English sentence (words are scrambled into tiles)' },
+      { name: 'ru', type: 'string', required: true, example: 'Я вижу кошку.', note: 'native-language meaning shown as the prompt' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
   punctuationCores: {
     description: 'Sentences with no end mark; the punctuation board asks which of . ? ! fits.',
     collection: 'strings',

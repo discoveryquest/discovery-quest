@@ -8,6 +8,7 @@
     "./phonics": "./src/phonics.js",
     "./vocab": "./src/vocab.js",
     "./grammar": "./src/grammar.js",
-    "./reading": "./src/reading.js"
+    "./reading": "./src/reading.js",
+    "./sentencesRu": "./src/sentencesRu.js"
   }
 }

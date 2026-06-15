@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { BOARD_GENERATORS } from '../src/boardGenerators.js';
 import { BOARD_META } from '../src/boardMeta.js';
 
-// All 18 English Quest board kinds must be present.
+// All English Quest board kinds must be present (incl. the EFL sentenceRu builder).
 const ALL_KINDS = Object.keys(BOARD_META);
 
 test('BOARD_GENERATORS covers every kind in BOARD_META', () => {
@@ -79,4 +79,15 @@ test('a generator runs against injected items — inference', () => {
   const p = BOARD_GENERATORS.inference.generate(items, { band: 0 });
   assert.equal(p.steps[0].chip.label, 'Inference');
   assert.equal(p.steps[0].chip.color, '#E879F9');
+});
+
+test('a generator runs against injected items — sentenceRu (EFL builder)', () => {
+  assert.equal(BOARD_META.sentenceRu.content, 'sentencesRu');
+  const items = [{ en: 'I see a cat.', ru: 'Я вижу кошку.' }, { en: 'We go to bed.', ru: 'Мы идём спать.' }];
+  const p = BOARD_GENERATORS.sentenceRu.generate(items, { band: 0 });
+  assert.equal(p.kind, 'sentenceRu');
+  const it = items.find((x) => x.en === p.word);
+  assert.ok(it, `word must be an injected en sentence, got "${p.word}"`);
+  assert.equal(p.steps[0].expected, it.en);
+  assert.equal(p.steps[0].tokenAudio, true);
 });

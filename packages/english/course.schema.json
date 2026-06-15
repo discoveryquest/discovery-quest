@@ -315,6 +315,34 @@
                 "type": "string"
               }
             },
+            "sentencesRu": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "en": {
+                    "type": "string",
+                    "description": "the target English sentence (words are scrambled into tiles)"
+                  },
+                  "ru": {
+                    "type": "string",
+                    "description": "native-language meaning shown as the prompt"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "optional difficulty/topic band; a station selects its slice via bands:"
+                  }
+                },
+                "required": [
+                  "en",
+                  "ru"
+                ],
+                "additionalProperties": false
+              }
+            },
             "punctuationCores": {
               "type": "array",
               "items": {
@@ -539,6 +567,7 @@
             "punctuation",
             "sameOpp",
             "sentence",
+            "sentenceRu",
             "sightWord",
             "soundToLetter",
             "vocabListen",

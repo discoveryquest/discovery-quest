@@ -5,6 +5,7 @@ import { genSoundToLetter, genBlend, genWordFamily, genDigraph } from '@discover
 import { genPictureMatch, genVocabListen, genSightWords, genSameOpposite, genContextClues } from '@discoveryquest/content-english/vocab';
 import { genWordSort, genBuildSentence, genPunctuation } from '@discoveryquest/content-english/grammar';
 import { genFirstReaders, comprehension } from '@discoveryquest/content-english/reading';
+import { genSentenceRu } from '@discoveryquest/content-english/sentencesRu';
 
 // Comprehension label+color values sourced from reading.js's C palette:
 //   C = { rose: '#F472B6', pink: '#F9A8D4', plum: '#E879F9' }
@@ -31,6 +32,7 @@ export const BOARD_GENERATORS = {
   grammarVerb:   { generate: (items, ctx) => genWordSort('verb',      items, ctx), content: 'parts_of_speech' },
   grammarAdj:    { generate: (items, ctx) => genWordSort('adjective', items, ctx), content: 'parts_of_speech' },
   sentence:      { generate: genBuildSentence,                                  content: 'sentences' },
+  sentenceRu:    { generate: genSentenceRu,                                     content: 'sentencesRu' },
   punctuation:   { generate: genPunctuation,                                    content: 'punctuationCores' },
 
   // ── Reading (World 4) ──

@@ -308,6 +308,25 @@
       ]
     },
     {
+      "kind": "sentenceRu",
+      "description": "Build an English sentence from scrambled word tiles, prompted by its native-language meaning; each tile speaks its word. Foreign-language sentence construction (renders via SentenceBuilder).",
+      "content": "sentencesRu",
+      "item": [
+        {
+          "name": "en",
+          "type": "string",
+          "example": "I see a cat.",
+          "note": "the target English sentence (words scrambled into tiles)"
+        },
+        {
+          "name": "ru",
+          "type": "string",
+          "example": "Я вижу кошку.",
+          "note": "native-language meaning shown as the prompt"
+        }
+      ]
+    },
+    {
       "kind": "sightWord",
       "description": "Choose the high-frequency sight word that was spoken — words you learn by sight, not sounding out.",
       "content": "sightWords",
@@ -850,6 +869,34 @@
       "description": "Model sentences for the sentence-builder board (capital first, period last).",
       "collection": "strings",
       "example": "The cat is big."
+    },
+    {
+      "id": "sentencesRu",
+      "description": "English sentences paired with a native-language meaning (ru) for foreign-language sentence-building. The learner reads the native-language prompt and orders the scrambled English word tiles to build the English sentence.",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "en",
+          "type": "string",
+          "required": true,
+          "example": "I see a cat.",
+          "note": "the target English sentence (words are scrambled into tiles)"
+        },
+        {
+          "name": "ru",
+          "type": "string",
+          "required": true,
+          "example": "Я вижу кошку.",
+          "note": "native-language meaning shown as the prompt"
+        },
+        {
+          "name": "band",
+          "type": "number",
+          "required": false,
+          "example": 0,
+          "note": "optional difficulty/topic band; a station selects its slice via bands:"
+        }
+      ]
     },
     {
       "id": "punctuationCores",
