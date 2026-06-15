@@ -7,6 +7,7 @@
   "exports": {
     "./phonics": "./src/phonics.js",
     "./vocab": "./src/vocab.js",
-    "./grammar": "./src/grammar.js"
+    "./grammar": "./src/grammar.js",
+    "./reading": "./src/reading.js"
   }
 }
