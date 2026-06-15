@@ -9,7 +9,8 @@
     "./voiceLines": "./src/voiceLines.js",
     "./curriculum": "./src/curriculum.js",
     "./quest": "./src/PhonicsQuest.jsx",
-    "./lessons": "./src/lessons.jsx"
+    "./lessons": "./src/lessons.jsx",
+    "./boardRegistry": "./src/boardRegistry.js"
   },
   "dependencies": {
     "@discoveryquest/engine": "*",
