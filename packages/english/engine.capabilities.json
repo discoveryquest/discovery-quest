@@ -196,6 +196,29 @@
       ]
     },
     {
+      "kind": "vocabListen",
+      "description": "Hear a vocabulary word, tap it among choices — the listening counterpart of picture-match. Reuses the vocab bank (incl. the optional ru gloss); ideal for foreign-language listening.",
+      "content": "vocab",
+      "item": [
+        {
+          "name": "word",
+          "type": "string",
+          "example": "cat"
+        },
+        {
+          "name": "emoji",
+          "type": "string",
+          "example": "🐱"
+        },
+        {
+          "name": "ru",
+          "type": "string",
+          "example": "кошка",
+          "note": "optional native-language gloss (EFL)"
+        }
+      ]
+    },
+    {
       "kind": "wordFamily",
       "description": "Word families: same ending, swap the first sound (-at → cat, hat, mat).",
       "content": "wordFamilies",

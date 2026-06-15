@@ -353,6 +353,7 @@
             "sentence",
             "sightWord",
             "soundToLetter",
+            "vocabListen",
             "wordFamily"
           ]
         },

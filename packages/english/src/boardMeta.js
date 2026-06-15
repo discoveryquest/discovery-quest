@@ -43,6 +43,15 @@ export const BOARD_META = {
       { name: 'ru', type: 'string', example: 'кошка', note: 'optional native-language gloss (EFL)' },
     ],
   },
+  vocabListen: {
+    description: 'Hear a vocabulary word, tap it among choices — the listening counterpart of picture-match. Reuses the vocab bank (incl. the optional ru gloss); ideal for foreign-language listening.',
+    content: 'vocab',
+    item: [
+      { name: 'word', type: 'string', example: 'cat' },
+      { name: 'emoji', type: 'string', example: '🐱' },
+      { name: 'ru', type: 'string', example: 'кошка', note: 'optional native-language gloss (EFL)' },
+    ],
+  },
   sightWord: {
     description: 'Choose the high-frequency sight word that was spoken — words you learn by sight, not sounding out.',
     content: 'sightWords',
