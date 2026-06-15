@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
+import { speak } from '@discoveryquest/voice-kit/audio';
+
+const clean = (w) => w.toLowerCase().replace(/[^a-z]/g, '');
 
 export default function SentenceBuilder({ step, picked, onPick }) {
   const tokens = step.tokens; // scrambled words; track by index (handles repeats like "the")
@@ -12,6 +15,7 @@ export default function SentenceBuilder({ step, picked, onPick }) {
 
   function place(i) {
     if (answered || placed.includes(i)) return;
+    if (step.tokenAudio) speak('word-' + clean(tokens[i])); // opt-in: tap a tile, hear its word
     const next = [...placed, i];
     setPlaced(next);
     if (next.length === n) onPick(next.map((k) => tokens[k]).join(' '));
@@ -29,7 +33,7 @@ export default function SentenceBuilder({ step, picked, onPick }) {
       <div className={`flex min-h-[56px] w-full max-w-md flex-wrap items-center justify-center gap-2 rounded-2xl border-2 p-3 ${
         !answered ? 'border-white/15' : correct ? 'border-emerald-300 bg-emerald-400/10' : 'border-rose-400 bg-rose-500/10'
       }`}>
-        {placed.length === 0 && <span className="text-slate-600">tap the words…</span>}
+        {placed.length === 0 && <span className="text-slate-600">{step.placeholder ?? 'tap the words…'}</span>}
         {placed.map((k, slot) => (
           <span key={slot} className="rounded-xl bg-cyan-400/15 px-3 py-1.5 text-xl font-extrabold text-white">{tokens[k]}</span>
         ))}
@@ -52,7 +56,7 @@ export default function SentenceBuilder({ step, picked, onPick }) {
           <RotateCcw size={13} /> start over
         </button>
       )}
-      {answered && !correct && <p className="text-sm font-bold text-slate-400">It reads: <span className="text-emerald-300">{step.expected}</span></p>}
+      {answered && !correct && <p className="text-sm font-bold text-slate-400">{step.readsLabel ?? 'It reads:'} <span className="text-emerald-300">{step.expected}</span></p>}
     </div>
   );
 }
