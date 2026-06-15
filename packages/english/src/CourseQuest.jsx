@@ -13,7 +13,7 @@ const QUEST_LEN = 6;
 const pickReaction = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
 
 export default function CourseQuest({ station, course, onExit }) {
-  const band = station?.bands?.[0] ?? 0;
+  const band = Math.max(...(station?.bands ?? [0]));
   const quest = useMemo(
     () => Array.from({ length: QUEST_LEN }, () => station.generate()),
     [station],
