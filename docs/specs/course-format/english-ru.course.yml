@@ -14,8 +14,8 @@ course:
     backToMap: На карту
     score: "Ты ответил правильно {correct} из {total}!"
   reactions:
-    praise: [praise-0, praise-1, praise-2]
-    oops: [oops-0, oops-1]
+    praise: [praise-0, praise-1, praise-2, praise-3, praise-4, praise-5]
+    oops: [oops-0, oops-1, oops-2]
     solved: [solved-0, solved-1]
   worlds:
     - id: animals
