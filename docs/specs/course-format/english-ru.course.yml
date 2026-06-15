@@ -150,6 +150,34 @@ course:
           bands:
             - 5
           lesson: body
+    - id: sentences1
+      title: Простые предложения
+      emoji: 📝
+      color: "#34D399"
+      blurb: Собираем простые предложения по-английски.
+      stations:
+        - id: s1-build
+          title: Собери предложение
+          icon: 🧩
+          sub: построй предложение из слов
+          board: sentenceRu
+          bands:
+            - 6
+          lesson: sentences1
+    - id: sentences2
+      title: Предложения дальше
+      emoji: 📜
+      color: "#A3E635"
+      blurb: Продолжаем собирать предложения.
+      stations:
+        - id: s2-build
+          title: Собери предложение
+          icon: 🧩
+          sub: построй предложение из слов
+          board: sentenceRu
+          bands:
+            - 7
+          lesson: sentences2
   lessons:
     animals-picture:
       title: Слово и картинка
@@ -295,6 +323,42 @@ course:
             - say: la-body-4
               caption: Теперь ты! Выбери нужное слово. Попробуй!
               view: { kind: picture, key: nose, emoji: 👃, word: nose }
+    sentences1:
+      title: Простые предложения
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-sent1-1
+              caption: Теперь будем собирать предложения! Слушай и собирай слова по порядку.
+              view: { kind: picture, key: sentence, emoji: 🧩, word: sentence }
+            - say: la-sent1-2
+              caption: "Например: «Я вижу кошку» — I see a cat. Нажимай слова по порядку."
+              view: { kind: picture, key: cat, emoji: 🐱, word: cat }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-sent1-3
+              caption: Твой ход! Собери предложение. Попробуй!
+              view: { kind: picture, key: sentence, emoji: 🧩, word: sentence }
+    sentences2:
+      title: Предложения дальше
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-sent2-1
+              caption: Продолжаем собирать предложения! Слушай и собирай слова по порядку.
+              view: { kind: picture, key: sentence, emoji: 🧩, word: sentence }
+            - say: la-sent2-2
+              caption: "Например: «Кошка большая» — The cat is big. Нажимай слова по порядку."
+              view: { kind: picture, key: cat, emoji: 🐱, word: cat }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-sent2-3
+              caption: Твой ход! Собери предложение. Попробуй!
+              view: { kind: picture, key: sentence, emoji: 🧩, word: sentence }
   narration:
     la-pic-1: Давай выучим животных по-английски! Смотри на картинку и слушай слово.
     la-pic-2: "Это кошка. По-английски — cat. Послушай: cat."
@@ -323,6 +387,13 @@ course:
     la-body-2: Это рука. По-английски — hand.
     la-body-3: Это глаз. По-английски — eye.
     la-body-4: Теперь ты! Выбери нужное слово. Попробуй!
+    la-sent1-1: Теперь будем собирать предложения! Слушай и собирай слова по порядку.
+    la-sent1-2: "Например: «Я вижу кошку» — I see a cat. Нажимай слова по порядку."
+    la-sent1-3: Твой ход! Собери предложение. Попробуй!
+    la-sent2-1: Продолжаем собирать предложения! Слушай и собирай слова по порядку.
+    la-sent2-2: "Например: «Кошка большая» — The cat is big. Нажимай слова по порядку."
+    la-sent2-3: Твой ход! Собери предложение. Попробуй!
+    q-build: Собери предложение по-английски, нажимай на слова по порядку.
     praise-0: Молодец!
     praise-1: Верно!
     praise-2: Отлично!
@@ -394,3 +465,16 @@ course:
       - { word: foot, emoji: 🦶, ru: нога, band: 5 }
       - { word: tooth, emoji: 🦷, ru: зуб, band: 5 }
       - { word: face, emoji: 🙂, ru: лицо, band: 5 }
+    sentencesRu:
+      - { en: "I see a cat.", ru: "Я вижу кошку.", band: 6 }
+      - { en: "I see a dog.", ru: "Я вижу собаку.", band: 6 }
+      - { en: "It is a fish.", ru: "Это рыба.", band: 6 }
+      - { en: "It is red.", ru: "Это красный.", band: 6 }
+      - { en: "I like milk.", ru: "Я люблю молоко.", band: 6 }
+      - { en: "I like cake.", ru: "Я люблю торт.", band: 6 }
+      - { en: "The cat is big.", ru: "Кошка большая.", band: 7 }
+      - { en: "The dog is small.", ru: "Собака маленькая.", band: 7 }
+      - { en: "This is my mom.", ru: "Это моя мама.", band: 7 }
+      - { en: "I have a sister.", ru: "У меня есть сестра.", band: 7 }
+      - { en: "I see a bird.", ru: "Я вижу птицу.", band: 7 }
+      - { en: "It is blue.", ru: "Это синий.", band: 7 }
