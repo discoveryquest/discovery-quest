@@ -7,6 +7,25 @@ course:
   voice:
     id: jessica
     profile: teaching-slow
+  ui:
+    done: "Great job!"
+    backToMap: "Back to the map"
+    score: "You got {correct} of {total}!"
+  reactions:
+    praise:
+      - praise-0
+      - praise-1
+      - praise-2
+      - praise-3
+      - praise-4
+      - praise-5
+    oops:
+      - oops-0
+      - oops-1
+      - oops-2
+    solved:
+      - solved-0
+      - solved-1
   engine: ">=1.0"
   worlds:
     - id: phonics
