@@ -274,6 +274,38 @@
       ]
     },
     {
+      "kind": "ruleQuiz",
+      "description": "Apply a spelling/grammar rule: a reminder of the rule, then pick the word that follows it (Bossy R, Magic E, i-before-e…).",
+      "content": "rules",
+      "item": [
+        {
+          "name": "rule",
+          "type": "string",
+          "example": "i before e, except after c",
+          "note": "the mnemonic shown as the reminder banner"
+        },
+        {
+          "name": "question",
+          "type": "string",
+          "example": "Which is correct?"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "example": "receive",
+          "note": "the word that follows the rule"
+        },
+        {
+          "name": "distractors",
+          "type": "string[]",
+          "example": [
+            "recieve"
+          ],
+          "note": "wrong-but-plausible choices that break the rule"
+        }
+      ]
+    },
+    {
       "kind": "sameOpp",
       "description": "Same or opposite? Pick the synonym or the antonym of the given word. Draws from both the synonyms and antonyms collections.",
       "content": [
@@ -888,6 +920,50 @@
           "required": true,
           "example": "Я вижу кошку.",
           "note": "native-language meaning shown as the prompt"
+        },
+        {
+          "name": "band",
+          "type": "number",
+          "required": false,
+          "example": 0,
+          "note": "optional difficulty/topic band; a station selects its slice via bands:"
+        }
+      ]
+    },
+    {
+      "id": "rules",
+      "description": "A spelling/grammar rule reminder + a question whose answer follows the rule. Feeds the rule-quiz board.",
+      "collection": "objects",
+      "item": [
+        {
+          "name": "rule",
+          "type": "string",
+          "required": true,
+          "example": "i before e, except after c",
+          "note": "the mnemonic shown as the reminder banner"
+        },
+        {
+          "name": "question",
+          "type": "string",
+          "required": true,
+          "example": "Which is correct?",
+          "note": "the question prompt"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "required": true,
+          "example": "receive",
+          "note": "the word that follows the rule"
+        },
+        {
+          "name": "distractors",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "recieve"
+          ],
+          "note": "wrong-but-plausible choices that break the rule"
         },
         {
           "name": "band",

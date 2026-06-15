@@ -106,6 +106,17 @@ export const CONTENT_META = {
       { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
     ],
   },
+  rules: {
+    description: 'A spelling/grammar rule reminder + a question whose answer follows the rule. Feeds the rule-quiz board.',
+    collection: 'objects',
+    item: [
+      { name: 'rule', type: 'string', required: true, example: 'i before e, except after c', note: 'the mnemonic shown as the reminder banner' },
+      { name: 'question', type: 'string', required: true, example: 'Which is correct?', note: 'the question prompt' },
+      { name: 'answer', type: 'string', required: true, example: 'receive', note: 'the word that follows the rule' },
+      { name: 'distractors', type: 'string[]', required: true, example: ['recieve'], note: 'wrong-but-plausible choices that break the rule' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
   punctuationCores: {
     description: 'Sentences with no end mark; the punctuation board asks which of . ? ! fits.',
     collection: 'strings',

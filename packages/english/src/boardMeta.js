@@ -101,6 +101,16 @@ export const BOARD_META = {
       { name: 'ru', type: 'string', example: 'Я вижу кошку.', note: 'native-language meaning shown as the prompt' },
     ],
   },
+  ruleQuiz: {
+    description: 'Apply a spelling/grammar rule: a reminder of the rule, then pick the word that follows it (Bossy R, Magic E, i-before-e…).',
+    content: 'rules',
+    item: [
+      { name: 'rule', type: 'string', example: 'i before e, except after c', note: 'the mnemonic shown as the reminder banner' },
+      { name: 'question', type: 'string', example: 'Which is correct?' },
+      { name: 'answer', type: 'string', example: 'receive', note: 'the word that follows the rule' },
+      { name: 'distractors', type: 'string[]', example: ['recieve'], note: 'wrong-but-plausible choices that break the rule' },
+    ],
+  },
   punctuation: {
     description: 'Choose the right end mark for a sentence (. ? !).',
     content: 'punctuationCores',

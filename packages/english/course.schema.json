@@ -343,6 +343,47 @@
                 "additionalProperties": false
               }
             },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rule": {
+                    "type": "string",
+                    "description": "the mnemonic shown as the reminder banner"
+                  },
+                  "question": {
+                    "type": "string",
+                    "description": "the question prompt"
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "the word that follows the rule"
+                  },
+                  "distractors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible choices that break the rule"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "optional difficulty/topic band; a station selects its slice via bands:"
+                  }
+                },
+                "required": [
+                  "rule",
+                  "question",
+                  "answer",
+                  "distractors"
+                ],
+                "additionalProperties": false
+              }
+            },
             "punctuationCores": {
               "type": "array",
               "items": {
@@ -565,6 +606,7 @@
             "mainIdea",
             "pictureMatch",
             "punctuation",
+            "ruleQuiz",
             "sameOpp",
             "sentence",
             "sentenceRu",
