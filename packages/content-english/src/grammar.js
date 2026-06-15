@@ -14,13 +14,20 @@ const C = { purple: '#A78BFA' };
 const NOUNS = ['cat', 'dog', 'sun', 'hat', 'bus', 'cup', 'fish', 'box', 'bed', 'ball', 'hen', 'jet', 'van', 'ant', 'pig', 'map', 'leg', 'queen', 'zebra', 'duck'];
 const VERBS = ['run', 'jump', 'sit', 'hop', 'eat', 'swim', 'sing', 'read', 'ride', 'fly', 'dig', 'sleep', 'look', 'go'];
 const ADJECTIVES = ['big', 'small', 'hot', 'cold', 'wet', 'dry', 'old', 'new', 'tall', 'soft', 'hard', 'happy', 'sad', 'nice'];
-const BANK = { noun: NOUNS, verb: VERBS, adjective: ADJECTIVES };
+// role-keyed bank (PLURAL keys — matches the multi-collection content shape); the fixture
+// the topic exports bind. `category` is SINGULAR, so map it to the plural key.
+const BANK = { nouns: NOUNS, verbs: VERBS, adjectives: ADJECTIVES };
+const ROLE = { noun: 'nouns', verb: 'verbs', adjective: 'adjectives' };
 export const POS_LABEL = { noun: 'naming word', verb: 'doing word', adjective: 'describing word' };
 export const GRAMMAR_WORDS = [...new Set([...NOUNS, ...VERBS, ...ADJECTIVES])];
 
-export function genWordSort(category, band = 0) {
-  const target = pick(BANK[category]);
-  const others = Object.keys(BANK).filter((k) => k !== category).flatMap((k) => BANK[k]);
+// `items` is the role-keyed object { nouns, verbs, adjectives }; `category` is singular.
+export function genWordSort(category, items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const key = ROLE[category];
+  const target = pick(items[key]);
+  const others = Object.entries(items).filter(([k]) => k !== key).flatMap(([, v]) => v);
   const distractors = shuffle(others).slice(0, 3);
   const choices = shuffle([target, ...distractors]);
   return {
@@ -38,7 +45,7 @@ export function genWordSort(category, band = 0) {
         audioPrompt: `q-${category}`,
         inputKind: 'choice',
         choices,
-        lower: band >= 2,
+        lower,
         expected: target,
         hint: `"${target}" is a ${POS_LABEL[category]}.`,
         sayQ: [`q-${category}`],
@@ -48,9 +55,9 @@ export function genWordSort(category, band = 0) {
   };
 }
 
-export const nouns = { id: 'nouns', title: 'Naming Words', boardKind: 'grammarNoun', bands: [0], generate: (b) => genWordSort('noun', b) };
-export const verbs = { id: 'verbs', title: 'Doing Words', boardKind: 'grammarVerb', bands: [0], generate: (b) => genWordSort('verb', b) };
-export const adjectives = { id: 'adjectives', title: 'Describing Words', boardKind: 'grammarAdj', bands: [0], generate: (b) => genWordSort('adjective', b) };
+export const nouns = { id: 'nouns', title: 'Naming Words', boardKind: 'grammarNoun', bands: [0], generate: (b) => genWordSort('noun', BANK, { band: b }) };
+export const verbs = { id: 'verbs', title: 'Doing Words', boardKind: 'grammarVerb', bands: [0], generate: (b) => genWordSort('verb', BANK, { band: b }) };
+export const adjectives = { id: 'adjectives', title: 'Describing Words', boardKind: 'grammarAdj', bands: [0], generate: (b) => genWordSort('adjective', BANK, { band: b }) };
 
 // ── Build a Sentence (word order) ───────────────────────────────────────────
 // Scrambled word tiles → tap them in order to make the sentence. Proper sentence case
@@ -60,8 +67,9 @@ export const SENTENCES = [
   'The fish is wet.', 'We go to bed.', 'The bus is big.', 'I see the sun.', 'The dog can run.',
 ];
 
-export function genBuildSentence() {
-  const sentence = pick(SENTENCES);
+// `items` is the sentences array.
+export function genBuildSentence(items, ctx = {}) {
+  const sentence = pick(items);
   const tokens = sentence.split(' ');
   return {
     kind: 'sentence',
@@ -86,7 +94,7 @@ export function genBuildSentence() {
 }
 
 export const buildSentence = {
-  id: 'build-sentence', title: 'Build a Sentence', boardKind: 'sentence', bands: [0], generate: genBuildSentence,
+  id: 'build-sentence', title: 'Build a Sentence', boardKind: 'sentence', bands: [0], generate: (b) => genBuildSentence(SENTENCES, { band: b }),
 };
 
 // ── Capitals & Periods ──────────────────────────────────────────────────────
@@ -95,8 +103,9 @@ export const buildSentence = {
 export const PUNCT_CORES = ['the cat is big', 'i see a dog', 'the sun is hot', 'a pig can run', 'we go to bed', 'the dog can run'];
 const cap = (s) => s[0].toUpperCase() + s.slice(1);
 
-export function genPunctuation() {
-  const core = pick(PUNCT_CORES);
+// `items` is the punctuation cores array (lowercase, no period).
+export function genPunctuation(items, ctx = {}) {
+  const core = pick(items);
   const correct = `${cap(core)}.`;
   const wrongs = [`${core}.`, cap(core), core]; // no-cap / no-period / neither
   const choices = shuffle([correct, ...wrongs]);
@@ -124,7 +133,7 @@ export function genPunctuation() {
 }
 
 export const punctuation = {
-  id: 'punctuation', title: 'Capitals & Periods', boardKind: 'punctuation', bands: [0], generate: genPunctuation,
+  id: 'punctuation', title: 'Capitals & Periods', boardKind: 'punctuation', bands: [0], generate: (b) => genPunctuation(PUNCT_CORES, { band: b }),
 };
 
 export const GRAMMAR_TOPICS = [nouns, verbs, adjectives, buildSentence, punctuation];
