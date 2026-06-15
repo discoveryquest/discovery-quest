@@ -57,8 +57,6 @@ export const PHONEMES = [
   { letter: 'z', key: 'phon-z', sound: '/z/', word: 'zebra' },
 ];
 
-const BY_LETTER = Object.fromEntries(PHONEMES.map((p) => [p.letter, p]));
-
 // word → picture, so a correct answer can SHOW what was said (e.g. "fish" → 🐟).
 // Words without a clean emoji simply show as text (the board falls back gracefully).
 export const WORD_EMOJI = {
@@ -71,22 +69,16 @@ export const WORD_EMOJI = {
   yoyo: '🪀', zebra: '🦓',
 };
 
-// Bands = how much of the alphabet is in play (gentle progression).
-const BANDS = [
-  ['s', 'a', 't', 'p', 'i', 'n'], // band 0 — classic first set
-  ['s', 'a', 't', 'p', 'i', 'n', 'm', 'd', 'g', 'o', 'c', 'k'], // band 1
-  PHONEMES.map((p) => p.letter), // band 2 — all single letters
-];
-
-export function bandLetters(band) {
-  return BANDS[Math.max(0, Math.min(BANDS.length - 1, band))];
-}
-
 // Sound → Letter: play a phoneme, child taps the matching letter.
-export function genSoundToLetter(band = 0) {
-  const letters = bandLetters(band);
-  const target = BY_LETTER[pick(letters)];
-  const pool = letters.filter((l) => l !== target.letter);
+// `items` are phoneme objects [{ letter, sound, word, band }] (already band-sliced
+// by the loader). The SOUND clip key is derived from the letter (`phon-<letter>`),
+// the stable gen-voice clip convention.
+export function genSoundToLetter(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const target = pick(items);
+  const key = `phon-${target.letter}`;
+  const pool = items.filter((i) => i.letter !== target.letter).map((i) => i.letter);
   const distractors = shuffle(pool).slice(0, Math.min(3, pool.length));
   const choices = shuffle([target.letter, ...distractors]);
 
@@ -104,13 +96,13 @@ export function genSoundToLetter(band = 0) {
         chip: { label: 'Letter Sounds', color: C.teal },
         banner: 'Listen — which letter makes this sound?',
         prompt: 'Tap the letter you hear',
-        audioPrompt: target.key, // the SOUND is the prompt (no readable text)
+        audioPrompt: key, // the SOUND is the prompt (no readable text)
         inputKind: 'choice',
         choices,
-        lower: band >= 2, // uppercase first; lowercase introduced at band 2 (All Letter Sounds)
+        lower, // uppercase first; lowercase introduced at band 2 (All Letter Sounds), or overridden by ctx.lowercase
         expected: target.letter,
         hint: `It says ${target.sound}, like in "${target.word}". That's the letter ${target.letter.toUpperCase()}!`,
-        sayQ: ['q-whichletter', target.key], // "which letter says…" + the sound
+        sayQ: ['q-whichletter', key], // "which letter says…" + the sound
         sayA: [`word-${target.word}`], // reinforce with the example word
       },
     ],
@@ -123,7 +115,7 @@ export const letterSounds = {
   title: 'Letter Sounds',
   boardKind: 'soundToLetter',
   bands: [0, 1, 2],
-  generate: genSoundToLetter,
+  generate: (band) => genSoundToLetter(PHONEMES, { band }),
 };
 
 // ── Blending (CVC) ──────────────────────────────────────────────────────────
@@ -135,12 +127,22 @@ const BLEND_BANDS = [
   ['sat', 'tip', 'pin', 'pan', 'cat', 'dog', 'mat', 'map', 'dig', 'dot', 'cop', 'top', 'pig', 'can'],
   ['cat', 'dog', 'pig', 'bed', 'bus', 'cup', 'hat', 'hen', 'leg', 'run', 'fan', 'bug', 'net', 'sun'],
 ];
-// every distinct blend word (for gen-voice word-<w> clips + smoke)
-export const BLEND_WORDS = [...new Set(BLEND_BANDS.flat())];
+// Banded blend words as objects {word, band} — the fixture the topic export binds
+// (band = first BLEND_BANDS array the word appears in).
+export const BLEND_ITEMS = (() => {
+  const seen = new Map();
+  BLEND_BANDS.forEach((words, band) => {
+    for (const word of words) if (!seen.has(word)) seen.set(word, band);
+  });
+  return [...seen].map(([word, band]) => ({ word, band }));
+})();
+// every distinct blend word (for gen-voice word-<w> clips + smoke) — flat strings
+export const BLEND_WORDS = BLEND_ITEMS.map((b) => b.word);
 
-export function genBlend(band = 0) {
-  const words = BLEND_BANDS[Math.max(0, Math.min(BLEND_BANDS.length - 1, band))];
-  const word = pick(words);
+export function genBlend(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const word = pick(items).word;
   const letters = word.split('');
   return {
     kind: 'blendWord',
@@ -159,7 +161,7 @@ export function genBlend(band = 0) {
         sounds: letters.map((l) => `phon-${l}`), // segmented sounds for "play the sounds"
         inputKind: 'build',
         tiles: shuffle(letters),
-        lower: band >= 2, // capitals first; lowercase from band 2 (matches the letter stage)
+        lower, // capitals first; lowercase from band 2 (matches the letter stage), or overridden by ctx.lowercase
         expected: word,
         hint: `Blend the sounds together: ${letters.join('-')} → ${word}.`,
         sayQ: ['q-buildword'],
@@ -174,7 +176,7 @@ export const blendWords = {
   title: 'Blending',
   boardKind: 'blendWord',
   bands: [0, 1, 2],
-  generate: genBlend,
+  generate: (band) => genBlend(BLEND_ITEMS, { band }),
 };
 
 // ── Word Families ───────────────────────────────────────────────────────────
@@ -189,9 +191,10 @@ export const FAMILIES = [
 ];
 export const FAMILY_WORDS = [...new Set(FAMILIES.flatMap((f) => f.words))];
 
-export function genWordFamily(band = 0) {
-  const fams = FAMILIES.filter((f) => f.band <= band);
-  const fam = pick(fams.length ? fams : [FAMILIES[0]]);
+export function genWordFamily(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const fam = pick(items);
   const target = pick(fam.words);
   const onsets = [...new Set(fam.words.map((w) => w[0]))];
   const distractors = shuffle(onsets.filter((o) => o !== target[0])).slice(0, 3);
@@ -211,7 +214,7 @@ export function genWordFamily(band = 0) {
         rime: fam.rime,
         inputKind: 'choice',
         choices,
-        lower: band >= 2,
+        lower,
         expected: target[0],
         hint: `"${target}" starts with ${target[0].toUpperCase()} — it's in the ${'-' + fam.rime} family.`,
         sayQ: [`word-${target}`],
@@ -222,7 +225,7 @@ export function genWordFamily(band = 0) {
 }
 
 export const wordFamilies = {
-  id: 'word-families', title: 'Word Families', boardKind: 'wordFamily', bands: [0, 1, 2], generate: genWordFamily,
+  id: 'word-families', title: 'Word Families', boardKind: 'wordFamily', bands: [0, 1, 2], generate: (band) => genWordFamily(FAMILIES, { band }),
 };
 
 // ── Digraphs (Tricky Teams) ─────────────────────────────────────────────────
@@ -236,9 +239,12 @@ export const DIGRAPHS = [
 ];
 export const DIGRAPH_WORDS = DIGRAPHS.map((d) => d.word);
 
-export function genDigraph() {
-  const target = pick(DIGRAPHS);
-  const choices = shuffle(DIGRAPHS.map((d) => d.team));
+// `items` are digraph objects [{ team, sound, word }]; the SOUND clip key is derived
+// from the team (`phon-<team>`), the stable gen-voice clip convention.
+export function genDigraph(items, ctx = {}) {
+  const target = pick(items);
+  const key = `phon-${target.team}`;
+  const choices = shuffle(items.map((d) => d.team));
   return {
     kind: 'soundToLetter', // same board as letter sounds; tiles are 2-letter teams
     letter: target.team,
@@ -250,12 +256,12 @@ export function genDigraph() {
         chip: { label: 'Tricky Teams', color: C.purple },
         banner: 'Two letters, one sound — which team did you hear?',
         prompt: 'Tap the letter team you hear',
-        audioPrompt: target.key,
+        audioPrompt: key,
         inputKind: 'choice',
         choices,
         expected: target.team,
         hint: `Those two letters say ${target.sound}, like in "${target.word}".`,
-        sayQ: ['q-whichteam', target.key],
+        sayQ: ['q-whichteam', key],
         sayA: [`word-${target.word}`],
       },
     ],
@@ -263,7 +269,7 @@ export function genDigraph() {
 }
 
 export const digraphTeams = {
-  id: 'digraphs', title: 'Tricky Teams', boardKind: 'digraphs', bands: [0], generate: genDigraph,
+  id: 'digraphs', title: 'Tricky Teams', boardKind: 'digraphs', bands: [0], generate: (band) => genDigraph(DIGRAPHS, { band }),
 };
 
 export const PHONICS_TOPICS = [letterSounds, blendWords, wordFamilies, digraphTeams];
