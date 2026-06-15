@@ -7,7 +7,9 @@
   "exports": {
     "./LunaOwl": "./src/LunaOwl.jsx",
     "./ConceptScreen": "./src/ConceptScreen.jsx",
-    "./LessonScreen": "./src/LessonScreen.jsx"
+    "./LessonScreen": "./src/LessonScreen.jsx",
+    "./TrailMap": "./src/TrailMap.jsx",
+    "./StationPopover": "./src/StationPopover.jsx"
   },
   "dependencies": {
     "@discoveryquest/voice-kit": "*"
