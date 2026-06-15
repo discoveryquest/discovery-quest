@@ -156,9 +156,10 @@ course:
 Notice every `caption` is **identical** to its `narration` line, and every
 `board`/`view.kind` (`soundToLetter`, `soundboard`, `phoneme`, `letters`) comes
 from the catalog. The catalog also includes foreign-language boards like
-`pictureMatch`, `vocabListen`, and `sentenceRu` (sentence construction from
-scrambled tiles, for non-native courses) — run the snippet above to see the full
-current list.
+`pictureMatch`, `vocabListen`, `sentenceRu` (sentence construction from
+scrambled tiles, for non-native courses), and `ruleQuiz` (apply a spelling/grammar
+rule — a reminder, then pick the word that follows it) — run the snippet above to
+see the full current list.
 
 ## 5. Validate before you submit
 
