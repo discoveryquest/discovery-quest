@@ -84,11 +84,12 @@ export const CONTENT_META = {
     example: 'the',
   },
   parts_of_speech: {
-    description: 'The grammar word bank; the generator tags each word as noun / verb / adjective.',
+    description: 'The grammar word bank, role-keyed: nouns / verbs / adjectives. The generator draws from the appropriate array per category.',
     collection: 'wordbank',
     fields: [
-      { name: 'note', type: 'string', required: false },
-      { name: 'words', type: 'string[]', required: true, example: ['cat', 'run', 'happy'] },
+      { name: 'nouns', type: 'string[]', required: true, example: ['cat', 'dog', 'sun'] },
+      { name: 'verbs', type: 'string[]', required: true, example: ['run', 'jump', 'sit'] },
+      { name: 'adjectives', type: 'string[]', required: true, example: ['big', 'small', 'hot'] },
     ],
   },
   sentences: {

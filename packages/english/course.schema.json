@@ -284,13 +284,19 @@
             "parts_of_speech": {
               "type": "object",
               "properties": {
-                "note": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
+                "nouns": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 },
-                "words": {
+                "verbs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "adjectives": {
                   "type": "array",
                   "items": {
                     "type": "string"
@@ -298,7 +304,9 @@
                 }
               },
               "required": [
-                "words"
+                "nouns",
+                "verbs",
+                "adjectives"
               ]
             },
             "sentences": {

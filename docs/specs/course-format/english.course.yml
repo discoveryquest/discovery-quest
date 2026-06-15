@@ -1179,8 +1179,7 @@ course:
           - dog
           - pig
     parts_of_speech:
-      note: word → part of speech (one generator, 3 categories)
-      words:
+      nouns:
         - cat
         - dog
         - sun
@@ -1201,6 +1200,7 @@ course:
         - queen
         - zebra
         - duck
+      verbs:
         - run
         - jump
         - sit
@@ -1215,6 +1215,7 @@ course:
         - sleep
         - look
         - go
+      adjectives:
         - big
         - small
         - hot

@@ -663,22 +663,37 @@
     },
     {
       "id": "parts_of_speech",
-      "description": "The grammar word bank; the generator tags each word as noun / verb / adjective.",
+      "description": "The grammar word bank, role-keyed: nouns / verbs / adjectives. The generator draws from the appropriate array per category.",
       "collection": "wordbank",
       "fields": [
         {
-          "name": "note",
-          "type": "string",
-          "required": false
-        },
-        {
-          "name": "words",
+          "name": "nouns",
           "type": "string[]",
           "required": true,
           "example": [
             "cat",
+            "dog",
+            "sun"
+          ]
+        },
+        {
+          "name": "verbs",
+          "type": "string[]",
+          "required": true,
+          "example": [
             "run",
-            "happy"
+            "jump",
+            "sit"
+          ]
+        },
+        {
+          "name": "adjectives",
+          "type": "string[]",
+          "required": true,
+          "example": [
+            "big",
+            "small",
+            "hot"
           ]
         }
       ]
