@@ -1,0 +1,209 @@
+course:
+  formatVersion: 1
+  id: english-ru
+  title: Учим английский
+  subject: English
+  companion: luna
+  voice:
+    id: jessica
+    profile: teaching-slow
+  engine: ">=1.0"
+  worlds:
+    - id: animals
+      title: Животные
+      emoji: 🐾
+      color: "#4ADE80"
+      blurb: Учим названия животных по-английски.
+      stations:
+        - id: a-pic
+          title: Слово и картинка
+          icon: 🖼️
+          sub: найди слово к картинке
+          board: pictureMatch
+          bands:
+            - 0
+          lesson: animals-picture
+        - id: a-listen
+          title: Слушай и выбери
+          icon: 👂
+          sub: послушай и выбери слово
+          board: vocabListen
+          bands:
+            - 0
+          lesson: animals-listen
+    - id: food
+      title: Еда
+      emoji: 🍎
+      color: "#FB923C"
+      blurb: Учим названия еды по-английски.
+      stations:
+        - id: f-pic
+          title: Слово и картинка
+          icon: 🖼️
+          sub: найди слово к картинке
+          board: pictureMatch
+          bands:
+            - 1
+          lesson: food
+        - id: f-listen
+          title: Слушай и выбери
+          icon: 👂
+          sub: послушай и выбери слово
+          board: vocabListen
+          bands:
+            - 1
+          lesson: food
+    - id: colours
+      title: Цвета
+      emoji: 🎨
+      color: "#A78BFA"
+      blurb: Учим названия цветов по-английски.
+      stations:
+        - id: c-pic
+          title: Слово и картинка
+          icon: 🖼️
+          sub: найди слово к цвету
+          board: pictureMatch
+          bands:
+            - 2
+          lesson: colours
+        - id: c-listen
+          title: Слушай и выбери
+          icon: 👂
+          sub: послушай и выбери слово
+          board: vocabListen
+          bands:
+            - 2
+          lesson: colours
+  lessons:
+    animals-picture:
+      title: Слово и картинка
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-pic-1
+              caption: Давай выучим животных по-английски! Смотри на картинку и слушай слово.
+              view: { kind: picture, key: animals, emoji: 🐾, word: animals }
+            - say: la-pic-2
+              caption: "Это кошка. По-английски — cat. Послушай: cat."
+              view: { kind: picture, key: cat, emoji: 🐱, word: cat }
+            - say: la-pic-3
+              caption: "Это собака. По-английски — dog. Послушай: dog."
+              view: { kind: picture, key: dog, emoji: 🐶, word: dog }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-pic-4
+              caption: Теперь ты! Посмотри на картинку и нажми нужное слово. Попробуй!
+              view: { kind: picture, key: fish, emoji: 🐟, word: fish }
+    animals-listen:
+      title: Слушай и выбери
+      sections:
+        - id: learn
+          label: Слушаем
+          beats:
+            - say: la-listen-1
+              caption: А теперь будем слушать! Я скажу слово по-английски, а ты его выбери.
+              view: { kind: picture, key: listen, emoji: 👂, word: listen }
+            - say: la-listen-2
+              caption: Например, рыба — это fish. Нажми на слово, которое услышал.
+              view: { kind: picture, key: fish, emoji: 🐟, word: fish }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-listen-3
+              caption: Готов? Слушай внимательно и выбирай. Попробуй!
+              view: { kind: picture, key: duck, emoji: 🦆, word: duck }
+    food:
+      title: Еда
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-food-1
+              caption: Давай выучим еду по-английски! Слушай и смотри.
+              view: { kind: picture, key: food, emoji: 🍎, word: food }
+            - say: la-food-2
+              caption: Это яблоко. По-английски — apple.
+              view: { kind: picture, key: apple, emoji: 🍎, word: apple }
+            - say: la-food-3
+              caption: Это молоко. По-английски — milk.
+              view: { kind: picture, key: milk, emoji: 🥛, word: milk }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-food-4
+              caption: Теперь ты! Выбери нужное слово. Попробуй!
+              view: { kind: picture, key: bread, emoji: 🍞, word: bread }
+    colours:
+      title: Цвета
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-col-1
+              caption: Давай выучим цвета по-английски! Слушай и смотри.
+              view: { kind: picture, key: colours, emoji: 🎨, word: colours }
+            - say: la-col-2
+              caption: Это красный цвет. По-английски — red.
+              view: { kind: picture, key: red, emoji: 🔴, word: red }
+            - say: la-col-3
+              caption: Это синий цвет. По-английски — blue.
+              view: { kind: picture, key: blue, emoji: 🔵, word: blue }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-col-4
+              caption: Теперь ты! Выбери нужное слово. Попробуй!
+              view: { kind: picture, key: green, emoji: 🟢, word: green }
+  narration:
+    la-pic-1: Давай выучим животных по-английски! Смотри на картинку и слушай слово.
+    la-pic-2: "Это кошка. По-английски — cat. Послушай: cat."
+    la-pic-3: "Это собака. По-английски — dog. Послушай: dog."
+    la-pic-4: Теперь ты! Посмотри на картинку и нажми нужное слово. Попробуй!
+    la-listen-1: А теперь будем слушать! Я скажу слово по-английски, а ты его выбери.
+    la-listen-2: Например, рыба — это fish. Нажми на слово, которое услышал.
+    la-listen-3: Готов? Слушай внимательно и выбирай. Попробуй!
+    la-food-1: Давай выучим еду по-английски! Слушай и смотри.
+    la-food-2: Это яблоко. По-английски — apple.
+    la-food-3: Это молоко. По-английски — milk.
+    la-food-4: Теперь ты! Выбери нужное слово. Попробуй!
+    la-col-1: Давай выучим цвета по-английски! Слушай и смотри.
+    la-col-2: Это красный цвет. По-английски — red.
+    la-col-3: Это синий цвет. По-английски — blue.
+    la-col-4: Теперь ты! Выбери нужное слово. Попробуй!
+  content:
+    vocab:
+      - { word: cat, emoji: 🐱, ru: кошка, band: 0 }
+      - { word: dog, emoji: 🐶, ru: собака, band: 0 }
+      - { word: duck, emoji: 🦆, ru: утка, band: 0 }
+      - { word: fish, emoji: 🐟, ru: рыба, band: 0 }
+      - { word: cow, emoji: 🐮, ru: корова, band: 0 }
+      - { word: horse, emoji: 🐴, ru: лошадь, band: 0 }
+      - { word: frog, emoji: 🐸, ru: лягушка, band: 0 }
+      - { word: bird, emoji: 🐦, ru: птица, band: 0 }
+      - { word: bear, emoji: 🐻, ru: медведь, band: 0 }
+      - { word: lion, emoji: 🦁, ru: лев, band: 0 }
+      - { word: monkey, emoji: 🐵, ru: обезьяна, band: 0 }
+      - { word: elephant, emoji: 🐘, ru: слон, band: 0 }
+      - { word: apple, emoji: 🍎, ru: яблоко, band: 1 }
+      - { word: banana, emoji: 🍌, ru: банан, band: 1 }
+      - { word: bread, emoji: 🍞, ru: хлеб, band: 1 }
+      - { word: egg, emoji: 🥚, ru: яйцо, band: 1 }
+      - { word: cheese, emoji: 🧀, ru: сыр, band: 1 }
+      - { word: milk, emoji: 🥛, ru: молоко, band: 1 }
+      - { word: cake, emoji: 🍰, ru: торт, band: 1 }
+      - { word: rice, emoji: 🍚, ru: рис, band: 1 }
+      - { word: water, emoji: 💧, ru: вода, band: 1 }
+      - { word: cookie, emoji: 🍪, ru: печенье, band: 1 }
+      - { word: carrot, emoji: 🥕, ru: морковь, band: 1 }
+      - { word: red, emoji: 🔴, ru: красный, band: 2 }
+      - { word: blue, emoji: 🔵, ru: синий, band: 2 }
+      - { word: green, emoji: 🟢, ru: зелёный, band: 2 }
+      - { word: yellow, emoji: 🟡, ru: жёлтый, band: 2 }
+      - { word: purple, emoji: 🟣, ru: фиолетовый, band: 2 }
+      - { word: black, emoji: ⚫, ru: чёрный, band: 2 }
+      - { word: white, emoji: ⚪, ru: белый, band: 2 }
+      - { word: brown, emoji: 🟤, ru: коричневый, band: 2 }
+      - { word: pink, emoji: 🌸, ru: розовый, band: 2 }
