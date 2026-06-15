@@ -8,6 +8,15 @@ course:
     id: jessica
     profile: teaching-slow
   engine: ">=1.0"
+  lowercase: true
+  ui:
+    done: Молодец!
+    backToMap: На карту
+    score: "Ты ответил правильно {correct} из {total}!"
+  reactions:
+    praise: [praise-0, praise-1, praise-2]
+    oops: [oops-0, oops-1]
+    solved: [solved-0, solved-1]
   worlds:
     - id: animals
       title: Животные
