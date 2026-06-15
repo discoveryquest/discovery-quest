@@ -19,8 +19,9 @@ Edit all catalog files before regenerating (gen-capabilities checks boardMeta↔
    a prominent **rule reminder card** (`step.rule`, e.g. *"i before e, except after c"*), the
    **question** (`step.prompt`), and the **choices** (`step.choices`) as tappable tiles;
    `onPick(choice)` → quest compares to `step.expected`; correct/reveal styling like ContextClue.
-   Speaks `step.audioPrompt` on mount (the question clip) like ContextClue does. Show choices
-   with `disp` (case per `step.lower`).
+   Speaks `step.audioPrompt` on mount — **key the effect on `step.prompt`** (the question, which
+   changes per item), NOT on `step.rule` (the card can repeat across items, which would suppress
+   the voice). Show choices with `disp` (case per `step.lower`).
 2. **`packages/content-english/src/rules.js`** (NEW) — `genRuleQuiz(items, ctx = {})` modeled on
    `genContextClues`: `const item = pick(items); const choices = shuffle([item.answer, ...item.distractors]);`
    return `kind:'ruleQuiz'`, `word:item.answer`, `result:item.answer`, one step with
@@ -65,7 +66,7 @@ Rules taught (lesson) + practiced (ruleQuiz items):
 ### Station 3 — "Word Rules" (`r-word`, band 2, lesson `rules-word`)
 - **Soft C & G** — *"C and G go soft (s/j) before e, i, y: city, gem; hard otherwise: cat, go."*
 - **A vs An** — *"Use 'an' before a vowel sound (an apple), 'a' before a consonant (a cat)."*
-  `{rule:"a before a consonant, an before a vowel", question:"Choose: ___ apple", answer:"an", distractors:["a"]}`, `…"a"/["an"] for "a cat"`.
+  `{rule:"a before a consonant, an before a vowel", question:"Choose: ___ apple", answer:"an", distractors:["a"]}`, `{rule:"…", question:"Choose: ___ cat", answer:"a", distractors:["an"]}`. (Every `content.rules` item MUST have a complete `question:` string — the generator uses it verbatim.)
 - **Q needs U** — *"Q is almost always followed by U: queen, quick."*
 - **Every sentence needs a verb / capital + end mark** — *"A sentence starts with a capital, ends with . ? or !, and needs a doing word."*
 
