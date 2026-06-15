@@ -84,6 +84,72 @@ course:
           bands:
             - 2
           lesson: colours
+    - id: family
+      title: Семья
+      emoji: 👪
+      color: "#F472B6"
+      blurb: Учим членов семьи по-английски.
+      stations:
+        - id: fa-pic
+          title: Слово и картинка
+          icon: 🖼️
+          sub: найди слово к картинке
+          board: pictureMatch
+          bands:
+            - 3
+          lesson: family
+        - id: fa-listen
+          title: Слушай и выбери
+          icon: 👂
+          sub: послушай и выбери слово
+          board: vocabListen
+          bands:
+            - 3
+          lesson: family
+    - id: numbers
+      title: Числа
+      emoji: 🔢
+      color: "#60A5FA"
+      blurb: Учим числа по-английски.
+      stations:
+        - id: nu-pic
+          title: Слово и картинка
+          icon: 🖼️
+          sub: найди слово к картинке
+          board: pictureMatch
+          bands:
+            - 4
+          lesson: numbers
+        - id: nu-listen
+          title: Слушай и выбери
+          icon: 👂
+          sub: послушай и выбери слово
+          board: vocabListen
+          bands:
+            - 4
+          lesson: numbers
+    - id: body
+      title: Тело
+      emoji: 🧍
+      color: "#2DD4BF"
+      blurb: Учим части тела по-английски.
+      stations:
+        - id: bo-pic
+          title: Слово и картинка
+          icon: 🖼️
+          sub: найди слово к картинке
+          board: pictureMatch
+          bands:
+            - 5
+          lesson: body
+        - id: bo-listen
+          title: Слушай и выбери
+          icon: 👂
+          sub: послушай и выбери слово
+          board: vocabListen
+          bands:
+            - 5
+          lesson: body
   lessons:
     animals-picture:
       title: Слово и картинка
@@ -166,6 +232,69 @@ course:
             - say: la-col-4
               caption: Теперь ты! Выбери нужное слово. Попробуй!
               view: { kind: picture, key: green, emoji: 🟢, word: green }
+    family:
+      title: Семья
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-family-1
+              caption: Давай выучим семью по-английски! Слушай и смотри.
+              view: { kind: picture, key: family, emoji: 👪, word: family }
+            - say: la-family-2
+              caption: Это мама. По-английски — mom.
+              view: { kind: picture, key: mom, emoji: 👩, word: mom }
+            - say: la-family-3
+              caption: Это папа. По-английски — dad.
+              view: { kind: picture, key: dad, emoji: 👨, word: dad }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-family-4
+              caption: Теперь ты! Выбери нужное слово. Попробуй!
+              view: { kind: picture, key: baby, emoji: 👶, word: baby }
+    numbers:
+      title: Числа
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-numbers-1
+              caption: Давай выучим числа по-английски! Слушай и смотри.
+              view: { kind: picture, key: numbers, emoji: 🔢, word: numbers }
+            - say: la-numbers-2
+              caption: Это один. По-английски — one.
+              view: { kind: picture, key: one, emoji: 1️⃣, word: one }
+            - say: la-numbers-3
+              caption: Это два. По-английски — two.
+              view: { kind: picture, key: two, emoji: 2️⃣, word: two }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-numbers-4
+              caption: Теперь ты! Выбери нужное слово. Попробуй!
+              view: { kind: picture, key: three, emoji: 3️⃣, word: three }
+    body:
+      title: Тело
+      sections:
+        - id: learn
+          label: Учимся
+          beats:
+            - say: la-body-1
+              caption: Давай выучим части тела по-английски! Слушай и смотри.
+              view: { kind: picture, key: body, emoji: 🧍, word: body }
+            - say: la-body-2
+              caption: Это рука. По-английски — hand.
+              view: { kind: picture, key: hand, emoji: ✋, word: hand }
+            - say: la-body-3
+              caption: Это глаз. По-английски — eye.
+              view: { kind: picture, key: eye, emoji: 👁️, word: eye }
+        - id: go
+          label: Твой ход
+          beats:
+            - say: la-body-4
+              caption: Теперь ты! Выбери нужное слово. Попробуй!
+              view: { kind: picture, key: nose, emoji: 👃, word: nose }
   narration:
     la-pic-1: Давай выучим животных по-английски! Смотри на картинку и слушай слово.
     la-pic-2: "Это кошка. По-английски — cat. Послушай: cat."
@@ -182,6 +311,18 @@ course:
     la-col-2: Это красный цвет. По-английски — red.
     la-col-3: Это синий цвет. По-английски — blue.
     la-col-4: Теперь ты! Выбери нужное слово. Попробуй!
+    la-family-1: Давай выучим семью по-английски! Слушай и смотри.
+    la-family-2: Это мама. По-английски — mom.
+    la-family-3: Это папа. По-английски — dad.
+    la-family-4: Теперь ты! Выбери нужное слово. Попробуй!
+    la-numbers-1: Давай выучим числа по-английски! Слушай и смотри.
+    la-numbers-2: Это один. По-английски — one.
+    la-numbers-3: Это два. По-английски — two.
+    la-numbers-4: Теперь ты! Выбери нужное слово. Попробуй!
+    la-body-1: Давай выучим части тела по-английски! Слушай и смотри.
+    la-body-2: Это рука. По-английски — hand.
+    la-body-3: Это глаз. По-английски — eye.
+    la-body-4: Теперь ты! Выбери нужное слово. Попробуй!
     praise-0: Молодец!
     praise-1: Верно!
     praise-2: Отлично!
@@ -227,3 +368,29 @@ course:
       - { word: white, emoji: ⚪, ru: белый, band: 2 }
       - { word: brown, emoji: 🟤, ru: коричневый, band: 2 }
       - { word: pink, emoji: 🌸, ru: розовый, band: 2 }
+      - { word: mom, emoji: 👩, ru: мама, band: 3 }
+      - { word: dad, emoji: 👨, ru: папа, band: 3 }
+      - { word: sister, emoji: 👧, ru: сестра, band: 3 }
+      - { word: brother, emoji: 👦, ru: брат, band: 3 }
+      - { word: baby, emoji: 👶, ru: малыш, band: 3 }
+      - { word: grandma, emoji: 👵, ru: бабушка, band: 3 }
+      - { word: grandpa, emoji: 👴, ru: дедушка, band: 3 }
+      - { word: family, emoji: 👪, ru: семья, band: 3 }
+      - { word: one, emoji: 1️⃣, ru: один, band: 4 }
+      - { word: two, emoji: 2️⃣, ru: два, band: 4 }
+      - { word: three, emoji: 3️⃣, ru: три, band: 4 }
+      - { word: four, emoji: 4️⃣, ru: четыре, band: 4 }
+      - { word: five, emoji: 5️⃣, ru: пять, band: 4 }
+      - { word: six, emoji: 6️⃣, ru: шесть, band: 4 }
+      - { word: seven, emoji: 7️⃣, ru: семь, band: 4 }
+      - { word: eight, emoji: 8️⃣, ru: восемь, band: 4 }
+      - { word: nine, emoji: 9️⃣, ru: девять, band: 4 }
+      - { word: ten, emoji: 🔟, ru: десять, band: 4 }
+      - { word: hand, emoji: ✋, ru: рука, band: 5 }
+      - { word: eye, emoji: 👁️, ru: глаз, band: 5 }
+      - { word: nose, emoji: 👃, ru: нос, band: 5 }
+      - { word: ear, emoji: 👂, ru: ухо, band: 5 }
+      - { word: mouth, emoji: 👄, ru: рот, band: 5 }
+      - { word: foot, emoji: 🦶, ru: нога, band: 5 }
+      - { word: tooth, emoji: 🦷, ru: зуб, band: 5 }
+      - { word: face, emoji: 🙂, ru: лицо, band: 5 }
