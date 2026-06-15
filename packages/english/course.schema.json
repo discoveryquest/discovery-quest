@@ -89,6 +89,13 @@
                   },
                   "word": {
                     "type": "string"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "phonics band this letter is introduced in (0=s,a,t,p,i,n; 1=+m,d,g,o,c,k; 2=all)"
                   }
                 },
                 "required": [
@@ -158,7 +165,21 @@
             "blendWords": {
               "type": "array",
               "items": {
-                "type": "string"
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string"
+                  },
+                  "band": {
+                    "type": "number",
+                    "description": "first BLEND_BANDS array the word appears in"
+                  }
+                },
+                "required": [
+                  "word",
+                  "band"
+                ],
+                "additionalProperties": false
               }
             },
             "wordFamilies": {

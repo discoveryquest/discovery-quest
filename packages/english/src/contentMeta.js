@@ -14,6 +14,7 @@ export const CONTENT_META = {
       { name: 'letter', type: 'string', required: true, example: 's' },
       { name: 'sound', type: 'string', required: true, example: '/s/' },
       { name: 'word', type: 'string', required: true, example: 'sun' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'phonics band this letter is introduced in (0=s,a,t,p,i,n; 1=+m,d,g,o,c,k; 2=all)' },
     ],
   },
   digraphs: {
@@ -36,9 +37,12 @@ export const CONTENT_META = {
     ],
   },
   blendWords: {
-    description: 'Decodable CVC words for sound-blending.',
-    collection: 'strings',
-    example: 'cat',
+    description: 'Decodable CVC words for sound-blending, tagged with the BLEND_BANDS band they are introduced in.',
+    collection: 'objects',
+    item: [
+      { name: 'word', type: 'string', required: true, example: 'cat' },
+      { name: 'band', type: 'number', required: true, example: 0, note: 'first BLEND_BANDS array the word appears in' },
+    ],
   },
   wordFamilies: {
     description: 'Word families grouped by rime (-at → cat, hat, mat). Feeds the word-family board.',

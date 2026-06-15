@@ -29,6 +29,7 @@ course:
           sub: + m d g o c k
           board: soundToLetter
           bands:
+            - 0
             - 1
           lesson: letter-sounds
         - id: ph-all
@@ -37,6 +38,8 @@ course:
           sub: every letter
           board: soundToLetter
           bands:
+            - 0
+            - 1
             - 2
           lesson: letter-sounds
         - id: ph-blend
@@ -777,81 +780,107 @@ course:
       - letter: s
         sound: /s/
         word: sun
+        band: 0
       - letter: a
         sound: /a/
         word: ant
+        band: 0
       - letter: t
         sound: /t/
         word: top
+        band: 0
       - letter: p
         sound: /p/
         word: pig
+        band: 0
       - letter: i
         sound: /i/
         word: igloo
+        band: 0
       - letter: "n"
         sound: /n/
         word: net
+        band: 0
       - letter: m
         sound: /m/
         word: map
+        band: 1
       - letter: d
         sound: /d/
         word: dog
+        band: 1
       - letter: g
         sound: /g/
         word: goat
+        band: 1
       - letter: o
         sound: /o/
         word: octopus
+        band: 1
       - letter: c
         sound: /k/
         word: cat
+        band: 1
       - letter: k
         sound: /k/
         word: kite
+        band: 1
       - letter: e
         sound: /e/
         word: egg
+        band: 2
       - letter: u
         sound: /u/
         word: umbrella
+        band: 2
       - letter: r
         sound: /r/
         word: rat
+        band: 2
       - letter: h
         sound: /h/
         word: hat
+        band: 2
       - letter: b
         sound: /b/
         word: ball
+        band: 2
       - letter: f
         sound: /f/
         word: fish
+        band: 2
       - letter: l
         sound: /l/
         word: leg
+        band: 2
       - letter: j
         sound: /j/
         word: jet
+        band: 2
       - letter: q
         sound: /kw/
         word: queen
+        band: 2
       - letter: v
         sound: /v/
         word: van
+        band: 2
       - letter: w
         sound: /w/
         word: web
+        band: 2
       - letter: x
         sound: /ks/
         word: box
+        band: 2
       - letter: "y"
         sound: /y/
         word: yoyo
+        band: 2
       - letter: z
         sound: /z/
         word: zebra
+        band: 2
     digraphs:
       - team: sh
         sound: /sh/
@@ -866,37 +895,68 @@ course:
         sound: /k/
         word: duck
     blendWords:
-      - sat
-      - sit
-      - tip
-      - tin
-      - pin
-      - pit
-      - nap
-      - pan
-      - tap
-      - sip
-      - cat
-      - dog
-      - mat
-      - map
-      - dig
-      - dot
-      - cop
-      - top
-      - pig
-      - can
-      - bed
-      - bus
-      - cup
-      - hat
-      - hen
-      - leg
-      - run
-      - fan
-      - bug
-      - net
-      - sun
+      - word: sat
+        band: 0
+      - word: sit
+        band: 0
+      - word: tip
+        band: 0
+      - word: tin
+        band: 0
+      - word: pin
+        band: 0
+      - word: pit
+        band: 0
+      - word: nap
+        band: 0
+      - word: pan
+        band: 0
+      - word: tap
+        band: 0
+      - word: sip
+        band: 0
+      - word: cat
+        band: 1
+      - word: dog
+        band: 1
+      - word: mat
+        band: 1
+      - word: map
+        band: 1
+      - word: dig
+        band: 1
+      - word: dot
+        band: 1
+      - word: cop
+        band: 1
+      - word: top
+        band: 1
+      - word: pig
+        band: 1
+      - word: can
+        band: 1
+      - word: bed
+        band: 2
+      - word: bus
+        band: 2
+      - word: cup
+        band: 2
+      - word: hat
+        band: 2
+      - word: hen
+        band: 2
+      - word: leg
+        band: 2
+      - word: run
+        band: 2
+      - word: fan
+        band: 2
+      - word: bug
+        band: 2
+      - word: net
+        band: 2
+      - word: sun
+        band: 2
     wordFamilies:
       - rime: at
         words:
