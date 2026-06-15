@@ -526,13 +526,18 @@ git commit -m "feat(english): CourseLesson — YAML-driven lesson host (threads 
 
 - [ ] **Step 1: Run the full open-core check**
 
-Run:
+Run (point `node --test` at the test FILES, not the package dirs — Node 22 tries to
+*execute* a bare directory arg, which fails with MODULE_NOT_FOUND):
 ```bash
-node --test packages/course-loader packages/content-english packages/english
+node --test \
+  packages/course-loader/test/loadCourse.test.js \
+  packages/content-english/test/vocab.test.js \
+  packages/english/test/boardGenerators.test.js
 npm run validate
-npm run build
 ```
-Expected: all unit tests PASS, `validate` exit 0, build green. **English Quest unchanged** (still on `PhonicsQuest`).
+Expected: all unit tests PASS (8), `validate` exit 0. **No `npm run build` in open-core** —
+the JSX (`boardRegistry`/`CourseQuest`/`CourseLesson`) is build-verified when the platform
+app builds in Phase F. **English Quest unchanged** (still on `PhonicsQuest`).
 
 - [ ] **Step 2: FF-merge `efl-port` → `main`** (discovery-quest is solo) once green — or hold per owner preference.
 
