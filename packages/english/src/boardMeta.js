@@ -35,11 +35,12 @@ export const BOARD_META = {
     ],
   },
   pictureMatch: {
-    description: 'Match a picture to its written word (or vice versa). Core vocabulary recognition.',
+    description: 'Match a picture to its written word (or vice versa). Core vocabulary recognition. Shows an optional native-language gloss (ru) beneath the word for foreign-language courses.',
     content: 'vocab',
     item: [
       { name: 'word', type: 'string', example: 'cat' },
       { name: 'emoji', type: 'string', example: '🐱' },
+      { name: 'ru', type: 'string', example: 'кошка', note: 'optional native-language gloss (EFL)' },
     ],
   },
   sightWord: {

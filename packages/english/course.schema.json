@@ -123,6 +123,20 @@
                   },
                   "emoji": {
                     "type": "string"
+                  },
+                  "ru": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "optional native-language gloss shown beneath the word (EFL courses)"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "optional difficulty/topic band; a station selects its slice via bands:"
                   }
                 },
                 "required": [

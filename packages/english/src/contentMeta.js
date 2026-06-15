@@ -26,11 +26,13 @@ export const CONTENT_META = {
     ],
   },
   vocab: {
-    description: 'Vocabulary words paired with a picture (emoji). Feeds picture-match.',
+    description: 'Vocabulary words paired with a picture (emoji), plus an optional native-language gloss (ru/…) for foreign-language courses. Feeds picture-match + listen-from-vocab.',
     collection: 'objects',
     item: [
       { name: 'word', type: 'string', required: true, example: 'cat' },
       { name: 'emoji', type: 'string', required: true, example: '🐱' },
+      { name: 'ru', type: 'string', required: false, example: 'кошка', note: 'optional native-language gloss shown beneath the word (EFL courses)' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
     ],
   },
   blendWords: {
