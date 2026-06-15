@@ -207,6 +207,36 @@ course:
           bands:
             - 0
           lesson: inference
+    - id: rules
+      title: Rules & Tricks
+      emoji: 💡
+      color: "#FBBF24"
+      blurb: Tricks that make English click.
+      stations:
+        - id: r-vowel
+          title: Vowel Tricks
+          icon: 🪄
+          sub: "silent e, bossy r, vowel teams"
+          board: ruleQuiz
+          bands:
+            - 0
+          lesson: rules-vowel
+        - id: r-spell
+          title: Spelling Rules
+          icon: ✏️
+          sub: "i before e, doubling, plurals"
+          board: ruleQuiz
+          bands:
+            - 1
+          lesson: rules-spell
+        - id: r-word
+          title: Word Rules
+          icon: 📐
+          sub: "soft c & g, a vs an"
+          board: ruleQuiz
+          bands:
+            - 2
+          lesson: rules-word
     - id: speaking
       title: Speaking Studio
       emoji: 🎙️
@@ -870,6 +900,153 @@ course:
                 kind: sentence
                 key: i3
                 text: How does it feel?
+    rules-vowel:
+      title: Vowel Tricks
+      sections:
+        - id: magic-e
+          label: Magic E
+          beats:
+            - say: la-rules-vowel-1
+              caption: >-
+                A silent E at the end makes the vowel say its name: cap becomes cape,
+                kit becomes kite, not becomes note.
+              view:
+                kind: picture
+                key: magic-e
+                emoji: 💡
+                word: cape
+        - id: bossy-r
+          label: Bossy R
+          beats:
+            - say: la-rules-vowel-2
+              caption: >-
+                When R follows a vowel it is bossy — it changes the sound: ar in car,
+                er in her, ir in bird, or in fork, ur in burn.
+              view:
+                kind: picture
+                key: bossy-r
+                emoji: 💡
+                word: car
+        - id: vowel-teams
+          label: Vowel Teams
+          beats:
+            - say: la-rules-vowel-3
+              caption: >-
+                When two vowels go walking, the first one does the talking: rain, boat, team.
+                The first vowel says its name and the second stays quiet.
+              view:
+                kind: picture
+                key: vowel-teams
+                emoji: 💡
+                word: rain
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-rules-vowel-4
+              caption: Your turn! Pick the word that follows the rule.
+              view:
+                kind: picture
+                key: rules-vowel-go
+                emoji: 🪄
+                word: rules
+    rules-spell:
+      title: Spelling Rules
+      sections:
+        - id: i-before-e
+          label: I before E
+          beats:
+            - say: la-rules-spell-1
+              caption: >-
+                I before E, except after C — or when it sounds like A, as in neighbor
+                and weigh. So believe and chief, but receive.
+              view:
+                kind: picture
+                key: i-before-e
+                emoji: 💡
+                word: believe
+        - id: doubling
+          label: Doubling
+          beats:
+            - say: la-rules-spell-2
+              caption: >-
+                One syllable, one vowel, one final consonant — double it before adding
+                -ing or -ed: run becomes running, hop becomes hopping.
+              view:
+                kind: picture
+                key: doubling
+                emoji: 💡
+                word: hopping
+        - id: plurals
+          label: Plurals
+          beats:
+            - say: la-rules-spell-3
+              caption: >-
+                Add -es after ch, sh, s, or x: boxes, dishes. Change y to i then add
+                -es: baby becomes babies.
+              view:
+                kind: picture
+                key: plurals
+                emoji: 💡
+                word: babies
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-rules-spell-4
+              caption: Your turn! Pick the word that follows the rule.
+              view:
+                kind: picture
+                key: rules-spell-go
+                emoji: ✏️
+                word: rules
+    rules-word:
+      title: Word Rules
+      sections:
+        - id: soft-cg
+          label: Soft C and G
+          beats:
+            - say: la-rules-word-1
+              caption: >-
+                C and G go soft before e, i, or y: city and gem. Before other letters
+                they stay hard: cat and go.
+              view:
+                kind: picture
+                key: soft-cg
+                emoji: 💡
+                word: city
+        - id: a-an
+          label: A or An
+          beats:
+            - say: la-rules-word-2
+              caption: >-
+                Use an before a vowel sound: an apple, an egg. Use a before a consonant
+                sound: a cat, a dog.
+              view:
+                kind: picture
+                key: a-an
+                emoji: 💡
+                word: "an apple"
+        - id: q-needs-u
+          label: Q needs U
+          beats:
+            - say: la-rules-word-3
+              caption: >-
+                Q is almost always followed by U: queen, quick, quiet. You will hardly
+                ever see Q without a U beside it.
+              view:
+                kind: picture
+                key: q-needs-u
+                emoji: 💡
+                word: queen
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-rules-word-4
+              caption: Your turn! Pick the word that follows the rule.
+              view:
+                kind: picture
+                key: rules-word-go
+                emoji: 📐
+                word: rules
   narration:
     lph-0: Here are all our letter sounds. Tap any letter to hear the sound it makes!
     lph-1: Reading starts with listening. Every letter makes its own little sound — let's hear a few!
@@ -930,6 +1107,37 @@ course:
     lin-1: Sometimes the answer is not written down. We use clues to figure it out.
     lin-2: A dog that runs and jumps must feel happy! We read between the lines.
     lin-3: Use the clues in the story to guess how someone feels. You try!
+    la-rules-vowel-1: >-
+      A silent E at the end makes the vowel say its name: cap becomes cape,
+      kit becomes kite, not becomes note.
+    la-rules-vowel-2: >-
+      When R follows a vowel it is bossy — it changes the sound: ar in car,
+      er in her, ir in bird, or in fork, ur in burn.
+    la-rules-vowel-3: >-
+      When two vowels go walking, the first one does the talking: rain, boat, team.
+      The first vowel says its name and the second stays quiet.
+    la-rules-vowel-4: Your turn! Pick the word that follows the rule.
+    la-rules-spell-1: >-
+      I before E, except after C — or when it sounds like A, as in neighbor
+      and weigh. So believe and chief, but receive.
+    la-rules-spell-2: >-
+      One syllable, one vowel, one final consonant — double it before adding
+      -ing or -ed: run becomes running, hop becomes hopping.
+    la-rules-spell-3: >-
+      Add -es after ch, sh, s, or x: boxes, dishes. Change y to i then add
+      -es: baby becomes babies.
+    la-rules-spell-4: Your turn! Pick the word that follows the rule.
+    la-rules-word-1: >-
+      C and G go soft before e, i, or y: city and gem. Before other letters
+      they stay hard: cat and go.
+    la-rules-word-2: >-
+      Use an before a vowel sound: an apple, an egg. Use a before a consonant
+      sound: a cat, a dog.
+    la-rules-word-3: >-
+      Q is almost always followed by U: queen, quick, quiet. You will hardly
+      ever see Q without a U beside it.
+    la-rules-word-4: Your turn! Pick the word that follows the rule.
+    q-rule: Which one follows the rule?
     rq-main: What is the story about?
     rq-where-cat: Where is the cat?
     rq-dog-see: What can the dog see?
@@ -1535,3 +1743,38 @@ course:
         d:
           - sad
           - mad
+    rules:
+      # ── Band 0: Vowel Tricks ──
+      - { rule: "silent e makes the vowel say its name", question: "Which says the long sound?", answer: "cape", distractors: ["cap", "cup"], band: 0 }
+      - { rule: "silent e makes the vowel say its name", question: "Which says the long sound?", answer: "kite", distractors: ["kit", "bit"], band: 0 }
+      - { rule: "silent e makes the vowel say its name", question: "Which says the long sound?", answer: "note", distractors: ["not", "dot"], band: 0 }
+      - { rule: "silent e makes the vowel say its name", question: "Add a silent E to make it long:", answer: "pine", distractors: ["pin", "pan"], band: 0 }
+      - { rule: "r is bossy after a vowel", question: "Which has a bossy R?", answer: "car", distractors: ["cat", "can"], band: 0 }
+      - { rule: "r is bossy after a vowel", question: "Which has a bossy R?", answer: "bird", distractors: ["bid", "big"], band: 0 }
+      - { rule: "r is bossy after a vowel", question: "Which has a bossy R?", answer: "fork", distractors: ["fog", "for"], band: 0 }
+      - { rule: "two vowels: the first one talks", question: "Which spells the long sound?", answer: "rain", distractors: ["ran", "run"], band: 0 }
+      - { rule: "two vowels: the first one talks", question: "Which spells the long sound?", answer: "boat", distractors: ["bot", "bat"], band: 0 }
+      - { rule: "two vowels: the first one talks", question: "Which spells the long sound?", answer: "team", distractors: ["tem", "tan"], band: 0 }
+      # ── Band 1: Spelling Rules ──
+      - { rule: "i before e, except after c", question: "Which is correct?", answer: "receive", distractors: ["recieve", "receve"], band: 1 }
+      - { rule: "i before e, except after c", question: "Which is correct?", answer: "believe", distractors: ["beleive", "belive"], band: 1 }
+      - { rule: "i before e, except after c", question: "Which is correct?", answer: "chief", distractors: ["cheif", "chife"], band: 1 }
+      - { rule: "i before e, except after c", question: "Which is correct?", answer: "field", distractors: ["feild", "felde"], band: 1 }
+      - { rule: "double the last consonant (run→running)", question: "Add -ing to 'hop':", answer: "hopping", distractors: ["hoping", "hopeing"], band: 1 }
+      - { rule: "double the last consonant (run→running)", question: "Add -ing to 'run':", answer: "running", distractors: ["runing", "runeing"], band: 1 }
+      - { rule: "double the last consonant (run→running)", question: "Add -ed to 'stop':", answer: "stopped", distractors: ["stoped", "stopeed"], band: 1 }
+      - { rule: "add -es after ch/sh/s/x; y→ies", question: "More than one baby:", answer: "babies", distractors: ["babys", "babyes"], band: 1 }
+      - { rule: "add -es after ch/sh/s/x; y→ies", question: "More than one box:", answer: "boxes", distractors: ["boxs", "boxies"], band: 1 }
+      - { rule: "add -es after ch/sh/s/x; y→ies", question: "More than one dish:", answer: "dishes", distractors: ["dishs", "dishies"], band: 1 }
+      # ── Band 2: Word Rules ──
+      - { rule: "c and g go soft before e, i, y", question: "Soft C (s-sound):", answer: "city", distractors: ["cat", "cup"], band: 2 }
+      - { rule: "c and g go soft before e, i, y", question: "Soft G (j-sound):", answer: "gem", distractors: ["go", "got"], band: 2 }
+      - { rule: "c and g go soft before e, i, y", question: "Which has a soft C?", answer: "cent", distractors: ["coat", "clap"], band: 2 }
+      - { rule: "c and g go soft before e, i, y", question: "Which has a soft G?", answer: "giraffe", distractors: ["gate", "goat"], band: 2 }
+      - { rule: "a before a consonant, an before a vowel", question: "Choose: ___ apple", answer: "an", distractors: ["a"], band: 2 }
+      - { rule: "a before a consonant, an before a vowel", question: "Choose: ___ cat", answer: "a", distractors: ["an"], band: 2 }
+      - { rule: "a before a consonant, an before a vowel", question: "Choose: ___ egg", answer: "an", distractors: ["a"], band: 2 }
+      - { rule: "a before a consonant, an before a vowel", question: "Choose: ___ dog", answer: "a", distractors: ["an"], band: 2 }
+      - { rule: "q is almost always followed by u", question: "Which is correct?", answer: "queen", distractors: ["qeen", "quuen"], band: 2 }
+      - { rule: "q is almost always followed by u", question: "Which is correct?", answer: "quick", distractors: ["qick", "quwick"], band: 2 }
+      - { rule: "q is almost always followed by u", question: "Which is correct?", answer: "quiet", distractors: ["qiet", "quiiet"], band: 2 }
