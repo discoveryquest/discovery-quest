@@ -65,14 +65,17 @@ export const pictureMatch = {
 // Listen-from-vocab: hear the English word, tap it among choices (no picture). Reuses the
 // vocab bank + word-<w> clips, rendered by the WordChoice board — the listening counterpart
 // of picture-match, ideal for foreign-language courses.
-export function genVocabListen(band = 0) {
-  const target = pick(VOCAB);
-  const distractors = shuffle(VOCAB.filter((v) => v.word !== target.word)).slice(0, 3);
+export function genVocabListen(items, ctx = {}) {
+  const band = ctx.band ?? 0;
+  const lower = ctx.lowercase ?? (band >= 2);
+  const target = pick(items);
+  const distractors = shuffle(items.filter((v) => v.word !== target.word)).slice(0, 3);
   const choices = shuffle([target, ...distractors]).map((v) => v.word);
   return {
     kind: 'vocabListen',
     word: target.word,
     emoji: target.emoji,
+    ru: target.ru,
     result: target.word,
     steps: [
       {
@@ -84,7 +87,7 @@ export function genVocabListen(band = 0) {
         audioPrompt: `word-${target.word}`,
         inputKind: 'choice',
         choices,
-        lower: band >= 2,
+        lower,
         expected: target.word,
         hint: `You heard "${target.word}".`,
         sayQ: [`word-${target.word}`],
@@ -95,7 +98,8 @@ export function genVocabListen(band = 0) {
 }
 
 export const vocabListen = {
-  id: 'vocab-listen', title: 'Listen & Choose', boardKind: 'vocabListen', bands: [0], generate: genVocabListen,
+  id: 'vocab-listen', title: 'Listen & Choose', boardKind: 'vocabListen', bands: [0],
+  generate: (band) => genVocabListen(VOCAB, { band }),
 };
 
 // ── Sight Words ─────────────────────────────────────────────────────────────
