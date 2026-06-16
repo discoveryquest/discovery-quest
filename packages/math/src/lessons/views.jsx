@@ -14,6 +14,7 @@ import {
   CoinTray, ClockRead, ElapsedClocks, UnitLadder,
   ShapeSides, SymmetryFold, AngleSweep, PerimeterTrace, AreaFill, VolumeLayers,
 } from '../interactiveHints.jsx';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 
 // ── a row of countable objects; counted-so-far light up one by one ──
 export function CountObjects({ emoji = '🍎', n = 5, highlight = -1, numeral = null }) {
@@ -46,7 +47,7 @@ export function CountObjects({ emoji = '🍎', n = 5, highlight = -1, numeral = 
                 transition={{ duration: 0.4 }}
                 style={{ filter: counted ? 'drop-shadow(0 0 10px rgba(34,211,238,0.55))' : 'none' }}
               >
-                {emoji}
+                <Emoji char={emoji} />
               </motion.span>
             </div>
           );
@@ -84,7 +85,7 @@ export function CompareMouth({ emoji = '🍪', left = 3, right = 5, sign = null 
             transition={{ delay: i * 0.06 }}
             style={{ filter: lit ? 'drop-shadow(0 0 8px rgba(255,224,102,0.7))' : 'none' }}
           >
-            {emoji}
+            <Emoji char={emoji} />
           </motion.span>
         ))}
       </div>

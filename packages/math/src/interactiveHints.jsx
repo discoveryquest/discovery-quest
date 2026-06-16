@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { RotateCcw } from 'lucide-react';
 import { Pie, FracLabel, Coin, ClockFace } from './boardsFacts.jsx';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 
 const ROW_C = '#22D3EE'; // horizontal sweep
 const COL_C = '#FFE066'; // vertical sweep
@@ -1087,7 +1088,7 @@ export function SymmetryFold({ emoji = '🦋' }) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative flex items-center justify-center" style={{ width: 200, height: 150 }}>
-        <span className="text-7xl" style={{ filter: 'drop-shadow(0 0 8px #F472B655)' }}>{emoji}</span>
+        <span className="text-7xl" style={{ filter: 'drop-shadow(0 0 8px #F472B655)' }}><Emoji char={emoji} /></span>
         <div className="absolute inset-y-0 left-1/2 -ml-px w-0.5" style={{ background: 'repeating-linear-gradient(#4ADE80 0 6px, transparent 6px 12px)' }} />
         {/* right half flips across the line to land on the left, proving the match */}
         <motion.span
@@ -1097,7 +1098,7 @@ export function SymmetryFold({ emoji = '🦋' }) {
           animate={reduce ? { scaleX: 1 } : { scaleX: [1, -1, -1, 1] }}
           transition={{ duration: 3, times: [0, 0.35, 0.7, 1], repeat: Infinity, repeatDelay: 0.6 }}
         >
-          {emoji}
+          <Emoji char={emoji} />
         </motion.span>
       </div>
       <p className="text-sm font-extrabold text-emerald-300">Both halves match — it's symmetric!</p>

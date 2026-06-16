@@ -3,6 +3,7 @@
 // Same contract as the long-arithmetic boards: ({ p, board, step }).
 
 import { motion } from 'framer-motion';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 
 const glow = (color, strong) => ({
   color,
@@ -309,7 +310,9 @@ function StoryBoard({ p, board, step }) {
         transition={{ type: 'spring', stiffness: 240, damping: 20 }}
         className="rounded-3xl border-2 border-emerald-300/30 bg-[#171b28] p-6 text-center shadow-[0_0_30px_rgba(74,222,128,0.12)]"
       >
-        <div className="mb-3 text-4xl tracking-widest">{p.emoji} {p.emoji} {p.emoji}</div>
+        <div className="mb-3 text-4xl tracking-widest">
+          <Emoji char={p.emoji} /> <Emoji char={p.emoji} /> <Emoji char={p.emoji} />
+        </div>
         <p className="text-xl font-bold leading-relaxed text-slate-100">{p.text}</p>
       </motion.div>
       <AnswerBox id="ans-0" val={board.ans[0]} color="#4ADE80" size="h-16 w-24 text-3xl" step={step} />
@@ -971,7 +974,9 @@ function Story2Board({ p, board, step }) {
         transition={{ type: 'spring', stiffness: 240, damping: 20 }}
         className="rounded-3xl border-2 border-orange-300/30 bg-[#171b28] p-6 text-center shadow-[0_0_30px_rgba(251,146,60,0.12)]"
       >
-        <div className="mb-3 text-4xl tracking-widest">{p.emoji} {p.emoji} {p.emoji}</div>
+        <div className="mb-3 text-4xl tracking-widest">
+          <Emoji char={p.emoji} /> <Emoji char={p.emoji} /> <Emoji char={p.emoji} />
+        </div>
         <p className="text-xl font-bold leading-relaxed text-slate-100">{p.text}</p>
       </motion.div>
       <div className="flex items-center gap-6">

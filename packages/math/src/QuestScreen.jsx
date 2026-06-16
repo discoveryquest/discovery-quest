@@ -16,6 +16,7 @@ import { questTotal, starsEarned, adaptBand } from '@discoveryquest/quest-runtim
 import { VOICE_LINES, voiceKey, numClips } from './voiceLines.js';
 import { speak, sfx, hushAll, setSoundEnabled } from '@discoveryquest/voice-kit/audio';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 import { playMusic, trackForWorld, setMusicEnabled, isMusicOn } from './music.js';
 import { brandOwner } from './brand.js';
 import { loadSave, mutateSave } from '@discoveryquest/engine/save';
@@ -150,7 +151,7 @@ function LeaderboardPanel({ open, onClose, rows, onRename, gems }) {
                 <span className="w-8 shrink-0 text-center font-mono text-sm font-bold text-slate-300">
                   {medal(idx + 1)}
                 </span>
-                <span className="text-2xl">{r.isYou && idx === 0 ? '👑' : r.emoji}</span>
+                <Emoji char={r.isYou && idx === 0 ? '👑' : r.emoji} className="text-2xl" />
                 {r.isYou && editing ? (
                   <input
                     autoFocus
@@ -171,7 +172,9 @@ function LeaderboardPanel({ open, onClose, rows, onRename, gems }) {
                       {r.name}
                       {r.isYou && <span className="ml-1.5 rounded bg-cyan-400/20 px-1 text-[10px] font-extrabold text-cyan-300">YOU</span>}
                     </span>
-                    <span className="block truncate text-[10px] font-bold text-slate-500">{r.where}</span>
+                    <span className="block truncate text-[10px] font-bold text-slate-500">
+                      <Emoji char={r.where.emoji} className="text-[10px]" /> {r.where.title}
+                    </span>
                   </span>
                 )}
                 {r.isYou && !editing && (
@@ -1067,10 +1070,11 @@ export default function QuestScreen({ station, onExit }) {
 
   const whereOf = (sc) => {
     const w = WORLDS[Math.min(Math.floor(sc / 350), WORLDS.length - 1)];
-    return `${w.emoji} ${w.title}`;
+    return { emoji: w.emoji, title: w.title };
   };
   const heroAt = heroStation(loadSave());
-  const heroWhere = `${WORLDS[heroAt?.w ?? 0].emoji} ${WORLDS[heroAt?.w ?? 0].title}`;
+  const heroW = WORLDS[heroAt?.w ?? 0];
+  const heroWhere = { emoji: heroW.emoji, title: heroW.title };
   const boardRows = [
     ...rivals.map((r) => ({ ...r, isYou: false, where: whereOf(r.score) })),
     { id: 'you', name: playerName, emoji: '🦉', score, isYou: true, where: heroWhere },
@@ -1486,7 +1490,7 @@ export default function QuestScreen({ station, onExit }) {
         </div>
         {station ? (
           <div className="order-last flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 sm:order-none sm:mx-auto sm:w-auto">
-            <span className="text-xl">{station.icon}</span>
+            <Emoji char={station.icon} className="text-xl" />
             <span className="text-sm font-extrabold text-slate-100">{station.title}</span>
           </div>
         ) : (

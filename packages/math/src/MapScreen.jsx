@@ -12,6 +12,7 @@ import {
 } from './curriculum.js';
 import { loadSave, mutateSave } from '@discoveryquest/engine/save';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 import { VOICE_LINES } from './voiceLines.js';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { playMusic, pauseMusic, resumeMusic } from './music.js';
@@ -170,7 +171,7 @@ function WorldSection({ world, wIdx, save, onPick, heroAt, heroAvatar }) {
         className="sticky top-14 z-20 mx-3 flex items-center gap-3 rounded-2xl border px-4 py-2.5 backdrop-blur-md"
         style={{ background: '#141822dd', borderColor: world.color + '44' }}
       >
-        <span className="text-2xl">{world.emoji}</span>
+        <Emoji char={world.emoji} className="text-2xl" />
         <h2 className="text-lg font-extrabold" style={{ color: world.color }}>
           {world.title}
         </h2>
@@ -234,7 +235,7 @@ function WorldSection({ world, wIdx, save, onPick, heroAt, heroAvatar }) {
                     : undefined
                 }
               >
-                {state === 'locked' ? <Lock size={20} className="text-slate-500" /> : st.icon}
+                {state === 'locked' ? <Lock size={20} className="text-slate-500" /> : <Emoji char={st.icon} />}
                 {state === 'open' && stars === 0 && (
                   <motion.span
                     className="absolute inset-[-5px] rounded-full border-2"
@@ -635,7 +636,7 @@ export default function MapScreen({ onPlay, onGrownUps, autoNext = false, accoun
                 >
                   <X size={18} />
                 </button>
-                <div className="text-5xl">{picked.station.icon}</div>
+                <div className="text-5xl"><Emoji char={picked.station.icon} /></div>
                 <h3 className="mt-2 text-xl font-extrabold text-white">{picked.station.title}</h3>
                 <div className="mt-2 flex justify-center">
                   <StarsRow n={picked.stars} size={22} />
