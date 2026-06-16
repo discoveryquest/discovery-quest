@@ -136,6 +136,37 @@ export const BOARD_META = {
       { name: 'distractors', type: 'string[]', example: ['there', "they're"], note: 'plausible misspellings/confusions' },
     ],
   },
+  wordBuild: {
+    description: 'Build a word form by tapping its parts in order (walk+ed → walked, un+happy → unhappy). Teaches morphology: verb tenses, plurals, comparatives, prefixes & suffixes. The tray mixes correct parts with distractor tiles; press Check when assembled.',
+    content: 'wordParts',
+    item: [
+      { name: 'rule', type: 'string', example: 'add -ed for the past', note: 'the rule shown as the reminder banner' },
+      { name: 'prompt', type: 'string', example: 'Make it past tense' },
+      { name: 'parts', type: 'string[]', example: ['walk', 'ed'], note: 'the ordered correct tiles (joined with no space = answer)' },
+      { name: 'distractors', type: 'string[]', example: ['ing', 's'], note: 'extra tiles the child must reject' },
+      { name: 'answer', type: 'string', example: 'walked', note: 'parts joined' },
+    ],
+  },
+  grammarDepth: {
+    description: 'Apply a grammar rule: a reminder, then pick the correct form (subject–verb agreement, pronouns, irregular past, sentence types). Shares the RuleQuiz interaction but draws from the grammar_depth collection.',
+    content: 'grammar_depth',
+    item: [
+      { name: 'rule', type: 'string', example: 'add -s to the verb for he/she/it', note: 'the rule shown as the reminder banner' },
+      { name: 'question', type: 'string', example: 'She ___ fast.' },
+      { name: 'answer', type: 'string', example: 'runs', note: 'the correct form' },
+      { name: 'distractors', type: 'string[]', example: ['run', 'running'], note: 'wrong-but-plausible forms' },
+    ],
+  },
+  figurative: {
+    description: 'Figurative language: a reminder, then identify or interpret the figure of speech (similes, metaphors, idioms). Shares the RuleQuiz interaction but draws from the figurative collection.',
+    content: 'figurative',
+    item: [
+      { name: 'rule', type: 'string', example: 'a simile compares using like or as', note: 'the reminder banner' },
+      { name: 'question', type: 'string', example: "'as busy as a bee' is a…" },
+      { name: 'answer', type: 'string', example: 'simile', note: 'the correct label/meaning' },
+      { name: 'distractors', type: 'string[]', example: ['metaphor', 'idiom'], note: 'other figures of speech' },
+    ],
+  },
   firstReader: {
     description: 'First Readers: read along to a short decodable story (narrated word by word), then tap the word you heard. Renders via the StoryReader board.',
     content: 'storyItems',

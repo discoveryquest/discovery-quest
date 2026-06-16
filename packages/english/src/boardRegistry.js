@@ -13,6 +13,7 @@ import ContextClue from './boards/ContextClue.jsx';
 import RuleQuiz from './boards/RuleQuiz.jsx';
 import GrammarSort from './boards/GrammarSort.jsx';
 import SentenceBuilder from './boards/SentenceBuilder.jsx';
+import WordBuilder from './boards/WordBuilder.jsx';
 import PunctuationChoice from './boards/PunctuationChoice.jsx';
 import StoryReader from './boards/StoryReader.jsx';
 
@@ -43,6 +44,11 @@ export const BOARD_REGISTRY = {
   //    reusing the RuleQuiz interaction over their own content collections ──
   soundPattern:  { ...BOARD_GENERATORS.soundPattern,  board: RuleQuiz },
   spellBee:      { ...BOARD_GENERATORS.spellBee,      board: RuleQuiz },
+
+  // ── Grammar Gym (World 9) & Word Lab (World 10) — grammar + vocabulary depth ──
+  wordBuild:     { ...BOARD_GENERATORS.wordBuild,     board: WordBuilder },
+  grammarDepth:  { ...BOARD_GENERATORS.grammarDepth,  board: RuleQuiz },
+  figurative:    { ...BOARD_GENERATORS.figurative,    board: RuleQuiz },
 
   // ── Reading (World 4) ──
   firstReader:   { ...BOARD_GENERATORS.firstReader,   board: StoryReader },

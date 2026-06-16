@@ -139,6 +139,40 @@ export const CONTENT_META = {
       { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
     ],
   },
+  wordParts: {
+    description: 'Morpheme-building items: assemble a word form from part tiles — verb endings (-ed/-ing), plurals/comparatives (-s/-es/-er), prefixes (un-/re-) and suffixes (-ful/-ly). Feeds the wordBuild board.',
+    collection: 'objects',
+    item: [
+      { name: 'rule', type: 'string', required: true, example: 'add -ed for the past', note: 'the rule shown as the reminder banner' },
+      { name: 'prompt', type: 'string', required: true, example: 'Make it past tense', note: 'the instruction prompt' },
+      { name: 'parts', type: 'string[]', required: true, example: ['walk', 'ed'], note: 'the ordered correct tiles; joined with no space must equal answer' },
+      { name: 'distractors', type: 'string[]', required: true, example: ['ing', 's'], note: 'extra tiles the child must reject' },
+      { name: 'answer', type: 'string', required: true, example: 'walked', note: 'the target form (= parts joined)' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
+  grammar_depth: {
+    description: 'Grammar-depth rule items: a rule reminder + a question whose answer is the correct form (subject–verb agreement, pronouns, irregular past, sentence types). Feeds the grammarDepth board. Same shape as rules.',
+    collection: 'objects',
+    item: [
+      { name: 'rule', type: 'string', required: true, example: 'add -s to the verb for he/she/it', note: 'the rule shown as the reminder banner' },
+      { name: 'question', type: 'string', required: true, example: 'She ___ fast.', note: 'the question prompt' },
+      { name: 'answer', type: 'string', required: true, example: 'runs', note: 'the correct form' },
+      { name: 'distractors', type: 'string[]', required: true, example: ['run', 'running'], note: 'wrong-but-plausible forms' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
+  figurative: {
+    description: 'Figurative-language items: a reminder + a question identifying or interpreting a figure of speech (similes, metaphors, idioms). Feeds the figurative board. Same shape as rules.',
+    collection: 'objects',
+    item: [
+      { name: 'rule', type: 'string', required: true, example: 'a simile compares using like or as', note: 'the reminder banner' },
+      { name: 'question', type: 'string', required: true, example: "'as busy as a bee' is a…", note: 'the question prompt' },
+      { name: 'answer', type: 'string', required: true, example: 'simile', note: 'the correct label/meaning' },
+      { name: 'distractors', type: 'string[]', required: true, example: ['metaphor', 'idiom'], note: 'other figures of speech' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
   punctuationCores: {
     description: 'Sentences with no end mark; the punctuation board asks which of . ? ! fits.',
     collection: 'strings',

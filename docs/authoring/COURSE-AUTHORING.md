@@ -162,8 +162,15 @@ rule — a reminder, then pick the word that follows it). `ruleQuiz` has two sib
 that share its interaction but draw from their own collections: `soundPattern`
 (advanced phonics — vowel teams, r-controlled, diphthongs, silent letters → the
 `patterns` collection) and `spellBee` (pick the correctly-spelled word — tricky
-words, homophones, endings → the `spellings` collection). Run the snippet above to
-see the full current list.
+words, homophones, endings → the `spellings` collection); `grammarDepth` (apply a
+grammar rule — agreement, pronouns, sentence types → `grammar_depth`) and
+`figurative` (identify similes/metaphors/idioms → `figurative`) are two more.
+A different interaction is **`wordBuild`**: instead of picking, the child **assembles
+a word form from morpheme tiles** (walk + ed → walked, un + happy → unhappy) and
+presses Check — the tray mixes the correct parts with distractor tiles. It draws from
+the `wordParts` collection (`{rule, prompt, parts, distractors, answer, band}`, where
+`parts` joined must equal `answer`) and powers verb tenses, plurals/comparatives, and
+prefixes/suffixes. Run the snippet above to see the full current list.
 
 ## 5. Validate before you submit
 

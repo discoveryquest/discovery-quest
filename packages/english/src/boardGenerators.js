@@ -7,6 +7,7 @@ import { genWordSort, genBuildSentence, genPunctuation } from '@discoveryquest/c
 import { genFirstReaders, comprehension } from '@discoveryquest/content-english/reading';
 import { genSentenceRu } from '@discoveryquest/content-english/sentencesRu';
 import { genRuleQuiz } from '@discoveryquest/content-english/rules';
+import { genWordBuild } from '@discoveryquest/content-english/build';
 
 // Comprehension label+color values sourced from reading.js's C palette:
 //   C = { rose: '#F472B6', pink: '#F9A8D4', plum: '#E879F9' }
@@ -38,6 +39,13 @@ export const BOARD_GENERATORS = {
   soundPattern:  { generate: genRuleQuiz,                                        content: 'patterns' },
   spellBee:      { generate: genRuleQuiz,                                        content: 'spellings' },
   punctuation:   { generate: genPunctuation,                                    content: 'punctuationCores' },
+
+  // ── Grammar Gym (World 9) & Word Lab (World 10) — grammar + vocabulary depth. wordBuild
+  //    assembles a word form from morpheme tiles; the choose-the-form stations reuse the
+  //    RuleQuiz interaction (genRuleQuiz) over their own collections, like soundPattern/spellBee ──
+  wordBuild:     { generate: genWordBuild,                                       content: 'wordParts' },
+  grammarDepth:  { generate: genRuleQuiz,                                        content: 'grammar_depth' },
+  figurative:    { generate: genRuleQuiz,                                        content: 'figurative' },
 
   // ── Reading (World 4) ──
   firstReader:   { generate: genFirstReaders,                                                        content: 'storyItems' },

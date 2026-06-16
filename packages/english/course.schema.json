@@ -466,6 +466,137 @@
                 "additionalProperties": false
               }
             },
+            "wordParts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rule": {
+                    "type": "string",
+                    "description": "the rule shown as the reminder banner"
+                  },
+                  "prompt": {
+                    "type": "string",
+                    "description": "the instruction prompt"
+                  },
+                  "parts": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "the ordered correct tiles; joined with no space must equal answer"
+                  },
+                  "distractors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "extra tiles the child must reject"
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "the target form (= parts joined)"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "optional difficulty/topic band; a station selects its slice via bands:"
+                  }
+                },
+                "required": [
+                  "rule",
+                  "prompt",
+                  "parts",
+                  "distractors",
+                  "answer"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "grammar_depth": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rule": {
+                    "type": "string",
+                    "description": "the rule shown as the reminder banner"
+                  },
+                  "question": {
+                    "type": "string",
+                    "description": "the question prompt"
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "the correct form"
+                  },
+                  "distractors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "wrong-but-plausible forms"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "optional difficulty/topic band; a station selects its slice via bands:"
+                  }
+                },
+                "required": [
+                  "rule",
+                  "question",
+                  "answer",
+                  "distractors"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "figurative": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rule": {
+                    "type": "string",
+                    "description": "the reminder banner"
+                  },
+                  "question": {
+                    "type": "string",
+                    "description": "the question prompt"
+                  },
+                  "answer": {
+                    "type": "string",
+                    "description": "the correct label/meaning"
+                  },
+                  "distractors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "other figures of speech"
+                  },
+                  "band": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "description": "optional difficulty/topic band; a station selects its slice via bands:"
+                  }
+                },
+                "required": [
+                  "rule",
+                  "question",
+                  "answer",
+                  "distractors"
+                ],
+                "additionalProperties": false
+              }
+            },
             "punctuationCores": {
               "type": "array",
               "items": {
@@ -679,9 +810,11 @@
             "blendWord",
             "contextClue",
             "digraphs",
+            "figurative",
             "findDetail",
             "firstReader",
             "grammarAdj",
+            "grammarDepth",
             "grammarNoun",
             "grammarVerb",
             "inference",
@@ -697,6 +830,7 @@
             "soundToLetter",
             "spellBee",
             "vocabListen",
+            "wordBuild",
             "wordFamily"
           ]
         },
