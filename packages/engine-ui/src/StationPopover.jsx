@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Star, X } from 'lucide-react';
+import Emoji from './Emoji.jsx';
 
 const DEFAULT_STRINGS = {
   play: 'Play',
@@ -54,7 +55,7 @@ export default function StationPopover({ picked, onClose, onPlay, onLearn, strin
               >
                 <X size={18} />
               </button>
-              <div className="text-5xl">{picked.station.icon}</div>
+              <Emoji char={picked.station.icon} className="text-5xl" />
               <h3 className="mt-2 text-xl font-extrabold text-white">{picked.station.title}</h3>
               <div className="mt-2 flex justify-center">
                 <StarsRow n={picked.stars} size={22} />

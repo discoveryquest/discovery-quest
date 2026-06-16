@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Volume2 } from 'lucide-react';
 import { speak } from '@discoveryquest/voice-kit/audio';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 
 function tileClasses(state) {
   if (state === 'correct') return 'border-emerald-300 bg-emerald-400/20 text-emerald-200';
@@ -34,7 +35,7 @@ export default function PictureMatch({ step, picked, onPick }) {
         style={{ boxShadow: '0 0 28px rgba(34,211,238,0.2)' }}
         aria-label="Play the word"
       >
-        <span className="text-7xl">{step.emoji}</span>
+        <Emoji char={step.emoji} className="text-7xl" />
       </motion.button>
       <button type="button" onClick={() => speak(step.audioPrompt, { important: true })}
         className="-mt-2 flex items-center gap-1.5 text-xs font-bold text-cyan-300">

@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Star } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave } from '@discoveryquest/engine/save';
 
@@ -118,7 +119,7 @@ export default function CourseQuest({ station, course, onExit }) {
             <AnimatePresence>
               {reveal && (
                 <motion.div key="reveal" initial={{ opacity: 0, scale: 0.7, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 18 }} className="mt-6 flex flex-col items-center gap-1">
-                  {reveal.emoji && <span className="text-7xl" style={{ filter: 'drop-shadow(0 0 14px rgba(74,222,128,0.4))' }}>{reveal.emoji}</span>}
+                  {reveal.emoji && <span className="text-7xl" style={{ filter: 'drop-shadow(0 0 14px rgba(74,222,128,0.4))' }}><Emoji char={reveal.emoji} /></span>}
                   <span className="text-3xl font-extrabold text-emerald-300" style={{ textShadow: '0 0 12px #4ADE8088' }}>{reveal.en}</span>
                   {reveal.ru && <span className="text-lg font-bold text-slate-400">{reveal.ru}</span>}
                 </motion.div>

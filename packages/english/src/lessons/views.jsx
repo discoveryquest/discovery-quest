@@ -4,6 +4,7 @@
 import { motion } from 'framer-motion';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { PHONEMES, DIGRAPHS } from '@discoveryquest/content-english/phonics';
+import Emoji from '@discoveryquest/engine-ui/Emoji';
 
 // tap → play this sound immediately, cutting off whatever was playing (no queue build-up)
 const playNow = (clip) => { hushAll(); speak(clip, { important: true }); };
@@ -85,7 +86,7 @@ export function Phoneme({ letter = 's', word = 'sun', emoji = '☀️', lower = 
         transition={{ delay: 0.35 }}
         className="flex items-center gap-3"
       >
-        <span className="text-5xl">{emoji}</span>
+        <Emoji char={emoji} className="text-5xl" />
         <span className="text-2xl font-extrabold text-white">
           <span className="text-yellow-300">{cased(word[0], lower)}</span>{cased(word.slice(1), lower)}
         </span>
@@ -139,7 +140,7 @@ export function Team({ team = 'sh', sound = '/sh/', word = 'ship', emoji = '🚢
         <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="ml-1 font-mono text-2xl font-extrabold text-yellow-300">= {sound}</motion.span>
       </div>
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex items-center gap-3">
-        <span className="text-5xl">{emoji}</span>
+        <Emoji char={emoji} className="text-5xl" />
         <span className="text-2xl font-extrabold text-white"><span className="text-purple-300">{cased(word.slice(0, team.length), lower)}</span>{cased(word.slice(team.length), lower)}</span>
       </motion.div>
     </div>
@@ -214,7 +215,7 @@ export function Cloze({ sentence = 'I sleep in my ___.', answer = '', lower = fa
 export function Picture({ emoji = '🐱', word = 'cat', lower = false }) {
   return (
     <div className="flex flex-col items-center gap-4">
-      <motion.span initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 240, damping: 16 }} className="text-8xl">{emoji}</motion.span>
+      <motion.span initial={{ scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 240, damping: 16 }} className="text-8xl"><Emoji char={emoji} /></motion.span>
       <motion.span initial={{ y: 8, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}
         className="font-mono text-4xl font-black text-yellow-300" style={{ textShadow: '0 0 16px #FFE06699' }}>{cased(word, lower)}</motion.span>
     </div>

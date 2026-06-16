@@ -9,7 +9,8 @@
     "./ConceptScreen": "./src/ConceptScreen.jsx",
     "./LessonScreen": "./src/LessonScreen.jsx",
     "./TrailMap": "./src/TrailMap.jsx",
-    "./StationPopover": "./src/StationPopover.jsx"
+    "./StationPopover": "./src/StationPopover.jsx",
+    "./Emoji": "./src/Emoji.jsx"
   },
   "dependencies": {
     "@discoveryquest/voice-kit": "*"
