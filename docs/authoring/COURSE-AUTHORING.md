@@ -191,6 +191,13 @@ Read the errors literally — each names the exact path (e.g.
 `station ph-set1: lesson "x" not defined`, or `…: caption ≠ narration`). Fix
 until it's green.
 
+**Emoji render as OpenMoji SVGs.** Author with the plain emoji character as always
+(`emoji: 💪`, `icon: ⏰`); the app renders it through `<Emoji>` as an OpenMoji SVG
+(consistent across devices). If you add or change an emoji, a maintainer regenerates the
+bundled SVGs: `node scripts/gen-emoji-assets.mjs <course.yml> --out apps/<app>/public/openmoji`
+(needs the `openmoji` devDep). Any emoji with no OpenMoji match falls back to the native
+glyph automatically. OpenMoji is CC BY-SA 4.0 — see `CREDITS.md`.
+
 ## 6. Child-safety & originality rules (non-negotiable)
 
 This is a product for young children. Every contribution must:
