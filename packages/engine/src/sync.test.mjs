@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { buildSyncRequest } from './sync.js';
+import { buildRosterSyncRequest } from './sync.js';
 
 test('buildSyncRequest targets the account API per quest/profile with the token', () => {
   const { url, options } = buildSyncRequest({
@@ -11,4 +12,17 @@ test('buildSyncRequest targets the account API per quest/profile with the token'
   assert.equal(options.method, 'PUT');
   assert.equal(options.headers.authorization, 'Bearer T');
   assert.equal(JSON.parse(options.body).profile.id, 'p 1');
+});
+
+test('buildRosterSyncRequest targets /api/roster with the token and profiles only', () => {
+  const { url, options } = buildRosterSyncRequest({
+    baseUrl: 'https://app.discoveryquest.app', token: 'T',
+    reg: { profiles: [{ id: 'p1' }], lastUsedByCourse: { math: 'p1' } },
+  });
+  assert.equal(url, 'https://app.discoveryquest.app/api/roster');
+  assert.equal(options.method, 'PUT');
+  assert.equal(options.headers.authorization, 'Bearer T');
+  const body = JSON.parse(options.body);
+  assert.deepEqual(body.profiles, [{ id: 'p1' }]);
+  assert.equal(body.lastUsedByCourse, undefined);
 });

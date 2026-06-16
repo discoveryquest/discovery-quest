@@ -10,7 +10,9 @@
     "./LessonScreen": "./src/LessonScreen.jsx",
     "./TrailMap": "./src/TrailMap.jsx",
     "./StationPopover": "./src/StationPopover.jsx",
-    "./Emoji": "./src/Emoji.jsx"
+    "./Emoji": "./src/Emoji.jsx",
+    "./ProfileSetup": "./src/ProfileSetup.jsx",
+    "./ProfilePicker": "./src/ProfilePicker.jsx"
   },
   "dependencies": {
     "@discoveryquest/voice-kit": "*"

@@ -9,6 +9,7 @@
     "./reviewDeck": "./src/reviewDeck.js",
     "./telemetry": "./src/telemetry.js",
     "./syncMerge": "./src/syncMerge.js",
-    "./sync": "./src/sync.js"
+    "./sync": "./src/sync.js",
+    "./profiles": "./src/profiles.js"
   }
 }
