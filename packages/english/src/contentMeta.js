@@ -117,6 +117,28 @@ export const CONTENT_META = {
       { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
     ],
   },
+  patterns: {
+    description: 'Advanced-phonics decoding patterns: a pattern reminder + a question whose answer uses that pattern (vowel teams, r-controlled, diphthongs, silent letters). Feeds the soundPattern board. Same shape as rules.',
+    collection: 'objects',
+    item: [
+      { name: 'rule', type: 'string', required: true, example: 'ai and ay spell long A', note: 'the pattern shown as the reminder banner' },
+      { name: 'question', type: 'string', required: true, example: 'Which spells the long A sound?', note: 'the question prompt' },
+      { name: 'answer', type: 'string', required: true, example: 'rain', note: 'the word that uses the pattern' },
+      { name: 'distractors', type: 'string[]', required: true, example: ['ran', 'run'], note: 'words that break the pattern' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
+  spellings: {
+    description: 'Spelling-Bee items: a spelling tip + a question whose answer is the correctly-spelled word (tricky high-frequency words, homophones, word endings). Feeds the spellBee board. Same shape as rules.',
+    collection: 'objects',
+    item: [
+      { name: 'rule', type: 'string', required: true, example: 'their = belonging, there = a place', note: 'the spelling tip shown as the reminder banner' },
+      { name: 'question', type: 'string', required: true, example: 'They lost ___ ball.', note: 'the question prompt' },
+      { name: 'answer', type: 'string', required: true, example: 'their', note: 'the correctly-spelled word' },
+      { name: 'distractors', type: 'string[]', required: true, example: ['there', "they're"], note: 'plausible misspellings/confusions' },
+      { name: 'band', type: 'number', required: false, example: 0, note: 'optional difficulty/topic band; a station selects its slice via bands:' },
+    ],
+  },
   punctuationCores: {
     description: 'Sentences with no end mark; the punctuation board asks which of . ? ! fits.',
     collection: 'strings',

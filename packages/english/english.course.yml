@@ -237,6 +237,66 @@ course:
           bands:
             - 2
           lesson: rules-word
+    - id: sound-patterns
+      title: Sound Patterns
+      emoji: 🎵
+      color: "#2DD4BF"
+      blurb: Crack the longer words — vowel teams, bossy endings, silent letters.
+      stations:
+        - id: sp-teams
+          title: Vowel Teams
+          icon: 🤝
+          sub: "ai, ee, oa, igh"
+          board: soundPattern
+          bands:
+            - 0
+          lesson: sound-patterns
+        - id: sp-rdiph
+          title: R-Controlled & Diphthongs
+          icon: 🌀
+          sub: "ar, er, oi, ow"
+          board: soundPattern
+          bands:
+            - 1
+          lesson: sound-patterns
+        - id: sp-silent
+          title: Silent Letters
+          icon: 🤫
+          sub: "kn, wr, mb, gn"
+          board: soundPattern
+          bands:
+            - 2
+          lesson: sound-patterns
+    - id: spelling
+      title: Spelling Bee
+      emoji: 🐝
+      color: "#FB7185"
+      blurb: Spell it right — the words that trip everyone up.
+      stations:
+        - id: sb-tricky
+          title: Tricky Spellings
+          icon: 🍯
+          sub: "said, friend, because"
+          board: spellBee
+          bands:
+            - 0
+          lesson: spelling-bee
+        - id: sb-homophone
+          title: Homophones
+          icon: 👯
+          sub: "their, to, your"
+          board: spellBee
+          bands:
+            - 1
+          lesson: spelling-bee
+        - id: sb-endings
+          title: Word Endings
+          icon: 🧩
+          sub: "-tion, doubles, -le"
+          board: spellBee
+          bands:
+            - 2
+          lesson: spelling-bee
     - id: speaking
       title: Speaking Studio
       emoji: 🎙️
@@ -1047,6 +1107,105 @@ course:
                 key: rules-word-go
                 emoji: 📐
                 word: rules
+    sound-patterns:
+      title: Sound Patterns
+      sections:
+        - id: vowel-teams
+          label: Vowel Teams
+          beats:
+            - say: la-sp-1
+              caption: >-
+                Long vowels often travel in teams of two letters. ai and ay say long A, like rain
+                and play. ee and ea say long E, like feet and leaf. oa and ow say long O, like
+                boat and snow.
+              view:
+                kind: picture
+                key: sp-teams
+                emoji: 🎵
+                word: rain
+        - id: r-controlled
+          label: Bossy Endings
+          beats:
+            - say: la-sp-2
+              caption: >-
+                When r follows a vowel it changes the sound: ar in car, or in fork, and er, ir,
+                and ur all make the er sound, like bird, her, and turn.
+              view:
+                kind: picture
+                key: sp-rcontrolled
+                emoji: 🌀
+                word: star
+        - id: silent-letters
+          label: Silent Letters
+          beats:
+            - say: la-sp-3
+              caption: >-
+                Some letters hide and stay silent. The k in knee, the w in write, the b in lamb,
+                the g in sign. You don't hear them, but you still spell them!
+              view:
+                kind: picture
+                key: sp-silent
+                emoji: 🤫
+                word: knee
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-sp-4
+              caption: Your turn! Pick the word that fits the pattern.
+              view:
+                kind: picture
+                key: sound-patterns-go
+                emoji: 🎵
+                word: patterns
+    spelling-bee:
+      title: Spelling Bee
+      sections:
+        - id: tricky
+          label: Tricky Words
+          beats:
+            - say: la-sb-1
+              caption: >-
+                Some words don't follow the rules — you just have to remember them, like
+                said, friend, and because.
+              view:
+                kind: picture
+                key: sb-tricky
+                emoji: 🐝
+                word: friend
+        - id: homophones
+          label: Homophones
+          beats:
+            - say: la-sb-2
+              caption: >-
+                Homophones sound the same but mean different things. their shows belonging, there
+                is a place, and they're means they are.
+              view:
+                kind: picture
+                key: sb-homophones
+                emoji: 👯
+                word: their
+        - id: endings
+          label: Word Endings
+          beats:
+            - say: la-sb-3
+              caption: >-
+                Word endings have patterns too. The shun sound is spelled t i o n, like nation.
+                After a short vowel, double the consonant, like letter.
+              view:
+                kind: picture
+                key: sb-endings
+                emoji: 🧩
+                word: nation
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-sb-4
+              caption: Your turn! Pick the word that is spelled correctly.
+              view:
+                kind: picture
+                key: spelling-bee-go
+                emoji: 🐝
+                word: spelling
   narration:
     lph-0: Here are all our letter sounds. Tap any letter to hear the sound it makes!
     lph-1: Reading starts with listening. Every letter makes its own little sound — let's hear a few!
@@ -1138,6 +1297,27 @@ course:
       ever see Q without a U beside it.
     la-rules-word-4: Your turn! Pick the word that follows the rule.
     q-rule: Which one follows the rule?
+    la-sp-1: >-
+      Long vowels often travel in teams of two letters. ai and ay say long A, like rain
+      and play. ee and ea say long E, like feet and leaf. oa and ow say long O, like
+      boat and snow.
+    la-sp-2: >-
+      When r follows a vowel it changes the sound: ar in car, or in fork, and er, ir,
+      and ur all make the er sound, like bird, her, and turn.
+    la-sp-3: >-
+      Some letters hide and stay silent. The k in knee, the w in write, the b in lamb,
+      the g in sign. You don't hear them, but you still spell them!
+    la-sp-4: Your turn! Pick the word that fits the pattern.
+    la-sb-1: >-
+      Some words don't follow the rules — you just have to remember them, like said,
+      friend, and because.
+    la-sb-2: >-
+      Homophones sound the same but mean different things. their shows belonging, there
+      is a place, and they're means they are.
+    la-sb-3: >-
+      Word endings have patterns too. The shun sound is spelled t i o n, like nation.
+      After a short vowel, double the consonant, like letter.
+    la-sb-4: Your turn! Pick the word that is spelled correctly.
     rq-main: What is the story about?
     rq-where-cat: Where is the cat?
     rq-dog-see: What can the dog see?
@@ -1778,3 +1958,71 @@ course:
       - { rule: "q is almost always followed by u", question: "Which is correct?", answer: "queen", distractors: ["qeen", "quuen"], band: 2 }
       - { rule: "q is almost always followed by u", question: "Which is correct?", answer: "quick", distractors: ["qick", "quwick"], band: 2 }
       - { rule: "q is almost always followed by u", question: "Which is correct?", answer: "quiet", distractors: ["qiet", "quiiet"], band: 2 }
+    patterns:
+      # ── Band 0: Vowel Teams (long vowels spelled with two letters) ──
+      - { rule: "ai and ay spell long A", question: "Which spells long A?", answer: "rain", distractors: ["ran", "run"], band: 0 }
+      - { rule: "ai and ay spell long A", question: "Which spells long A?", answer: "play", distractors: ["plan", "plot"], band: 0 }
+      - { rule: "ai and ay spell long A", question: "Which spells long A?", answer: "train", distractors: ["tan", "ten"], band: 0 }
+      - { rule: "ee and ea spell long E", question: "Which spells long E?", answer: "feet", distractors: ["fed", "fit"], band: 0 }
+      - { rule: "ee and ea spell long E", question: "Which spells long E?", answer: "leaf", distractors: ["left", "lift"], band: 0 }
+      - { rule: "ee and ea spell long E", question: "Which spells long E?", answer: "team", distractors: ["tem", "tam"], band: 0 }
+      - { rule: "oa and ow spell long O", question: "Which spells long O?", answer: "boat", distractors: ["bot", "bat"], band: 0 }
+      - { rule: "oa and ow spell long O", question: "Which spells long O?", answer: "snow", distractors: ["snap", "snip"], band: 0 }
+      - { rule: "igh spells long I", question: "Which spells long I?", answer: "light", distractors: ["lit", "list"], band: 0 }
+      - { rule: "igh spells long I", question: "Which spells long I?", answer: "night", distractors: ["net", "knit"], band: 0 }
+      # ── Band 1: R-Controlled vowels & Diphthongs ──
+      - { rule: "ar spells the sound in car", question: "Which has the /ar/ sound?", answer: "star", distractors: ["sat", "set"], band: 1 }
+      - { rule: "ar spells the sound in car", question: "Which has the /ar/ sound?", answer: "farm", distractors: ["fan", "fin"], band: 1 }
+      - { rule: "or spells the sound in fork", question: "Which has the /or/ sound?", answer: "corn", distractors: ["con", "can"], band: 1 }
+      - { rule: "er, ir, and ur all spell /er/", question: "Which spells /er/?", answer: "bird", distractors: ["bid", "bed"], band: 1 }
+      - { rule: "er, ir, and ur all spell /er/", question: "Which spells /er/?", answer: "turn", distractors: ["ton", "tan"], band: 1 }
+      - { rule: "er, ir, and ur all spell /er/", question: "Which spells /er/?", answer: "her", distractors: ["had", "hat"], band: 1 }
+      - { rule: "oi and oy spell the sound in coin", question: "Which spells /oy/?", answer: "coin", distractors: ["con", "can"], band: 1 }
+      - { rule: "oi and oy spell the sound in coin", question: "Which spells /oy/?", answer: "toy", distractors: ["top", "tap"], band: 1 }
+      - { rule: "ou and ow spell the sound in cloud", question: "Which spells /ow/?", answer: "cloud", distractors: ["clod", "clad"], band: 1 }
+      - { rule: "ou and ow spell the sound in cloud", question: "Which spells /ow/?", answer: "owl", distractors: ["all", "ill"], band: 1 }
+      # ── Band 2: Silent Letters ──
+      - { rule: "k is silent before n (knee)", question: "Which is spelled correctly?", answer: "knee", distractors: ["nee", "kee"], band: 2 }
+      - { rule: "k is silent before n (knee)", question: "Which is spelled correctly?", answer: "knock", distractors: ["nock", "knok"], band: 2 }
+      - { rule: "k is silent before n (knee)", question: "Which is spelled correctly?", answer: "knot", distractors: ["not", "nott"], band: 2 }
+      - { rule: "w is silent before r (write)", question: "Which is spelled correctly?", answer: "write", distractors: ["rite", "wite"], band: 2 }
+      - { rule: "w is silent before r (write)", question: "Which is spelled correctly?", answer: "wrist", distractors: ["rist", "wist"], band: 2 }
+      - { rule: "w is silent before r (write)", question: "Which is spelled correctly?", answer: "wrap", distractors: ["rap", "warp"], band: 2 }
+      - { rule: "b is silent after m (lamb)", question: "Which is spelled correctly?", answer: "lamb", distractors: ["lam", "lamm"], band: 2 }
+      - { rule: "b is silent after m (lamb)", question: "Which is spelled correctly?", answer: "thumb", distractors: ["thum", "thumm"], band: 2 }
+      - { rule: "g is silent before n (sign)", question: "Which is spelled correctly?", answer: "sign", distractors: ["sin", "sien"], band: 2 }
+      - { rule: "g is silent before n (sign)", question: "Which is spelled correctly?", answer: "gnat", distractors: ["nat", "gnatt"], band: 2 }
+    spellings:
+      # ── Band 0: Tricky high-frequency words you memorize ──
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "said", distractors: ["sed", "sayd"], band: 0 }
+      - { rule: "remember: fri-END is a friend to the END", question: "Which is spelled correctly?", answer: "friend", distractors: ["frend", "freind"], band: 0 }
+      - { rule: "because: big elephants can always understand small elephants", question: "Which is spelled correctly?", answer: "because", distractors: ["becuase", "becouse"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "where", distractors: ["wair", "whewre"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "people", distractors: ["peeple", "peopel"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "once", distractors: ["wonce", "wunce"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "many", distractors: ["meny", "manny"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "could", distractors: ["cud", "cood"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "again", distractors: ["agen", "agian"], band: 0 }
+      - { rule: "some words you just memorize", question: "Which is spelled correctly?", answer: "school", distractors: ["scool", "shool"], band: 0 }
+      # ── Band 1: Homophones (sound the same, spelled differently) ──
+      - { rule: "their = belonging, there = a place, they're = they are", question: "They lost ___ ball.", answer: "their", distractors: ["there", "they're"], band: 1 }
+      - { rule: "their = belonging, there = a place, they're = they are", question: "Put it over ___.", answer: "there", distractors: ["their", "they're"], band: 1 }
+      - { rule: "to = toward, too = also, two = 2", question: "I have ___ cats.", answer: "two", distractors: ["to", "too"], band: 1 }
+      - { rule: "to = toward, too = also, two = 2", question: "Can I come ___?", answer: "too", distractors: ["to", "two"], band: 1 }
+      - { rule: "your = belonging, you're = you are", question: "___ a great friend!", answer: "you're", distractors: ["your", "yore"], band: 1 }
+      - { rule: "your = belonging, you're = you are", question: "Is this ___ book?", answer: "your", distractors: ["you're", "yore"], band: 1 }
+      - { rule: "its = belonging, it's = it is", question: "The dog wagged ___ tail.", answer: "its", distractors: ["it's", "its'"], band: 1 }
+      - { rule: "its = belonging, it's = it is", question: "___ raining today.", answer: "it's", distractors: ["its", "its'"], band: 1 }
+      - { rule: "hear = with your ear, here = this place", question: "I can ___ the bell.", answer: "hear", distractors: ["here", "heer"], band: 1 }
+      - { rule: "hear = with your ear, here = this place", question: "Come over ___.", answer: "here", distractors: ["hear", "heer"], band: 1 }
+      # ── Band 2: Word endings ──
+      - { rule: "the /shun/ sound is spelled -tion", question: "Which is spelled correctly?", answer: "nation", distractors: ["nashun", "nashon"], band: 2 }
+      - { rule: "the /shun/ sound is spelled -tion", question: "Which is spelled correctly?", answer: "action", distractors: ["acshun", "acttion"], band: 2 }
+      - { rule: "the /shun/ sound is spelled -tion", question: "Which is spelled correctly?", answer: "station", distractors: ["stashun", "statshion"], band: 2 }
+      - { rule: "the /shun/ sound is spelled -tion", question: "Which is spelled correctly?", answer: "motion", distractors: ["moshun", "mottion"], band: 2 }
+      - { rule: "after a short vowel, double the consonant", question: "Which is spelled correctly?", answer: "letter", distractors: ["leter", "lettre"], band: 2 }
+      - { rule: "after a short vowel, double the consonant", question: "Which is spelled correctly?", answer: "dinner", distractors: ["diner", "dinnar"], band: 2 }
+      - { rule: "after a short vowel, double the consonant", question: "Which is spelled correctly?", answer: "rabbit", distractors: ["rabit", "rabbitt"], band: 2 }
+      - { rule: "many words end in -le, not -el", question: "Which is spelled correctly?", answer: "apple", distractors: ["appel", "appil"], band: 2 }
+      - { rule: "many words end in -le, not -el", question: "Which is spelled correctly?", answer: "little", distractors: ["littel", "litle"], band: 2 }
+      - { rule: "many words end in -le, not -el", question: "Which is spelled correctly?", answer: "table", distractors: ["tabel", "tabil"], band: 2 }

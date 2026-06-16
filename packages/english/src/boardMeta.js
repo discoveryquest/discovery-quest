@@ -116,6 +116,26 @@ export const BOARD_META = {
     content: 'punctuationCores',
     item: [{ name: '(core)', type: 'string', example: 'the cat is big', note: 'sentence without its end mark' }],
   },
+  soundPattern: {
+    description: 'Advanced phonics: a reminder of a decoding pattern (vowel team, r-controlled, diphthong, silent letter), then pick the word that uses it. Shares the RuleQuiz interaction but draws from the patterns collection.',
+    content: 'patterns',
+    item: [
+      { name: 'rule', type: 'string', example: 'ai and ay spell long A', note: 'the pattern shown as the reminder banner' },
+      { name: 'question', type: 'string', example: 'Which spells the long A sound?' },
+      { name: 'answer', type: 'string', example: 'rain', note: 'the word that uses the pattern' },
+      { name: 'distractors', type: 'string[]', example: ['ran', 'run'], note: 'words that break the pattern' },
+    ],
+  },
+  spellBee: {
+    description: 'Spelling Bee: a reminder tip, then pick the correctly-spelled word (tricky high-frequency words, homophones, word endings). Shares the RuleQuiz interaction but draws from the spellings collection.',
+    content: 'spellings',
+    item: [
+      { name: 'rule', type: 'string', example: 'their = belonging, there = a place', note: 'the spelling tip shown as the reminder banner' },
+      { name: 'question', type: 'string', example: 'They lost ___ ball.' },
+      { name: 'answer', type: 'string', example: 'their', note: 'the correctly-spelled word' },
+      { name: 'distractors', type: 'string[]', example: ['there', "they're"], note: 'plausible misspellings/confusions' },
+    ],
+  },
   firstReader: {
     description: 'First Readers: read along to a short decodable story (narrated word by word), then tap the word you heard. Renders via the StoryReader board.',
     content: 'storyItems',

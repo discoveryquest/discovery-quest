@@ -158,7 +158,11 @@ Notice every `caption` is **identical** to its `narration` line, and every
 from the catalog. The catalog also includes foreign-language boards like
 `pictureMatch`, `vocabListen`, `sentenceRu` (sentence construction from
 scrambled tiles, for non-native courses), and `ruleQuiz` (apply a spelling/grammar
-rule — a reminder, then pick the word that follows it) — run the snippet above to
+rule — a reminder, then pick the word that follows it). `ruleQuiz` has two siblings
+that share its interaction but draw from their own collections: `soundPattern`
+(advanced phonics — vowel teams, r-controlled, diphthongs, silent letters → the
+`patterns` collection) and `spellBee` (pick the correctly-spelled word — tricky
+words, homophones, endings → the `spellings` collection). Run the snippet above to
 see the full current list.
 
 ## 5. Validate before you submit

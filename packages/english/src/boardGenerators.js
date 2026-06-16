@@ -35,6 +35,8 @@ export const BOARD_GENERATORS = {
   sentence:      { generate: genBuildSentence,                                  content: 'sentences' },
   sentenceRu:    { generate: genSentenceRu,                                     content: 'sentencesRu' },
   ruleQuiz:      { generate: genRuleQuiz,                                        content: 'rules' },
+  soundPattern:  { generate: genRuleQuiz,                                        content: 'patterns' },
+  spellBee:      { generate: genRuleQuiz,                                        content: 'spellings' },
   punctuation:   { generate: genPunctuation,                                    content: 'punctuationCores' },
 
   // ── Reading (World 4) ──

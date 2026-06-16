@@ -39,6 +39,11 @@ export const BOARD_REGISTRY = {
   ruleQuiz:      { ...BOARD_GENERATORS.ruleQuiz,      board: RuleQuiz },
   punctuation:   { ...BOARD_GENERATORS.punctuation,   board: PunctuationChoice },
 
+  // ── Sound Patterns (World 6) & Spelling Bee (World 7) — advanced phonics + spelling,
+  //    reusing the RuleQuiz interaction over their own content collections ──
+  soundPattern:  { ...BOARD_GENERATORS.soundPattern,  board: RuleQuiz },
+  spellBee:      { ...BOARD_GENERATORS.spellBee,      board: RuleQuiz },
+
   // ── Reading (World 4) ──
   firstReader:   { ...BOARD_GENERATORS.firstReader,   board: StoryReader },
   mainIdea:      { ...BOARD_GENERATORS.mainIdea,      board: StoryReader },

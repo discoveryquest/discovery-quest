@@ -92,8 +92,13 @@ documented (catalog + authoring guide + website).
 
 ## Release sequence (each its own spec → plan → implement)
 1. **Rules & Tricks world** (`ruleQuiz` board + ~10 rules) + refresh the stale roadmap doc.
-2. **Spelling strand + advanced Phonics** (vowel teams / r-controlled / silent-e / syllables) —
-   mostly content (+ reuse `ruleQuiz` for spelling-choice).
+2. **Spelling strand + advanced Phonics** — ✅ **SHIPPED 2026-06-16.** Two new content-only
+   worlds reusing the `ruleQuiz` interaction over their own collections: **Sound Patterns** 🎵
+   (`soundPattern` board / `patterns` collection — vowel teams, r-controlled, diphthongs, silent
+   letters; 3 bands) and **Spelling Bee** 🐝 (`spellBee` board / `spellings` collection — tricky
+   high-frequency words, homophones, word endings; 3 bands). ~60 items + 2 Learn-it lessons. No
+   loader change — the two boards are thin catalog entries pointing `genRuleQuiz` at new
+   collections (same idiom as `grammarNoun/Verb/Adj`).
 3. **Grammar depth** (tenses, agreement, pronouns/adverbs/prepositions, sentence types) +
    **Vocabulary depth** (roots/affixes, figurative language).
 4. **Reading Comprehension depth** (summarize, cause/effect, compare/contrast, author's
