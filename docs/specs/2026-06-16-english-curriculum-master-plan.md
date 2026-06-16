@@ -99,8 +99,15 @@ documented (catalog + authoring guide + website).
    high-frequency words, homophones, word endings; 3 bands). ~60 items + 2 Learn-it lessons. No
    loader change — the two boards are thin catalog entries pointing `genRuleQuiz` at new
    collections (same idiom as `grammarNoun/Verb/Adj`).
-3. **Grammar depth** (tenses, agreement, pronouns/adverbs/prepositions, sentence types) +
-   **Vocabulary depth** (roots/affixes, figurative language).
+3. **Grammar depth + Vocabulary depth** — ✅ **SHIPPED 2026-06-16.** Two new worlds + one new
+   engine board (`wordBuild`, the morpheme builder: tap word-part tiles + Check, e.g. walk+ed →
+   walked). **Grammar Gym** 💪 (verb tenses, plurals/comparatives via `wordBuild`; pronouns &
+   agreement, sentence types via `grammarDepth`→`grammar_depth`) and **Word Lab** 🔬 (prefixes,
+   suffixes via `wordBuild`→`wordParts`; figurative language via `figurative`→`figurative`).
+   ~56 items + 7 Learn-it lessons. Spec: `2026-06-16-release3-grammar-vocab-design.md`. **Latin/
+   Greek roots deferred** to a later vocab pass (abstract for the age band). `wordBuild` is the
+   first non-multiple-choice English board (constructive); the choose-the-form stations reuse the
+   `genRuleQuiz` interaction over their own collections (like Release 2's siblings).
 4. **Reading Comprehension depth** (summarize, cause/effect, compare/contrast, author's
    purpose, genres, text features).
 5. **Grade-banding rollout** — the K / 1–2 / 3–4 / 5–6 level spine on the map + per-world level

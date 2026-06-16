@@ -297,6 +297,74 @@ course:
           bands:
             - 2
           lesson: spelling-bee
+    - id: grammar-gym
+      title: Grammar Gym
+      emoji: 💪
+      color: "#818CF8"
+      blurb: Train your grammar — build the right form.
+      stations:
+        - id: gg-tense
+          title: Verb Tenses
+          icon: ⏰
+          sub: "walk → walked, jumping"
+          board: wordBuild
+          bands:
+            - 0
+          lesson: verb-tenses
+        - id: gg-plural
+          title: Plurals & Comparatives
+          icon: 📊
+          sub: "cats, boxes, bigger"
+          board: wordBuild
+          bands:
+            - 1
+          lesson: plurals-comparatives
+        - id: gg-pro
+          title: Pronouns & Agreement
+          icon: 🔁
+          sub: "she runs, give it to him"
+          board: grammarDepth
+          bands:
+            - 0
+          lesson: pronouns-agreement
+        - id: gg-sent
+          title: Sentence Types
+          icon: ❓
+          sub: "ask, tell, command, shout"
+          board: grammarDepth
+          bands:
+            - 1
+          lesson: sentence-types
+    - id: word-lab
+      title: Word Lab
+      emoji: 🔬
+      color: "#F59E0B"
+      blurb: Take words apart and build new ones.
+      stations:
+        - id: wl-pre
+          title: Prefixes
+          icon: ⬅️
+          sub: "un-, re-, pre-, dis-"
+          board: wordBuild
+          bands:
+            - 2
+          lesson: prefixes
+        - id: wl-suf
+          title: Suffixes
+          icon: ➡️
+          sub: "-ful, -less, -ly, -er"
+          board: wordBuild
+          bands:
+            - 3
+          lesson: suffixes
+        - id: wl-fig
+          title: Figurative Language
+          icon: 🎭
+          sub: "similes, metaphors, idioms"
+          board: figurative
+          bands:
+            - 0
+          lesson: figurative
     - id: speaking
       title: Speaking Studio
       emoji: 🎙️
@@ -1206,6 +1274,181 @@ course:
                 key: spelling-bee-go
                 emoji: 🐝
                 word: spelling
+    verb-tenses:
+      title: Verb Tenses
+      sections:
+        - id: teach
+          label: Verb Tenses
+          beats:
+            - say: la-vt-1
+              caption: >-
+                Verbs can change to show time. Add -ed for the past, like walk becomes walked. Add
+                -ing for right now, like jump becomes jumping.
+              view:
+                kind: picture
+                key: gg-tense
+                emoji: ⏰
+                word: walked
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-build-go
+              caption: Your turn! Tap the parts to build the word.
+              view:
+                kind: picture
+                key: gg-build-go
+                emoji: 💪
+                word: build
+    plurals-comparatives:
+      title: Plurals & Comparatives
+      sections:
+        - id: teach
+          label: Plurals & Comparatives
+          beats:
+            - say: la-pc-1
+              caption: >-
+                Add -s or -es to mean more than one, like one cat, two cats, and one box, two
+                boxes. Add -er to compare two things, like big becomes bigger.
+              view:
+                kind: picture
+                key: gg-plural
+                emoji: 📊
+                word: bigger
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-build-go
+              caption: Your turn! Tap the parts to build the word.
+              view:
+                kind: picture
+                key: gg-build-go
+                emoji: 💪
+                word: build
+    pronouns-agreement:
+      title: Pronouns & Agreement
+      sections:
+        - id: teach
+          label: Pronouns & Agreement
+          beats:
+            - say: la-pa-1
+              caption: >-
+                Use he, she, and they instead of a name. And for he, she, or it, the verb adds an
+                -s, like she runs and he jumps.
+              view:
+                kind: picture
+                key: gg-pro
+                emoji: 🔁
+                word: runs
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-pick-go
+              caption: Your turn! Pick the one that is correct.
+              view:
+                kind: picture
+                key: gg-pick-go
+                emoji: 💪
+                word: pick
+    sentence-types:
+      title: Sentence Types
+      sections:
+        - id: teach
+          label: Sentence Types
+          beats:
+            - say: la-st-1
+              caption: >-
+                Sentences have jobs. A telling sentence ends with a period. A question ends with a
+                question mark. An excited sentence ends with an exclamation mark.
+              view:
+                kind: picture
+                key: gg-sent
+                emoji: ❓
+                word: question
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-pick-go
+              caption: Your turn! Pick the one that is correct.
+              view:
+                kind: picture
+                key: gg-pick-go
+                emoji: 💪
+                word: pick
+    prefixes:
+      title: Prefixes
+      sections:
+        - id: teach
+          label: Prefixes
+          beats:
+            - say: la-pre-1
+              caption: >-
+                A prefix goes at the front of a word and changes its meaning. un- means not, so
+                unhappy means not happy. re- means again, so redo means do again.
+              view:
+                kind: picture
+                key: wl-pre
+                emoji: ⬅️
+                word: unhappy
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-build-go
+              caption: Your turn! Tap the parts to build the word.
+              view:
+                kind: picture
+                key: wl-build-go
+                emoji: 🔬
+                word: build
+    suffixes:
+      title: Suffixes
+      sections:
+        - id: teach
+          label: Suffixes
+          beats:
+            - say: la-suf-1
+              caption: >-
+                A suffix goes at the end of a word. -ful means full of, so helpful means full of
+                help. -less means without, so careless means without care.
+              view:
+                kind: picture
+                key: wl-suf
+                emoji: ➡️
+                word: helpful
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-build-go
+              caption: Your turn! Tap the parts to build the word.
+              view:
+                kind: picture
+                key: wl-build-go
+                emoji: 🔬
+                word: build
+    figurative:
+      title: Figurative Language
+      sections:
+        - id: teach
+          label: Figurative Language
+          beats:
+            - say: la-fig-1
+              caption: >-
+                Sometimes words paint pictures. A simile compares using like or as, like as busy
+                as a bee. A metaphor says one thing is another, like the sky is a blanket.
+              view:
+                kind: picture
+                key: wl-fig
+                emoji: 🎭
+                word: simile
+        - id: go
+          label: Your turn
+          beats:
+            - say: la-pick-go
+              caption: Your turn! Pick the one that is correct.
+              view:
+                kind: picture
+                key: wl-pick-go
+                emoji: 🔬
+                word: pick
   narration:
     lph-0: Here are all our letter sounds. Tap any letter to hear the sound it makes!
     lph-1: Reading starts with listening. Every letter makes its own little sound — let's hear a few!
@@ -1318,6 +1561,30 @@ course:
       Word endings have patterns too. The shun sound is spelled t i o n, like nation.
       After a short vowel, double the consonant, like letter.
     la-sb-4: Your turn! Pick the word that is spelled correctly.
+    q-build: Build the word from its parts.
+    la-vt-1: >-
+      Verbs can change to show time. Add -ed for the past, like walk becomes walked. Add
+      -ing for right now, like jump becomes jumping.
+    la-pc-1: >-
+      Add -s or -es to mean more than one, like one cat, two cats, and one box, two
+      boxes. Add -er to compare two things, like big becomes bigger.
+    la-pa-1: >-
+      Use he, she, and they instead of a name. And for he, she, or it, the verb adds an
+      -s, like she runs and he jumps.
+    la-st-1: >-
+      Sentences have jobs. A telling sentence ends with a period. A question ends with a
+      question mark. An excited sentence ends with an exclamation mark.
+    la-pre-1: >-
+      A prefix goes at the front of a word and changes its meaning. un- means not, so
+      unhappy means not happy. re- means again, so redo means do again.
+    la-suf-1: >-
+      A suffix goes at the end of a word. -ful means full of, so helpful means full of
+      help. -less means without, so careless means without care.
+    la-fig-1: >-
+      Sometimes words paint pictures. A simile compares using like or as, like as busy
+      as a bee. A metaphor says one thing is another, like the sky is a blanket.
+    la-build-go: Your turn! Tap the parts to build the word.
+    la-pick-go: Your turn! Pick the one that is correct.
     rq-main: What is the story about?
     rq-where-cat: Where is the cat?
     rq-dog-see: What can the dog see?
@@ -2026,3 +2293,70 @@ course:
       - { rule: "many words end in -le, not -el", question: "Which is spelled correctly?", answer: "apple", distractors: ["appel", "appil"], band: 2 }
       - { rule: "many words end in -le, not -el", question: "Which is spelled correctly?", answer: "little", distractors: ["littel", "litle"], band: 2 }
       - { rule: "many words end in -le, not -el", question: "Which is spelled correctly?", answer: "table", distractors: ["tabel", "tabil"], band: 2 }
+    wordParts:
+      # ── Band 0: Verb Tenses (regular -ed / -ing, no spelling change) ──
+      - { rule: "add -ed to show the past", prompt: "Make it past tense: walk", parts: ["walk", "ed"], distractors: ["ing", "s"], answer: "walked", band: 0 }
+      - { rule: "add -ed to show the past", prompt: "Make it past tense: jump", parts: ["jump", "ed"], distractors: ["ing", "s"], answer: "jumped", band: 0 }
+      - { rule: "add -ed to show the past", prompt: "Make it past tense: play", parts: ["play", "ed"], distractors: ["ing", "s"], answer: "played", band: 0 }
+      - { rule: "add -ed to show the past", prompt: "Make it past tense: look", parts: ["look", "ed"], distractors: ["ing", "s"], answer: "looked", band: 0 }
+      - { rule: "add -ed to show the past", prompt: "Make it past tense: rain", parts: ["rain", "ed"], distractors: ["ing", "s"], answer: "rained", band: 0 }
+      - { rule: "add -ing for happening now", prompt: "Make it -ing: jump", parts: ["jump", "ing"], distractors: ["ed", "s"], answer: "jumping", band: 0 }
+      - { rule: "add -ing for happening now", prompt: "Make it -ing: read", parts: ["read", "ing"], distractors: ["ed", "s"], answer: "reading", band: 0 }
+      - { rule: "add -ing for happening now", prompt: "Make it -ing: eat", parts: ["eat", "ing"], distractors: ["ed", "s"], answer: "eating", band: 0 }
+      # ── Band 1: Plurals & Comparatives ──
+      - { rule: "add -s for more than one", prompt: "More than one: cat", parts: ["cat", "s"], distractors: ["es", "ing"], answer: "cats", band: 1 }
+      - { rule: "add -s for more than one", prompt: "More than one: dog", parts: ["dog", "s"], distractors: ["es", "ed"], answer: "dogs", band: 1 }
+      - { rule: "add -s for more than one", prompt: "More than one: pig", parts: ["pig", "s"], distractors: ["es", "er"], answer: "pigs", band: 1 }
+      - { rule: "add -es after x, s, ch, sh", prompt: "More than one: box", parts: ["box", "es"], distractors: ["s", "ing"], answer: "boxes", band: 1 }
+      - { rule: "add -es after x, s, ch, sh", prompt: "More than one: wish", parts: ["wish", "es"], distractors: ["s", "ed"], answer: "wishes", band: 1 }
+      - { rule: "add -es after x, s, ch, sh", prompt: "More than one: bus", parts: ["bus", "es"], distractors: ["s", "ing"], answer: "buses", band: 1 }
+      - { rule: "add -er to compare two things", prompt: "Compare: tall", parts: ["tall", "er"], distractors: ["est", "s"], answer: "taller", band: 1 }
+      - { rule: "add -er to compare two things", prompt: "Compare: fast", parts: ["fast", "er"], distractors: ["est", "ing"], answer: "faster", band: 1 }
+      - { rule: "add -er to compare two things", prompt: "Compare: small", parts: ["small", "er"], distractors: ["est", "s"], answer: "smaller", band: 1 }
+      # ── Band 2: Prefixes (front of the word) ──
+      - { rule: "un- means not", prompt: "Build a word: not happy", parts: ["un", "happy"], distractors: ["re", "dis"], answer: "unhappy", band: 2 }
+      - { rule: "un- can mean the opposite", prompt: "Build a word: opposite of lock", parts: ["un", "lock"], distractors: ["re", "pre"], answer: "unlock", band: 2 }
+      - { rule: "re- means again", prompt: "Build a word: do again", parts: ["re", "do"], distractors: ["un", "dis"], answer: "redo", band: 2 }
+      - { rule: "re- means again", prompt: "Build a word: play again", parts: ["re", "play"], distractors: ["un", "pre"], answer: "replay", band: 2 }
+      - { rule: "pre- means before", prompt: "Build a word: view before", parts: ["pre", "view"], distractors: ["un", "re"], answer: "preview", band: 2 }
+      - { rule: "dis- means not or opposite", prompt: "Build a word: not like", parts: ["dis", "like"], distractors: ["un", "re"], answer: "dislike", band: 2 }
+      - { rule: "un- means not", prompt: "Build a word: not kind", parts: ["un", "kind"], distractors: ["re", "dis"], answer: "unkind", band: 2 }
+      - { rule: "re- means again", prompt: "Build a word: read again", parts: ["re", "read"], distractors: ["un", "pre"], answer: "reread", band: 2 }
+      # ── Band 3: Suffixes (end of the word) ──
+      - { rule: "-ful means full of", prompt: "Build a word: full of help", parts: ["help", "ful"], distractors: ["less", "ly"], answer: "helpful", band: 3 }
+      - { rule: "-ful means full of", prompt: "Build a word: full of care", parts: ["care", "ful"], distractors: ["less", "er"], answer: "careful", band: 3 }
+      - { rule: "-ful means full of", prompt: "Build a word: full of hope", parts: ["hope", "ful"], distractors: ["less", "ly"], answer: "hopeful", band: 3 }
+      - { rule: "-less means without", prompt: "Build a word: without care", parts: ["care", "less"], distractors: ["ful", "ly"], answer: "careless", band: 3 }
+      - { rule: "-less means without", prompt: "Build a word: without help", parts: ["help", "less"], distractors: ["ful", "er"], answer: "helpless", band: 3 }
+      - { rule: "-ly tells how something is done", prompt: "Build a word: in a quick way", parts: ["quick", "ly"], distractors: ["ful", "er"], answer: "quickly", band: 3 }
+      - { rule: "-ly tells how something is done", prompt: "Build a word: in a slow way", parts: ["slow", "ly"], distractors: ["ful", "er"], answer: "slowly", band: 3 }
+      - { rule: "-er can mean a person who does it", prompt: "Build a word: a person who teaches", parts: ["teach", "er"], distractors: ["ful", "ly"], answer: "teacher", band: 3 }
+    grammar_depth:
+      # ── Band 0: Pronouns & Subject–Verb Agreement ──
+      - { rule: "for he, she, or it, add -s to the verb", question: "She ___ fast.", answer: "runs", distractors: ["run", "running"], band: 0 }
+      - { rule: "for he, she, or it, add -s to the verb", question: "He ___ to school.", answer: "walks", distractors: ["walk", "walking"], band: 0 }
+      - { rule: "use him, her, or them after the verb", question: "Give the ball to ___.", answer: "him", distractors: ["he", "his"], band: 0 }
+      - { rule: "use he, she, or they before the verb", question: "___ is my best friend.", answer: "She", distractors: ["Her", "Hers"], band: 0 }
+      - { rule: "some verbs change completely in the past", question: "Yesterday I ___ to the park.", answer: "went", distractors: ["goed", "wented"], band: 0 }
+      - { rule: "some verbs change completely in the past", question: "She ___ a happy song.", answer: "sang", distractors: ["singed", "sanged"], band: 0 }
+      - { rule: "he, she, and it use 'is'", question: "He ___ very happy.", answer: "is", distractors: ["are", "am"], band: 0 }
+      - { rule: "use these or those for more than one", question: "Look at ___ cats!", answer: "these", distractors: ["this", "that"], band: 0 }
+      # ── Band 1: Sentence Types ──
+      - { rule: "a statement tells something and ends with a period", question: "'The sky is blue' is a…", answer: "statement", distractors: ["question", "exclamation"], band: 1 }
+      - { rule: "a question asks something and ends with a question mark", question: "'Where is my hat' is a…", answer: "question", distractors: ["statement", "command"], band: 1 }
+      - { rule: "an exclamation shows strong feeling and ends with !", question: "'What a great day' is an…", answer: "exclamation", distractors: ["statement", "question"], band: 1 }
+      - { rule: "a command tells someone to do something", question: "'Close the door' is a…", answer: "command", distractors: ["question", "exclamation"], band: 1 }
+      - { rule: "a question ends with a question mark", question: "Which mark ends a question?", answer: "?", distractors: [".", "!"], band: 1 }
+      - { rule: "an exclamation ends with an exclamation mark", question: "Which mark shows excitement?", answer: "!", distractors: [".", "?"], band: 1 }
+      - { rule: "a telling sentence ends with a period", question: "Which mark ends a telling sentence?", answer: ".", distractors: ["?", "!"], band: 1 }
+      - { rule: "a command often ends with a period", question: "'Please sit down' is a…", answer: "command", distractors: ["question", "exclamation"], band: 1 }
+    figurative:
+      # ── Figurative language: similes, metaphors, idioms ──
+      - { rule: "a simile compares using like or as", question: "'as busy as a bee' is a…", answer: "simile", distractors: ["metaphor", "idiom"], band: 0 }
+      - { rule: "a metaphor says one thing IS another", question: "'the classroom was a zoo' is a…", answer: "metaphor", distractors: ["simile", "idiom"], band: 0 }
+      - { rule: "an idiom means something different from its words", question: "'break a leg' really means…", answer: "good luck", distractors: ["get hurt", "run fast"], band: 0 }
+      - { rule: "a simile uses like or as", question: "'she runs like the wind' is a…", answer: "simile", distractors: ["metaphor", "idiom"], band: 0 }
+      - { rule: "an idiom is a saying with a hidden meaning", question: "'it's raining cats and dogs' means…", answer: "raining hard", distractors: ["pets falling", "a sunny day"], band: 0 }
+      - { rule: "a metaphor calls one thing another", question: "'time is money' is a…", answer: "metaphor", distractors: ["simile", "idiom"], band: 0 }
+      - { rule: "a simile compares with like or as", question: "'as light as a feather' is a…", answer: "simile", distractors: ["metaphor", "idiom"], band: 0 }
+      - { rule: "an idiom means more than its words", question: "'a piece of cake' means…", answer: "very easy", distractors: ["a dessert", "very hard"], band: 0 }
