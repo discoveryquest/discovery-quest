@@ -3,6 +3,7 @@
 // returns the authoritative copy, which we persist locally. One round trip.
 import { loadSave, persistSave } from './save.js';
 import { loadRegistry, persistRegistry, mergeRoster } from './profiles.js';
+import { computeXp } from './xp.js';
 
 export function buildSyncRequest({ baseUrl, quest, profileId, token, save }) {
   return {
@@ -45,8 +46,16 @@ export function buildRosterSyncRequest({ baseUrl, token, reg }) {
   };
 }
 
-export async function syncRoster({ baseUrl, getToken, fetchImpl = fetch, storage }) {
+export async function syncRoster({ baseUrl, getToken, fetchImpl = fetch, storage, courseId }) {
   const reg = loadRegistry(storage);
+  if (courseId) {
+    const activeId = reg.lastUsedByCourse?.[courseId];
+    const entry = reg.profiles.find((p) => p.id === activeId);
+    if (entry) {
+      entry.xpByCourse = { ...(entry.xpByCourse || {}), [courseId]: computeXp(loadSave(storage)) };
+      persistRegistry(reg, storage);
+    }
+  }
   let token; try { token = await getToken(); } catch { token = null; }
   if (!token) return { ok: false, reason: 'no-token' };
   try {

@@ -124,3 +124,24 @@ test('mergeRoster tolerates null inputs', () => {
   assert.deepEqual(mergeRoster(null, { profiles: [{ id: 'p1' }] }).profiles, [{ id: 'p1' }]);
   assert.deepEqual(mergeRoster({ profiles: [{ id: 'p1' }] }, null).profiles, [{ id: 'p1' }]);
 });
+
+test('mergeRoster merges xpByCourse per-key by max (not clobbered by LWW spread)', () => {
+  const a = { profiles: [{ id: 'p1', name: 'Old', updatedAt: 1, xpByCourse: { math: 300, english: 50 } }] };
+  const b = { profiles: [{ id: 'p1', name: 'New', updatedAt: 9, xpByCourse: { math: 100, 'english-ru': 70 } }] };
+  const m = mergeRoster(a, b).profiles[0];
+  assert.equal(m.name, 'New');               // identity LWW (newer)
+  assert.deepEqual(m.xpByCourse, { math: 300, english: 50, 'english-ru': 70 }); // per-key max + union
+});
+
+test('mergeRoster xpByCourse is order-independent + idempotent', () => {
+  const a = { profiles: [{ id: 'p1', updatedAt: 1, xpByCourse: { math: 300 } }] };
+  const b = { profiles: [{ id: 'p1', updatedAt: 9, xpByCourse: { math: 100 } }] };
+  assert.equal(mergeRoster(a, b).profiles[0].xpByCourse.math, 300);
+  assert.equal(mergeRoster(b, a).profiles[0].xpByCourse.math, 300);
+  assert.equal(mergeRoster(mergeRoster(a, b), b).profiles[0].xpByCourse.math, 300);
+});
+
+test('mergeRoster: a lone xpByCourse (first-seen id) passes through', () => {
+  const a = { profiles: [{ id: 'p1', xpByCourse: { math: 42 } }] };
+  assert.deepEqual(mergeRoster(a, { profiles: [] }).profiles[0].xpByCourse, { math: 42 });
+});

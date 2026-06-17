@@ -26,3 +26,12 @@ test('buildRosterSyncRequest targets /api/roster with the token and profiles onl
   assert.deepEqual(body.profiles, [{ id: 'p1' }]);
   assert.equal(body.lastUsedByCourse, undefined);
 });
+
+test('buildRosterSyncRequest serializes xpByCourse on profiles', () => {
+  const { options } = buildRosterSyncRequest({
+    baseUrl: 'https://app', token: 'T',
+    reg: { profiles: [{ id: 'p1', name: 'Mila', xpByCourse: { math: 300 } }] },
+  });
+  const body = JSON.parse(options.body);
+  assert.deepEqual(body.profiles[0].xpByCourse, { math: 300 });
+});

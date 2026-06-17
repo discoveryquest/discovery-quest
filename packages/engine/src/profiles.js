@@ -2,6 +2,8 @@
 // key holds the canonical roster + the device-local "last used" pointer per course.
 // Canonical for name/avatar/age; course saves keep profile.id as the join key and
 // mirror identity for back-compat. Storage injectable for node tests (like save.js).
+import { SAVE_VERSION } from './save.js'; // value-only import (not the SAVE_KEY-bound fns)
+
 export const REGISTRY_KEY = 'dq-profiles';
 export const REGISTRY_VERSION = 1;
 
@@ -64,6 +66,11 @@ function mirrorIntoSave(storage, saveKey, profile) {
   let save;
   try { save = JSON.parse(storage.getItem(saveKey)); } catch { save = null; }
   save = save && typeof save === 'object' ? save : {};
+  // Stamp a version so migrate() treats this as a valid save. Without it, a mirror
+  // that is the FIRST writer of a course save (no prior loadSave) would be seen as
+  // versionless and reset to defaultSave() on the next load — silently dropping the
+  // mirrored identity and any progress written after.
+  save.version = save.version || SAVE_VERSION;
   save.profile = { ...(save.profile || {}), id: profile.id, name: profile.name, avatar: profile.avatar, age: profile.age };
   save.updatedAt = Date.now();
   try { storage.setItem(saveKey, JSON.stringify(save)); } catch { /* ignore */ }
@@ -106,6 +113,12 @@ export function ensureRegistry(storage = globalThis.localStorage, sources = []) 
   return seeded;
 }
 
+function mergeXpByCourse(a = {}, b = {}) {
+  const out = {};
+  for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) out[k] = Math.max(a[k] || 0, b[k] || 0);
+  return out;
+}
+
 // Pure roster merge for sync (runs identically on client + server). Union by id;
 // per-field last-write-wins by updatedAt. lastUsedByCourse is device-local and
 // intentionally dropped from the merged result (never synced).
@@ -116,7 +129,10 @@ export function mergeRoster(a, b) {
   for (const p of [...ap, ...bp]) {
     const cur = byId.get(p.id);
     if (!cur) { byId.set(p.id, { ...p }); continue; }
-    byId.set(p.id, (p.updatedAt || 0) >= (cur.updatedAt || 0) ? { ...cur, ...p } : { ...p, ...cur });
+    const winner = (p.updatedAt || 0) >= (cur.updatedAt || 0) ? { ...cur, ...p } : { ...p, ...cur };
+    const xp = mergeXpByCourse(cur.xpByCourse, p.xpByCourse);
+    if (Object.keys(xp).length) winner.xpByCourse = xp; else delete winner.xpByCourse;
+    byId.set(p.id, winner);
   }
   return { version: REGISTRY_VERSION, profiles: [...byId.values()], updatedAt: Math.max(a?.updatedAt || 0, b?.updatedAt || 0) };
 }

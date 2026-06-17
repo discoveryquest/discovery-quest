@@ -12,7 +12,8 @@
     "./StationPopover": "./src/StationPopover.jsx",
     "./Emoji": "./src/Emoji.jsx",
     "./ProfileSetup": "./src/ProfileSetup.jsx",
-    "./ProfilePicker": "./src/ProfilePicker.jsx"
+    "./ProfilePicker": "./src/ProfilePicker.jsx",
+    "./HeroBadge": "./src/HeroBadge.jsx"
   },
   "dependencies": {
     "@discoveryquest/voice-kit": "*"
