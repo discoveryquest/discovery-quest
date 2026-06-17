@@ -9,6 +9,7 @@ import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/L
 import Emoji from '@discoveryquest/engine-ui/Emoji';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave } from '@discoveryquest/engine/save';
+import { bump as track } from '@discoveryquest/engine/telemetry';
 
 const QUEST_LEN = 6;
 const pickReaction = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
@@ -19,6 +20,7 @@ export default function CourseQuest({ station, course, onExit }) {
     () => Array.from({ length: QUEST_LEN }, () => station.generate()),
     [station],
   );
+  const startedAt = useMemo(() => Date.now(), [station]);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState(null);
   const [correct, setCorrect] = useState(0);
@@ -78,6 +80,11 @@ export default function CourseQuest({ station, course, onExit }) {
       };
       s.questCount = (s.questCount || 0) + 1;
     });
+    const elapsed = Math.round((Date.now() - startedAt) / 1000);
+    track(station.id, 'correct', correct);
+    track(station.id, 'missed', QUEST_LEN - correct);
+    track(station.id, 'quests', 1);
+    track(station.id, 'sec', elapsed);
   }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const doneHeading = course.meta.ui?.done ?? 'Great job!';
