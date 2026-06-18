@@ -1,18 +1,18 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { COURSES_CATALOG_URL, ACCOUNT_DASHBOARD_URL, resolveCatalogUrl } from './links.js';
+import { SITE_HOME_URL, ACCOUNT_DASHBOARD_URL, resolveHomeUrl } from './links.js';
 import { setSaveKey, getSaveKey } from './save.js';
 
-test('catalog + account URLs are absolute https', () => {
-  assert.match(COURSES_CATALOG_URL, /^https:\/\/discoveryquest\.app\/courses$/);
+test('site home + account URLs are absolute https', () => {
+  assert.match(SITE_HOME_URL, /^https:\/\/discoveryquest\.app$/);
   assert.match(ACCOUNT_DASHBOARD_URL, /^https:\/\/app\.discoveryquest\.app$/);
 });
 
-test('resolveCatalogUrl prefers an explicit override', () => {
-  assert.equal(resolveCatalogUrl('https://x.test/c'), 'https://x.test/c');
-  assert.equal(resolveCatalogUrl(''), COURSES_CATALOG_URL);
-  assert.equal(resolveCatalogUrl(undefined), COURSES_CATALOG_URL);
-  assert.equal(resolveCatalogUrl(null), COURSES_CATALOG_URL);
+test('resolveHomeUrl prefers an explicit override', () => {
+  assert.equal(resolveHomeUrl('https://x.test/c'), 'https://x.test/c');
+  assert.equal(resolveHomeUrl(''), SITE_HOME_URL);
+  assert.equal(resolveHomeUrl(undefined), SITE_HOME_URL);
+  assert.equal(resolveHomeUrl(null), SITE_HOME_URL);
 });
 
 test('getSaveKey reflects setSaveKey', () => {

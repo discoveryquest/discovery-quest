@@ -7,14 +7,14 @@
 //   accountSlot— sign-in / user button, injected by the app shell
 //   extras     — extra settings rows (math injects its music toggle)
 //   soundLabel — overrides the settings sound-toggle label (default keeps "Luna…")
-// Actions: onMoreQuests (runs on confirm; when given, catalogUrl is ignored — defaults
-//   to navigating to the catalog otherwise, always behind the confirm),
+// Actions: onMoreQuests (runs on confirm; when given, homeUrl is ignored — defaults
+//   to navigating to the apex home page otherwise, always behind the confirm),
 //   onGrownUps / onSwitchPlayer (passed to the settings sheet), onSettingsClosed,
-//   catalogUrl (optional override of the default catalog target).
+//   homeUrl (optional override of the default home target).
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Home } from 'lucide-react';
-import { resolveCatalogUrl } from '@discoveryquest/engine/links';
+import { resolveHomeUrl } from '@discoveryquest/engine/links';
 import QuestSettingsSheet from './QuestSettingsSheet.jsx';
 
 export default function QuestHeader({
@@ -28,7 +28,7 @@ export default function QuestHeader({
   onGrownUps,
   onSwitchPlayer,
   onSettingsClosed,
-  catalogUrl,
+  homeUrl,
 }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [confirmLeave, setConfirmLeave] = useState(false);
@@ -43,7 +43,7 @@ export default function QuestHeader({
   function leave() {
     setConfirmLeave(false);
     if (onMoreQuests) onMoreQuests();
-    else window.location.assign(resolveCatalogUrl(catalogUrl));
+    else window.location.assign(resolveHomeUrl(homeUrl));
   }
 
   return (
