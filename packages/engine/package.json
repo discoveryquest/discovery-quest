@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Learning Quest platform engine: progress, spaced-repetition review, telemetry. Platform-agnostic (no DOM imports) so web and React Native apps can share it.",
   "exports": {
+    "./links": "./src/links.js",
     "./save": "./src/save.js",
     "./reviewDeck": "./src/reviewDeck.js",
     "./telemetry": "./src/telemetry.js",

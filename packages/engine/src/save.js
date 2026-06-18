@@ -11,6 +11,9 @@ let SAVE_KEY = 'lmq-save';
 export function setSaveKey(key) {
   if (key) SAVE_KEY = key;
 }
+export function getSaveKey() {
+  return SAVE_KEY;
+}
 export const SAVE_VERSION = 1;
 
 export function defaultSave() {
