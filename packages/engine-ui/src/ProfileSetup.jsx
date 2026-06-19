@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 export default function ProfileSetup({
   avatars = ['🦊', '🐰', '🐸', '🦖', '🐱', '🐼', '🚀', '🌟'],
   nameIdeas = [], ages = [5, 6, 7, 8, 9, 10, 11, '11+'],
-  initial = {}, labels = {}, onSubmit, onCancel,
+  initial = {}, labels = {}, onSubmit, onCancel, authSlot = null,
 }) {
   const [avatar, setAvatar] = useState(initial.avatar || avatars[0]);
   const [name, setName] = useState(initial.name || (nameIdeas[Math.floor(Math.random() * nameIdeas.length)] ?? ''));
@@ -40,6 +40,12 @@ export default function ProfileSetup({
         className={`mt-2 w-full rounded-3xl py-5 text-2xl font-extrabold ${ready ? 'bg-cyan-400 text-slate-900' : 'cursor-not-allowed bg-white/10 text-slate-500'}`}>
         {labels.submit || 'Start the adventure!'}
       </button>
+      {authSlot && (
+        <div className="flex flex-col items-center gap-2 pt-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{labels.haveHero || 'Already have a hero?'}</span>
+          {authSlot}
+        </div>
+      )}
       {onCancel && <button type="button" onClick={onCancel} className="mx-auto text-sm font-bold text-slate-500 hover:text-slate-300">{labels.cancel || 'Back'}</button>}
     </div>
   );

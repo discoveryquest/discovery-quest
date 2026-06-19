@@ -4,7 +4,7 @@ import Emoji from './Emoji.jsx';
 import HeroBadge from './HeroBadge.jsx';
 import { totalXp, heroProgress } from '@discoveryquest/engine/xp';
 
-export default function ProfilePicker({ profiles = [], onPick, onNew, onCancel, labels = {} }) {
+export default function ProfilePicker({ profiles = [], onPick, onNew, onCancel, labels = {}, authSlot = null }) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-6">
       <h1 className="font-display text-3xl font-extrabold text-white">{labels.title || "Who's the hero?"}</h1>
@@ -28,6 +28,12 @@ export default function ProfilePicker({ profiles = [], onPick, onNew, onCancel, 
           <span className="font-display font-extrabold">{labels.newHero || 'New hero'}</span>
         </button>
       </div>
+      {authSlot && (
+        <div className="flex flex-col items-center gap-2 pt-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{labels.haveHero || 'Already have a hero?'}</span>
+          {authSlot}
+        </div>
+      )}
       {onCancel && <button type="button" onClick={onCancel} className="text-sm font-bold text-slate-500 hover:text-slate-300">{labels.cancel || 'Back'}</button>}
     </div>
   );
