@@ -1,0 +1,58 @@
+[
+  {
+    "date": "2026-06-16",
+    "kind": "new",
+    "text": "Release 3 — Grammar Gym + Word Lab worlds",
+    "sha": "578a207",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/578a207"
+  },
+  {
+    "date": "2026-06-16",
+    "kind": "new",
+    "text": "Release 2 — Sound Patterns + Spelling Bee worlds",
+    "sha": "5d35bd3",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/5d35bd3"
+  },
+  {
+    "date": "2026-06-16",
+    "kind": "new",
+    "text": "Rules & Tricks world (ruleQuiz) — bossy R, i-before-e, magic e…",
+    "sha": "58774b3",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/58774b3"
+  },
+  {
+    "date": "2026-06-15",
+    "kind": "new",
+    "text": "author the Reading world (Story Harbor)",
+    "sha": "453c0fd",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/453c0fd"
+  },
+  {
+    "date": "2026-06-15",
+    "kind": "new",
+    "text": "English ui + reactions for CourseQuest",
+    "sha": "63b3d49",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/63b3d49"
+  },
+  {
+    "date": "2026-06-15",
+    "kind": "new",
+    "text": "parts_of_speech role-keyed (nouns/verbs/adjectives)",
+    "sha": "04ad5c1",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/04ad5c1"
+  },
+  {
+    "date": "2026-06-15",
+    "kind": "new",
+    "text": "band-tag phonemes/blendWords + inclusive soundToLetter bands",
+    "sha": "6d929a2",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/6d929a2"
+  },
+  {
+    "date": "2026-06-13",
+    "kind": "update",
+    "text": "Initial open release — Discovery Quest engine + course format + official courses",
+    "sha": "0c68312",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/0c68312"
+  }
+]

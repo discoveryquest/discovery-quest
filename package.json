@@ -12,6 +12,7 @@
     "course:export": "node scripts/export-course.mjs",
     "course:capabilities": "node scripts/gen-capabilities.mjs",
     "course:schema": "node scripts/gen-schema.mjs",
+    "course:changelog": "node scripts/gen-changelog.mjs",
     "validate": "node scripts/gen-capabilities.mjs --check && node scripts/gen-schema.mjs --check"
   },
   "devDependencies": {

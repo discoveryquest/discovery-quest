@@ -1,0 +1,9 @@
+[
+  {
+    "date": "2026-06-13",
+    "kind": "update",
+    "text": "Initial open release — Discovery Quest engine + course format + official courses",
+    "sha": "0c68312",
+    "url": "https://github.com/discoveryquest/discovery-quest/commit/0c68312"
+  }
+]
