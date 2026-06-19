@@ -10,8 +10,11 @@ import { commitsToChangelog } from './lib/changelog.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(__dirname, '..');
 const REPO_URL = 'https://github.com/discoveryquest/discovery-quest';
+// Courses that have public /courses/<id> pages (mirrors COURSES in the platform's
+// gen-courses.mjs). english-ru has no course page yet, so it gets no changelog.
 const COURSES = ['math', 'english'];
 const ymlPath = (id) => `docs/specs/course-format/${id}.course.yml`;
+const changelogPath = (id) => path.join(REPO, `docs/specs/course-format/${id}.changelog.json`);
 
 function gitLog(relPath) {
   // tab-separated: shortsha \t YYYY-MM-DD \t subject
@@ -29,9 +32,10 @@ function gitLog(relPath) {
 for (const id of COURSES) {
   const rel = ymlPath(id);
   let commits = [];
-  try { commits = gitLog(rel); } catch { commits = []; }
+  try { commits = gitLog(rel); }
+  catch (e) { console.warn(`warn: git log failed for ${id} (${rel}): ${e.message}`); commits = []; }
   const entries = commitsToChangelog(commits, { repoUrl: REPO_URL });
-  const outPath = path.join(REPO, `docs/specs/course-format/${id}.changelog.json`);
+  const outPath = changelogPath(id);
   writeFileSync(outPath, JSON.stringify(entries, null, 2) + '\n');
   console.log(`${id}: ${entries.length} entries -> ${path.relative(REPO, outPath)}`);
 }
