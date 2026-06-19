@@ -62,7 +62,10 @@ npm run course:check -- docs/specs/course-format/english.course.yml --app packag
   `--voice`) every narration line has fresh audio.
 
 Other commands: `npm run course:capabilities` (regenerate the catalog of boards/views/content),
-`npm run course:schema` (regenerate the JSON Schema), `npm run validate` (freshness gates).
+`npm run course:schema` (regenerate the JSON Schema), `npm run validate` (freshness gates),
+`npm run course:changelog` (regenerate each course's `<id>.changelog.json` from the git history
+of its `<id>.course.yml` — this feeds the per-course **Update Log** shown on discoveryquest.app;
+after authoring changes, run it and mirror the JSON into the platform repo alongside the YAML).
 
 ## Contributing a course
 
