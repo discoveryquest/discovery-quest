@@ -7,3 +7,6 @@ dist
 **/public/voice/
 **/public/music/
 **/map-art/
+
+# git worktrees (local, never committed)
+.worktrees/
