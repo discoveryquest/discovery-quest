@@ -1,0 +1,23 @@
+name: validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # gen-changelog --check reads the full git history of each course YAML
+          # (git log --follow); the default shallow clone would make it wrong.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Freshness gates: capability catalog, JSON schema, and per-course changelog
+      # must match what their generators produce from the committed source/history.
+      - run: npm run validate
