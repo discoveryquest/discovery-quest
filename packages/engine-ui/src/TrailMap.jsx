@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, Star } from 'lucide-react';
+import { Lock, Star, ChevronDown } from 'lucide-react';
 import { ROW, zigzag, yOf, trailPathD } from './trailPath.js';
 import Emoji from './Emoji.jsx';
 
@@ -113,7 +113,35 @@ function WorldSection({ world, wIdx, stateOf, starsOf, heroId, heroAvatar, onPic
   );
 }
 
-export default function TrailMap({ worlds, stateOf, starsOf, heroId, heroAvatar, onPick, decorationOf, intro }) {
+// Collapsed stand-in for an "earlier / younger-kid" world: a compact, tappable chip.
+// Tapping expands it back into a full WorldSection. Shows the world's earned-star tally so
+// progress isn't hidden.
+function WorldChip({ world, starsOf, hint, onExpand }) {
+  const worldStars = world.stations.reduce((a, st) => a + (starsOf(st) || 0), 0);
+  return (
+    <button
+      type="button"
+      onClick={onExpand}
+      className="mx-auto flex w-full max-w-md items-center gap-3 rounded-3xl border px-4 py-3 text-left backdrop-blur-md transition-colors hover:bg-white/5"
+      style={{ background: '#141822cc', borderColor: world.color + '33' }}
+    >
+      <Emoji char={world.emoji} className="text-2xl opacity-80" />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-base font-extrabold" style={{ color: world.color }}>{world.title}</span>
+        <span className="block text-[11px] font-bold text-slate-500">{hint}</span>
+      </span>
+      {worldStars > 0 && (
+        <span className="flex items-center gap-1 font-mono text-xs font-bold text-slate-400">
+          <Star size={12} className="fill-yellow-300 text-yellow-300" />{worldStars}
+        </span>
+      )}
+      <ChevronDown size={18} className="text-slate-500" />
+    </button>
+  );
+}
+
+export default function TrailMap({ worlds, stateOf, starsOf, heroId, heroAvatar, onPick, decorationOf, intro, collapsedBelow = 0, collapsedHint = 'For younger explorers' }) {
+  const [expanded, setExpanded] = useState(() => new Set()); // world ids manually opened (session-only)
   // Scroll the frontier (hero) station into view on mount — preserves math's heroRef behavior
   // and gives english/EFL the same nicety. data-station is on every node button.
   useEffect(() => {
@@ -127,10 +155,15 @@ export default function TrailMap({ worlds, stateOf, starsOf, heroId, heroAvatar,
   return (
     <main className="relative z-10 flex flex-col gap-8 pb-28 pt-6">
       {intro}
-      {worlds.map((w, i) => ({ w, i })).reverse().map(({ w, i }) => (
-        <WorldSection key={w.id} world={w} wIdx={i} stateOf={stateOf} starsOf={starsOf}
-          heroId={heroId} heroAvatar={heroAvatar} onPick={onPick} decorationOf={decorationOf} />
-      ))}
+      {worlds.map((w, i) => ({ w, i })).reverse().map(({ w, i }) =>
+        i < collapsedBelow && !expanded.has(w.id) ? (
+          <WorldChip key={w.id} world={w} starsOf={starsOf} hint={collapsedHint}
+            onExpand={() => setExpanded((s) => new Set(s).add(w.id))} />
+        ) : (
+          <WorldSection key={w.id} world={w} wIdx={i} stateOf={stateOf} starsOf={starsOf}
+            heroId={heroId} heroAvatar={heroAvatar} onPick={onPick} decorationOf={decorationOf} />
+        ),
+      )}
     </main>
   );
 }
