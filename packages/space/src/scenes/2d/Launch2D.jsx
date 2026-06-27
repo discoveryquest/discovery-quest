@@ -23,9 +23,6 @@ export default function Launch2D({ payload }) {
     [],
   );
 
-  // Rocket y position: starts below visible area, loops upward
-  const rocketY = reduce ? '30%' : undefined;
-
   return (
     <SpaceStage>
       <div className="relative h-full w-full overflow-hidden">
@@ -74,13 +71,14 @@ export default function Launch2D({ payload }) {
             alignItems: 'center',
             zIndex: 4,
           }}
+          // Reduced motion: static mid-flight frame (initial === animate, zero-duration).
+          initial={{ y: reduce ? '-30%' : '110%' }}
           animate={reduce ? { y: '-30%' } : { y: ['110%', '-30%'] }}
           transition={
             reduce
-              ? {}
+              ? { duration: 0 }
               : { repeat: Infinity, duration: 2.8, ease: 'easeIn', repeatDelay: 0.4 }
           }
-          initial={reduce ? { y: rocketY } : { y: '110%' }}
         >
           {/* Thrust plume */}
           {!reduce && (
