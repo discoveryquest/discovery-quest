@@ -446,14 +446,13 @@ export function renderLessonView(view) {
 
 **Files:** Modify `packages/space/engine.capabilities.json`
 
-- [ ] **Step 1: Add** a `views[]` entry for each new kind (`body`, `orbit`, `field`, `scrub`, `reveal`, `launch`, `compare`), keeping `fact`. Each lists its fields with `name`/`type`/`required`/`note`/`example`. Use `object[]` for `bodies`/`states`/`hotspots`/`items` and `object` for `base`. Field shapes must match exactly what the components read (Tasks 7–13) and what the YAML authors in Phase 5. Example for `orbit` and `scrub`:
+- [ ] **Step 1: Add** a `views[]` entry for each new kind (`body`, `orbit`, `field`, `scrub`, `reveal`, `launch`, `compare`), keeping `fact`. Each lists its fields with `name`/`type`/`required`/`note`/`example`. Use `object[]` for `bodies`/`states`/`hotspots`/`items` and `object` for `base`. Field shapes must match exactly what the components read (Tasks 7–13) and what the YAML authors in Phase 5. **Do not list `key`** — `gen-schema` auto-injects `key` into every view branch. Example for `orbit` and `scrub`:
 
 ```json
 {
   "kind": "orbit",
   "description": "A central body with one or more bodies orbiting it on dashed paths; a phaseLit moon shows its lit fraction. Cinematic dark-space stage.",
   "fields": [
-    { "name": "key", "type": "string", "required": true, "example": "mp1", "note": "unique beat id within the lesson" },
     { "name": "bodies", "type": "object[]", "required": true, "note": "each {id, role, orbits?, radius?, period?, phaseLit?}; the body with no `orbits` is the center", "example": [{ "id": "earth", "role": "planet" }, { "id": "moon", "role": "moon", "orbits": "earth", "period": 6, "phaseLit": true }] }
   ]
 },
@@ -461,7 +460,6 @@ export function renderLessonView(view) {
   "kind": "scrub",
   "description": "Interactive: the learner drags a handle through ordered states; each state shows a caption and speaks its line. Optional `base` scene underneath.",
   "fields": [
-    { "name": "key", "type": "string", "required": true, "example": "mp-explore" },
     { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. an orbit) to render the interaction on" },
     { "name": "states", "type": "object[]", "required": true, "note": "ordered {id, label, say, caption}; `say` must exist in narration", "example": [{ "id": "full", "label": "Full Moon", "say": "mp-x-full", "caption": "Full Moon — the whole lit side faces Earth." }] }
   ]
@@ -598,8 +596,13 @@ export function buildVoiceJobs(course) {
     source on this machine; never print it). If neither yields a key, exit non-zero with:
     `"ELEVENLABS_API_KEY not found — set it in the environment or at platform/apps/math-quest/.env (see spec › Dubbing)"`.
   - Pick voice **Jessica**; write to `examples/space-preview/public/voice/jessica/<key>.mp3`
-    + `manifest.json` (bake each job's text; skip unchanged unless `--force`; regenerate when
-    baked text differs — same stale logic as the reference).
+    + `manifest.json` (skip unchanged unless `--force`; regenerate when baked text differs —
+    same stale logic as the reference).
+  - **Manifest baking — match the checker:** `course-check.mjs` compares `manifest[key]`
+    against `forSpeech(narration[key])` (it strips `⭐`/`🎉` and collapses whitespace). So bake
+    **`forSpeech(job.text)`** (not the raw text) into `manifest.json`, or a celebratory recap
+    line containing an emoji (the spec's recap "celebratory tone") would falsely report STALE
+    on `course:check:space`. Replicate `forSpeech` (or import it if exported) in the script.
   - Use `output_format=mp3_44100_64`, teaching-slow params consistent with the reference.
 - [ ] **Step 3: Add** root script: `"voice:space": "node packages/space/scripts/gen-voice.mjs"`.
 - [ ] **Step 4: Commit** (`feat(space): gen-voice.mjs (Jessica) from course narration`).
