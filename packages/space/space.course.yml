@@ -73,45 +73,60 @@ course:
         - id: learn
           label: Learn it
           beats:
-            - { say: mp-0, caption: "The Moon makes no light of its own — it shines by reflecting sunlight.", advance: hold, view: { kind: fact, key: mp0, emoji: 🌙, text: "The Moon makes no light of its own — it shines by reflecting sunlight." } }
-            - { say: mp-1, caption: "As the Moon orbits Earth, we see more or less of its sunlit half. That's a phase!", advance: hold, view: { kind: fact, key: mp1, emoji: 🌗, text: "As the Moon orbits Earth, we see more or less of its sunlit half. That's a phase!" } }
-            - { say: mp-2, caption: "The phases cycle about every 29 days — new moon to full moon and back.", advance: hold, view: { kind: fact, key: mp2, emoji: 🔁, text: "The phases cycle about every 29 days — new moon to full moon and back." } }
+            - { say: mp-0, caption: "Why does the Moon seem to change shape each night?", advance: hold, view: { kind: body, key: mp0, body: { role: moon, glow: true }, label: "The Moon" } }
+            - { say: mp-1, caption: "The Moon makes no light of its own — it shines by reflecting sunlight.", view: { kind: orbit, key: mp1, bodies: [ { id: sun, role: star }, { id: moon, role: moon, orbits: sun, radius: 70, period: 8, phaseLit: true } ] } }
+            - { say: mp-2, caption: "As the Moon orbits Earth, we see more or less of its sunlit half.", view: { kind: orbit, key: mp2, bodies: [ { id: earth, role: planet }, { id: moon, role: moon, orbits: earth, radius: 64, period: 6, phaseLit: true } ] } }
+            - { say: mp-3, caption: "That changing sunlit slice is what we call a phase.", view: { kind: body, key: mp3, body: { role: moon, phase: 0.75 } } }
+            - { say: mp-4, caption: "The phases cycle about every 29 days — new moon to full moon and back.", view: { kind: body, key: mp4, body: { role: moon, glow: true } } }
+            - { say: mp-5, caption: "Drag to walk the Moon through its phases!", advance: hold, view: { kind: scrub, key: mp-explore, base: { kind: orbit, bodies: [ { id: earth, role: planet }, { id: moon, role: moon, orbits: earth, phaseLit: true } ] }, states: [ { id: new, label: New Moon, say: mp-x-new, caption: "New Moon — the lit side faces away from us." }, { id: quarter, label: First Quarter, say: mp-x-quarter, caption: "First Quarter — we see half the lit side." }, { id: full, label: Full Moon, say: mp-x-full, caption: "Full Moon — the whole lit side faces Earth." } ] } }
     day-night:
       title: Day & Night
       sections:
         - id: learn
           label: Learn it
           beats:
-            - { say: dn-0, caption: "Earth spins like a top — one full spin takes about 24 hours.", advance: hold, view: { kind: fact, key: dn0, emoji: 🌍, text: "Earth spins like a top — one full spin takes about 24 hours." } }
-            - { say: dn-1, caption: "The side facing the Sun has daytime; the side facing away has night.", advance: hold, view: { kind: fact, key: dn1, emoji: ☀️, text: "The side facing the Sun has daytime; the side facing away has night." } }
-            - { say: dn-2, caption: "It's Earth's spinning — not the Sun moving — that gives us day and night.", advance: hold, view: { kind: fact, key: dn2, emoji: 🔄, text: "It's Earth's spinning — not the Sun moving — that gives us day and night." } }
+            - { say: dn-0, caption: "Have you ever wondered why it gets dark at night?", advance: hold, view: { kind: body, key: dn0, body: { role: planet, glow: true }, label: "Earth" } }
+            - { say: dn-1, caption: "Earth spins like a top — one full spin takes about 24 hours.", view: { kind: orbit, key: dn1, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
+            - { say: dn-2, caption: "The side facing the Sun has daytime; the side facing away has night.", view: { kind: orbit, key: dn2, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
+            - { say: dn-3, caption: "It's Earth's spinning — not the Sun moving — that gives us day and night.", view: { kind: body, key: dn3, body: { role: planet, glow: true } } }
+            - { say: dn-4, caption: "One full spin equals one day — you get sunshine and darkness every 24 hours.", view: { kind: body, key: dn4, body: { role: planet } } }
+            - { say: dn-5, caption: "Drag to spin Earth through a full day!", advance: hold, view: { kind: scrub, key: dn-explore, base: { kind: orbit, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70 } ] }, states: [ { id: dawn, label: Dawn, say: dn-x-dawn, caption: "Dawn — the Sun peeks over the horizon as Earth turns toward it." }, { id: noon, label: Noon, say: dn-x-noon, caption: "Noon — your part of Earth faces the Sun directly." }, { id: dusk, label: Dusk, say: dn-x-dusk, caption: "Dusk — Earth turns away and the Sun sinks toward the horizon." }, { id: night, label: Night, say: dn-x-night, caption: "Night — your side of Earth faces away from the Sun." } ] } }
     the-sun:
       title: Our Star
       sections:
         - id: learn
           label: Learn it
           beats:
-            - { say: su-0, caption: "The Sun is a star — the closest one to Earth.", advance: hold, view: { kind: fact, key: su0, emoji: 🌞, text: "The Sun is a star — the closest one to Earth." } }
-            - { say: su-1, caption: "It's a giant ball of super-hot, glowing gas.", advance: hold, view: { kind: fact, key: su1, emoji: 🔥, text: "It's a giant ball of super-hot, glowing gas." } }
-            - { say: su-2, caption: "The Sun gives Earth almost all of its light and heat.", advance: hold, view: { kind: fact, key: su2, emoji: 💡, text: "The Sun gives Earth almost all of its light and heat." } }
+            - { say: su-0, caption: "Look up on a clear day — what is that brilliant ball of light?", advance: hold, view: { kind: body, key: su0, body: { role: star, glow: true }, label: "The Sun" } }
+            - { say: su-1, caption: "The Sun is a star — the closest one to Earth.", view: { kind: body, key: su1, body: { role: star, glow: true } } }
+            - { say: su-2, caption: "It's a giant ball of super-hot, glowing gas.", view: { kind: body, key: su2, body: { role: star, glow: true } } }
+            - { say: su-3, caption: "The Sun is so large that over a million Earths could fit inside.", view: { kind: compare, key: su3, items: [ { label: "Sun", relSize: 10 }, { label: "Earth", relSize: 1 } ] } }
+            - { say: su-4, caption: "The Sun gives Earth almost all of its light and heat — without it, life couldn't exist.", view: { kind: body, key: su4, body: { role: star, glow: true } } }
+            - { say: su-5, caption: "Tap each part of the Sun to explore what's inside!", advance: hold, view: { kind: reveal, key: su-explore, base: { kind: body, body: { role: star, glow: true } }, hotspots: [ { id: core, label: "Core", say: su-x-core, caption: "The core is the engine — energy made here takes thousands of years to reach the surface.", x: 50, y: 50 }, { id: surface, label: "Surface", say: su-x-surface, caption: "The surface blazes at about 5,500 degrees Celsius.", x: 80, y: 30 }, { id: rays, label: "Sunlight", say: su-x-rays, caption: "Light and heat pour out and travel 8 minutes to reach Earth.", x: 15, y: 15 } ] } }
     seasons:
       title: The Seasons
       sections:
         - id: learn
           label: Learn it
           beats:
-            - { say: se-0, caption: "Earth is tilted as it circles the Sun.", advance: hold, view: { kind: fact, key: se0, emoji: 🌍, text: "Earth is tilted as it circles the Sun." } }
-            - { say: se-1, caption: "That tilt makes sunlight stronger at some times of year — that's seasons.", advance: hold, view: { kind: fact, key: se1, emoji: ☀️, text: "That tilt makes sunlight stronger at some times of year — that's seasons." } }
-            - { say: se-2, caption: "When your half of Earth tilts toward the Sun, it's summer; tilted away, it's winter.", advance: hold, view: { kind: fact, key: se2, emoji: 🍂, text: "When your half of Earth tilts toward the Sun, it's summer; tilted away, it's winter." } }
+            - { say: se-0, caption: "Why is summer hot and winter cold, even though Earth stays the same distance from the Sun?", advance: hold, view: { kind: orbit, key: se0, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
+            - { say: se-1, caption: "Earth is tilted as it circles the Sun — not straight up, but at an angle.", view: { kind: body, key: se1, body: { role: planet, tilt: true } } }
+            - { say: se-2, caption: "When your half of Earth tilts toward the Sun, sunlight hits more directly — that's summer.", view: { kind: body, key: se2, body: { role: planet, tilt: true } } }
+            - { say: se-3, caption: "When your half tilts away, sunlight spreads out and feels weaker — that's winter.", view: { kind: orbit, key: se3, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
+            - { say: se-4, caption: "Seasons are caused by Earth's tilt, not by how close we are to the Sun.", view: { kind: fact, key: se4, emoji: "🌍", text: "Seasons are caused by Earth's tilt, not by how close we are to the Sun." } }
+            - { say: se-5, caption: "Drag Earth around its orbit to walk through the four seasons!", advance: hold, view: { kind: scrub, key: se-explore, base: { kind: orbit, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70 } ] }, states: [ { id: spring, label: Spring, say: se-x-spring, caption: "Spring — neither hemisphere tilts much toward the Sun; days grow longer." }, { id: summer, label: Summer, say: se-x-summer, caption: "Summer — your hemisphere tilts toward the Sun; long days and strong sunlight." }, { id: autumn, label: Autumn, say: se-x-autumn, caption: "Autumn — your hemisphere tilts away again; days shorten and cool." }, { id: winter, label: Winter, say: se-x-winter, caption: "Winter — your hemisphere tilts away the most; short days and weak sunlight." } ] } }
     gravity:
       title: Gravity
       sections:
         - id: learn
           label: Learn it
           beats:
-            - { say: gr-0, caption: "Gravity is a pull. Everything with mass pulls on everything else.", advance: hold, view: { kind: fact, key: gr0, emoji: 🪐, text: "Gravity is a pull. Everything with mass pulls on everything else." } }
-            - { say: gr-1, caption: "Earth's gravity pulls things toward its center — that's why things fall down.", advance: hold, view: { kind: fact, key: gr1, emoji: ⬇️, text: "Earth's gravity pulls things toward its center — that's why things fall down." } }
-            - { say: gr-2, caption: "The more mass something has, the stronger its gravity pull.", advance: hold, view: { kind: fact, key: gr2, emoji: 🚀, text: "The more mass something has, the stronger its gravity pull." } }
+            - { say: gr-0, caption: "Drop anything and it falls — why does everything always pull toward the ground?", advance: hold, view: { kind: body, key: gr0, body: { role: planet, glow: true }, label: "Earth" } }
+            - { say: gr-1, caption: "Gravity is a pull. Everything with mass pulls on everything else.", view: { kind: body, key: gr1, body: { role: planet } } }
+            - { say: gr-2, caption: "Earth's gravity pulls things toward its center — that's why things fall down.", view: { kind: body, key: gr2, body: { role: planet, glow: true } } }
+            - { say: gr-3, caption: "The more mass something has, the stronger its gravity pull.", view: { kind: compare, key: gr3, items: [ { label: "Earth", relSize: 4 }, { label: "Moon", relSize: 1 } ] } }
+            - { say: gr-4, caption: "Gravity holds you to the ground, keeps the Moon in orbit, and holds Earth near the Sun.", view: { kind: orbit, key: gr4, bodies: [ { id: earth, role: planet }, { id: moon, role: moon, orbits: earth, radius: 64, period: 6 } ] } }
+            - { say: gr-5, caption: "Tap each world to feel its gravity!", advance: hold, view: { kind: reveal, key: gr-explore, base: { kind: compare, items: [ { label: "Jupiter", relSize: 11 }, { label: "Earth", relSize: 4 }, { label: "Moon", relSize: 1 } ] }, hotspots: [ { id: jupiter, label: "Jupiter", say: gr-x-jupiter, caption: "Jupiter is enormous — its gravity is 2.5 times stronger than Earth's.", x: 15, y: 50 }, { id: earth, label: "Earth", say: gr-x-earth, caption: "Earth's gravity feels normal to you — it's what you were born with!", x: 50, y: 50 }, { id: moon, label: "Moon", say: gr-x-moon, caption: "The Moon is small — its gravity is about one-sixth of Earth's.", x: 80, y: 50 } ] } }
     inner-outer:
       title: Inner & Outer Planets
       sections:
@@ -296,21 +311,53 @@ course:
       - { question: "What will Mars explorers need to make or bring?", answer: "Air, water, and food", distractors: ["Just sunglasses", "Nothing at all"], band: 19 }
 
   narration:
-    mp-0: "The Moon makes no light of its own — it shines by reflecting sunlight."
-    mp-1: "As the Moon orbits Earth, we see more or less of its sunlit half. That's a phase!"
-    mp-2: "The phases cycle about every 29 days — new moon to full moon and back."
-    dn-0: "Earth spins like a top — one full spin takes about 24 hours."
-    dn-1: "The side facing the Sun has daytime; the side facing away has night."
-    dn-2: "It's Earth's spinning — not the Sun moving — that gives us day and night."
-    su-0: "The Sun is a star — the closest one to Earth."
-    su-1: "It's a giant ball of super-hot, glowing gas."
-    su-2: "The Sun gives Earth almost all of its light and heat."
-    se-0: "Earth is tilted as it circles the Sun."
-    se-1: "That tilt makes sunlight stronger at some times of year — that's seasons."
-    se-2: "When your half of Earth tilts toward the Sun, it's summer; tilted away, it's winter."
-    gr-0: "Gravity is a pull. Everything with mass pulls on everything else."
-    gr-1: "Earth's gravity pulls things toward its center — that's why things fall down."
-    gr-2: "The more mass something has, the stronger its gravity pull."
+    mp-0: "Why does the Moon seem to change shape each night?"
+    mp-1: "The Moon makes no light of its own — it shines by reflecting sunlight."
+    mp-2: "As the Moon orbits Earth, we see more or less of its sunlit half."
+    mp-3: "That changing sunlit slice is what we call a phase."
+    mp-4: "The phases cycle about every 29 days — new moon to full moon and back."
+    mp-5: "Drag to walk the Moon through its phases!"
+    mp-x-new: "New Moon — the lit side faces away from us."
+    mp-x-quarter: "First Quarter — we see half the lit side."
+    mp-x-full: "Full Moon — the whole lit side faces Earth."
+    dn-0: "Have you ever wondered why it gets dark at night?"
+    dn-1: "Earth spins like a top — one full spin takes about 24 hours."
+    dn-2: "The side facing the Sun has daytime; the side facing away has night."
+    dn-3: "It's Earth's spinning — not the Sun moving — that gives us day and night."
+    dn-4: "One full spin equals one day — you get sunshine and darkness every 24 hours."
+    dn-5: "Drag to spin Earth through a full day!"
+    dn-x-dawn: "Dawn — the Sun peeks over the horizon as Earth turns toward it."
+    dn-x-noon: "Noon — your part of Earth faces the Sun directly."
+    dn-x-dusk: "Dusk — Earth turns away and the Sun sinks toward the horizon."
+    dn-x-night: "Night — your side of Earth faces away from the Sun."
+    su-0: "Look up on a clear day — what is that brilliant ball of light?"
+    su-1: "The Sun is a star — the closest one to Earth."
+    su-2: "It's a giant ball of super-hot, glowing gas."
+    su-3: "The Sun is so large that over a million Earths could fit inside."
+    su-4: "The Sun gives Earth almost all of its light and heat — without it, life couldn't exist."
+    su-5: "Tap each part of the Sun to explore what's inside!"
+    su-x-core: "The core is the engine — energy made here takes thousands of years to reach the surface."
+    su-x-surface: "The surface blazes at about 5,500 degrees Celsius."
+    su-x-rays: "Light and heat pour out and travel 8 minutes to reach Earth."
+    se-0: "Why is summer hot and winter cold, even though Earth stays the same distance from the Sun?"
+    se-1: "Earth is tilted as it circles the Sun — not straight up, but at an angle."
+    se-2: "When your half of Earth tilts toward the Sun, sunlight hits more directly — that's summer."
+    se-3: "When your half tilts away, sunlight spreads out and feels weaker — that's winter."
+    se-4: "Seasons are caused by Earth's tilt, not by how close we are to the Sun."
+    se-5: "Drag Earth around its orbit to walk through the four seasons!"
+    se-x-spring: "Spring — neither hemisphere tilts much toward the Sun; days grow longer."
+    se-x-summer: "Summer — your hemisphere tilts toward the Sun; long days and strong sunlight."
+    se-x-autumn: "Autumn — your hemisphere tilts away again; days shorten and cool."
+    se-x-winter: "Winter — your hemisphere tilts away the most; short days and weak sunlight."
+    gr-0: "Drop anything and it falls — why does everything always pull toward the ground?"
+    gr-1: "Gravity is a pull. Everything with mass pulls on everything else."
+    gr-2: "Earth's gravity pulls things toward its center — that's why things fall down."
+    gr-3: "The more mass something has, the stronger its gravity pull."
+    gr-4: "Gravity holds you to the ground, keeps the Moon in orbit, and holds Earth near the Sun."
+    gr-5: "Tap each world to feel its gravity!"
+    gr-x-jupiter: "Jupiter is enormous — its gravity is 2.5 times stronger than Earth's."
+    gr-x-earth: "Earth's gravity feels normal to you — it's what you were born with!"
+    gr-x-moon: "The Moon is small — its gravity is about one-sixth of Earth's."
     io-0: "Our Solar System has 8 planets, all circling the Sun."
     io-1: "The 4 inner planets — Mercury, Venus, Earth, Mars — are small and rocky."
     io-2: "The 4 outer planets are huge balls of gas and ice, much farther out."
