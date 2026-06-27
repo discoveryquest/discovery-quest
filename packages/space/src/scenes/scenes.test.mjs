@@ -55,3 +55,13 @@ test('fractionFromIndex is the inverse midpoint of a bucket', () => {
   assert.equal(fractionFromIndex(0, 3), 0);
   assert.equal(fractionFromIndex(2, 3), 1);
 });
+
+import { buildVoiceJobs } from './voiceJobs.js';
+
+test('buildVoiceJobs turns the narration map into deduped slow jobs', () => {
+  const course = { narration: { 'mp-0': 'Hi', 'mp-1': 'There', dup: 'Hi' } };
+  const jobs = buildVoiceJobs(course);
+  assert.deepEqual(jobs.find((j) => j.key === 'mp-0'), { key: 'mp-0', text: 'Hi', slow: true });
+  assert.equal(jobs.length, 3);
+  assert.ok(jobs.every((j) => j.slow === true));
+});

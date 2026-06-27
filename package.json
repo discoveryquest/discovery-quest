@@ -15,7 +15,9 @@
     "course:capabilities": "node scripts/gen-capabilities.mjs",
     "course:schema": "node scripts/gen-schema.mjs",
     "course:changelog": "node scripts/gen-changelog.mjs",
-    "validate": "node scripts/gen-capabilities.mjs --check && node scripts/gen-schema.mjs --check && node scripts/gen-changelog.mjs --check"
+    "validate": "node scripts/gen-capabilities.mjs --check && node scripts/gen-schema.mjs --check && node scripts/gen-changelog.mjs --check",
+    "voice:space": "node packages/space/scripts/gen-voice.mjs",
+    "course:check:space": "node scripts/course-check.mjs packages/space/space.course.yml --app packages/space --voice examples/space-preview"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
