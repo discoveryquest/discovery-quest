@@ -74,8 +74,12 @@ A single dispatcher resolves a descriptor to a renderer by `(mode, kind)`:
        mode '3d' → Body3D, Orbit3D, …                                                 (later)
 ```
 
-- `mode` defaults to `'2d'`, set once at the app/course level. Switching the whole course
-  to 3D is one change; per-kind override is supported.
+- `mode` defaults to `'2d'`. It originates as a single exported constant in
+  `src/scenes/registry.js` (e.g. `export const SCENE_MODE = '2d'`); `views.jsx` reads it and
+  passes it into `<Scene>`, so `CourseLesson`'s `renderView(view)` contract is unchanged.
+  Switching the whole course to 3D is editing that one constant; per-kind override is
+  supported via the fallback below. (A future enhancement could read it from
+  `space.course.yml`, but that is out of scope here.)
 - **Fallback:** if `SCENE_RENDERERS[mode][kind]` is missing, fall back to `'2d'` for that
   kind (so a partial 3D rollout never breaks a lesson).
 - The same descriptors/YAML feed both renderers — **zero content changes when 3D arrives**.
@@ -127,6 +131,44 @@ of truth for both runtime playback and voice generation).
 Both reuse the same descriptor data and call into `@discoveryquest/voice-kit/audio`'s
 `speak()` so exploration is dubbed too.
 
+### Interactive descriptor shapes
+
+Each interactive state/hotspot carries **both** a `caption` (shown) and a `say` key (the
+narration key, so the line lives in `narration:` and gets generated + spoken):
+
+```yaml
+# scrub — ordered states the learner drags through
+view:
+  kind: scrub
+  key: mp-explore
+  base: { kind: orbit, bodies: [ { id: earth, role: planet }, { id: moon, role: moon, orbits: earth, phaseLit: true } ] }
+  states:
+    - { id: new,     label: New Moon,     say: mp-x-new,     caption: "New Moon — the lit side faces away from us." }
+    - { id: quarter, label: First Quarter, say: mp-x-quarter, caption: "First Quarter — we see half the lit side." }
+    - { id: full,    label: Full Moon,    say: mp-x-full,    caption: "Full Moon — the whole lit side faces Earth." }
+
+# reveal — tappable hotspots on a scene
+view:
+  kind: reveal
+  key: io-explore
+  base: { kind: field, tint: deep-space }
+  hotspots:
+    - { id: mercury, label: Mercury, say: io-x-mercury, caption: "Mercury — closest to the Sun, small and rocky." }
+    - { id: jupiter, label: Jupiter, say: io-x-jupiter, caption: "Jupiter — the largest planet, a gas giant." }
+```
+
+`scrub`/`reveal` may carry a `base` descriptor (a non-interactive scene kind) they render
+the interaction on top of, or render standalone.
+
+### Narration key convention
+
+Existing keys are `<station>-<n>` (`mp-0..2`). The expanded structure extends this:
+
+- Hook / teach / recap beats: continue the numeric sequence — `mp-0` (hook), `mp-1..3`
+  (teach), `mp-4` (recap).
+- Interactive per-state / per-hotspot lines: `<station>-x-<stateId>` (e.g. `mp-x-full`,
+  `io-x-jupiter`) so they're visually distinct from the linear beats.
+
 ## Dubbing pipeline (Jessica, generate now)
 
 - New `packages/space/scripts/gen-voice.mjs`, mirroring
@@ -164,6 +206,9 @@ packages/space/src/scenes/
 
 - `lessons/views.jsx` becomes a thin shim returning `<Scene descriptor={view} mode={mode} />`
   (keeps `CourseLesson`'s `renderView` contract stable).
+- **Naming note:** new code lives in `src/scenes/` (plural). The pre-existing dormant 3D
+  scaffold is `src/scene/` (singular) and is intentionally left as the future home for `3d`
+  renderers — the near-identical names are deliberate, not a typo.
 - `space.course.yml` lessons + `narration:` are rewritten/extended per the new structure.
 
 ## Testing & validation
