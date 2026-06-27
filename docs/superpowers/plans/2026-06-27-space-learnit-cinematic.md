@@ -17,7 +17,8 @@
 ## File Structure
 
 **Create:**
-- `packages/space/src/scenes/registry.js` — `SCENE_MODE` constant, `SCENE_RENDERERS` map, pure `resolveRenderer(registry, mode, kind)` (2D fallback).
+- `packages/space/src/scenes/registry.js` — **pure** (no JSX imports): `SCENE_MODE` constant + `resolveRenderer(registry, mode, kind)` (2D fallback). Safe to import from `node --test`.
+- `packages/space/src/scenes/renderers.jsx` — the `SCENE_RENDERERS` map (imports the 2D components). JSX, so **never** imported by a `.test.mjs`.
 - `packages/space/src/scenes/geometry.js` — pure scene math (orbit positions, ring/tilt, phase mask).
 - `packages/space/src/scenes/scrub.js` — pure interactive-state math (clamp, fraction→index).
 - `packages/space/src/scenes/voiceJobs.js` — pure `buildVoiceJobs(course)` (dedupe narration → job list).
@@ -77,24 +78,25 @@ test('returns null for an unknown kind (caller renders nothing)', () => {
 Run: `cd packages/space && node --test src/scenes/scenes.test.mjs`
 Expected: FAIL — `Cannot find module './registry.js'`.
 
-- [ ] **Step 3: Implement `registry.js`** (renderers added in later tasks; keep map empty-ish for now but real)
+- [ ] **Step 3: Implement `registry.js`** — **pure only.** The component map lives in a
+  separate `.jsx` file (Task 14) so this module stays JSX-free and importable by `node --test`.
 
 ```js
-// Scene renderer registry + resolution. A beat's `view` (a semantic scene descriptor) is
-// rendered by SCENE_RENDERERS[mode][kind]. `mode` is a single constant today; swapping the
-// whole course to 3D is editing SCENE_MODE, and a missing (mode,kind) falls back to 2d so a
-// partial 3D rollout never breaks a lesson. Components are registered in this file (2d) and,
-// later, by the dormant src/scene 3D scaffold.
+// Scene renderer resolution (pure — no JSX, so node --test can import it). A beat's `view`
+// (a semantic scene descriptor) is rendered by SCENE_RENDERERS[mode][kind] (the map lives in
+// renderers.jsx). `mode` is a single constant today; swapping the whole course to 3D is
+// editing SCENE_MODE, and a missing (mode,kind) falls back to 2d so a partial 3D rollout
+// never breaks a lesson.
 export const SCENE_MODE = '2d';
 
-// resolveRenderer is pure (no React) so it is unit-tested. Returns a component or null.
+// Returns a component or null. registry shape: { mode: { kind: Component } }.
 export function resolveRenderer(registry, mode, kind) {
   return registry[mode]?.[kind] ?? registry['2d']?.[kind] ?? null;
 }
-
-// Filled in by Task 14 (imports the 2d components). Declared here so Scene.jsx can import it.
-export const SCENE_RENDERERS = { '2d': {} };
 ```
+
+> Do NOT add a `SCENE_RENDERERS` export here — it would force a JSX import and break every
+> `scenes.test.mjs` test. It lives in `renderers.jsx` (Task 14).
 
 - [ ] **Step 4: Run tests, verify pass**
 
@@ -271,7 +273,9 @@ export function SpaceStage({ children, tint }) {
 ```jsx
 // Dispatcher: turn a semantic scene descriptor (a beat's `view`) into a node by looking up
 // SCENE_RENDERERS[mode][kind] (2d fallback). Content-agnostic; renderers read the descriptor.
-import { SCENE_RENDERERS, SCENE_MODE, resolveRenderer } from './registry.js';
+// Pure resolution comes from registry.js; the JSX component map from renderers.jsx.
+import { SCENE_MODE, resolveRenderer } from './registry.js';
+import { SCENE_RENDERERS } from './renderers.jsx';
 
 export default function Scene({ descriptor, mode = SCENE_MODE }) {
   if (!descriptor) return null;
@@ -279,6 +283,11 @@ export default function Scene({ descriptor, mode = SCENE_MODE }) {
   return Renderer ? <Renderer {...descriptor} /> : null;
 }
 ```
+
+> `renderers.jsx` doesn't exist until Task 14. Either do Task 14 before Task 5, or add a
+> temporary `export const SCENE_RENDERERS = { '2d': {} };` stub in `renderers.jsx` now and
+> fill it in Task 14. (Stubbing keeps `fact` blank until Task 6/14 — fine, nothing renders
+> it yet.)
 
 - [ ] **Step 2: Commit** (`feat(space): Scene dispatcher`).
 
@@ -366,25 +375,19 @@ Descriptor: `{ base?, hotspots: [{ id, label, say, caption, x?, y? }] }`. Render
 - [ ] **Step 1: Implement.** Buttons are real `<button>`s (keyboard-accessible).
 - [ ] **Step 2: Commit** (`feat(space): Reveal2D interactive tap-to-reveal`).
 
-### Task 14: Register all 2D renderers
+### Task 14: Register all 2D renderers (`renderers.jsx`)
 
-**Files:** Modify `packages/space/src/scenes/registry.js`; Test: `scenes.test.mjs` (append)
+**Files:** Create `packages/space/src/scenes/renderers.jsx`
 
-- [ ] **Step 1: Write the failing test** (registry is fully wired + importable)
+> This file imports `.jsx` components, so it is **JSX** and must NOT be imported by any
+> `.test.mjs` (`node --test` can't transform JSX). There is no render-test harness, so
+> "every kind is registered + renders" is verified in the dev server (Phase 5), not by a unit
+> test. `scenes.test.mjs` only ever imports the pure modules (`registry.js`, `geometry.js`,
+> `scrub.js`, `voiceJobs.js`).
 
-```js
-import { SCENE_RENDERERS } from './registry.js';
-test('every advertised 2d kind has a renderer registered', () => {
-  const kinds = ['fact', 'body', 'orbit', 'field', 'launch', 'compare', 'scrub', 'reveal'];
-  for (const k of kinds) assert.equal(typeof SCENE_RENDERERS['2d'][k], 'function', `missing ${k}`);
-});
-```
+- [ ] **Step 1: Implement** `renderers.jsx` — import the components and build `SCENE_RENDERERS['2d']`.
 
-- [ ] **Step 2: Run, verify fail** (renderers not yet imported into the map).
-
-- [ ] **Step 3: Implement** — import the components and fill `SCENE_RENDERERS['2d']`.
-
-```js
+```jsx
 import Fact2D from './2d/Fact2D.jsx';
 import Body2D from './2d/Body2D.jsx';
 import Orbit2D from './2d/Orbit2D.jsx';
@@ -394,13 +397,15 @@ import Compare2D from './2d/Compare2D.jsx';
 import Scrub2D from './2d/Scrub2D.jsx';
 import Reveal2D from './2d/Reveal2D.jsx';
 
+// SCENE_RENDERERS[mode][kind] → component. 3D renderers register their own mode key later.
 export const SCENE_RENDERERS = {
   '2d': { fact: Fact2D, body: Body2D, orbit: Orbit2D, field: Field2D, launch: Launch2D, compare: Compare2D, scrub: Scrub2D, reveal: Reveal2D },
 };
 ```
 
-> Note: `scenes.test.mjs` now imports `.jsx` through `registry.js`. `node --test` cannot parse JSX. **Therefore split the import-dependent assertion out:** keep `resolveRenderer`/geometry/scrub/voiceJobs tests in `scenes.test.mjs` (pure JS), and put the "every kind registered" check in a manual verification instead (the dev server failing to render a kind surfaces it). **Replace Step 1–2 of this task** with: verify in the dev server (Phase 5) that each kind renders. (Keep `SCENE_RENDERERS` export as written.)
-
+- [ ] **Step 2: Sanity-check the wiring without JSX** — confirm `resolveRenderer` finds each
+  kind, by reading the file (no test). The real proof is Phase 5's dev-server walkthrough.
+- [ ] **Step 3: Run pure tests** `cd packages/space && node --test` → still green (no JSX leaked into `.test.mjs`).
 - [ ] **Step 4: Commit** (`feat(space): register all 2d scene renderers`).
 
 ---
@@ -576,26 +581,51 @@ export function buildVoiceJobs(course) {
 
 **Files:** Create `packages/space/scripts/gen-voice.mjs`; Modify root `package.json`
 
-- [ ] **Step 1: Implement** by adapting `platform/apps/english-quest/scripts/gen-voice.mjs`:
+> **PATH REALITY (important):** the `platform/` repo is **NOT inside this worktree** — it
+> lives at the absolute path `/Users/pavel/dev/discoveryquest/platform` (a sibling of the
+> discovery-quest checkout). The reference script and the API key are both over there. The
+> user's memory note records this gotcha ("gen-voice .env gotcha — run from main checkout").
+> So this script cannot use `../../../platform/...` relative paths.
+
+- [ ] **Step 1: Read the reference** for structure (ElevenLabs calls, voice pick, manifest/
+  stale logic): `/Users/pavel/dev/discoveryquest/platform/apps/english-quest/scripts/gen-voice.mjs`.
+- [ ] **Step 2: Implement** `packages/space/scripts/gen-voice.mjs`:
   - Read `packages/space/space.course.yml`, `yaml.load`, take `.course`.
-  - `import { buildVoiceJobs } from '../src/scenes/voiceJobs.js'` and use it for the job list (dedupe via a `Set` on key just in case).
-  - Source `ELEVENLABS_API_KEY` from `../../../platform/apps/math-quest/.env` (the established single source; do not print it). **If the file/key is absent, exit with a clear message** ("ELEVENLABS_API_KEY not found — see spec dubbing section").
-  - Pick voice **Jessica**; write to `examples/space-preview/public/voice/jessica/<key>.mp3` + `manifest.json` (bake each job's text; skip unchanged unless `--force`; regenerate when baked text differs — the same stale logic as the reference script).
+  - `import { buildVoiceJobs } from '../src/scenes/voiceJobs.js'`; dedupe by key with a `Set`.
+  - **Key resolution, in order:** (1) `process.env.ELEVENLABS_API_KEY` if set; else (2) parse
+    it from the env file at the **absolute** path
+    `/Users/pavel/dev/discoveryquest/platform/apps/math-quest/.env` (the established single
+    source on this machine; never print it). If neither yields a key, exit non-zero with:
+    `"ELEVENLABS_API_KEY not found — set it in the environment or at platform/apps/math-quest/.env (see spec › Dubbing)"`.
+  - Pick voice **Jessica**; write to `examples/space-preview/public/voice/jessica/<key>.mp3`
+    + `manifest.json` (bake each job's text; skip unchanged unless `--force`; regenerate when
+    baked text differs — same stale logic as the reference).
   - Use `output_format=mp3_44100_64`, teaching-slow params consistent with the reference.
-- [ ] **Step 2: Add** root script: `"voice:space": "node packages/space/scripts/gen-voice.mjs"`.
-- [ ] **Step 3: Commit** (`feat(space): gen-voice.mjs (Jessica) from course narration`).
+- [ ] **Step 3: Add** root script: `"voice:space": "node packages/space/scripts/gen-voice.mjs"`.
+- [ ] **Step 4: Commit** (`feat(space): gen-voice.mjs (Jessica) from course narration`).
 
 ### Task 22: Generate clips + verify audio
 
 - [ ] **Step 1: Generate** — Run: `npm run voice:space` → creates `examples/space-preview/public/voice/jessica/*.mp3` + `manifest.json`. Confirm clip count ≈ number of narration keys.
 - [ ] **Step 2: Verify on phone** — restart `npm run preview:space`; walk a Backyard Sky station: Jessica now narrates each beat in sync, and the explore beat speaks per state/hotspot.
-- [ ] **Step 3: Commit** the generated clips + manifest (`feat(space): generate Jessica voice clips for Backyard Sky`). *(Confirm clips aren't gitignored; the `**/shots` style ignores exist — check `.gitignore` doesn't drop `public/voice`.)*
+- [ ] **Step 3: Do NOT commit the clips.** `.gitignore` line 7 is `**/public/voice/`, so the
+  generated MP3s + `manifest.json` are intentionally ignored (same pattern as every platform
+  app — voice is generated per-environment, not version-controlled). A `git add` of them is a
+  silent no-op. They live on disk for dev/phone testing and `course:check`; distribution to
+  the deployed app is the platform-mirror follow-up. **No commit this step.** (If you ever do
+  want them tracked, that's an explicit `git add -f` decision — out of scope here.)
 
 ### Task 23: Activate course-check
 
-- [ ] **Step 1: Run** — `npm run course:check` (or the space-scoped equivalent). The audio invariant (every narration line has a matching clip) is now satisfiable for the lines you generated. Fix any caption≠narration or missing-clip errors it reports.
-- [ ] **Step 2:** `npm run validate` → green. `cd packages/space && node --test` → green.
-- [ ] **Step 3: Commit** any fixes.
+- [ ] **Step 1: Add** a root `package.json` script for reproducibility:
+  `"course:check:space": "node scripts/course-check.mjs packages/space/space.course.yml --app packages/space --voice examples/space-preview"`
+  (`--app` = where the schema/capabilities live; `--voice` = the app dir whose `public/voice`
+  holds the generated clips — confirmed CLI: `course-check <course.yml> [--app <dir>] [--voice <dir>]`).
+- [ ] **Step 2: Run** — `npm run course:check:space`. The audio invariant (every narration
+  line has a matching clip whose baked text still matches) is now satisfiable for the lines
+  you generated. Fix any `caption≠narration[say]` or missing-clip errors it reports.
+- [ ] **Step 3:** `npm run validate` → green. `cd packages/space && node --test` → green.
+- [ ] **Step 4: Commit** the new script + any YAML fixes (clips stay uncommitted per Task 22).
 
 ---
 
@@ -603,15 +633,15 @@ export function buildVoiceJobs(course) {
 
 ### Task 24: Cosmic Neighborhood (5 stations)
 
-- [ ] Rewrite `inner-outer`, `gas-giants`, `moons-rings`, `asteroids-comets`, `whole-system` to the 6-beat pattern using the scene vocabulary (`compare` for sizes, `field`/`reveal` for the system, `body` with rings for Saturn, etc.); extend `narration:`. Commit. Then `npm run voice:space` (incremental), verify a station on phone, `course:check`. Commit clips.
+- [ ] Rewrite `inner-outer`, `gas-giants`, `moons-rings`, `asteroids-comets`, `whole-system` to the 6-beat pattern using the scene vocabulary (`compare` for sizes, `field`/`reveal` for the system, `body` with rings for Saturn, etc.); extend `narration:`. Commit the YAML. Then `npm run voice:space` (incremental — only new keys generate), verify a station on phone, `npm run course:check:space`. Clips stay uncommitted (Task 22).
 
 ### Task 25: Deep Space (5 stations)
 
-- [ ] Rewrite `constellations`, `star-life` (`scrub` lifecycle), `nebulae` (`field` tint nebula), `galaxies` (`field` spiral), `black-holes` (`body` + accretion). Extend narration, gen-voice, verify, check, commit.
+- [ ] Rewrite `constellations`, `star-life` (`scrub` lifecycle), `nebulae` (`field` tint nebula), `galaxies` (`field` spiral), `black-holes` (`body` + accretion). Extend narration, commit YAML, `npm run voice:space`, verify on phone, `npm run course:check:space` (clips uncommitted).
 
 ### Task 26: The Human Element (5 stations)
 
-- [ ] Rewrite `life-in-orbit`, `getting-there` (`launch`), `satellites` (`orbit`), `spacewalks`, `mars-base` (`body`/`reveal`). Extend narration, gen-voice, verify, check, commit.
+- [ ] Rewrite `life-in-orbit`, `getting-there` (`launch`), `satellites` (`orbit`), `spacewalks`, `mars-base` (`body`/`reveal`). Extend narration, commit YAML, `npm run voice:space`, verify on phone, `npm run course:check:space` (clips uncommitted).
 
 ---
 
@@ -620,7 +650,7 @@ export function buildVoiceJobs(course) {
 ### Task 27: Full sweep
 
 - [ ] **Step 1:** `npm run voice:space` (ensure all clips current) — no unexpected regenerations.
-- [ ] **Step 2:** `npm run validate` → all green; `npm run course:check` → green (audio invariant passes for all narration); `cd packages/space && node --test` → green.
+- [ ] **Step 2:** `npm run validate` → all green; `npm run course:check:space` → green (audio invariant passes for all narration); `cd packages/space && node --test` → green.
 - [ ] **Step 3: Manual phone walkthrough** of one station per world: cinematic animation, Jessica narration in sync, captions correct, interactive explore responds + speaks, reduced-motion still readable (toggle OS reduce-motion and re-check one station).
 - [ ] **Step 4: Commit** anything outstanding.
 - [ ] **Step 5: Follow-ups** (record in the spec's Follow-ups / a memory, do NOT do here): mirror `jessica/*.mp3` + YAML into the deployed `platform` repo; wire space into `gen-capabilities`; implement `3d` renderers under `src/scene` and flip `SCENE_MODE` per-kind; reconcile with `space-3d-fugu`.
@@ -631,6 +661,6 @@ export function buildVoiceJobs(course) {
 
 - Package logic tests: `cd packages/space && node --test`
 - Schema regenerate / check: `npm run course:schema` / `npm run validate`
-- Course integrity (incl. audio invariant): `npm run course:check`
+- Course integrity (incl. audio invariant): `npm run course:check:space` (added in Task 23)
 - Voice generation: `npm run voice:space` (`-- --force` to re-roll all)
 - Dev server (LAN for phone): `npm run preview:space`
