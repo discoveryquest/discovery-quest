@@ -2,14 +2,15 @@
 // Tapping a hotspot adds it to a revealed Set, shows label+caption, and calls speak().
 // Hotspots positioned by x/y percentages or auto-laid-out in a row.
 import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { speak } from '@discoveryquest/voice-kit/audio';
 import { SpaceStage } from './base.jsx';
-// Static import is SAFE despite the Scene → renderers.jsx → Reveal2D cycle: Scene is only
-// referenced at RENDER time (not module-eval time), so ES live bindings are resolved by then.
-import Scene from '../Scene.jsx';
+// SceneContent renders the base BARE (no nested SpaceStage) so the outer stage is the only
+// backdrop. Static import is safe: it's referenced at render time, not module-eval time.
+import SceneContent from '../SceneContent.jsx';
 
 export default function Reveal2D({ base, hotspots = [] }) {
+  const reduce = useReducedMotion();
   const [revealed, setRevealed] = useState(new Set());
   const [active, setActive] = useState(null);
 
@@ -23,14 +24,19 @@ export default function Reveal2D({ base, hotspots = [] }) {
   );
 
   const hasPositions = hotspots.some((h) => h.x != null || h.y != null);
+  // Reduced motion: skip hover/tap scale springs (interaction still works).
+  const hover = reduce ? undefined : { scale: 1.15 };
+  const tapAnim = reduce ? undefined : { scale: 0.9 };
+  const hoverBtn = reduce ? undefined : { scale: 1.07 };
+  const tapBtn = reduce ? undefined : { scale: 0.93 };
 
   return (
     <SpaceStage>
       <div className="relative h-full w-full">
-        {/* Base scene */}
+        {/* Base scene (bare — shares the outer stage) */}
         {base && (
           <div className="absolute inset-0">
-            <Scene descriptor={base} />
+            <SceneContent descriptor={base} />
           </div>
         )}
 
@@ -68,8 +74,8 @@ export default function Reveal2D({ base, hotspots = [] }) {
                         ? 'rgba(34,211,238,0.12)'
                         : 'rgba(14,16,20,0.7)',
                   }}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={hover}
+                  whileTap={tapAnim}
                   animate={isRevealed ? { boxShadow: '0 0 12px 3px rgba(34,211,238,0.45)' } : {}}
                 >
                   <span className="text-xs font-extrabold text-cyan-300">
@@ -108,8 +114,8 @@ export default function Reveal2D({ base, hotspots = [] }) {
                       ? 'rgba(34,211,238,0.18)'
                       : 'rgba(14,16,20,0.75)',
                   }}
-                  whileHover={{ scale: 1.07 }}
-                  whileTap={{ scale: 0.93 }}
+                  whileHover={hoverBtn}
+                  whileTap={tapBtn}
                 >
                   {isRevealed ? '✓ ' : ''}{h.label}
                 </motion.button>
@@ -123,9 +129,10 @@ export default function Reveal2D({ base, hotspots = [] }) {
           {active?.caption && (
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, y: 8 }}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
+              exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+              transition={reduce ? { duration: 0 } : undefined}
               className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 max-w-[320px] text-center"
             >
               <p
