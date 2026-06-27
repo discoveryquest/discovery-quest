@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = (p) => fileURLToPath(new URL(p, import.meta.url));
-const APPS = ['packages/math', 'packages/english'];
+const APPS = ['packages/math', 'packages/english', 'packages/space'];
 
 // catalog field type → JSON Schema fragment. Optional (non-required) fields also accept
 // `null`, because the exporter serializes "no value" as an explicit null (e.g. `active: null`

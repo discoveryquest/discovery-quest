@@ -10,3 +10,6 @@ dist
 
 # git worktrees (local, never committed)
 .worktrees/
+
+# scratch space (e.g. raw model outputs to vet before integrating)
+scratch/
