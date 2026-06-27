@@ -1,28 +1,17 @@
 // Reveal2D — INTERACTIVE tap-to-reveal hotspots over an optional base scene.
 // Tapping a hotspot adds it to a revealed Set, shows label+caption, and calls speak().
 // Hotspots positioned by x/y percentages or auto-laid-out in a row.
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { speak } from '@discoveryquest/voice-kit/audio';
 import { SpaceStage } from './base.jsx';
-
-let _Scene = null;
-async function getScene() {
-  if (!_Scene) {
-    const mod = await import('../Scene.jsx');
-    _Scene = mod.default;
-  }
-  return _Scene;
-}
+// Static import is SAFE despite the Scene → renderers.jsx → Reveal2D cycle: Scene is only
+// referenced at RENDER time (not module-eval time), so ES live bindings are resolved by then.
+import Scene from '../Scene.jsx';
 
 export default function Reveal2D({ base, hotspots = [] }) {
   const [revealed, setRevealed] = useState(new Set());
   const [active, setActive] = useState(null);
-  const [SceneComp, setSceneComp] = useState(null);
-
-  useEffect(() => {
-    if (base) getScene().then(setSceneComp);
-  }, [base]);
 
   const tap = useCallback(
     (h) => {
@@ -39,9 +28,9 @@ export default function Reveal2D({ base, hotspots = [] }) {
     <SpaceStage>
       <div className="relative h-full w-full">
         {/* Base scene */}
-        {SceneComp && base && (
+        {base && (
           <div className="absolute inset-0">
-            <SceneComp descriptor={base} />
+            <Scene descriptor={base} />
           </div>
         )}
 

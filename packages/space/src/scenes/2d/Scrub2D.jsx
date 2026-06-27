@@ -1,35 +1,17 @@
 // Scrub2D — INTERACTIVE scrubber through ordered scene states.
 // A range input drives a current index; when the index changes, speak() is called.
 // If `base` descriptor is provided, renders a Scene beneath the state label.
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { speak } from '@discoveryquest/voice-kit/audio';
 import { clampIndex } from '../scrub.js';
 import { SpaceStage } from './base.jsx';
-
-// Lazy import of Scene via dynamic-style ref to avoid circular at module eval time.
-// Scene → renderers.jsx → Scrub2D, so we accept SceneComponent as optional prop.
-// When Scrub2D is used standalone (without a base), no Scene is needed.
-// When base is present, callers should ensure Scene is mounted; we lazy-require it.
-let _Scene = null;
-async function getScene() {
-  if (!_Scene) {
-    const mod = await import('../Scene.jsx');
-    _Scene = mod.default;
-  }
-  return _Scene;
-}
+// Static import is SAFE despite the Scene → renderers.jsx → Scrub2D cycle: Scene is only
+// referenced at RENDER time (not module-eval time), so ES live bindings are resolved by then.
+import Scene from '../Scene.jsx';
 
 export default function Scrub2D({ base, states = [] }) {
   const [index, setIndex] = useState(0);
-  const [SceneComp, setSceneComp] = useState(null);
   const prevIndex = useRef(-1);
-
-  // Load Scene lazily when base is provided
-  useEffect(() => {
-    if (base) {
-      getScene().then(setSceneComp);
-    }
-  }, [base]);
 
   // Speak when index changes (not on mount — LessonScreen handles initial narration)
   const handleChange = useCallback(
@@ -63,9 +45,9 @@ export default function Scrub2D({ base, states = [] }) {
     <SpaceStage>
       <div className="flex h-full w-full flex-col items-center justify-between py-3 px-4">
         {/* Base scene underneath */}
-        {SceneComp && enrichedBase ? (
+        {enrichedBase ? (
           <div className="w-full flex-1 min-h-0">
-            <SceneComp descriptor={enrichedBase} />
+            <Scene descriptor={enrichedBase} />
           </div>
         ) : (
           <div className="flex flex-1 items-center justify-center">
@@ -81,7 +63,7 @@ export default function Scrub2D({ base, states = [] }) {
         )}
 
         {/* State label (shown above scrubber when base is rendered) */}
-        {SceneComp && current?.label && (
+        {enrichedBase && current?.label && (
           <p className="text-sm font-bold text-cyan-300 text-center">{current.label}</p>
         )}
 
