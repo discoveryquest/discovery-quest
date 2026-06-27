@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "boards": [
     {
       "kind": "quiz",
@@ -16,11 +16,64 @@
   "views": [
     {
       "kind": "fact",
-      "description": "A Discovery Deck fact card: a big emoji and a short caption that Luna narrates.",
+      "description": "A Discovery Deck fact card: a big emoji and a short caption, on the cinematic space stage. Legacy/simple beats.",
       "fields": [
-        { "name": "key", "type": "string", "required": true, "example": "f0", "note": "unique id of the beat within the lesson" },
         { "name": "emoji", "type": "string", "required": true, "example": "🌙" },
         { "name": "text", "type": "string", "required": true, "example": "The Moon shines by reflecting the Sun." }
+      ]
+    },
+    {
+      "kind": "body",
+      "description": "One glowing gradient celestial body on the space stage. Style by role; options for rings, axis tilt, glow, and a moon phase fraction.",
+      "fields": [
+        { "name": "body", "type": "object", "required": true, "note": "{ role: star|planet|moon|blackhole, color?, rings?(bool|deg), tilt?(deg), glow?(bool), phase?(0..1 lit fraction for a moon) }", "example": { "role": "star", "glow": true } },
+        { "name": "label", "type": "string", "required": false, "note": "caption under the body", "example": "The Sun" }
+      ]
+    },
+    {
+      "kind": "orbit",
+      "description": "A central body with one or more bodies orbiting it on dashed paths; a phaseLit moon shows its lit fraction. The body with no `orbits` is the center.",
+      "fields": [
+        { "name": "bodies", "type": "object[]", "required": true, "note": "each { id, role, orbits?(id of body it circles), radius?, period?(seconds), phaseLit?(bool) }", "example": [ { "id": "earth", "role": "planet" }, { "id": "moon", "role": "moon", "orbits": "earth", "period": 6, "phaseLit": true } ] }
+      ]
+    },
+    {
+      "kind": "field",
+      "description": "A drifting, tintable particle cloud (stars / nebula / galaxy) over the space stage, with an optional label.",
+      "fields": [
+        { "name": "tint", "type": "enum", "required": false, "note": "backdrop tint, e.g. nebula | deep-space (default)", "example": "nebula" },
+        { "name": "density", "type": "enum", "required": false, "note": "low | medium (default) | high", "example": "medium" },
+        { "name": "label", "type": "string", "required": false, "example": "A Nebula" }
+      ]
+    },
+    {
+      "kind": "launch",
+      "description": "A rocket rising with an animated thrust plume and parallax star streaks.",
+      "fields": [
+        { "name": "payload", "type": "string", "required": false, "note": "optional emoji/label riding the rocket", "example": "🛰️" }
+      ]
+    },
+    {
+      "kind": "compare",
+      "description": "Two or more bodies side by side, scaled by relative size, to show scale; each with a size label.",
+      "fields": [
+        { "name": "items", "type": "object[]", "required": true, "note": "each { label, relSize(0..1 of the largest), color? }", "example": [ { "label": "Earth", "relSize": 0.22 }, { "label": "Jupiter", "relSize": 1 } ] }
+      ]
+    },
+    {
+      "kind": "scrub",
+      "description": "Interactive: the learner drags a handle through ordered states; each state shows a caption and speaks its line. Optional `base` scene rendered underneath (a `body` or `orbit` whose phase reflects the scrub position).",
+      "fields": [
+        { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. { kind: orbit, bodies: [...] }) the interaction renders on", "example": { "kind": "orbit", "bodies": [ { "id": "earth", "role": "planet" }, { "id": "moon", "role": "moon", "orbits": "earth", "phaseLit": true } ] } },
+        { "name": "states", "type": "object[]", "required": true, "note": "ordered { id, label, say, caption }; each `say` must exist in narration", "example": [ { "id": "full", "label": "Full Moon", "say": "mp-x-full", "caption": "Full Moon — the whole lit side faces Earth." } ] }
+      ]
+    },
+    {
+      "kind": "reveal",
+      "description": "Interactive: tappable hotspots on a scene; tapping reveals a label and speaks its fact. Optional `base` scene underneath.",
+      "fields": [
+        { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. { kind: field, tint: nebula }) the hotspots sit on" },
+        { "name": "hotspots", "type": "object[]", "required": true, "note": "each { id, label, say, caption, x?, y?(percent positions) }; each `say` must exist in narration", "example": [ { "id": "jupiter", "label": "Jupiter", "say": "io-x-jupiter", "caption": "Jupiter — the largest planet.", "x": 68, "y": 40 } ] }
       ]
     }
   ],

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://discoveryquest.app/schema/space/course.schema.json",
   "title": "Discovery Quest course — space",
-  "$comment": "GENERATED from engine.capabilities.json v1 by gen-schema.mjs. Do not edit by hand.",
+  "$comment": "GENERATED from engine.capabilities.json v2 by gen-schema.mjs. Do not edit by hand.",
   "type": "object",
   "required": [
     "course"
@@ -277,7 +277,14 @@
       "properties": {
         "kind": {
           "enum": [
-            "fact"
+            "fact",
+            "body",
+            "orbit",
+            "field",
+            "launch",
+            "compare",
+            "scrub",
+            "reveal"
           ]
         }
       },
@@ -299,8 +306,10 @@
                 "const": "fact"
               },
               "key": {
-                "type": "string",
-                "description": "unique id of the beat within the lesson"
+                "type": [
+                  "string",
+                  "number"
+                ]
               },
               "emoji": {
                 "type": "string"
@@ -311,9 +320,296 @@
             },
             "required": [
               "kind",
-              "key",
               "emoji",
               "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "body"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "body"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "body": {
+                "type": "object",
+                "description": "{ role: star|planet|moon|blackhole, color?, rings?(bool|deg), tilt?(deg), glow?(bool), phase?(0..1 lit fraction for a moon) }"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "caption under the body"
+              }
+            },
+            "required": [
+              "kind",
+              "body"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "orbit"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "orbit"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "bodies": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "each { id, role, orbits?(id of body it circles), radius?, period?(seconds), phaseLit?(bool) }"
+              }
+            },
+            "required": [
+              "kind",
+              "bodies"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "field"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "field"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "tint": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "backdrop tint, e.g. nebula | deep-space (default)"
+              },
+              "density": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "low | medium (default) | high"
+              },
+              "label": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "launch"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "launch"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "payload": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "optional emoji/label riding the rocket"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "compare"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "compare"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "each { label, relSize(0..1 of the largest), color? }"
+              }
+            },
+            "required": [
+              "kind",
+              "items"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "scrub"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "scrub"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "base": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "an underlying scene descriptor (e.g. { kind: orbit, bodies: [...] }) the interaction renders on"
+              },
+              "states": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "ordered { id, label, say, caption }; each `say` must exist in narration"
+              }
+            },
+            "required": [
+              "kind",
+              "states"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "reveal"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "reveal"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "base": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "an underlying scene descriptor (e.g. { kind: field, tint: nebula }) the hotspots sit on"
+              },
+              "hotspots": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "each { id, label, say, caption, x?, y?(percent positions) }; each `say` must exist in narration"
+              }
+            },
+            "required": [
+              "kind",
+              "hotspots"
             ],
             "additionalProperties": false
           }
