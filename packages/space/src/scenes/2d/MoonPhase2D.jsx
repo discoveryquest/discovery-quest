@@ -22,7 +22,7 @@
 //   f = (1-cos θ)/2 guards the all-dark and full-disc special cases.
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useReducedMotion } from 'framer-motion';
-import { speak } from '@discoveryquest/voice-kit/audio';
+import { speak, isSpeaking, currentClipDuration } from '@discoveryquest/voice-kit/audio';
 import { SpaceStage } from './base.jsx';
 
 // ── Stage / layout constants ──────────────────────────────────────────────────
@@ -369,14 +369,27 @@ function DiagramContent({ interactive = false, says = {} }) {
 
 // ── Strip variant ─────────────────────────────────────────────────────────────
 // Two rows of 4 from-Earth discs with labels; a highlight ring advances
-// left→right (row-major) to convey the ~29-day cycle. ~1 s per phase.
+// left→right (row-major) to convey the ~29-day cycle.
+//   • No `says`  → silent auto-cycle, ~1 s per phase (e.g. the gallery sample).
+//   • With `says` → a ONE-TIME, AUDIO-PACED narrated tour: wait for the beat's
+//     intro line to finish, then for each phase speak its key and advance only
+//     when that clip ends, resting on the final phase (no loop).
 const STRIP_W = 430;
 const STRIP_H = 230;
 const STRIP_COLS = 4;
 const STRIP_DISC_R = 22;
 const STRIP_CELL_W = STRIP_W / STRIP_COLS; // 107.5
 const STRIP_ROW_CY = [70, 158]; // disc centres for the two rows
-const STRIP_STEP_MS = 1000;
+const STRIP_STEP_MS = 1000; // silent auto-cycle cadence
+
+// Audio-paced tour timing (mirrors LessonScreen's clip-end detection):
+//   advance once narration stops (isSpeaking() false) after a MIN floor, with a
+//   duration-based fallback (currentClipDuration) and a hard cap so it never hangs
+//   when audio can't play.
+const TOUR_MIN_MS = 700; // each phase lingers at least this long
+const TOUR_DUR_PAD_MS = 500; // breath after a clip's known duration
+const TOUR_HARD_MAX_MS = 6000; // safety cap per phase if 'ended' never fires
+const TOUR_POLL_MS = 120;
 
 function stripCell(index) {
   const col = index % STRIP_COLS;
@@ -387,18 +400,80 @@ function stripCell(index) {
   };
 }
 
-function StripContent() {
+function StripContent({ says }) {
   const reduce = useReducedMotion();
-  const [active, setActive] = useState(reduce ? -1 : 0);
-  const timerRef = useRef(null);
+  const tour = says && typeof says === 'object';
+  const [active, setActive] = useState(reduce && !tour ? -1 : 0);
 
+  // ── Silent auto-cycle (no narration keys) ─────────────────────────────────
   useEffect(() => {
-    if (reduce) return;
-    timerRef.current = setInterval(() => {
-      setActive((i) => (i + 1) % PHASES.length);
-    }, STRIP_STEP_MS);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [reduce]);
+    if (tour || reduce) return;
+    const id = setInterval(() => setActive((i) => (i + 1) % PHASES.length), STRIP_STEP_MS);
+    return () => clearInterval(id);
+  }, [tour, reduce]);
+
+  // ── Audio-paced narrated tour ─────────────────────────────────────────────
+  useEffect(() => {
+    if (!tour) return;
+    let cancelled = false;
+    let timer = null;
+
+    // Resolve once the current clip has ended (mirrors LessonScreen): after a MIN
+    // floor, advance when !isSpeaking(); fall back to the clip's known duration,
+    // and a hard cap so a missing audio device can't stall the tour.
+    const waitForClipEnd = () =>
+      new Promise((resolve) => {
+        const startedAt = Date.now();
+        const poll = () => {
+          if (cancelled) return resolve();
+          const el = Date.now() - startedAt;
+          const durMs = (currentClipDuration() || 0) * 1000;
+          const byDuration = durMs > 0 && el >= durMs + TOUR_DUR_PAD_MS;
+          const ready = el > TOUR_MIN_MS && (!isSpeaking() || byDuration);
+          if (ready || el > TOUR_HARD_MAX_MS) return resolve();
+          timer = setTimeout(poll, TOUR_POLL_MS);
+        };
+        timer = setTimeout(poll, TOUR_POLL_MS);
+      });
+
+    // Wait for whatever is currently speaking (the beat's intro line) to finish.
+    const waitForQuiet = () =>
+      new Promise((resolve) => {
+        const startedAt = Date.now();
+        const poll = () => {
+          if (cancelled) return resolve();
+          // give the intro a hard cap too, so we never wait forever
+          if (!isSpeaking() || Date.now() - startedAt > TOUR_HARD_MAX_MS) return resolve();
+          timer = setTimeout(poll, TOUR_POLL_MS);
+        };
+        timer = setTimeout(poll, TOUR_POLL_MS);
+      });
+
+    (async () => {
+      await waitForQuiet();
+      for (let i = 0; i < PHASES.length; i++) {
+        if (cancelled) return;
+        setActive(i);
+        const key = says[PHASES[i].id];
+        if (key) {
+          speak(key, { important: true });
+          await waitForClipEnd();
+        } else {
+          // No narration for this phase — give it a brief beat, then move on.
+          await new Promise((r) => { timer = setTimeout(r, TOUR_MIN_MS); });
+        }
+      }
+      // rest on the final phase (no loop)
+    })();
+
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [tour, says]);
+
+  // Scale-pulse only when motion is allowed; the ring highlight always shows.
+  const pulse = !reduce;
 
   return (
     <div className="relative h-full w-full">
@@ -414,7 +489,7 @@ function StripContent() {
         {PHASES.map((p, i) => {
           const { cx, cy } = stripCell(i);
           const isActive = i === active;
-          const scale = isActive ? 1.16 : 1;
+          const scale = isActive && pulse ? 1.16 : 1;
           const labelY = cy + STRIP_DISC_R + 13;
           const words = p.name.split(' ');
           return (
@@ -459,7 +534,7 @@ function StripContent() {
 
 // ── Public components ──────────────────────────────────────────────────────────
 export function MoonPhase2DContent({ variant = 'diagram', ...props }) {
-  return variant === 'strip' ? <StripContent /> : <DiagramContent {...props} />;
+  return variant === 'strip' ? <StripContent says={props.says} /> : <DiagramContent {...props} />;
 }
 
 export default function MoonPhase2D(props) {
