@@ -86,7 +86,7 @@ course:
         - id: cycle
           label: The cycle
           beats:
-            - { say: mp-4, caption: "The phases cycle about every 29 days — from new moon to full moon and back.", view: { kind: moonPhase, key: mp4, variant: strip } }
+            - { say: mp-4, caption: "The phases cycle about every 29 days — from new moon to full moon and back.", advance: hold, view: { kind: moonPhase, key: mp4, variant: strip, says: { new: mp-x-new, waxingCrescent: mp-x-waxing-crescent, first: mp-x-first, waxingGibbous: mp-x-waxing-gibbous, full: mp-x-full, waningGibbous: mp-x-waning-gibbous, last: mp-x-last, waningCrescent: mp-x-waning-crescent } } }
         - id: explore
           label: Explore
           beats:
