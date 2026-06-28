@@ -400,19 +400,25 @@ function stripCell(index) {
   };
 }
 
-function StripContent({ says }) {
+function StripContent({ says, active: controlledActive }) {
   const reduce = useReducedMotion();
-  const tour = says && typeof says === 'object';
-  const [active, setActive] = useState(reduce && !tour ? -1 : 0);
+  // Precedence: a numeric `active` prop puts the strip in CONTROLLED mode — the
+  // lesson engine drives one static highlight per beat (and speaks/advances
+  // itself), so we ignore `says`, the narrated tour, and the auto-cycle.
+  const controlled = controlledActive != null;
+  const tour = !controlled && says && typeof says === 'object';
+  const [internalActive, setInternalActive] = useState(reduce && !tour ? -1 : 0);
+  const setActive = setInternalActive;
+  const active = controlled ? controlledActive : internalActive;
 
-  // ── Silent auto-cycle (no narration keys) ─────────────────────────────────
+  // ── Silent auto-cycle (no narration keys, uncontrolled) ───────────────────
   useEffect(() => {
-    if (tour || reduce) return;
+    if (controlled || tour || reduce) return;
     const id = setInterval(() => setActive((i) => (i + 1) % PHASES.length), STRIP_STEP_MS);
     return () => clearInterval(id);
-  }, [tour, reduce]);
+  }, [controlled, tour, reduce]);
 
-  // ── Audio-paced narrated tour ─────────────────────────────────────────────
+  // ── Audio-paced narrated tour (uncontrolled) ──────────────────────────────
   useEffect(() => {
     if (!tour) return;
     let cancelled = false;
@@ -534,7 +540,11 @@ function StripContent({ says }) {
 
 // ── Public components ──────────────────────────────────────────────────────────
 export function MoonPhase2DContent({ variant = 'diagram', ...props }) {
-  return variant === 'strip' ? <StripContent says={props.says} /> : <DiagramContent {...props} />;
+  return variant === 'strip' ? (
+    <StripContent says={props.says} active={props.active} />
+  ) : (
+    <DiagramContent {...props} />
+  );
 }
 
 export default function MoonPhase2D(props) {

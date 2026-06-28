@@ -644,6 +644,13 @@
                 ],
                 "description": "diagram (default) | strip"
               },
+              "active": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "strip variant only: index 0..7 of the phase to statically highlight (lesson engine drives one per beat); -1 = all phases shown with no highlight. When set it overrides the auto-cycle and narrated tour and ignores `says`."
+              },
               "interactive": {
                 "type": [
                   "boolean",
@@ -656,7 +663,7 @@
                   "object",
                   "null"
                 ],
-                "description": "{ new, waxingCrescent, first, waxingGibbous, full, waningGibbous, last, waningCrescent } narration keys spoken aloud when the slider enters each named phase (only used when interactive=true)"
+                "description": "{ new, waxingCrescent, first, waxingGibbous, full, waningGibbous, last, waningCrescent } narration keys; in diagram+interactive they're spoken when the slider enters each named phase, in strip (without `active`) they drive the audio-paced narrated tour"
               }
             },
             "required": [

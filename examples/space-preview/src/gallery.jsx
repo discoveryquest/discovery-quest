@@ -23,6 +23,7 @@ const SAMPLES = [
   ['moonPhase · auto', { kind: 'moonPhase', interactive: false }],
   ['moonPhase · interactive', { kind: 'moonPhase', interactive: true, says: { new: 'x', first: 'x', full: 'x', last: 'x' } }],
   ['moonPhase · strip', { kind: 'moonPhase', variant: 'strip' }],
+  ['moonPhase · strip active', { kind: 'moonPhase', variant: 'strip', active: 3 }],
 ];
 
 class Boundary extends React.Component {
