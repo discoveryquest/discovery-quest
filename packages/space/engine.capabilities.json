@@ -78,10 +78,11 @@
     },
     {
       "kind": "moonPhase",
-      "description": "A physically-meaningful top-down moon-phase diagram: Sun (left) emits parallel light rays, Earth at centre, Moon orbits with its sun-facing hemisphere always lit. An inset disc shows the phase as seen from Earth, updating continuously. Two modes: auto-orbit (default) or slider-driven exploration.",
+      "description": "A physically-meaningful top-down moon-phase diagram: Sun (left) emits parallel light rays, Earth at centre, Moon orbits with its sun-facing hemisphere always lit. An inset disc shows the phase as seen from Earth, updating continuously. variant=diagram has two modes (auto-orbit default, or slider-driven exploration); variant=strip shows all 8 from-Earth phases in a row with a highlight advancing along the cycle.",
       "fields": [
-        { "name": "interactive", "type": "bool", "required": false, "note": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases" },
-        { "name": "says", "type": "object", "required": false, "note": "{ new, first, full, last } narration keys spoken aloud when the slider crosses each cardinal phase (only used when interactive=true)" }
+        { "name": "variant", "type": "enum", "required": false, "note": "diagram (default) | strip" },
+        { "name": "interactive", "type": "bool", "required": false, "note": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases (diagram variant only)" },
+        { "name": "says", "type": "object", "required": false, "note": "{ new, waxingCrescent, first, waxingGibbous, full, waningGibbous, last, waningCrescent } narration keys spoken aloud when the slider enters each named phase (only used when interactive=true)" }
       ]
     }
   ],

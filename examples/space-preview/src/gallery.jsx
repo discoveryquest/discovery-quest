@@ -22,6 +22,7 @@ const SAMPLES = [
     { id: 'b', label: 'Jupiter', say: 'x', caption: 'The largest planet.', x: 68, y: 40 } ] }],
   ['moonPhase · auto', { kind: 'moonPhase', interactive: false }],
   ['moonPhase · interactive', { kind: 'moonPhase', interactive: true, says: { new: 'x', first: 'x', full: 'x', last: 'x' } }],
+  ['moonPhase · strip', { kind: 'moonPhase', variant: 'strip' }],
 ];
 
 class Boundary extends React.Component {

@@ -1,15 +1,18 @@
-// MoonPhase2D — top-down moon phase teaching diagram.
+// MoonPhase2D — top-down moon phase teaching diagram + phase-cycle strip.
 //
-// Layout: Sun (left, warm glow) → parallel light rays → Earth (centre) with Moon
-// orbiting on a circle. The Moon's LEFT hemisphere is ALWAYS lit (sun-facing),
-// showing the key insight: the Sun always lights half the Moon — only our viewing
-// angle from Earth changes. An inset disc (bottom-right) renders what Earth sees.
+// variant='diagram' (default): Sun (left, warm glow) → parallel light rays →
+//   Earth (centre) with Moon orbiting on a circle. The Moon's LEFT hemisphere is
+//   ALWAYS lit (sun-facing), showing the key insight: the Sun always lights half
+//   the Moon — only our viewing angle from Earth changes. An inset disc renders
+//   what Earth sees.
+// variant='strip': a row of all 8 from-Earth phase discs (two rows of 4) with a
+//   gentle highlight that advances left→right to convey the ~29-day cycle.
 //
-// Modes:
+// Modes (diagram):
 //   interactive=false (default) — Moon auto-orbits ~12 s/cycle via requestAnimationFrame.
 //     useReducedMotion → static first-quarter frame (θ=90°).
-//   interactive=true — slider drives θ continuously; cardinal phases are spoken via
-//     says = { new, first, full, last } narration keys.
+//   interactive=true — slider drives θ continuously; speaks says[phaseId] (8 named
+//     phases) when the named phase changes, via @discoveryquest/voice-kit/audio speak().
 //
 // Phase-disc geometry (SVG arcs):
 //   Waxing (0<θ<180): right-semicircle CW + terminator ellipse back to top.
@@ -54,6 +57,34 @@ const INSET_CY_INTERACTIVE = 148;
 // Subtle parallel light-ray y offsets from sun centre
 const RAY_DYS = [-64, -44, -26, -12, 0, 12, 26, 44, 64];
 
+// ── Phase model (single source of truth: id ↔ name ↔ representative θ) ─────────
+// Bands (deg): New [337.5,22.5) · WaxCrescent [22.5,67.5) · First [67.5,112.5) ·
+//   WaxGibbous [112.5,157.5) · Full [157.5,202.5) · WanGibbous [202.5,247.5) ·
+//   Last [247.5,292.5) · WanCrescent [292.5,337.5).
+const PHASES = [
+  { id: 'new', name: 'New Moon', theta: 0 },
+  { id: 'waxingCrescent', name: 'Waxing Crescent', theta: 45 },
+  { id: 'first', name: 'First Quarter', theta: 90 },
+  { id: 'waxingGibbous', name: 'Waxing Gibbous', theta: 135 },
+  { id: 'full', name: 'Full Moon', theta: 180 },
+  { id: 'waningGibbous', name: 'Waning Gibbous', theta: 225 },
+  { id: 'last', name: 'Last Quarter', theta: 270 },
+  { id: 'waningCrescent', name: 'Waning Crescent', theta: 315 },
+];
+
+/** Resolve an orbital angle to its named phase { id, name } (8 phases). */
+function getPhase(thetaDeg) {
+  const t = ((thetaDeg % 360) + 360) % 360;
+  if (t < 22.5 || t >= 337.5) return PHASES[0]; // new
+  if (t < 67.5) return PHASES[1]; // waxing crescent
+  if (t < 112.5) return PHASES[2]; // first quarter
+  if (t < 157.5) return PHASES[3]; // waxing gibbous
+  if (t < 202.5) return PHASES[4]; // full
+  if (t < 247.5) return PHASES[5]; // waning gibbous
+  if (t < 292.5) return PHASES[6]; // last quarter
+  return PHASES[7]; // waning crescent
+}
+
 // ── Math helpers ──────────────────────────────────────────────────────────────
 
 /** Moon position on the orbit circle.
@@ -73,28 +104,6 @@ function moonPos(thetaDeg) {
 /** Fraction of the Moon's disc lit as seen from Earth: f = (1 − cos θ) / 2 */
 function litFraction(thetaDeg) {
   return (1 - Math.cos((thetaDeg * Math.PI) / 180)) / 2;
-}
-
-/** Human-readable phase name from orbital angle (8 phases). */
-function getPhaseName(thetaDeg) {
-  const t = ((thetaDeg % 360) + 360) % 360;
-  if (t < 22.5 || t >= 337.5) return 'New Moon';
-  if (t < 67.5) return 'Waxing Crescent';
-  if (t < 112.5) return 'First Quarter';
-  if (t < 157.5) return 'Waxing Gibbous';
-  if (t < 202.5) return 'Full Moon';
-  if (t < 247.5) return 'Waning Gibbous';
-  if (t < 292.5) return 'Last Quarter';
-  return 'Waning Crescent';
-}
-
-/** Which cardinal quadrant the angle is in, for speech triggers. */
-function getCardinal(thetaDeg) {
-  const t = ((thetaDeg % 360) + 360) % 360;
-  if (t < 45 || t >= 315) return 'new';
-  if (t < 135) return 'first';
-  if (t < 225) return 'full';
-  return 'last';
 }
 
 /**
@@ -134,6 +143,77 @@ function litPath(thetaDeg, r, cx, cy) {
   }
 }
 
+// ── Shared SVG defs (gradients used across variants) ──────────────────────────
+function PhaseDefs() {
+  return (
+    <defs>
+      {/* Sun bloom */}
+      <radialGradient id="mp-sunglow" cx="50%" cy="50%">
+        <stop offset="0%" stopColor="rgba(255,215,60,0.42)" />
+        <stop offset="45%" stopColor="rgba(255,185,30,0.1)" />
+        <stop offset="100%" stopColor="rgba(255,160,0,0)" />
+      </radialGradient>
+      {/* Sun body */}
+      <radialGradient id="mp-sun" cx="38%" cy="35%">
+        <stop offset="0%" stopColor="#fff9e8" />
+        <stop offset="15%" stopColor="#ffe566" />
+        <stop offset="45%" stopColor="#ffaa18" />
+        <stop offset="78%" stopColor="#c45500" />
+        <stop offset="100%" stopColor="#5a1800" />
+      </radialGradient>
+      {/* Earth glow */}
+      <radialGradient id="mp-earthglow" cx="50%" cy="50%">
+        <stop offset="0%" stopColor="rgba(60,150,255,0.5)" />
+        <stop offset="100%" stopColor="rgba(60,150,255,0)" />
+      </radialGradient>
+      {/* Earth body — matches roles.js planet */}
+      <radialGradient id="mp-earth" cx="36%" cy="32%">
+        <stop offset="0%" stopColor="#c8e8ff" />
+        <stop offset="22%" stopColor="#4fa8e8" />
+        <stop offset="55%" stopColor="#1460b8" />
+        <stop offset="85%" stopColor="#052050" />
+        <stop offset="100%" stopColor="#020d1f" />
+      </radialGradient>
+      {/* Moon body in orbital view — left=lit (sun-facing), right=dark */}
+      <linearGradient id="mp-moon" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#e0ddd0" />
+        <stop offset="36%" stopColor="#b8b4a4" />
+        <stop offset="50%" stopColor="#787060" />
+        <stop offset="64%" stopColor="#201e16" />
+        <stop offset="100%" stopColor="#0c0b08" />
+      </linearGradient>
+      {/* Phase disc: lit region — warm silvery moonlight */}
+      <radialGradient id="mp-phase-lit" cx="40%" cy="38%">
+        <stop offset="0%" stopColor="#eee6d0" />
+        <stop offset="100%" stopColor="#b0a888" />
+      </radialGradient>
+      {/* Ambient sunlight wash (left warm → right transparent) */}
+      <linearGradient id="mp-lightwash" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="rgba(255,200,60,0.08)" />
+        <stop offset="18%" stopColor="rgba(255,185,40,0.03)" />
+        <stop offset="45%" stopColor="rgba(255,185,40,0)" />
+      </linearGradient>
+      {/* Phase disc outer glow */}
+      <radialGradient id="mp-inset-glow" cx="50%" cy="50%">
+        <stop offset="68%" stopColor="rgba(103,232,249,0)" />
+        <stop offset="100%" stopColor="rgba(103,232,249,0.28)" />
+      </radialGradient>
+    </defs>
+  );
+}
+
+/** A single from-Earth phase disc (dark circle + lit path + border). */
+function PhaseDisc({ theta, cx, cy, r }) {
+  const d = litPath(theta, r, cx, cy);
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={r} fill="#060810" />
+      {d && <path d={d} fill="url(#mp-phase-lit)" />}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(103,232,249,0.22)" strokeWidth={1} />
+    </g>
+  );
+}
+
 // ── Slider CSS (matches Scrub2D style) ───────────────────────────────────────
 const SLIDER_CSS = `
   .moon-range { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; }
@@ -145,15 +225,14 @@ const SLIDER_CSS = `
   .moon-range:focus-visible::-webkit-slider-thumb { outline: 2px solid #a5f3fc; outline-offset: 2px; }
 `;
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
-export function MoonPhase2DContent({ interactive = false, says = {} }) {
+// ── Diagram variant ───────────────────────────────────────────────────────────
+function DiagramContent({ interactive = false, says = {} }) {
   const reduce = useReducedMotion();
   // Reduced motion → static first-quarter frame (θ=90°, clear half-moon)
   const [theta, setTheta] = useState(reduce ? 90 : 0);
   const rafRef = useRef(null);
   const startRef = useRef(null);
-  const prevCardinal = useRef(null);
+  const prevPhaseId = useRef(null);
 
   // Auto-orbit: ~12 s per full cycle
   useEffect(() => {
@@ -167,26 +246,25 @@ export function MoonPhase2DContent({ interactive = false, says = {} }) {
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, [interactive, reduce]);
 
-  // Slider: continuous θ update + cardinal-phase speech on quadrant crossing
+  // Slider: continuous θ update + speak each NAMED phase on change (debounced by id)
   const handleSlider = useCallback((e) => {
     const newTheta = parseFloat(e.target.value) * 360;
     setTheta(newTheta);
-    const card = getCardinal(newTheta);
-    if (card !== prevCardinal.current) {
-      prevCardinal.current = card;
-      const key = says?.[card];
+    const { id } = getPhase(newTheta);
+    if (id !== prevPhaseId.current) {
+      prevPhaseId.current = id;
+      const key = says?.[id];
       if (key) speak(key, { important: true });
     }
   }, [says]);
 
   // Derived geometry
   const { x: moonX, y: moonY } = moonPos(theta);
-  const phase = getPhaseName(theta);
+  const phaseName = getPhase(theta).name;
   const SVGH = interactive ? SVGH_INTERACTIVE : SVGH_AUTO;
   const INSET_CY = interactive ? INSET_CY_INTERACTIVE : INSET_CY_AUTO;
   const INSET_LABEL_Y = INSET_CY - INSET_R - 7;
   const PHASE_LABEL_Y = INSET_CY + INSET_R + 14;
-  const litD = litPath(theta, INSET_R, INSET_CX, INSET_CY);
 
   return (
     <div className="relative h-full w-full flex flex-col">
@@ -195,71 +273,10 @@ export function MoonPhase2DContent({ interactive = false, says = {} }) {
         viewBox={`0 0 ${W} ${SVGH}`}
         style={{ display: 'block', width: '100%', flex: '1 1 auto', minHeight: 0 }}
         preserveAspectRatio="xMidYMid meet"
-        aria-label={`Moon phase diagram showing ${phase}`}
+        aria-label={`Moon phase diagram showing ${phaseName}`}
         role="img"
       >
-        <defs>
-          {/* Sun bloom */}
-          <radialGradient id="mp-sunglow" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="rgba(255,215,60,0.42)" />
-            <stop offset="45%" stopColor="rgba(255,185,30,0.1)" />
-            <stop offset="100%" stopColor="rgba(255,160,0,0)" />
-          </radialGradient>
-
-          {/* Sun body */}
-          <radialGradient id="mp-sun" cx="38%" cy="35%">
-            <stop offset="0%" stopColor="#fff9e8" />
-            <stop offset="15%" stopColor="#ffe566" />
-            <stop offset="45%" stopColor="#ffaa18" />
-            <stop offset="78%" stopColor="#c45500" />
-            <stop offset="100%" stopColor="#5a1800" />
-          </radialGradient>
-
-          {/* Earth glow */}
-          <radialGradient id="mp-earthglow" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="rgba(60,150,255,0.5)" />
-            <stop offset="100%" stopColor="rgba(60,150,255,0)" />
-          </radialGradient>
-
-          {/* Earth body — matches roles.js planet */}
-          <radialGradient id="mp-earth" cx="36%" cy="32%">
-            <stop offset="0%" stopColor="#c8e8ff" />
-            <stop offset="22%" stopColor="#4fa8e8" />
-            <stop offset="55%" stopColor="#1460b8" />
-            <stop offset="85%" stopColor="#052050" />
-            <stop offset="100%" stopColor="#020d1f" />
-          </radialGradient>
-
-          {/* Moon body in orbital view — left=lit (sun-facing), right=dark.
-              gradientUnits=objectBoundingBox means x1/x2 are relative to each
-              rendered circle's own bounding box, so the split is always local. */}
-          <linearGradient id="mp-moon" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#e0ddd0" />
-            <stop offset="36%" stopColor="#b8b4a4" />
-            <stop offset="50%" stopColor="#787060" />
-            <stop offset="64%" stopColor="#201e16" />
-            <stop offset="100%" stopColor="#0c0b08" />
-          </linearGradient>
-
-          {/* Phase inset: lit region — warm silvery moonlight */}
-          <radialGradient id="mp-phase-lit" cx="40%" cy="38%">
-            <stop offset="0%" stopColor="#eee6d0" />
-            <stop offset="100%" stopColor="#b0a888" />
-          </radialGradient>
-
-          {/* Ambient sunlight wash (left warm → right transparent) */}
-          <linearGradient id="mp-lightwash" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(255,200,60,0.08)" />
-            <stop offset="18%" stopColor="rgba(255,185,40,0.03)" />
-            <stop offset="45%" stopColor="rgba(255,185,40,0)" />
-          </linearGradient>
-
-          {/* Phase inset outer glow */}
-          <radialGradient id="mp-inset-glow" cx="50%" cy="50%">
-            <stop offset="68%" stopColor="rgba(103,232,249,0)" />
-            <stop offset="100%" stopColor="rgba(103,232,249,0.28)" />
-          </radialGradient>
-        </defs>
+        <PhaseDefs />
 
         {/* Ambient sun-light wash */}
         <rect x={0} y={0} width={W} height={SVGH} fill="url(#mp-lightwash)" />
@@ -276,105 +293,60 @@ export function MoonPhase2DContent({ interactive = false, says = {} }) {
           />
         ))}
 
-        {/* Sun bloom */}
+        {/* Sun bloom + body + label */}
         <circle cx={SUN_CX} cy={SUN_CY} r={100} fill="url(#mp-sunglow)" />
-        {/* Sun body */}
         <circle cx={SUN_CX} cy={SUN_CY} r={SUN_R} fill="url(#mp-sun)" />
-        {/* Sun label */}
         <text
-          x={SUN_CX + SUN_R + 5}
-          y={SUN_CY - SUN_R - 4}
-          fill="rgba(255,215,80,0.65)"
-          fontSize={7.5}
-          fontFamily="sans-serif"
-          fontWeight="bold"
-          letterSpacing=".12em"
+          x={SUN_CX + SUN_R + 5} y={SUN_CY - SUN_R - 4}
+          fill="rgba(255,215,80,0.65)" fontSize={7.5}
+          fontFamily="sans-serif" fontWeight="bold" letterSpacing=".12em"
         >SUN</text>
 
-        {/* "SUNLIGHT →" direction hint (between sun and orbit) */}
+        {/* "SUNLIGHT →" direction hint */}
         <text
-          x={92}
-          y={SUN_CY - 4}
-          fill="rgba(255,205,60,0.28)"
-          fontSize={7}
-          fontFamily="sans-serif"
-          letterSpacing=".08em"
+          x={92} y={SUN_CY - 4}
+          fill="rgba(255,205,60,0.28)" fontSize={7}
+          fontFamily="sans-serif" letterSpacing=".08em"
         >SUNLIGHT →</text>
 
-        {/* Orbit ring — dashed circle around Earth */}
+        {/* Orbit ring */}
         <circle
           cx={EARTH_CX} cy={EARTH_CY} r={ORBIT_R}
-          fill="none"
-          stroke="rgba(148,163,184,0.22)"
-          strokeWidth={1}
-          strokeDasharray="3 5"
+          fill="none" stroke="rgba(148,163,184,0.22)" strokeWidth={1} strokeDasharray="3 5"
         />
 
-        {/* Line of sight: Earth → Moon (dotted cyan) */}
+        {/* Line of sight: Earth → Moon */}
         <line
-          x1={EARTH_CX} y1={EARTH_CY}
-          x2={moonX} y2={moonY}
-          stroke="rgba(103,232,249,0.28)"
-          strokeWidth={1}
-          strokeDasharray="2 3"
+          x1={EARTH_CX} y1={EARTH_CY} x2={moonX} y2={moonY}
+          stroke="rgba(103,232,249,0.28)" strokeWidth={1} strokeDasharray="2 3"
         />
 
-        {/* Earth glow */}
+        {/* Earth glow + body + label */}
         <circle cx={EARTH_CX} cy={EARTH_CY} r={EARTH_R + 9} fill="url(#mp-earthglow)" />
-        {/* Earth body */}
         <circle cx={EARTH_CX} cy={EARTH_CY} r={EARTH_R} fill="url(#mp-earth)" />
-        {/* Earth label */}
         <text
-          x={EARTH_CX}
-          y={EARTH_CY + EARTH_R + 10}
-          textAnchor="middle"
-          fill="rgba(148,210,255,0.6)"
-          fontSize={7.5}
-          fontFamily="sans-serif"
-          fontWeight="bold"
-          letterSpacing=".09em"
+          x={EARTH_CX} y={EARTH_CY + EARTH_R + 10} textAnchor="middle"
+          fill="rgba(148,210,255,0.6)" fontSize={7.5}
+          fontFamily="sans-serif" fontWeight="bold" letterSpacing=".09em"
         >EARTH</text>
 
-        {/* Moon orbital disc — left half always lit (facing Sun), right half dark */}
+        {/* Moon orbital disc — left half always lit (facing Sun) */}
         <circle cx={moonX} cy={moonY} r={MOON_R + 4} fill="rgba(200,196,170,0.09)" />
         <circle cx={moonX} cy={moonY} r={MOON_R} fill="url(#mp-moon)" />
 
         {/* ── Phase inset ───────────────────────────────────────────────── */}
         <text
-          x={INSET_CX}
-          y={INSET_LABEL_Y}
-          textAnchor="middle"
-          fill="rgba(148,163,184,0.6)"
-          fontSize={7}
-          fontFamily="sans-serif"
-          letterSpacing=".09em"
+          x={INSET_CX} y={INSET_LABEL_Y} textAnchor="middle"
+          fill="rgba(148,163,184,0.6)" fontSize={7}
+          fontFamily="sans-serif" letterSpacing=".09em"
         >FROM EARTH:</text>
-
-        {/* Outer glow ring */}
         <circle cx={INSET_CX} cy={INSET_CY} r={INSET_R + 5} fill="url(#mp-inset-glow)" />
-        {/* Dark background */}
-        <circle cx={INSET_CX} cy={INSET_CY} r={INSET_R} fill="#060810" />
-        {/* Lit area — SVG path geometry described at top of file */}
-        {litD && <path d={litD} fill="url(#mp-phase-lit)" />}
-        {/* Border ring */}
-        <circle
-          cx={INSET_CX} cy={INSET_CY} r={INSET_R}
-          fill="none"
-          stroke="rgba(103,232,249,0.22)"
-          strokeWidth={1}
-        />
-
-        {/* Phase name label — positioned below the inset disc */}
+        <PhaseDisc theta={theta} cx={INSET_CX} cy={INSET_CY} r={INSET_R} />
         <text
-          x={INSET_CX}
-          y={PHASE_LABEL_Y}
-          textAnchor="middle"
-          fill="rgba(255,215,100,0.88)"
-          fontSize={10}
-          fontFamily="sans-serif"
-          fontWeight="bold"
-          letterSpacing=".06em"
-        >{phase}</text>
+          x={INSET_CX} y={PHASE_LABEL_Y} textAnchor="middle"
+          fill="rgba(255,215,100,0.88)" fontSize={10}
+          fontFamily="sans-serif" fontWeight="bold" letterSpacing=".06em"
+        >{phaseName}</text>
       </svg>
 
       {/* ── Interactive slider ─────────────────────────────────────────────── */}
@@ -383,9 +355,7 @@ export function MoonPhase2DContent({ interactive = false, says = {} }) {
           <style>{SLIDER_CSS}</style>
           <input
             type="range"
-            min={0}
-            max={1}
-            step="any"
+            min={0} max={1} step="any"
             value={theta / 360}
             onChange={handleSlider}
             className="moon-range"
@@ -395,6 +365,101 @@ export function MoonPhase2DContent({ interactive = false, says = {} }) {
       )}
     </div>
   );
+}
+
+// ── Strip variant ─────────────────────────────────────────────────────────────
+// Two rows of 4 from-Earth discs with labels; a highlight ring advances
+// left→right (row-major) to convey the ~29-day cycle. ~1 s per phase.
+const STRIP_W = 430;
+const STRIP_H = 230;
+const STRIP_COLS = 4;
+const STRIP_DISC_R = 22;
+const STRIP_CELL_W = STRIP_W / STRIP_COLS; // 107.5
+const STRIP_ROW_CY = [70, 158]; // disc centres for the two rows
+const STRIP_STEP_MS = 1000;
+
+function stripCell(index) {
+  const col = index % STRIP_COLS;
+  const row = Math.floor(index / STRIP_COLS);
+  return {
+    cx: STRIP_CELL_W * (col + 0.5),
+    cy: STRIP_ROW_CY[row],
+  };
+}
+
+function StripContent() {
+  const reduce = useReducedMotion();
+  const [active, setActive] = useState(reduce ? -1 : 0);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (reduce) return;
+    timerRef.current = setInterval(() => {
+      setActive((i) => (i + 1) % PHASES.length);
+    }, STRIP_STEP_MS);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [reduce]);
+
+  return (
+    <div className="relative h-full w-full">
+      <svg
+        viewBox={`0 0 ${STRIP_W} ${STRIP_H}`}
+        style={{ display: 'block', width: '100%', height: '100%' }}
+        preserveAspectRatio="xMidYMid meet"
+        aria-label="The phases of the Moon, one full cycle"
+        role="img"
+      >
+        <PhaseDefs />
+
+        {PHASES.map((p, i) => {
+          const { cx, cy } = stripCell(i);
+          const isActive = i === active;
+          const scale = isActive ? 1.16 : 1;
+          const labelY = cy + STRIP_DISC_R + 13;
+          const words = p.name.split(' ');
+          return (
+            <g key={p.id}>
+              {/* Active glow ring */}
+              {isActive && (
+                <circle
+                  cx={cx} cy={cy} r={STRIP_DISC_R * scale + 4}
+                  fill="none"
+                  stroke="rgba(103,232,249,0.7)"
+                  strokeWidth={2}
+                  style={{ filter: 'drop-shadow(0 0 6px rgba(103,232,249,0.7))' }}
+                />
+              )}
+              {/* Disc (scaled about its own centre when active) */}
+              <g transform={`translate(${cx} ${cy}) scale(${scale}) translate(${-cx} ${-cy})`}>
+                <PhaseDisc theta={p.theta} cx={cx} cy={cy} r={STRIP_DISC_R} />
+              </g>
+              {/* Label — two lines for two-word names */}
+              <text
+                x={cx} y={labelY} textAnchor="middle"
+                fill={isActive ? 'rgba(255,215,100,0.95)' : 'rgba(180,190,205,0.8)'}
+                fontSize={8.5} fontFamily="sans-serif"
+                fontWeight={isActive ? 'bold' : 'normal'}
+              >
+                {words.length > 1 ? (
+                  <>
+                    <tspan x={cx} dy={0}>{words[0]}</tspan>
+                    <tspan x={cx} dy={10}>{words.slice(1).join(' ')}</tspan>
+                  </>
+                ) : (
+                  words[0]
+                )}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+// ── Public components ──────────────────────────────────────────────────────────
+export function MoonPhase2DContent({ variant = 'diagram', ...props }) {
+  return variant === 'strip' ? <StripContent /> : <DiagramContent {...props} />;
 }
 
 export default function MoonPhase2D(props) {

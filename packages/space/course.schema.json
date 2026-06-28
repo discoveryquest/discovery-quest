@@ -637,19 +637,26 @@
                   "number"
                 ]
               },
+              "variant": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "diagram (default) | strip"
+              },
               "interactive": {
                 "type": [
                   "boolean",
                   "null"
                 ],
-                "description": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases"
+                "description": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases (diagram variant only)"
               },
               "says": {
                 "type": [
                   "object",
                   "null"
                 ],
-                "description": "{ new, first, full, last } narration keys spoken aloud when the slider crosses each cardinal phase (only used when interactive=true)"
+                "description": "{ new, waxingCrescent, first, waxingGibbous, full, waningGibbous, last, waningCrescent } narration keys spoken aloud when the slider enters each named phase (only used when interactive=true)"
               }
             },
             "required": [
