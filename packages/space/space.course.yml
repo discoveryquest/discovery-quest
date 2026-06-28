@@ -77,16 +77,19 @@ course:
         - id: light
           label: Sunlight
           beats:
-            - { say: mp-1, caption: "The Moon makes no light of its own — it shines by reflecting sunlight.", view: { kind: moonPhase, key: mp1, interactive: false } }
-        - id: half
-          label: Half lit
+            - { say: mp-1, caption: "The Moon makes no light of its own — it shines by reflecting sunlight, and the Sun always lights the half facing it.", view: { kind: moonPhase, key: mp1, interactive: false } }
+        - id: phases
+          label: The phases
           beats:
-            - { say: mp-2, caption: "The Sun always lights one half of the Moon — the half facing the Sun.", view: { kind: moonPhase, key: mp2, interactive: false } }
-            - { say: mp-3, caption: "As the Moon orbits Earth, we see more or less of that sunlit half — that's a phase.", view: { kind: moonPhase, key: mp3, interactive: false } }
-        - id: cycle
-          label: The cycle
-          beats:
-            - { say: mp-4, caption: "The phases cycle about every 29 days — from new moon to full moon and back.", advance: hold, view: { kind: moonPhase, key: mp4, variant: strip, says: { new: mp-x-new, waxingCrescent: mp-x-waxing-crescent, first: mp-x-first, waxingGibbous: mp-x-waxing-gibbous, full: mp-x-full, waningGibbous: mp-x-waning-gibbous, last: mp-x-last, waningCrescent: mp-x-waning-crescent } } }
+            - { say: mp-3, caption: "As the Moon orbits Earth, we see more or less of that sunlit half — and that's a phase. One full cycle takes about 29 days.", view: { kind: moonPhase, key: mp3, variant: strip, active: -1 } }
+            - { say: mp-x-new, caption: "New Moon — the Moon sits between Earth and the Sun, so the side facing us is dark.", view: { kind: moonPhase, key: mpc0, variant: strip, active: 0 } }
+            - { say: mp-x-waxing-crescent, caption: "Waxing Crescent — a thin sliver of the lit side appears, and it's growing.", view: { kind: moonPhase, key: mpc1, variant: strip, active: 1 } }
+            - { say: mp-x-first, caption: "First Quarter — we see half of the Moon's lit side.", view: { kind: moonPhase, key: mpc2, variant: strip, active: 2 } }
+            - { say: mp-x-waxing-gibbous, caption: "Waxing Gibbous — most of the lit side shows now, and it's still growing.", view: { kind: moonPhase, key: mpc3, variant: strip, active: 3 } }
+            - { say: mp-x-full, caption: "Full Moon — the Moon is opposite the Sun, so we see its whole lit face.", view: { kind: moonPhase, key: mpc4, variant: strip, active: 4 } }
+            - { say: mp-x-waning-gibbous, caption: "Waning Gibbous — most of the lit side still shows, but now it's shrinking.", view: { kind: moonPhase, key: mpc5, variant: strip, active: 5 } }
+            - { say: mp-x-last, caption: "Last Quarter — we see the other half of the lit side.", view: { kind: moonPhase, key: mpc6, variant: strip, active: 6 } }
+            - { say: mp-x-waning-crescent, caption: "Waning Crescent — only a thin sliver of light is left before the next new moon.", view: { kind: moonPhase, key: mpc7, variant: strip, active: 7 } }
         - id: explore
           label: Explore
           beats:
@@ -363,10 +366,8 @@ course:
 
   narration:
     mp-0: "Why does the Moon seem to change shape each night?"
-    mp-1: "The Moon makes no light of its own — it shines by reflecting sunlight."
-    mp-2: "The Sun always lights one half of the Moon — the half facing the Sun."
-    mp-3: "As the Moon orbits Earth, we see more or less of that sunlit half — that's a phase."
-    mp-4: "The phases cycle about every 29 days — from new moon to full moon and back."
+    mp-1: "The Moon makes no light of its own — it shines by reflecting sunlight, and the Sun always lights the half facing it."
+    mp-3: "As the Moon orbits Earth, we see more or less of that sunlit half — and that's a phase. One full cycle takes about 29 days."
     mp-5: "Drag to move the Moon around Earth and watch its phase change!"
     mp-x-new: "New Moon — the Moon sits between Earth and the Sun, so the side facing us is dark."
     mp-x-waxing-crescent: "Waxing Crescent — a thin sliver of the lit side appears, and it's growing."
