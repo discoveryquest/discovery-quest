@@ -86,11 +86,11 @@ course:
         - id: cycle
           label: The cycle
           beats:
-            - { say: mp-4, caption: "The phases cycle about every 29 days — from new moon to full moon and back.", view: { kind: body, key: mp4, body: { role: moon, glow: true } } }
+            - { say: mp-4, caption: "The phases cycle about every 29 days — from new moon to full moon and back.", view: { kind: moonPhase, key: mp4, variant: strip } }
         - id: explore
           label: Explore
           beats:
-            - { say: mp-5, caption: "Drag to move the Moon around Earth and watch its phase change!", advance: hold, view: { kind: moonPhase, key: mp-explore, interactive: true, says: { new: mp-x-new, first: mp-x-first, full: mp-x-full, last: mp-x-last } } }
+            - { say: mp-5, caption: "Drag to move the Moon around Earth and watch its phase change!", advance: hold, view: { kind: moonPhase, key: mp-explore, interactive: true, says: { new: mp-x-new, waxingCrescent: mp-x-waxing-crescent, first: mp-x-first, waxingGibbous: mp-x-waxing-gibbous, full: mp-x-full, waningGibbous: mp-x-waning-gibbous, last: mp-x-last, waningCrescent: mp-x-waning-crescent } } }
     day-night:
       title: Day & Night
       sections:
@@ -369,9 +369,13 @@ course:
     mp-4: "The phases cycle about every 29 days — from new moon to full moon and back."
     mp-5: "Drag to move the Moon around Earth and watch its phase change!"
     mp-x-new: "New Moon — the Moon sits between Earth and the Sun, so the side facing us is dark."
+    mp-x-waxing-crescent: "Waxing Crescent — a thin sliver of the lit side appears, and it's growing."
     mp-x-first: "First Quarter — we see half of the Moon's lit side."
+    mp-x-waxing-gibbous: "Waxing Gibbous — most of the lit side shows now, and it's still growing."
     mp-x-full: "Full Moon — the Moon is opposite the Sun, so we see its whole lit face."
+    mp-x-waning-gibbous: "Waning Gibbous — most of the lit side still shows, but now it's shrinking."
     mp-x-last: "Last Quarter — we see the other half of the lit side."
+    mp-x-waning-crescent: "Waning Crescent — only a thin sliver of light is left before the next new moon."
     dn-0: "Have you ever wondered why it gets dark at night?"
     dn-1: "Earth spins like a top — one full spin takes about 24 hours."
     dn-2: "The side facing the Sun has daytime; the side facing away has night."
