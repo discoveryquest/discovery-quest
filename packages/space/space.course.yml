@@ -73,7 +73,7 @@ course:
         - id: learn
           label: Learn it
           beats:
-            - { say: mp-0, caption: "Why does the Moon seem to change shape each night?", advance: hold, view: { kind: body, key: mp0, body: { role: moon, glow: true }, label: "The Moon" } }
+            - { say: mp-0, caption: "Why does the Moon seem to change shape each night?", view: { kind: body, key: mp0, body: { role: moon, glow: true }, label: "The Moon" } }
             - { say: mp-1, caption: "The Moon makes no light of its own — it shines by reflecting sunlight.", view: { kind: orbit, key: mp1, bodies: [ { id: sun, role: star }, { id: moon, role: moon, orbits: sun, radius: 70, period: 8, phaseLit: true } ] } }
             - { say: mp-2, caption: "As the Moon orbits Earth, we see more or less of its sunlit half.", view: { kind: orbit, key: mp2, bodies: [ { id: earth, role: planet }, { id: moon, role: moon, orbits: earth, radius: 64, period: 6, phaseLit: true } ] } }
             - { say: mp-3, caption: "That changing sunlit slice is what we call a phase.", view: { kind: body, key: mp3, body: { role: moon, phase: 0.75 } } }
@@ -85,7 +85,7 @@ course:
         - id: learn
           label: Learn it
           beats:
-            - { say: dn-0, caption: "Have you ever wondered why it gets dark at night?", advance: hold, view: { kind: body, key: dn0, body: { role: planet, glow: true }, label: "Earth" } }
+            - { say: dn-0, caption: "Have you ever wondered why it gets dark at night?", view: { kind: body, key: dn0, body: { role: planet, glow: true }, label: "Earth" } }
             - { say: dn-1, caption: "Earth spins like a top — one full spin takes about 24 hours.", view: { kind: orbit, key: dn1, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
             - { say: dn-2, caption: "The side facing the Sun has daytime; the side facing away has night.", view: { kind: orbit, key: dn2, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
             - { say: dn-3, caption: "It's Earth's spinning — not the Sun moving — that gives us day and night.", view: { kind: body, key: dn3, body: { role: planet, glow: true } } }
@@ -97,7 +97,7 @@ course:
         - id: learn
           label: Learn it
           beats:
-            - { say: su-0, caption: "Look up on a clear day — what is that brilliant ball of light?", advance: hold, view: { kind: body, key: su0, body: { role: star, glow: true }, label: "The Sun" } }
+            - { say: su-0, caption: "Look up on a clear day — what is that brilliant ball of light?", view: { kind: body, key: su0, body: { role: star, glow: true }, label: "The Sun" } }
             - { say: su-1, caption: "The Sun is a star — the closest one to Earth.", view: { kind: body, key: su1, body: { role: star, glow: true } } }
             - { say: su-2, caption: "It's a giant ball of super-hot, glowing gas.", view: { kind: body, key: su2, body: { role: star, glow: true } } }
             - { say: su-3, caption: "The Sun is so large that over a million Earths could fit inside.", view: { kind: compare, key: su3, items: [ { label: "Sun", relSize: 10 }, { label: "Earth", relSize: 1 } ] } }
@@ -109,7 +109,7 @@ course:
         - id: learn
           label: Learn it
           beats:
-            - { say: se-0, caption: "Why is summer hot and winter cold, even though Earth stays the same distance from the Sun?", advance: hold, view: { kind: orbit, key: se0, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
+            - { say: se-0, caption: "Why is summer hot and winter cold, even though Earth stays the same distance from the Sun?", view: { kind: orbit, key: se0, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
             - { say: se-1, caption: "Earth is tilted as it circles the Sun — not straight up, but at an angle.", view: { kind: body, key: se1, body: { role: planet, tilt: true } } }
             - { say: se-2, caption: "When your half of Earth tilts toward the Sun, sunlight hits more directly — that's summer.", view: { kind: body, key: se2, body: { role: planet, tilt: true } } }
             - { say: se-3, caption: "When your half tilts away, sunlight spreads out and feels weaker — that's winter.", view: { kind: orbit, key: se3, bodies: [ { id: sun, role: star }, { id: earth, role: planet, orbits: sun, radius: 70, period: 10 } ] } }
@@ -121,7 +121,7 @@ course:
         - id: learn
           label: Learn it
           beats:
-            - { say: gr-0, caption: "Drop anything and it falls — why does everything always pull toward the ground?", advance: hold, view: { kind: body, key: gr0, body: { role: planet, glow: true }, label: "Earth" } }
+            - { say: gr-0, caption: "Drop anything and it falls — why does everything always pull toward the ground?", view: { kind: body, key: gr0, body: { role: planet, glow: true }, label: "Earth" } }
             - { say: gr-1, caption: "Gravity is a pull. Everything with mass pulls on everything else.", view: { kind: body, key: gr1, body: { role: planet } } }
             - { say: gr-2, caption: "Earth's gravity pulls things toward its center — that's why things fall down.", view: { kind: body, key: gr2, body: { role: planet, glow: true } } }
             - { say: gr-3, caption: "The more mass something has, the stronger its gravity pull.", view: { kind: compare, key: gr3, items: [ { label: "Earth", relSize: 4 }, { label: "Moon", relSize: 1 } ] } }
