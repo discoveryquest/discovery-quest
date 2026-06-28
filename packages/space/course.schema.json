@@ -284,7 +284,8 @@
             "launch",
             "compare",
             "scrub",
-            "reveal"
+            "reveal",
+            "moonPhase"
           ]
         }
       },
@@ -610,6 +611,49 @@
             "required": [
               "kind",
               "hotspots"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "moonPhase"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "moonPhase"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "interactive": {
+                "type": [
+                  "boolean",
+                  "null"
+                ],
+                "description": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases"
+              },
+              "says": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "description": "{ new, first, full, last } narration keys spoken aloud when the slider crosses each cardinal phase (only used when interactive=true)"
+              }
+            },
+            "required": [
+              "kind"
             ],
             "additionalProperties": false
           }

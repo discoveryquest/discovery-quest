@@ -9,6 +9,7 @@ import Launch2D from './2d/Launch2D.jsx';
 import Compare2D from './2d/Compare2D.jsx';
 import Scrub2D from './2d/Scrub2D.jsx';
 import Reveal2D from './2d/Reveal2D.jsx';
+import MoonPhase2D from './2d/MoonPhase2D.jsx';
 
 export const SCENE_RENDERERS = {
   '2d': {
@@ -20,5 +21,6 @@ export const SCENE_RENDERERS = {
     compare: Compare2D,
     scrub: Scrub2D,
     reveal: Reveal2D,
+    moonPhase: MoonPhase2D,
   },
 };
