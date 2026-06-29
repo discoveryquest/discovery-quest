@@ -52,6 +52,12 @@ Example target behavior:
 6. **World-by-world implementation.**  
    Finish all practice missions for one world, voice/check/test that world, then continue to the next world.
 
+7. **Teaching stays open-source and agent-authorable.**  
+   Practice prompts, targets, feedback, hints, narration keys, and mechanic descriptors must
+   live in `space.course.yml` like other course content. App code should only provide
+   reusable mechanics. Agents and contributors should be able to edit/review the teaching
+   layer as YAML, run validation/voice generation, and preview locally.
+
 ## Proposed runtime architecture
 
 ### Current practice pipeline
@@ -99,6 +105,20 @@ Add a new board kind in `packages/space/engine.capabilities.json`:
 ```
 
 Add `content.practice:` to `space.course.yml`. Keep `content.questions:` during migration.
+
+### Agent authoring contract
+
+This redesign must preserve Discovery Quest's course-authoring model:
+
+- **YAML is the source of truth** for educational content and practice mission data.
+- **Agent-accessible:** agents can generate or update missions by editing YAML, not by
+  writing one-off React code per station.
+- **Open-source reviewable:** pedagogy, prompts, accepted answers/targets, hints, and
+  feedback are committed as course data and can be reviewed in diffs.
+- **Runtime mechanics are reusable primitives:** new code may add generic mechanics
+  (`moon-position`, `sort-zones`, `order-line`, etc.), but not hard-coded station teaching.
+- **Voice is derived from YAML:** generated clips stay ignored/mirrored, while narration
+  text and keys are committed.
 
 ### Example: Moon phase drag item
 

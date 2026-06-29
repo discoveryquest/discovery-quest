@@ -34,6 +34,10 @@ same bar: the child should *do* space science, not answer a worksheet.
    every referenced key has a fresh generated clip.
 6. Deliver **world-by-world**: finish, voice, check, and verify one world's practice before
    starting the next.
+7. Keep the teaching/practice layer an **open-source, agent-authorable course feature**:
+   the educational content, prompts, targets, feedback, and mechanic descriptors live in
+   `space.course.yml` like Math/English course content, so agents and contributors can
+   inspect, generate, review, and edit it without touching app code.
 
 ## Non-goals
 
@@ -51,6 +55,7 @@ same bar: the child should *do* space science, not answer a worksheet.
 | Interaction model | Embodied mechanics; correctness comes from manipulation |
 | Narration | Luna narrates every prompt (`say` key) + replay button |
 | Authoring | YAML data + small mechanic vocabulary (no per-station code) |
+| Openness | Teaching/practice content remains open-source and agent-editable in course YAML |
 | Board kind | New `practice` board; `quiz` kept as fallback during migration |
 | Visual layer | Reuse 2D scene kit; renderer-agnostic for later 3D |
 | Rollout | World-by-world (W1 → W2 → W3 → W4), voiced + checked per world |
@@ -113,6 +118,27 @@ Add a `content.practice:` collection to `space.course.yml`, tagged by `band` exa
 > unique band. The `station` field above is therefore redundant for routing but useful for
 > authoring clarity and cross-checks. Decision: keep `station` for human/lint use; routing
 > stays band-based to avoid loader changes.
+
+### Open-source / agent-authoring contract
+
+Practice is part of the **course teaching layer**, not private app logic. It must follow the
+same open-source, YAML-first contract as the existing Math/English/Space course content:
+
+- **All educational intent is in YAML:** prompts, narrated lines, correct targets,
+  acceptable tolerances, hint/feedback keys, token labels, hotspot labels, and mechanic
+  descriptors live in `space.course.yml`.
+- **Mechanics are reusable engine primitives:** React code implements generic mechanics
+  such as `moon-position`, `sort-zones`, and `order-line`; it must not hard-code facts for
+  a specific station.
+- **Agents can author and review it:** an agent should be able to add or revise a practice
+  mission by editing `space.course.yml`, running schema/check/voice generation, and opening
+  a preview — without needing to modify app code unless a new reusable mechanic is required.
+- **Open-source review remains possible:** because the teaching data is YAML, contributors
+  can diff content changes, validate them, and discuss pedagogy separately from runtime
+  implementation.
+- **The deployed shell may mirror private assets, but the course source is open:** generated
+  Jessica clips remain gitignored and mirrored separately, but the text and interaction
+  definitions they derive from are committed course data.
 
 ### Example: Moon-phase drag item
 
