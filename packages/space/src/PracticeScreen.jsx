@@ -10,9 +10,15 @@ import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
 import MoonPositionPractice from './practice/MoonPositionPractice.jsx';
+import StateDialPractice from './practice/StateDialPractice.jsx';
+import TargetTapPractice from './practice/TargetTapPractice.jsx';
 
 const MECHANICS = {
   'moon-position': MoonPositionPractice,
+  'earth-spin': StateDialPractice,
+  'orbit-season': StateDialPractice,
+  'tap-hotspot': TargetTapPractice,
+  'compare-strength': TargetTapPractice,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
@@ -65,6 +71,14 @@ export default function PracticeScreen({ station, course, onExit }) {
       if (idx + 1 >= steps.length) setDone(true);
       else setIdx((i) => i + 1);
     }, 1700);
+  }
+
+  function showHint(say = step?.feedback?.hintSay) {
+    setBase('hint');
+    const line = say && course.narration?.[say] ? course.narration[say] : 'Not quite — try again.';
+    setBubble(line);
+    hushAll();
+    if (say) speak(say, { important: true });
   }
 
   const total = Math.max(steps.length, 1);
@@ -147,7 +161,7 @@ export default function PracticeScreen({ station, course, onExit }) {
         ) : (
           <motion.div key={step?.say ?? 'empty'} initial={{ x: 28, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -28, opacity: 0 }} className="mt-5">
             {Mechanic ? (
-              <Mechanic step={step} disabled={locked} onCorrect={completeStep} />
+              <Mechanic step={step} disabled={locked} onCorrect={completeStep} onHint={showHint} />
             ) : (
               <div className="rounded-3xl border border-amber-300/20 bg-amber-300/10 p-5 text-center">
                 <p className="font-extrabold text-amber-100">This practice mechanic is not implemented yet.</p>

@@ -25,10 +25,10 @@ course:
       blurb: Earth, the Moon, the Sun, seasons, and gravity.
       stations:
         - { id: moon-phases, title: Moon Phases, icon: 🌗, sub: why the Moon changes shape, board: practice, bands: [0], lesson: moon-phases, concept: moon-phases }
-        - { id: day-night, title: Day & Night, icon: 🌍, sub: why we have day and night, board: quiz, bands: [1], lesson: day-night, concept: day-night-cycle }
-        - { id: the-sun, title: Our Star, icon: 🌞, sub: the Sun, our nearest star, board: quiz, bands: [2], lesson: the-sun, concept: our-star }
-        - { id: seasons, title: The Seasons, icon: 🍂, sub: why the year changes, board: quiz, bands: [3], lesson: seasons, concept: seasons }
-        - { id: gravity, title: Gravity, icon: ⬇️, sub: the pull that holds us down, board: quiz, bands: [4], lesson: gravity, concept: gravity-pulls-down }
+        - { id: day-night, title: Day & Night, icon: 🌍, sub: why we have day and night, board: practice, bands: [1], lesson: day-night, concept: day-night-cycle }
+        - { id: the-sun, title: Our Star, icon: 🌞, sub: the Sun, our nearest star, board: practice, bands: [2], lesson: the-sun, concept: our-star }
+        - { id: seasons, title: The Seasons, icon: 🍂, sub: why the year changes, board: practice, bands: [3], lesson: seasons, concept: seasons }
+        - { id: gravity, title: Gravity, icon: ⬇️, sub: the pull that holds us down, board: practice, bands: [4], lesson: gravity, concept: gravity-pulls-down }
 
     - id: cosmic-neighborhood
       title: Cosmic Neighborhood
@@ -549,6 +549,14 @@ course:
       - { station: moon-phases, band: 0, kind: moon-position, say: pr-mp-full, prompt: "Move the Moon to make a Full Moon.", scene: { kind: moonPhase, interactive: true }, target: { phase: full, label: "Full Moon", toleranceDeg: 16 }, feedback: { correctSay: pr-mp-full-ok, hintSay: pr-mp-full-hint } }
       - { station: moon-phases, band: 0, kind: moon-position, say: pr-mp-first, prompt: "Move the Moon to make a First Quarter Moon.", scene: { kind: moonPhase, interactive: true }, target: { phase: first-quarter, label: "First Quarter", toleranceDeg: 16 }, feedback: { correctSay: pr-mp-first-ok, hintSay: pr-mp-first-hint } }
       - { station: moon-phases, band: 0, kind: moon-position, say: pr-mp-waning-crescent, prompt: "Move the Moon to make a Waning Crescent.", scene: { kind: moonPhase, interactive: true }, target: { phase: waning-crescent, label: "Waning Crescent", toleranceDeg: 16 }, feedback: { correctSay: pr-mp-waning-crescent-ok, hintSay: pr-mp-waning-crescent-hint } }
+      - { station: day-night, band: 1, kind: earth-spin, say: pr-dn-noon, prompt: "Spin Earth until your town has noon.", target: { state: noon, states: [ { id: dawn, label: Dawn }, { id: noon, label: Noon }, { id: dusk, label: Dusk }, { id: night, label: Night } ] }, feedback: { correctSay: pr-dn-noon-ok, hintSay: pr-dn-noon-hint } }
+      - { station: day-night, band: 1, kind: earth-spin, say: pr-dn-night, prompt: "Spin Earth until your town has night.", target: { state: night, states: [ { id: dawn, label: Dawn }, { id: noon, label: Noon }, { id: dusk, label: Dusk }, { id: night, label: Night } ] }, feedback: { correctSay: pr-dn-night-ok, hintSay: pr-dn-night-hint } }
+      - { station: the-sun, band: 2, kind: tap-hotspot, say: pr-su-core, prompt: "Tap the part of the Sun where energy is made.", target: { id: core, items: [ { id: core, label: Core, emoji: "🔥", x: 50, y: 50 }, { id: surface, label: Surface, emoji: "☀️", x: 34, y: 34 }, { id: rays, label: Rays, emoji: "✨", x: 74, y: 42 } ] }, feedback: { correctSay: pr-su-core-ok, hintSay: pr-su-core-hint } }
+      - { station: the-sun, band: 2, kind: tap-hotspot, say: pr-su-rays, prompt: "Tap the rays that carry light and heat to Earth.", target: { id: rays, items: [ { id: core, label: Core, emoji: "🔥", x: 50, y: 50 }, { id: surface, label: Surface, emoji: "☀️", x: 34, y: 34 }, { id: rays, label: Rays, emoji: "✨", x: 74, y: 42 } ] }, feedback: { correctSay: pr-su-rays-ok, hintSay: pr-su-rays-hint } }
+      - { station: seasons, band: 3, kind: orbit-season, say: pr-se-summer, prompt: "Move Earth to summer for the northern half.", target: { state: summer, states: [ { id: spring, label: Spring }, { id: summer, label: Summer }, { id: autumn, label: Autumn }, { id: winter, label: Winter } ] }, feedback: { correctSay: pr-se-summer-ok, hintSay: pr-se-summer-hint } }
+      - { station: seasons, band: 3, kind: orbit-season, say: pr-se-winter, prompt: "Move Earth to winter for the northern half.", target: { state: winter, states: [ { id: spring, label: Spring }, { id: summer, label: Summer }, { id: autumn, label: Autumn }, { id: winter, label: Winter } ] }, feedback: { correctSay: pr-se-winter-ok, hintSay: pr-se-winter-hint } }
+      - { station: gravity, band: 4, kind: compare-strength, say: pr-gr-strongest, prompt: "Tap the world with the strongest gravity.", target: { id: jupiter, items: [ { id: moon, label: Moon, emoji: "🌙", size: 48 }, { id: earth, label: Earth, emoji: "🌍", size: 66 }, { id: jupiter, label: Jupiter, emoji: "🪐", size: 96 } ] }, feedback: { correctSay: pr-gr-strongest-ok, hintSay: pr-gr-strongest-hint } }
+      - { station: gravity, band: 4, kind: compare-strength, say: pr-gr-earth, prompt: "Tap the world whose gravity feels normal to us.", target: { id: earth, items: [ { id: moon, label: Moon, emoji: "🌙", size: 48 }, { id: earth, label: Earth, emoji: "🌍", size: 66 }, { id: jupiter, label: Jupiter, emoji: "🪐", size: 96 } ] }, feedback: { correctSay: pr-gr-earth-ok, hintSay: pr-gr-earth-hint } }
 
   narration:
     mp-0: "Why does the Moon seem to change shape each night?"
@@ -572,6 +580,30 @@ course:
     pr-mp-waning-crescent: "Move the Moon to make a Waning Crescent."
     pr-mp-waning-crescent-ok: "Yes — only a thin sliver is lit, and it is shrinking toward New Moon."
     pr-mp-waning-crescent-hint: "Try the last small sliver before the Moon returns to New Moon."
+    pr-dn-noon: "Spin Earth until your town has noon."
+    pr-dn-noon-ok: "Yes — at noon, your part of Earth faces the Sun directly."
+    pr-dn-noon-hint: "Look for the moment when your side is turned toward the Sun."
+    pr-dn-night: "Spin Earth until your town has night."
+    pr-dn-night-ok: "Correct — night happens when your side faces away from the Sun."
+    pr-dn-night-hint: "Turn Earth until your side is on the dark half."
+    pr-su-core: "Tap the part of the Sun where energy is made."
+    pr-su-core-ok: "Yes — the core is the Sun's energy engine."
+    pr-su-core-hint: "The core is deep in the middle of the Sun."
+    pr-su-rays: "Tap the rays that carry light and heat to Earth."
+    pr-su-rays-ok: "Right — sunlight and heat travel outward as rays."
+    pr-su-rays-hint: "Look for the glowing lines leaving the Sun."
+    pr-se-summer: "Move Earth to summer for the northern half."
+    pr-se-summer-ok: "Yes — the northern half tilts toward the Sun in summer."
+    pr-se-summer-hint: "Try the place where the northern half leans toward the Sun."
+    pr-se-winter: "Move Earth to winter for the northern half."
+    pr-se-winter-ok: "Correct — winter happens when the northern half tilts away from the Sun."
+    pr-se-winter-hint: "Try the place where the northern half leans away from the Sun."
+    pr-gr-strongest: "Tap the world with the strongest gravity."
+    pr-gr-strongest-ok: "Yes — huge Jupiter has the strongest gravity of these three."
+    pr-gr-strongest-hint: "The more mass a world has, the stronger its gravity pull."
+    pr-gr-earth: "Tap the world whose gravity feels normal to us."
+    pr-gr-earth-ok: "Right — Earth's gravity is what feels normal to people on Earth."
+    pr-gr-earth-hint: "Choose our home planet."
     dn-0: "Have you ever wondered why it gets dark at night?"
     dn-1: "Earth spins like a top — one full spin takes about 24 hours."
     dn-2: "The side facing the Sun has daytime; the side facing away has night."
