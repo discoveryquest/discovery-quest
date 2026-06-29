@@ -97,7 +97,8 @@ export default function App() {
       setLesson({ id: st.lessonId, then: () => startQuest(st) });
     } else startQuest(st);
   };
-  const onLearn = (st) => setLesson({ id: st.lessonId, then: null }); // replay
+  // Replaying Learn it should still let the final "Let's practice!" CTA launch practice.
+  const onLearn = (st) => setLesson({ id: st.lessonId, then: () => startQuest(st) });
 
   return (
     <Shell>
