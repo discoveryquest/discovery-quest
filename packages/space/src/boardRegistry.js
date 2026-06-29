@@ -7,4 +7,5 @@ import Quiz from './boards/Quiz.jsx';
 
 export const BOARD_REGISTRY = {
   quiz: { ...BOARD_GENERATORS.quiz, board: Quiz },
+  practice: { ...BOARD_GENERATORS.practice, board: null },
 };

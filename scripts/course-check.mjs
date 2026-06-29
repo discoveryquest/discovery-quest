@@ -117,10 +117,12 @@ if (contentIds && contentIds.size) {
 }
 
 // ── worlds + stations ──
+const stationById = new Map();
 for (const w of course.worlds || []) {
   if (!w.id || !w.title) E(`world ${w.id || '?'}: id + title required`);
   for (const st of w.stations || []) {
     if (!st.id || !st.title) { E(`station ${st.id || '?'}: id + title required`); continue; }
+    stationById.set(st.id, st);
     if (st.soon) continue;
     if (!schema) { // when no schema, fall back to enum/presence checks here
       if (!st.board) E(`station ${st.id}: playable station needs a board`);
@@ -133,9 +135,32 @@ for (const w of course.worlds || []) {
   }
 }
 
-// ── lessons → beats ──
 const usedLines = new Set();
 let beatCount = 0;
+
+// ── practice content → narration/audio ──
+// Space's interactive practice is authored as course data. Like lessons, every shown prompt
+// must exactly equal what Luna speaks, and feedback narration keys must resolve/freshen.
+const practiceItems = Array.isArray(course.content?.practice) ? course.content.practice : [];
+for (const item of practiceItems) {
+  const where = `practice/${item.station || '?'}/${item.say || '?'}`;
+  const st = item.station ? stationById.get(item.station) : null;
+  if (!item.station) E(`${where}: station is required`);
+  else if (!st) E(`${where}: station "${item.station}" not found`);
+  else if (Array.isArray(st.bands) && !st.bands.includes(item.band)) E(`${where}: band ${item.band} is not assigned to station "${item.station}"`);
+  if (!(item.say in narration)) E(`${where}: say "${item.say}" not in narration`);
+  else {
+    usedLines.add(item.say);
+    if (item.prompt !== narration[item.say]) E(`${where}: prompt ≠ narration (shown must equal spoken)`);
+  }
+  for (const [k, v] of Object.entries(item.feedback || {})) {
+    if (!k.endsWith('Say')) continue;
+    if (!(v in narration)) E(`${where}: feedback.${k} "${v}" not in narration`);
+    else usedLines.add(v);
+  }
+}
+
+// ── lessons → beats ──
 for (const [id, lesson] of Object.entries(lessons)) {
   if (!lesson.title || !Array.isArray(lesson.sections)) { E(`lesson ${id}: title + sections required`); continue; }
   for (const sec of lesson.sections) {

@@ -11,6 +11,21 @@
         { "name": "distractors", "type": "string[]", "example": ["The Moon itself", "Earth's glow"], "note": "wrong-but-plausible choices" },
         { "name": "band", "type": "int", "example": 0, "note": "which station this question belongs to" }
       ]
+    },
+    {
+      "kind": "practice",
+      "description": "Interactive mission practice: the learner answers by manipulating a scene (drag/spin/sort/arrange/tap/trace/match). One band per station; items are an ordered mission list. Luna narrates each prompt via `say`.",
+      "content": "practice",
+      "item": [
+        { "name": "station", "type": "string", "example": "moon-phases", "note": "descriptive owner id; routing is by band" },
+        { "name": "band", "type": "int", "example": 0, "note": "which station this mission belongs to" },
+        { "name": "kind", "type": "string", "example": "moon-position", "note": "mechanic id; selects the interactive component" },
+        { "name": "say", "type": "string", "example": "pr-mp-full", "note": "narration key Luna speaks for the prompt (text must equal `prompt`)" },
+        { "name": "prompt", "type": "string", "example": "Move the Moon to make a Full Moon." },
+        { "name": "scene", "type": "object", "note": "optional scene descriptor the mechanic renders on" },
+        { "name": "target", "type": "object", "note": "correctness target for the mechanic (e.g. { phase: full, toleranceDeg: 16 })" },
+        { "name": "feedback", "type": "object", "note": "optional { correctSay, hintSay } narration keys" }
+      ]
     }
   ],
   "views": [
@@ -97,6 +112,21 @@
         { "name": "answer", "type": "string", "required": true },
         { "name": "distractors", "type": "string[]", "required": true },
         { "name": "band", "type": "number", "required": true }
+      ]
+    },
+    {
+      "id": "practice",
+      "description": "Interactive practice missions for the practice board, partitioned by band (one band per station). Ordered: the host plays them in array order.",
+      "collection": "objects",
+      "item": [
+        { "name": "station", "type": "string", "required": true },
+        { "name": "band", "type": "number", "required": true },
+        { "name": "kind", "type": "string", "required": true },
+        { "name": "say", "type": "string", "required": true },
+        { "name": "prompt", "type": "string", "required": true },
+        { "name": "scene", "type": "object", "required": false },
+        { "name": "target", "type": "object", "required": true },
+        { "name": "feedback", "type": "object", "required": false }
       ]
     }
   ]

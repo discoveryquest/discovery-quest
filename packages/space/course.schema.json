@@ -105,6 +105,53 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            "practice": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "station": {
+                    "type": "string"
+                  },
+                  "band": {
+                    "type": "number"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "say": {
+                    "type": "string"
+                  },
+                  "prompt": {
+                    "type": "string"
+                  },
+                  "scene": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  },
+                  "target": {
+                    "type": "object"
+                  },
+                  "feedback": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "station",
+                  "band",
+                  "kind",
+                  "say",
+                  "prompt",
+                  "target"
+                ],
+                "additionalProperties": false
+              }
             }
           }
         }
@@ -164,7 +211,8 @@
         },
         "board": {
           "enum": [
-            "quiz"
+            "quiz",
+            "practice"
           ]
         },
         "bands": {

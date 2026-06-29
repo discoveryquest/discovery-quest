@@ -10,6 +10,7 @@ import { hushAll } from '@discoveryquest/voice-kit/audio';
 import ProfileSetup from '@discoveryquest/engine-ui/ProfileSetup';
 import ProfilePicker from '@discoveryquest/engine-ui/ProfilePicker';
 import QuizScreen from './QuizScreen.jsx'; // Space's richer quest host (draggable Luna, tiles)
+import PracticeScreen from './PracticeScreen.jsx';
 import MapScreen from './MapScreen.jsx';
 import CourseLesson from './CourseLesson.jsx';
 import { playMusic, trackForWorld, MAP_TRACK } from './music.js';
@@ -90,6 +91,7 @@ export default function App() {
   const profile = reg.profiles.find((p) => p.id === route.profileId) || save.profile;
   const hasLesson = (st) => st?.lessonId && course.lessonsById[st.lessonId];
   const startQuest = (st) => { setStation(st); setScreen('quest'); };
+  const Quest = station?.board === 'practice' ? PracticeScreen : QuizScreen;
   // First visit to a station with a lesson → "Learn it", then play; otherwise play.
   const onPlay = (st) => {
     if (hasLesson(st) && !save.conceptSeen?.[st.lessonId]) {
@@ -103,7 +105,7 @@ export default function App() {
   return (
     <Shell>
       {screen === 'quest' ? (
-        <QuizScreen key={station?.id} station={station} course={course} onExit={() => { setSaveTick((t) => t + 1); setScreen('map'); }} />
+        <Quest key={station?.id} station={station} course={course} onExit={() => { setSaveTick((t) => t + 1); setScreen('map'); }} />
       ) : (
         <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile} onPlay={onPlay} onLearn={onLearn} />
       )}

@@ -24,7 +24,7 @@ course:
       color: "#22D3EE"
       blurb: Earth, the Moon, the Sun, seasons, and gravity.
       stations:
-        - { id: moon-phases, title: Moon Phases, icon: 🌗, sub: why the Moon changes shape, board: quiz, bands: [0], lesson: moon-phases, concept: moon-phases }
+        - { id: moon-phases, title: Moon Phases, icon: 🌗, sub: why the Moon changes shape, board: practice, bands: [0], lesson: moon-phases, concept: moon-phases }
         - { id: day-night, title: Day & Night, icon: 🌍, sub: why we have day and night, board: quiz, bands: [1], lesson: day-night, concept: day-night-cycle }
         - { id: the-sun, title: Our Star, icon: 🌞, sub: the Sun, our nearest star, board: quiz, bands: [2], lesson: the-sun, concept: our-star }
         - { id: seasons, title: The Seasons, icon: 🍂, sub: why the year changes, board: quiz, bands: [3], lesson: seasons, concept: seasons }
@@ -544,6 +544,12 @@ course:
       - { question: "What is Mars like?", answer: "A cold, dusty desert", distractors: ["A warm ocean world", "A ball of gas"], band: 19 }
       - { question: "What will Mars explorers need to make or bring?", answer: "Air, water, and food", distractors: ["Just sunglasses", "Nothing at all"], band: 19 }
 
+    practice:
+      # ── Backyard Sky / Moon Phases flagship interactive practice ──
+      - { station: moon-phases, band: 0, kind: moon-position, say: pr-mp-full, prompt: "Move the Moon to make a Full Moon.", scene: { kind: moonPhase, interactive: true }, target: { phase: full, label: "Full Moon", toleranceDeg: 16 }, feedback: { correctSay: pr-mp-full-ok, hintSay: pr-mp-full-hint } }
+      - { station: moon-phases, band: 0, kind: moon-position, say: pr-mp-first, prompt: "Move the Moon to make a First Quarter Moon.", scene: { kind: moonPhase, interactive: true }, target: { phase: first-quarter, label: "First Quarter", toleranceDeg: 16 }, feedback: { correctSay: pr-mp-first-ok, hintSay: pr-mp-first-hint } }
+      - { station: moon-phases, band: 0, kind: moon-position, say: pr-mp-waning-crescent, prompt: "Move the Moon to make a Waning Crescent.", scene: { kind: moonPhase, interactive: true }, target: { phase: waning-crescent, label: "Waning Crescent", toleranceDeg: 16 }, feedback: { correctSay: pr-mp-waning-crescent-ok, hintSay: pr-mp-waning-crescent-hint } }
+
   narration:
     mp-0: "Why does the Moon seem to change shape each night?"
     mp-1: "The Moon makes no light of its own — it shines by reflecting sunlight, and the Sun always lights the half facing it."
@@ -557,6 +563,15 @@ course:
     mp-x-waning-gibbous: "Waning Gibbous — most of the lit side still shows, but now it's shrinking."
     mp-x-last: "Last Quarter — we see the other half of the lit side."
     mp-x-waning-crescent: "Waning Crescent — only a thin sliver of light is left before the next new moon."
+    pr-mp-full: "Move the Moon to make a Full Moon."
+    pr-mp-full-ok: "Yes — the Moon is opposite the Sun, so we see its whole lit face."
+    pr-mp-full-hint: "Try the far side of Earth, away from the Sun."
+    pr-mp-first: "Move the Moon to make a First Quarter Moon."
+    pr-mp-first-ok: "Great — First Quarter shows half of the Moon's lit side."
+    pr-mp-first-hint: "Try placing the Moon a quarter of the way around from New Moon."
+    pr-mp-waning-crescent: "Move the Moon to make a Waning Crescent."
+    pr-mp-waning-crescent-ok: "Yes — only a thin sliver is lit, and it is shrinking toward New Moon."
+    pr-mp-waning-crescent-hint: "Try the last small sliver before the Moon returns to New Moon."
     dn-0: "Have you ever wondered why it gets dark at night?"
     dn-1: "Earth spins like a top — one full spin takes about 24 hours."
     dn-2: "The side facing the Sun has daytime; the side facing away has night."

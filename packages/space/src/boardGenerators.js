@@ -33,6 +33,26 @@ export function genQuiz(items = [], _ctx = {}, rnd = Math.random) {
   };
 }
 
+// Practice missions are authored as an ordered list in YAML. Unlike `quiz`, this returns
+// the full station mission sequence; the PracticeScreen paces through `steps`.
+export function genPractice(items = [], _ctx = {}) {
+  const steps = (items || []).map((item) => ({
+    kind: item.kind,
+    say: item.say,
+    prompt: item.prompt,
+    scene: item.scene,
+    target: item.target || {},
+    feedback: item.feedback || {},
+    station: item.station,
+    band: item.band,
+  }));
+  return {
+    word: steps[0]?.target?.label ?? steps[0]?.target?.phase ?? null,
+    steps,
+  };
+}
+
 export const BOARD_GENERATORS = {
   quiz: { generate: genQuiz, content: 'questions' },
+  practice: { generate: genPractice, content: 'practice' },
 };

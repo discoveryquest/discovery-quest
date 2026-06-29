@@ -321,6 +321,19 @@ Reviewer pass against the current codebase. Severity: **[H]** must fix before bu
   difficulty tiers. If practice later wants multiple difficulty levels per station, that
   needs a separate field; do not overload `band`.
 
+- **[H] R9 — Interactive mechanics already exist as dormant "Cosmic Gates".** The repo has a
+  second, dormant interactive system under `packages/space/src/gates/` with PURE, unit-tested
+  scoring: `phaseLock.js` (drag the Sun/Moon to a target phase — exactly the user's example),
+  `orbitSort.js` (order/sort planets), `connectStars.js` (trace a constellation), `dock.js`
+  (align/dock), and `eventHorizon.js` (slingshot). These are wired to the 3D `SpaceQuest.jsx`
+  + `gameStore` path, which the live 2D preview (`App.jsx` → `QuizScreen`) does NOT mount.
+  **Decision:** the redesign REUSES these pure scoring modules and ports the mechanic UIs
+  into the live 2D `PracticeScreen`, instead of inventing new scoring. The flagship
+  `moon-position` mechanic uses `gates/phaseLock.js` directly. This shrinks Phase 2
+  significantly: most mechanics already have tested math (`scorePhase`, `phaseForAngle`,
+  order/sort/trace scorers). The new code is mostly the 2D host + thin mechanic views +
+  YAML authoring + audio wiring.
+
 ### Verdict
 
 Design is **sound and buildable** with two must-resolve items folded in before coding:
