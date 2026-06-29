@@ -1,7 +1,7 @@
 // Compare2D — side-by-side size comparison of 2+ bodies.
 // items: [{ label, relSize (0..1), color? }]. Bodies are scaled circles.
 // Mostly static; no animation needed.
-import { roleGradient, roleGlow } from './roles.js';
+import { celestialGradient, celestialGlow } from './roles.js';
 import { SpaceStage } from './base.jsx';
 
 const MAX_SIZE = 110; // px for relSize=1
@@ -12,8 +12,8 @@ export default function Compare2D({ items = [] }) {
       <div className="flex h-full w-full items-end justify-center gap-6 pb-6">
         {items.map((item, i) => {
           const size = Math.max(16, Math.round((item.relSize ?? 0.5) * MAX_SIZE));
-          const gradient = item.gradient ?? roleGradient(item.role);
-          const glow = item.glow ?? roleGlow(item.role);
+          const gradient = item.gradient ?? celestialGradient(item.role, item.color);
+          const glow = item.glow ?? celestialGlow(item.role, item.color);
           return (
             <div key={i} className="flex flex-col items-center gap-2">
               <div

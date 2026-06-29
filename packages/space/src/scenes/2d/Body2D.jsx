@@ -5,7 +5,7 @@
 import { useId } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { phaseMaskShift } from '../geometry.js';
-import { roleGradient, roleGlow } from './roles.js';
+import { celestialGradient, celestialGlow } from './roles.js';
 import { SpaceStage } from './base.jsx';
 
 const BODY_SIZE = 120; // px diameter
@@ -62,10 +62,11 @@ function Rings({ size, tilt = 20 }) {
 // Bare content (no SpaceStage) — used standalone via Body2D, or nested as a scrub/reveal base.
 export function Body2DContent({ body = {}, label }) {
   const reduce = useReducedMotion();
-  const { role = 'planet', rings, tilt, phase } = body;
-  const gradient = roleGradient(role);
-  const glow = roleGlow(role);
+  const { role = 'planet', color, rings, tilt, phase } = body;
+  const gradient = celestialGradient(role, color);
+  const glow = celestialGlow(role, color);
   const glowSize = ROLE_GLOW_SIZE[role] ?? 24;
+  const tiltDeg = tilt === true ? 23.5 : tilt;
 
   const boxShadow = [
     `0 0 ${glowSize}px ${glowSize / 2}px ${glow}`,
@@ -90,7 +91,7 @@ export function Body2DContent({ body = {}, label }) {
             borderRadius: '50%',
             background: gradient,
             boxShadow,
-            transform: tilt ? `rotate(${tilt}deg)` : undefined,
+            transform: tiltDeg ? `rotate(${tiltDeg}deg)` : undefined,
             position: 'relative',
             overflow: 'hidden',
           }}

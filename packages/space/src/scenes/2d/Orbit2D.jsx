@@ -2,9 +2,9 @@
 // SVG dashed orbit rings; framer-motion rotation drives each body around the center.
 // Reduced-motion: static positions via orbitPosition(), no rotation animation.
 // Orbit2DContent is the bare inner content (no SpaceStage) for nesting as a scrub/reveal base.
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useTime, useTransform } from 'framer-motion';
 import { orbitPosition, phaseMaskShift } from '../geometry.js';
-import { roleGradient, roleGlow } from './roles.js';
+import { celestialGradient, celestialGlow } from './roles.js';
 import { SpaceStage } from './base.jsx';
 
 // Width of the stage area for orbit placement
@@ -14,13 +14,14 @@ const CX = W / 2;
 const CY = H / 2;
 
 const ROLE_SIZE = { star: 52, planet: 28, moon: 14, blackhole: 36 };
+const ORBIT_Y_SCALE = 0.38;
 
 // Auto-assign orbit radii when not provided
 const AUTO_RADII = [62, 88, 110];
 
-function CelestialBody({ role = 'planet', size, phaseLit, style: extraStyle }) {
-  const grad = roleGradient(role);
-  const glow = roleGlow(role);
+function CelestialBody({ role = 'planet', color, size, phaseLit, style: extraStyle }) {
+  const grad = celestialGradient(role, color);
+  const glow = celestialGlow(role, color);
   const boxShadow = `0 0 ${size * 0.5}px ${size * 0.25}px ${glow}`;
   const phaseShift = phaseLit != null ? phaseMaskShift(phaseLit, size) : null;
   return (
@@ -51,10 +52,63 @@ function CelestialBody({ role = 'planet', size, phaseLit, style: extraStyle }) {
   );
 }
 
+function OrbitingBody({ body, index, count }) {
+  const reduce = useReducedMotion();
+  const size = ROLE_SIZE[body.role] ?? 20;
+  const staticAngle = (360 / count) * index;
+  const time = useTime();
+  const x = useTransform(time, (t) => {
+    const angle = ((t / 1000 / body.period) * 360 + staticAngle) * (Math.PI / 180);
+    return Math.cos(angle) * body.radius;
+  });
+  const y = useTransform(time, (t) => {
+    const angle = ((t / 1000 / body.period) * 360 + staticAngle) * (Math.PI / 180);
+    return Math.sin(angle) * body.radius * ORBIT_Y_SCALE;
+  });
+
+  if (reduce) {
+    const pos = orbitPosition({ cx: CX, cy: CY, radius: body.radius, angleDeg: staticAngle });
+    const px = pos.x;
+    const py = CY + (pos.y - CY) * ORBIT_Y_SCALE;
+    return (
+      <div
+        style={{ position: 'absolute', left: px - size / 2, top: py - size / 2, zIndex: 3 }}
+      >
+        <CelestialBody
+          role={body.role}
+          color={body.color}
+          size={size}
+          phaseLit={body.phaseLit}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      style={{
+        position: 'absolute',
+        left: CX,
+        top: CY,
+        x,
+        y,
+        marginLeft: -size / 2,
+        marginTop: -size / 2,
+        zIndex: 3,
+      }}
+    >
+      <CelestialBody
+        role={body.role}
+        color={body.color}
+        size={size}
+        phaseLit={body.phaseLit}
+      />
+    </motion.div>
+  );
+}
+
 // Bare content (no SpaceStage) — used standalone via Orbit2D, or nested as a scrub/reveal base.
 export function Orbit2DContent({ bodies = [] }) {
-  const reduce = useReducedMotion();
-
   // Separate center (no orbits prop) from orbiting bodies
   const center = bodies.find((b) => !b.orbits) ?? bodies[0];
   const orbiters = bodies.filter((b) => b.orbits || b !== center);
@@ -85,7 +139,7 @@ export function Orbit2DContent({ bodies = [] }) {
             cx={CX}
             cy={CY}
             rx={b.radius}
-            ry={b.radius * 0.38}
+            ry={b.radius * ORBIT_Y_SCALE}
             fill="none"
             stroke="rgba(148,163,184,0.22)"
             strokeWidth={1}
@@ -104,58 +158,14 @@ export function Orbit2DContent({ bodies = [] }) {
             zIndex: 2,
           }}
         >
-          <CelestialBody role={center.role} size={centerSize} />
+          <CelestialBody role={center.role} color={center.color} size={centerSize} />
         </div>
       )}
 
       {/* Orbiting bodies */}
-      {orbitersWithRadius.map((b, idx) => {
-        const size = ROLE_SIZE[b.role] ?? 20;
-        const staticAngle = (360 / orbitersWithRadius.length) * idx;
-
-        if (reduce) {
-          const pos = orbitPosition({ cx: CX, cy: CY, radius: b.radius, angleDeg: staticAngle });
-          const px = pos.x;
-          const py = CY + (pos.y - CY) * 0.38; // squish y for the inclined ellipse
-          return (
-            <div
-              key={b.id}
-              style={{ position: 'absolute', left: px - size / 2, top: py - size / 2, zIndex: 3 }}
-            >
-              <CelestialBody role={b.role} size={size} phaseLit={b.phaseLit} />
-            </div>
-          );
-        }
-
-        // Animated orbit: rotating container, then counter-rotate child so it stays upright.
-        return (
-          <motion.div
-            key={b.id}
-            style={{ position: 'absolute', left: CX, top: CY, width: 0, height: 0, zIndex: 3 }}
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: b.period, ease: 'linear' }}
-          >
-            {/* Translate to orbit position along x, then squish y for the inclined ellipse */}
-            <div
-              style={{
-                position: 'absolute',
-                left: b.radius - size / 2,
-                top: -size / 2,
-                transformOrigin: `${size / 2 - b.radius}px ${size / 2}px`,
-                transform: `scaleY(0.38)`,
-              }}
-            >
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: b.period, ease: 'linear' }}
-                style={{ transformOrigin: `${size / 2}px ${size / 2}px` }}
-              >
-                <CelestialBody role={b.role} size={size} phaseLit={b.phaseLit} />
-              </motion.div>
-            </div>
-          </motion.div>
-        );
-      })}
+      {orbitersWithRadius.map((b, idx) => (
+        <OrbitingBody key={b.id} body={b} index={idx} count={orbitersWithRadius.length} />
+      ))}
     </div>
   );
 }
