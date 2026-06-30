@@ -47,8 +47,7 @@ test('every station generates valid board steps', () => {
 test('band slicing routes the right questions to each station', () => {
   const promptOf = (id) => course.stationsById.get(id).generate().steps[0].prompt;
   assert.equal(promptOf('moon-phases'), 'Move the Moon to make a Full Moon.', 'moon-phases draws its band-0 ordered practice mission');
-  const marsQs = new Set(['What is Mars like?', 'What will Mars explorers need to make or bring?']);
-  for (let i = 0; i < 12; i++) assert.ok(marsQs.has(promptOf('mars-base')), 'mars-base draws only its band-11 questions');
+  assert.equal(promptOf('mars-base'), 'Sort what a Mars base must make or bring.', 'mars-base draws its band-19 ordered practice mission');
 });
 
 test('every station resolves to a lesson the course knows', () => {

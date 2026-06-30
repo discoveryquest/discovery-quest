@@ -60,11 +60,11 @@ course:
       color: "#2DD4BF"
       blurb: Satellites, the ISS, spacewalks, rockets, and living on Mars.
       stations:
-        - { id: life-in-orbit, title: Life in Orbit, icon: 🛰️, sub: living on the ISS, board: quiz, bands: [15], lesson: life-in-orbit, concept: iss-astronauts }
-        - { id: getting-there, title: Getting There, icon: 🚀, sub: how we reach space, board: quiz, bands: [16], lesson: getting-there, concept: space-travel-tech }
-        - { id: satellites, title: Satellites, icon: 📡, sub: helpers orbiting Earth, board: quiz, bands: [17], lesson: satellites, concept: satellites }
-        - { id: spacewalks, title: Spacewalks, icon: 🧑‍🚀, sub: working outside the ship, board: quiz, bands: [18], lesson: spacewalks, concept: spacesuits }
-        - { id: mars-base, title: Mars Base, icon: 🔴, sub: living on another world, board: quiz, bands: [19], lesson: mars-base, concept: living-off-earth }
+        - { id: life-in-orbit, title: Life in Orbit, icon: 🛰️, sub: living on the ISS, board: practice, bands: [15], lesson: life-in-orbit, concept: iss-astronauts }
+        - { id: getting-there, title: Getting There, icon: 🚀, sub: how we reach space, board: practice, bands: [16], lesson: getting-there, concept: space-travel-tech }
+        - { id: satellites, title: Satellites, icon: 📡, sub: helpers orbiting Earth, board: practice, bands: [17], lesson: satellites, concept: satellites }
+        - { id: spacewalks, title: Spacewalks, icon: 🧑‍🚀, sub: working outside the ship, board: practice, bands: [18], lesson: spacewalks, concept: spacesuits }
+        - { id: mars-base, title: Mars Base, icon: 🔴, sub: living on another world, board: practice, bands: [19], lesson: mars-base, concept: living-off-earth }
 
   lessons:
     moon-phases:
@@ -579,6 +579,17 @@ course:
       - { station: galaxies, band: 13, kind: sort-zones, say: pr-ga-scale, prompt: "Sort the space objects from small family to huge family.", target: { zones: [ { id: star, label: Single star, emoji: "⭐", hint: "One star" }, { id: galaxy, label: Galaxy, emoji: "🌌", hint: "Billions of stars" } ], tokens: [ { id: sun, label: Sun, emoji: "☀️", zone: star }, { id: milky, label: "Milky Way", emoji: "🌌", zone: galaxy }, { id: andromeda, label: Andromeda, emoji: "🌌", zone: galaxy }, { id: sirius, label: Sirius, emoji: "⭐", zone: star } ] }, feedback: { correctSay: pr-ga-scale-ok, hintSay: pr-ga-scale-hint } }
       - { station: black-holes, band: 14, kind: tap-hotspot, say: pr-bh-light, prompt: "Tap the clue that shows black holes can bend light.", target: { id: light, items: [ { id: light, label: "Bent light", emoji: "〰️", x: 32, y: 42 }, { id: sound, label: Sound, emoji: "🔊", x: 58, y: 38 }, { id: cloud, label: Cloud, emoji: "☁️", x: 74, y: 64 } ] }, feedback: { correctSay: pr-bh-light-ok, hintSay: pr-bh-light-hint } }
       - { station: black-holes, band: 14, kind: tap-hotspot, say: pr-bh-tug, prompt: "Tap the clue that reveals something invisible tugging on a star.", target: { id: tug, items: [ { id: gas, label: "Hot gas", emoji: "🔥", x: 30, y: 50 }, { id: tug, label: "Star tug", emoji: "⭐", x: 58, y: 42 }, { id: ice, label: Ice, emoji: "🧊", x: 74, y: 66 } ] }, feedback: { correctSay: pr-bh-tug-ok, hintSay: pr-bh-tug-hint } }
+      # ── The Human Element ──
+      - { station: life-in-orbit, band: 15, kind: tap-hotspot, say: pr-lo-freefall, prompt: "Tap why astronauts float on the space station.", target: { id: freefall, items: [ { id: freefall, label: Free-fall, emoji: "🛰️", x: 38, y: 45 }, { id: no-gravity, label: "No gravity", emoji: "🚫", x: 62, y: 38 }, { id: magnets, label: Magnets, emoji: "🧲", x: 72, y: 66 } ] }, feedback: { correctSay: pr-lo-freefall-ok, hintSay: pr-lo-freefall-hint } }
+      - { station: life-in-orbit, band: 15, kind: sort-zones, say: pr-lo-day, prompt: "Sort ISS activities into body care or science work.", target: { zones: [ { id: body, label: Body care, emoji: "💪", hint: "Keeping astronauts healthy" }, { id: science, label: Science, emoji: "🔬", hint: "Experiments in microgravity" } ], tokens: [ { id: exercise, label: Exercise, emoji: "🏃", zone: body }, { id: sleep, label: Sleep, emoji: "😴", zone: body }, { id: experiment, label: Experiment, emoji: "🧪", zone: science }, { id: plants, label: "Plant study", emoji: "🌱", zone: science } ] }, feedback: { correctSay: pr-lo-day-ok, hintSay: pr-lo-day-hint } }
+      - { station: getting-there, band: 16, kind: order-line, say: pr-gt-sequence, prompt: "Arrange the rocket trip from launch pad to orbit.", target: { order: [ thrust, stage, orbit, reuse ], items: [ { id: thrust, label: Thrust, emoji: "🔥" }, { id: stage, label: "Stage drop", emoji: "⬇️" }, { id: orbit, label: Orbit, emoji: "🛰️" }, { id: reuse, label: Landing, emoji: "♻️" } ] }, feedback: { correctSay: pr-gt-sequence-ok, hintSay: pr-gt-sequence-hint } }
+      - { station: getting-there, band: 16, kind: tap-hotspot, say: pr-gt-thrust, prompt: "Tap what pushes a rocket upward.", target: { id: thrust, items: [ { id: thrust, label: Thrust, emoji: "🔥", x: 40, y: 55 }, { id: wind, label: Wind, emoji: "💨", x: 62, y: 40 }, { id: rope, label: Rope, emoji: "🪢", x: 72, y: 65 } ] }, feedback: { correctSay: pr-gt-thrust-ok, hintSay: pr-gt-thrust-hint } }
+      - { station: satellites, band: 17, kind: sort-zones, say: pr-sa-jobs, prompt: "Match each satellite helper to its job.", target: { zones: [ { id: navigation, label: Navigation, emoji: "🧭", hint: "Finding location" }, { id: weather, label: Weather, emoji: "🌦️", hint: "Watching clouds and storms" } ], tokens: [ { id: gps, label: GPS, emoji: "📍", zone: navigation }, { id: maps, label: Maps, emoji: "🗺️", zone: navigation }, { id: clouds, label: Clouds, emoji: "☁️", zone: weather }, { id: storms, label: Storms, emoji: "⛈️", zone: weather } ] }, feedback: { correctSay: pr-sa-jobs-ok, hintSay: pr-sa-jobs-hint } }
+      - { station: satellites, band: 17, kind: tap-hotspot, say: pr-sa-orbit, prompt: "Tap where satellites travel.", target: { id: orbit, items: [ { id: orbit, label: Orbit, emoji: "🛰️", x: 50, y: 42 }, { id: sun, label: Sun, emoji: "☀️", x: 28, y: 60 }, { id: ocean, label: Ocean, emoji: "🌊", x: 72, y: 65 } ] }, feedback: { correctSay: pr-sa-orbit-ok, hintSay: pr-sa-orbit-hint } }
+      - { station: spacewalks, band: 18, kind: tap-hotspot, say: pr-sw-air, prompt: "Tap the spacesuit system that helps astronauts breathe.", target: { id: air, items: [ { id: air, label: Air, emoji: "🫁", x: 36, y: 42 }, { id: cooling, label: Cooling, emoji: "❄️", x: 58, y: 38 }, { id: tether, label: Tether, emoji: "🪢", x: 72, y: 66 } ] }, feedback: { correctSay: pr-sw-air-ok, hintSay: pr-sw-air-hint } }
+      - { station: spacewalks, band: 18, kind: tap-hotspot, say: pr-sw-tether, prompt: "Tap what keeps a spacewalker attached to the spacecraft.", target: { id: tether, items: [ { id: air, label: Air, emoji: "🫁", x: 36, y: 42 }, { id: cooling, label: Cooling, emoji: "❄️", x: 58, y: 38 }, { id: tether, label: Tether, emoji: "🪢", x: 72, y: 66 } ] }, feedback: { correctSay: pr-sw-tether-ok, hintSay: pr-sw-tether-hint } }
+      - { station: mars-base, band: 19, kind: sort-zones, say: pr-mb-supplies, prompt: "Sort what a Mars base must make or bring.", target: { zones: [ { id: survival, label: Survival systems, emoji: "🏠", hint: "Needed to live" }, { id: extra, label: Not enough alone, emoji: "🎒", hint: "Useful, but not life support" } ], tokens: [ { id: air, label: Air, emoji: "💨", zone: survival }, { id: water, label: Water, emoji: "💧", zone: survival }, { id: food, label: Food, emoji: "🥬", zone: survival }, { id: sunglasses, label: Sunglasses, emoji: "🕶️", zone: extra } ] }, feedback: { correctSay: pr-mb-supplies-ok, hintSay: pr-mb-supplies-hint } }
+      - { station: mars-base, band: 19, kind: tap-hotspot, say: pr-mb-power, prompt: "Tap the system that could run heaters, labs, and life support.", target: { id: power, items: [ { id: habitat, label: Habitat, emoji: "🏠", x: 34, y: 48 }, { id: power, label: Power, emoji: "⚡", x: 58, y: 36 }, { id: rover, label: Rover, emoji: "🚙", x: 74, y: 66 } ] }, feedback: { correctSay: pr-mb-power-ok, hintSay: pr-mb-power-hint } }
 
   narration:
     mp-0: "Why does the Moon seem to change shape each night?"
@@ -686,6 +697,36 @@ course:
     pr-bh-tug: "Tap the clue that reveals something invisible tugging on a star."
     pr-bh-tug-ok: "Correct — a star orbiting something invisible can reveal a black hole."
     pr-bh-tug-hint: "Look for the star being pulled by gravity."
+    pr-lo-freefall: "Tap why astronauts float on the space station."
+    pr-lo-freefall-ok: "Correct — astronauts float because they and the station are falling around Earth together."
+    pr-lo-freefall-hint: "They are still near Earth's gravity, but they are in continuous free-fall."
+    pr-lo-day: "Sort ISS activities into body care or science work."
+    pr-lo-day-ok: "Yes — crews care for their bodies and run science experiments in orbit."
+    pr-lo-day-hint: "Exercise and sleep help the body; experiments and plant studies are science."
+    pr-gt-sequence: "Arrange the rocket trip from launch pad to orbit."
+    pr-gt-sequence-ok: "Yes — thrust lifts off, stages drop, orbit begins, and reusable parts can land."
+    pr-gt-sequence-hint: "Start with engine thrust and end with landing for reuse."
+    pr-gt-thrust: "Tap what pushes a rocket upward."
+    pr-gt-thrust-ok: "Right — thrust from hot gas pushes the rocket upward."
+    pr-gt-thrust-hint: "Look for the fiery engine push."
+    pr-sa-jobs: "Match each satellite helper to its job."
+    pr-sa-jobs-ok: "Correct — GPS helps navigation, while weather satellites watch clouds and storms."
+    pr-sa-jobs-hint: "Maps and GPS find places; clouds and storms belong to weather."
+    pr-sa-orbit: "Tap where satellites travel."
+    pr-sa-orbit-ok: "Yes — satellites travel in orbits around Earth."
+    pr-sa-orbit-hint: "Choose the path circling Earth."
+    pr-sw-air: "Tap the spacesuit system that helps astronauts breathe."
+    pr-sw-air-ok: "Correct — the suit backpack supplies oxygen for breathing."
+    pr-sw-air-hint: "Look for the breathing clue."
+    pr-sw-tether: "Tap what keeps a spacewalker attached to the spacecraft."
+    pr-sw-tether-ok: "Yes — a tether keeps the astronaut connected."
+    pr-sw-tether-hint: "Look for the safety line."
+    pr-mb-supplies: "Sort what a Mars base must make or bring."
+    pr-mb-supplies-ok: "Yes — air, water, and food are survival systems for a Mars base."
+    pr-mb-supplies-hint: "A Mars base needs life support, not just travel gear."
+    pr-mb-power: "Tap the system that could run heaters, labs, and life support."
+    pr-mb-power-ok: "Correct — power keeps a Mars base running."
+    pr-mb-power-hint: "Look for the energy symbol."
     dn-0: "Have you ever wondered why it gets dark at night?"
     dn-1: "Earth spins like a top — one full spin takes about 24 hours."
     dn-2: "The side facing the Sun has daytime; the side facing away has night."
