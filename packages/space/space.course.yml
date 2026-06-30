@@ -48,11 +48,11 @@ course:
       color: "#818CF8"
       blurb: Constellations, the lives of stars, nebulae, galaxies, and black holes.
       stations:
-        - { id: constellations, title: Constellations, icon: ✨, sub: patterns in the stars, board: quiz, bands: [10], lesson: constellations, concept: constellations }
-        - { id: star-life, title: A Star's Life, icon: ⭐, sub: how stars are born and die, board: quiz, bands: [11], lesson: star-life, concept: star-lifecycle }
-        - { id: nebulae, title: Nebulae, icon: ☁️, sub: where stars are born, board: quiz, bands: [12], lesson: nebulae, concept: nebulae }
-        - { id: galaxies, title: Galaxies, icon: 🌌, sub: islands of billions of stars, board: quiz, bands: [13], lesson: galaxies, concept: galaxies }
-        - { id: black-holes, title: Black Holes, icon: 🕳️, sub: gravity so strong light can't escape, board: quiz, bands: [14], lesson: black-holes, concept: black-holes }
+        - { id: constellations, title: Constellations, icon: ✨, sub: patterns in the stars, board: practice, bands: [10], lesson: constellations, concept: constellations }
+        - { id: star-life, title: A Star's Life, icon: ⭐, sub: how stars are born and die, board: practice, bands: [11], lesson: star-life, concept: star-lifecycle }
+        - { id: nebulae, title: Nebulae, icon: ☁️, sub: where stars are born, board: practice, bands: [12], lesson: nebulae, concept: nebulae }
+        - { id: galaxies, title: Galaxies, icon: 🌌, sub: islands of billions of stars, board: practice, bands: [13], lesson: galaxies, concept: galaxies }
+        - { id: black-holes, title: Black Holes, icon: 🕳️, sub: gravity so strong light can't escape, board: practice, bands: [14], lesson: black-holes, concept: black-holes }
 
     - id: human-element
       title: The Human Element
@@ -568,6 +568,17 @@ course:
       - { station: asteroids-comets, band: 8, kind: tap-hotspot, say: pr-ac-belt, prompt: "Tap where most asteroids travel.", target: { id: belt, items: [ { id: sun, label: Sun, emoji: "☀️", x: 25, y: 50 }, { id: belt, label: "Asteroid belt", emoji: "🪨", x: 55, y: 44 }, { id: neptune, label: Neptune, emoji: "🔵", x: 76, y: 63 } ] }, feedback: { correctSay: pr-ac-belt-ok, hintSay: pr-ac-belt-hint } }
       - { station: whole-system, band: 9, kind: order-line, say: pr-ws-order, prompt: "Arrange the planets from closest to farthest from the Sun.", target: { order: [ mercury, venus, earth, mars, jupiter, saturn, uranus, neptune ], items: [ { id: mercury, label: Mercury, emoji: "☿️" }, { id: venus, label: Venus, emoji: "🟡" }, { id: earth, label: Earth, emoji: "🌍" }, { id: mars, label: Mars, emoji: "🔴" }, { id: jupiter, label: Jupiter, emoji: "🪐" }, { id: saturn, label: Saturn, emoji: "💍" }, { id: uranus, label: Uranus, emoji: "🧊" }, { id: neptune, label: Neptune, emoji: "🔵" } ] }, feedback: { correctSay: pr-ws-order-ok, hintSay: pr-ws-order-hint } }
       - { station: whole-system, band: 9, kind: order-line, say: pr-ws-inner-outer, prompt: "Arrange this mini Solar System from inside to outside.", target: { order: [ mercury, earth, jupiter, neptune ], items: [ { id: mercury, label: Mercury, emoji: "☿️" }, { id: earth, label: Earth, emoji: "🌍" }, { id: jupiter, label: Jupiter, emoji: "🪐" }, { id: neptune, label: Neptune, emoji: "🔵" } ] }, feedback: { correctSay: pr-ws-inner-outer-ok, hintSay: pr-ws-inner-outer-hint } }
+      # ── Deep Space ──
+      - { station: constellations, band: 10, kind: connect-stars, say: pr-cn-connect, prompt: "Connect the stars to make a constellation pattern.", target: { order: [ a, b, c, d ], stars: [ { id: a, x: 24, y: 68 }, { id: b, x: 42, y: 42 }, { id: c, x: 62, y: 58 }, { id: d, x: 78, y: 30 } ] }, feedback: { correctSay: pr-cn-connect-ok, hintSay: pr-cn-connect-hint } }
+      - { station: constellations, band: 10, kind: tap-hotspot, say: pr-cn-guide, prompt: "Tap the sky clue travelers used to find their way.", target: { id: guide, items: [ { id: picture, label: Picture, emoji: "✨", x: 32, y: 45 }, { id: guide, label: Guide star, emoji: "🧭", x: 58, y: 38 }, { id: season, label: Season, emoji: "🍂", x: 72, y: 64 } ] }, feedback: { correctSay: pr-cn-guide-ok, hintSay: pr-cn-guide-hint } }
+      - { station: star-life, band: 11, kind: order-line, say: pr-sl-order, prompt: "Arrange the life of a massive star from birth to explosion.", target: { order: [ nebula, newstar, giant, supernova ], items: [ { id: nebula, label: Nebula, emoji: "☁️" }, { id: newstar, label: "New star", emoji: "⭐" }, { id: giant, label: "Red giant", emoji: "🔴" }, { id: supernova, label: Supernova, emoji: "💥" } ] }, feedback: { correctSay: pr-sl-order-ok, hintSay: pr-sl-order-hint } }
+      - { station: star-life, band: 11, kind: tap-hotspot, say: pr-sl-birth, prompt: "Tap where stars are born.", target: { id: nebula, items: [ { id: nebula, label: Nebula, emoji: "☁️", x: 36, y: 46 }, { id: planet, label: Planet, emoji: "🌍", x: 62, y: 42 }, { id: asteroid, label: Asteroid, emoji: "🪨", x: 72, y: 66 } ] }, feedback: { correctSay: pr-sl-birth-ok, hintSay: pr-sl-birth-hint } }
+      - { station: nebulae, band: 12, kind: tap-hotspot, say: pr-ne-stars, prompt: "Tap the place where new stars can begin inside a nebula.", target: { id: stars, items: [ { id: gas, label: Gas, emoji: "💨", x: 30, y: 50 }, { id: dust, label: Dust, emoji: "✨", x: 55, y: 38 }, { id: stars, label: "New stars", emoji: "⭐", x: 70, y: 62 } ] }, feedback: { correctSay: pr-ne-stars-ok, hintSay: pr-ne-stars-hint } }
+      - { station: nebulae, band: 12, kind: sort-zones, say: pr-ne-sort, prompt: "Sort what belongs inside a nebula.", target: { zones: [ { id: nebula, label: Nebula stuff, emoji: "☁️", hint: "Gas, dust, baby stars" }, { id: not, label: Not nebula stuff, emoji: "🚫", hint: "Objects that do not make the cloud" } ], tokens: [ { id: gas, label: Gas, emoji: "💨", zone: nebula }, { id: dust, label: Dust, emoji: "✨", zone: nebula }, { id: baby-star, label: "Baby star", emoji: "⭐", zone: nebula }, { id: rocket, label: Rocket, emoji: "🚀", zone: not } ] }, feedback: { correctSay: pr-ne-sort-ok, hintSay: pr-ne-sort-hint } }
+      - { station: galaxies, band: 13, kind: tap-hotspot, say: pr-ga-home, prompt: "Tap our home galaxy.", target: { id: milky, items: [ { id: milky, label: "Milky Way", emoji: "🌌", x: 42, y: 48 }, { id: sun, label: Sun, emoji: "☀️", x: 68, y: 38 }, { id: planet, label: Planet, emoji: "🌍", x: 72, y: 66 } ] }, feedback: { correctSay: pr-ga-home-ok, hintSay: pr-ga-home-hint } }
+      - { station: galaxies, band: 13, kind: sort-zones, say: pr-ga-scale, prompt: "Sort the space objects from small family to huge family.", target: { zones: [ { id: star, label: Single star, emoji: "⭐", hint: "One star" }, { id: galaxy, label: Galaxy, emoji: "🌌", hint: "Billions of stars" } ], tokens: [ { id: sun, label: Sun, emoji: "☀️", zone: star }, { id: milky, label: "Milky Way", emoji: "🌌", zone: galaxy }, { id: andromeda, label: Andromeda, emoji: "🌌", zone: galaxy }, { id: sirius, label: Sirius, emoji: "⭐", zone: star } ] }, feedback: { correctSay: pr-ga-scale-ok, hintSay: pr-ga-scale-hint } }
+      - { station: black-holes, band: 14, kind: tap-hotspot, say: pr-bh-light, prompt: "Tap the clue that shows black holes can bend light.", target: { id: light, items: [ { id: light, label: "Bent light", emoji: "〰️", x: 32, y: 42 }, { id: sound, label: Sound, emoji: "🔊", x: 58, y: 38 }, { id: cloud, label: Cloud, emoji: "☁️", x: 74, y: 64 } ] }, feedback: { correctSay: pr-bh-light-ok, hintSay: pr-bh-light-hint } }
+      - { station: black-holes, band: 14, kind: tap-hotspot, say: pr-bh-tug, prompt: "Tap the clue that reveals something invisible tugging on a star.", target: { id: tug, items: [ { id: gas, label: "Hot gas", emoji: "🔥", x: 30, y: 50 }, { id: tug, label: "Star tug", emoji: "⭐", x: 58, y: 42 }, { id: ice, label: Ice, emoji: "🧊", x: 74, y: 66 } ] }, feedback: { correctSay: pr-bh-tug-ok, hintSay: pr-bh-tug-hint } }
 
   narration:
     mp-0: "Why does the Moon seem to change shape each night?"
@@ -645,6 +656,36 @@ course:
     pr-ws-inner-outer: "Arrange this mini Solar System from inside to outside."
     pr-ws-inner-outer-ok: "Correct — Mercury is inside, then Earth, then Jupiter, then Neptune."
     pr-ws-inner-outer-hint: "Rocky worlds come before the far outer giants."
+    pr-cn-connect: "Connect the stars to make a constellation pattern."
+    pr-cn-connect-ok: "Yes — connecting the bright points makes a remembered star pattern."
+    pr-cn-connect-hint: "Start with the lower-left star, then follow the bent line upward."
+    pr-cn-guide: "Tap the sky clue travelers used to find their way."
+    pr-cn-guide-ok: "Correct — familiar star patterns helped travelers keep direction at night."
+    pr-cn-guide-hint: "Look for the clue that acts like a compass."
+    pr-sl-order: "Arrange the life of a massive star from birth to explosion."
+    pr-sl-order-ok: "Yes — cloud, new star, giant star, then supernova."
+    pr-sl-order-hint: "Stars begin in nebulae and massive ones can end with a supernova."
+    pr-sl-birth: "Tap where stars are born."
+    pr-sl-birth-ok: "Right — stars are born in nebulae, giant clouds of gas and dust."
+    pr-sl-birth-hint: "Choose the cloudy star nursery."
+    pr-ne-stars: "Tap the place where new stars can begin inside a nebula."
+    pr-ne-stars-ok: "Yes — gravity can gather material until new stars begin."
+    pr-ne-stars-hint: "Look for the tiny stars forming inside the cloud."
+    pr-ne-sort: "Sort what belongs inside a nebula."
+    pr-ne-sort-ok: "Correct — gas, dust, and forming stars belong in a nebula."
+    pr-ne-sort-hint: "A nebula is a cloud, not a spacecraft."
+    pr-ga-home: "Tap our home galaxy."
+    pr-ga-home-ok: "Yes — the Milky Way is our home galaxy."
+    pr-ga-home-hint: "Our home galaxy has a milky band of stars."
+    pr-ga-scale: "Sort the space objects from small family to huge family."
+    pr-ga-scale-ok: "Correct — a galaxy is a huge family of billions of stars."
+    pr-ga-scale-hint: "Single stars go together; galaxies are giant star families."
+    pr-bh-light: "Tap the clue that shows black holes can bend light."
+    pr-bh-light-ok: "Yes — strong gravity can bend light around a black hole."
+    pr-bh-light-hint: "Look for the wavy bent-light clue."
+    pr-bh-tug: "Tap the clue that reveals something invisible tugging on a star."
+    pr-bh-tug-ok: "Correct — a star orbiting something invisible can reveal a black hole."
+    pr-bh-tug-hint: "Look for the star being pulled by gravity."
     dn-0: "Have you ever wondered why it gets dark at night?"
     dn-1: "Earth spins like a top — one full spin takes about 24 hours."
     dn-2: "The side facing the Sun has daytime; the side facing away has night."

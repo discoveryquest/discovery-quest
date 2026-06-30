@@ -14,6 +14,7 @@ import StateDialPractice from './practice/StateDialPractice.jsx';
 import TargetTapPractice from './practice/TargetTapPractice.jsx';
 import SortZonesPractice from './practice/SortZonesPractice.jsx';
 import OrderLinePractice from './practice/OrderLinePractice.jsx';
+import ConnectStarsPractice from './practice/ConnectStarsPractice.jsx';
 
 const MECHANICS = {
   'moon-position': MoonPositionPractice,
@@ -23,6 +24,7 @@ const MECHANICS = {
   'compare-strength': TargetTapPractice,
   'sort-zones': SortZonesPractice,
   'order-line': OrderLinePractice,
+  'connect-stars': ConnectStarsPractice,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
