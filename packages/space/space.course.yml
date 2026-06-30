@@ -36,11 +36,11 @@ course:
       color: "#A78BFA"
       blurb: The Solar System — planets, moons, rings, and space rocks.
       stations:
-        - { id: inner-outer, title: Inner & Outer Planets, icon: 🪨, sub: rocky planets vs gas giants, board: quiz, bands: [5], lesson: inner-outer, concept: inner-vs-outer-planets }
-        - { id: gas-giants, title: The Gas Giants, icon: 🪐, sub: the giant outer planets, board: quiz, bands: [6], lesson: gas-giants, concept: gas-giants }
-        - { id: moons-rings, title: Moons & Rings, icon: 💍, sub: moons and ring systems, board: quiz, bands: [7], lesson: moons-rings, concept: moons-and-rings }
-        - { id: asteroids-comets, title: Asteroids & Comets, icon: ☄️, sub: space rocks and icy visitors, board: quiz, bands: [8], lesson: asteroids-comets, concept: small-bodies }
-        - { id: whole-system, title: The Whole System, icon: 📏, sub: order and scale, board: quiz, bands: [9], lesson: whole-system, concept: solar-system-order }
+        - { id: inner-outer, title: Inner & Outer Planets, icon: 🪨, sub: rocky planets vs gas giants, board: practice, bands: [5], lesson: inner-outer, concept: inner-vs-outer-planets }
+        - { id: gas-giants, title: The Gas Giants, icon: 🪐, sub: the giant outer planets, board: practice, bands: [6], lesson: gas-giants, concept: gas-giants }
+        - { id: moons-rings, title: Moons & Rings, icon: 💍, sub: moons and ring systems, board: practice, bands: [7], lesson: moons-rings, concept: moons-and-rings }
+        - { id: asteroids-comets, title: Asteroids & Comets, icon: ☄️, sub: space rocks and icy visitors, board: practice, bands: [8], lesson: asteroids-comets, concept: small-bodies }
+        - { id: whole-system, title: The Whole System, icon: 📏, sub: order and scale, board: practice, bands: [9], lesson: whole-system, concept: solar-system-order }
 
     - id: deep-space
       title: Deep Space
@@ -557,6 +557,17 @@ course:
       - { station: seasons, band: 3, kind: orbit-season, say: pr-se-winter, prompt: "Move Earth to winter for the northern half.", target: { state: winter, states: [ { id: spring, label: Spring }, { id: summer, label: Summer }, { id: autumn, label: Autumn }, { id: winter, label: Winter } ] }, feedback: { correctSay: pr-se-winter-ok, hintSay: pr-se-winter-hint } }
       - { station: gravity, band: 4, kind: compare-strength, say: pr-gr-strongest, prompt: "Tap the world with the strongest gravity.", target: { id: jupiter, items: [ { id: moon, label: Moon, emoji: "🌙", size: 48 }, { id: earth, label: Earth, emoji: "🌍", size: 66 }, { id: jupiter, label: Jupiter, emoji: "🪐", size: 96 } ] }, feedback: { correctSay: pr-gr-strongest-ok, hintSay: pr-gr-strongest-hint } }
       - { station: gravity, band: 4, kind: compare-strength, say: pr-gr-earth, prompt: "Tap the world whose gravity feels normal to us.", target: { id: earth, items: [ { id: moon, label: Moon, emoji: "🌙", size: 48 }, { id: earth, label: Earth, emoji: "🌍", size: 66 }, { id: jupiter, label: Jupiter, emoji: "🪐", size: 96 } ] }, feedback: { correctSay: pr-gr-earth-ok, hintSay: pr-gr-earth-hint } }
+      # ── Cosmic Neighborhood ──
+      - { station: inner-outer, band: 5, kind: sort-zones, say: pr-io-sort, prompt: "Sort each planet into inner rocky worlds or outer giants.", target: { zones: [ { id: inner, label: "Inner rocky", emoji: "🪨", hint: "Small and close to the Sun" }, { id: outer, label: "Outer giants", emoji: "🪐", hint: "Huge and far from the Sun" } ], tokens: [ { id: mercury, label: Mercury, emoji: "☿️", zone: inner }, { id: earth, label: Earth, emoji: "🌍", zone: inner }, { id: jupiter, label: Jupiter, emoji: "🪐", zone: outer }, { id: neptune, label: Neptune, emoji: "🔵", zone: outer } ] }, feedback: { correctSay: pr-io-sort-ok, hintSay: pr-io-sort-hint } }
+      - { station: inner-outer, band: 5, kind: sort-zones, say: pr-io-rocky-giant, prompt: "Put the rocky planets on one side and the giant planets on the other.", target: { zones: [ { id: rocky, label: "Rocky", emoji: "🪨", hint: "Solid surface" }, { id: giant, label: "Giant", emoji: "🎈", hint: "Gas or ice giant" } ], tokens: [ { id: venus, label: Venus, emoji: "🟡", zone: rocky }, { id: mars, label: Mars, emoji: "🔴", zone: rocky }, { id: saturn, label: Saturn, emoji: "💍", zone: giant }, { id: uranus, label: Uranus, emoji: "🧊", zone: giant } ] }, feedback: { correctSay: pr-io-rocky-giant-ok, hintSay: pr-io-rocky-giant-hint } }
+      - { station: gas-giants, band: 6, kind: compare-strength, say: pr-gg-biggest, prompt: "Tap the biggest planet.", target: { id: jupiter, items: [ { id: earth, label: Earth, emoji: "🌍", size: 48 }, { id: jupiter, label: Jupiter, emoji: "🪐", size: 98 }, { id: neptune, label: Neptune, emoji: "🔵", size: 64 } ] }, feedback: { correctSay: pr-gg-biggest-ok, hintSay: pr-gg-biggest-hint } }
+      - { station: gas-giants, band: 6, kind: tap-hotspot, say: pr-gg-rings, prompt: "Tap Saturn's rings.", target: { id: rings, items: [ { id: storm, label: "Jupiter storm", emoji: "🌀", x: 35, y: 46 }, { id: rings, label: "Saturn rings", emoji: "💍", x: 62, y: 42 }, { id: ice, label: "Ice giant", emoji: "🧊", x: 73, y: 66 } ] }, feedback: { correctSay: pr-gg-rings-ok, hintSay: pr-gg-rings-hint } }
+      - { station: moons-rings, band: 7, kind: sort-zones, say: pr-mr-sort, prompt: "Sort moons and ring pieces into the right orbit groups.", target: { zones: [ { id: moon, label: "Moon", emoji: "🌙", hint: "One larger world" }, { id: ring, label: "Ring pieces", emoji: "💍", hint: "Many small chunks" } ], tokens: [ { id: luna, label: "Large moon", emoji: "🌙", zone: moon }, { id: titan, label: Titan, emoji: "🟠", zone: moon }, { id: ice, label: "Icy chunk", emoji: "🧊", zone: ring }, { id: dust, label: Dust, emoji: "✨", zone: ring } ] }, feedback: { correctSay: pr-mr-sort-ok, hintSay: pr-mr-sort-hint } }
+      - { station: moons-rings, band: 7, kind: tap-hotspot, say: pr-mr-gravity, prompt: "Tap what keeps moons and ring pieces looping around a planet.", target: { id: gravity, items: [ { id: gravity, label: Gravity, emoji: "⬇️", x: 50, y: 42 }, { id: wind, label: Wind, emoji: "💨", x: 30, y: 65 }, { id: fire, label: Fire, emoji: "🔥", x: 70, y: 65 } ] }, feedback: { correctSay: pr-mr-gravity-ok, hintSay: pr-mr-gravity-hint } }
+      - { station: asteroids-comets, band: 8, kind: sort-zones, say: pr-ac-sort, prompt: "Sort each small body as rocky asteroid or icy comet.", target: { zones: [ { id: asteroid, label: Asteroid, emoji: "🪨", hint: "Mostly rock" }, { id: comet, label: Comet, emoji: "☄️", hint: "Ice and dust" } ], tokens: [ { id: belt-rock, label: "Belt rock", emoji: "🪨", zone: asteroid }, { id: crater-rock, label: "Cratered rock", emoji: "🟤", zone: asteroid }, { id: tail, label: "Glowing tail", emoji: "☄️", zone: comet }, { id: snowball, label: "Dusty snowball", emoji: "❄️", zone: comet } ] }, feedback: { correctSay: pr-ac-sort-ok, hintSay: pr-ac-sort-hint } }
+      - { station: asteroids-comets, band: 8, kind: tap-hotspot, say: pr-ac-belt, prompt: "Tap where most asteroids travel.", target: { id: belt, items: [ { id: sun, label: Sun, emoji: "☀️", x: 25, y: 50 }, { id: belt, label: "Asteroid belt", emoji: "🪨", x: 55, y: 44 }, { id: neptune, label: Neptune, emoji: "🔵", x: 76, y: 63 } ] }, feedback: { correctSay: pr-ac-belt-ok, hintSay: pr-ac-belt-hint } }
+      - { station: whole-system, band: 9, kind: order-line, say: pr-ws-order, prompt: "Arrange the planets from closest to farthest from the Sun.", target: { order: [ mercury, venus, earth, mars, jupiter, saturn, uranus, neptune ], items: [ { id: mercury, label: Mercury, emoji: "☿️" }, { id: venus, label: Venus, emoji: "🟡" }, { id: earth, label: Earth, emoji: "🌍" }, { id: mars, label: Mars, emoji: "🔴" }, { id: jupiter, label: Jupiter, emoji: "🪐" }, { id: saturn, label: Saturn, emoji: "💍" }, { id: uranus, label: Uranus, emoji: "🧊" }, { id: neptune, label: Neptune, emoji: "🔵" } ] }, feedback: { correctSay: pr-ws-order-ok, hintSay: pr-ws-order-hint } }
+      - { station: whole-system, band: 9, kind: order-line, say: pr-ws-inner-outer, prompt: "Arrange this mini Solar System from inside to outside.", target: { order: [ mercury, earth, jupiter, neptune ], items: [ { id: mercury, label: Mercury, emoji: "☿️" }, { id: earth, label: Earth, emoji: "🌍" }, { id: jupiter, label: Jupiter, emoji: "🪐" }, { id: neptune, label: Neptune, emoji: "🔵" } ] }, feedback: { correctSay: pr-ws-inner-outer-ok, hintSay: pr-ws-inner-outer-hint } }
 
   narration:
     mp-0: "Why does the Moon seem to change shape each night?"
@@ -604,6 +615,36 @@ course:
     pr-gr-earth: "Tap the world whose gravity feels normal to us."
     pr-gr-earth-ok: "Right — Earth's gravity is what feels normal to people on Earth."
     pr-gr-earth-hint: "Choose our home planet."
+    pr-io-sort: "Sort each planet into inner rocky worlds or outer giants."
+    pr-io-sort-ok: "Yes — the inner planets are rocky, and Jupiter and Neptune are outer giants."
+    pr-io-sort-hint: "Small solid worlds go inside; huge gas and ice worlds go outside."
+    pr-io-rocky-giant: "Put the rocky planets on one side and the giant planets on the other."
+    pr-io-rocky-giant-ok: "Correct — Venus and Mars are rocky, while Saturn and Uranus are giants."
+    pr-io-rocky-giant-hint: "Rocky planets have solid surfaces; giant planets are much larger."
+    pr-gg-biggest: "Tap the biggest planet."
+    pr-gg-biggest-ok: "Yes — Jupiter is the biggest planet in our Solar System."
+    pr-gg-biggest-hint: "Look for the largest giant."
+    pr-gg-rings: "Tap Saturn's rings."
+    pr-gg-rings-ok: "Right — Saturn's bright rings are made of ice and rock."
+    pr-gg-rings-hint: "Look for the wide hoop around Saturn."
+    pr-mr-sort: "Sort moons and ring pieces into the right orbit groups."
+    pr-mr-sort-ok: "Yes — moons are larger worlds, while rings are made of many small pieces."
+    pr-mr-sort-hint: "One big object is a moon; many tiny chunks make a ring."
+    pr-mr-gravity: "Tap what keeps moons and ring pieces looping around a planet."
+    pr-mr-gravity-ok: "Correct — gravity keeps them orbiting again and again."
+    pr-mr-gravity-hint: "It is the same pull that makes things fall down."
+    pr-ac-sort: "Sort each small body as rocky asteroid or icy comet."
+    pr-ac-sort-ok: "Yes — asteroids are rocky, and comets are icy dusty bodies."
+    pr-ac-sort-hint: "Rock goes with asteroids; ice and tails go with comets."
+    pr-ac-belt: "Tap where most asteroids travel."
+    pr-ac-belt-ok: "Right — most asteroids travel in the belt between Mars and Jupiter."
+    pr-ac-belt-hint: "Look for the rocky zone between the inner planets and Jupiter."
+    pr-ws-order: "Arrange the planets from closest to farthest from the Sun."
+    pr-ws-order-ok: "Yes — that is the planet order from Mercury out to Neptune."
+    pr-ws-order-hint: "Start with Mercury and end with Neptune."
+    pr-ws-inner-outer: "Arrange this mini Solar System from inside to outside."
+    pr-ws-inner-outer-ok: "Correct — Mercury is inside, then Earth, then Jupiter, then Neptune."
+    pr-ws-inner-outer-hint: "Rocky worlds come before the far outer giants."
     dn-0: "Have you ever wondered why it gets dark at night?"
     dn-1: "Earth spins like a top — one full spin takes about 24 hours."
     dn-2: "The side facing the Sun has daytime; the side facing away has night."

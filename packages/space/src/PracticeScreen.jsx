@@ -12,6 +12,8 @@ import { bump as track } from '@discoveryquest/engine/telemetry';
 import MoonPositionPractice from './practice/MoonPositionPractice.jsx';
 import StateDialPractice from './practice/StateDialPractice.jsx';
 import TargetTapPractice from './practice/TargetTapPractice.jsx';
+import SortZonesPractice from './practice/SortZonesPractice.jsx';
+import OrderLinePractice from './practice/OrderLinePractice.jsx';
 
 const MECHANICS = {
   'moon-position': MoonPositionPractice,
@@ -19,6 +21,8 @@ const MECHANICS = {
   'orbit-season': StateDialPractice,
   'tap-hotspot': TargetTapPractice,
   'compare-strength': TargetTapPractice,
+  'sort-zones': SortZonesPractice,
+  'order-line': OrderLinePractice,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
