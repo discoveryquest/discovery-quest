@@ -69,7 +69,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
     if (!step || done || tutorial) return; // don't talk over the tutorial video
     setLocked(false);
     setBase('idle');
-    setBubble(step.prompt);
+    setBubble("I'm right here — give it a try! 🌙");
     const t = setTimeout(() => speak(step.say, { important: true }), 250);
     return () => clearTimeout(t);
   }, [step?.say, done, tutorial]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -158,22 +158,18 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
         ))}
       </div>
 
-      <motion.div drag dragMomentum={false} dragElastic={0.15} whileDrag={{ scale: 1.04 }}
-        className="z-10 mx-auto mt-4 flex w-full cursor-grab touch-none flex-col items-center active:cursor-grabbing">
-        <AnimatePresence mode="wait">
-          <motion.div key={bubble} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-            className="mb-1 max-w-[310px] rounded-2xl border border-white/10 bg-[#141822]/90 px-4 py-2 text-center text-sm font-bold text-slate-200 backdrop-blur-md">
-            {bubble}
-            {!done && step?.say && (
-              <button type="button" onClick={replayPrompt} aria-label="Replay Luna's prompt"
-                className="ml-2 inline-flex align-middle text-cyan-300 hover:text-cyan-100">
-                <RotateCcw size={13} />
-              </button>
-            )}
-          </motion.div>
-        </AnimatePresence>
-        <div className="scale-90"><LunaOwl mood={mood} talking={talking} /></div>
-      </motion.div>
+      {/* The mission goal — the main instruction, above the interactive scene */}
+      {!done && (
+        <div className="mx-auto mt-3 flex max-w-[340px] items-center justify-center gap-2 text-center">
+          <p className="text-sm font-extrabold text-slate-100">{step?.prompt}</p>
+          {step?.say && (
+            <button type="button" onClick={replayPrompt} aria-label="Replay Luna's prompt"
+              className="inline-flex shrink-0 text-cyan-300 hover:text-cyan-100">
+              <RotateCcw size={14} />
+            </button>
+          )}
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         {done ? (
@@ -202,6 +198,20 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Luna — a floating companion (like math): reacts + narrates from the corner,
+          never the main focus. Bubble carries her reactions (praise / hints). */}
+      {!tutorial && (
+        <div className="pointer-events-none fixed bottom-2 left-2 z-30 flex items-end sm:bottom-3 sm:left-3">
+          <div className="w-16 shrink-0 sm:w-20"><LunaOwl mood={mood} talking={talking} /></div>
+          <AnimatePresence mode="wait">
+            <motion.div key={bubble} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              className="pointer-events-auto mb-4 -ml-1 max-w-[200px] rounded-2xl rounded-bl-sm border border-white/10 bg-[#141822]/92 px-3 py-1.5 text-xs font-bold text-slate-200 shadow-lg backdrop-blur-md">
+              {bubble}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* "See how Luna solves it" — recorded video with baked narration */}
       <AnimatePresence>

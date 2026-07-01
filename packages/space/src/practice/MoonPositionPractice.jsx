@@ -80,6 +80,7 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
   const reduce = useReducedMotion();
   const svgRef = useRef(null);
   const doneRef = useRef(false);
+  const draggingRef = useRef(false);
   const [angle, setAngle] = useState(START_ANGLE);
   const targetPhase = step?.target?.phase ?? 'full';
   const tolerance = step?.target?.toleranceDeg ?? 16;
@@ -121,8 +122,19 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
 
   const updateFromPointer = (e) => {
     if (doneRef.current || !svgRef.current) return;
-    e.currentTarget.setPointerCapture?.(e.pointerId);
     setAngle(phaseAngleFromPoint(e.clientX, e.clientY, svgRef.current));
+  };
+  // Track the drag with an explicit ref rather than `e.buttons` — touch pointers
+  // report buttons=0 on move, which would freeze the Moon on phones.
+  const startDrag = (e) => {
+    if (doneRef.current) return;
+    draggingRef.current = true;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    updateFromPointer(e);
+  };
+  const endDrag = (e) => {
+    draggingRef.current = false;
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
   };
 
   const nudge = (delta) => {
@@ -139,8 +151,10 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
           className="block w-full touch-none select-none"
           role="img"
           aria-label={`Moon phase practice. Current phase: ${current.label}. Target: ${targetPhase}.`}
-          onPointerDown={updateFromPointer}
-          onPointerMove={(e) => { if (e.buttons) updateFromPointer(e); }}
+          onPointerDown={startDrag}
+          onPointerMove={(e) => { if (draggingRef.current) updateFromPointer(e); }}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === 'ArrowLeft') { e.preventDefault(); nudge(-5); }
