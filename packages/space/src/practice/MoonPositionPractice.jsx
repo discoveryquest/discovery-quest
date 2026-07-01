@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { angularError, phaseForAngle, targetAngle } from '../gates/phaseLock.js';
-import { litPath } from '../scenes/geometry.js';
+import { litFraction, litPath } from '../scenes/geometry.js';
 
 const SIZE = 300;
 const CX = SIZE / 2;
@@ -53,24 +53,28 @@ function PhaseGlobe({ angle, cx, cy, r, lit = '#ece7d6', dark = '#0a0c15', litOp
   );
 }
 
-// The Sun is drawn on the left; sunlight is parallel, so the Moon's SUN-FACING
-// hemisphere is lit in this top-down view (NOT the from-Earth phase — that is a
-// separate inset). Lit half = the semicircle bulging toward the Sun direction.
 const SUN = { x: 34, y: CY };
-function sunLitPath(cx, cy, r) {
-  const phi = Math.atan2(SUN.y - cy, SUN.x - cx); // Moon → Sun direction
-  const p1 = { x: cx + r * Math.cos(phi + Math.PI / 2), y: cy + r * Math.sin(phi + Math.PI / 2) };
-  const p2 = { x: cx + r * Math.cos(phi - Math.PI / 2), y: cy + r * Math.sin(phi - Math.PI / 2) };
-  // sweep=0 traces the semicircle bulging toward the Sun (through angle phi).
-  return `M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${r} ${r} 0 0 0 ${p2.x.toFixed(2)} ${p2.y.toFixed(2)} Z`;
-}
 
-/** The draggable Moon on its orbit — lit on the side facing the Sun. */
-function SunLitMoon({ cx, cy, r, close }) {
+/**
+ * The draggable Moon on its orbit. It morphs through the phases as it moves
+ * (illuminated fraction grows new→full) AND its bright limb points at the Sun:
+ *   • fraction f = (1−cos θ)/2 — thin sliver near the Sun, full disc opposite it.
+ *   • drawn as litPath's "waxing" (lit-right) form for that fraction, then rotated
+ *     so the lit limb aims at the Sun direction. So it both changes shape and
+ *     stays physically lit from the Sun. (The from-Earth view is the YOU SEE inset.)
+ */
+function PhasedMoon({ angle, cx, cy, r, close }) {
+  const waxForm = angle <= 180 ? angle : 360 - angle; // lit-right form, same fraction
+  const d = litPath(waxForm, r, cx, cy);
+  const phiDeg = (Math.atan2(SUN.y - cy, SUN.x - cx) * 180) / Math.PI; // Moon → Sun
   return (
     <g>
       <circle cx={cx} cy={cy} r={r} fill="#0b0d16" />
-      <path d={sunLitPath(cx, cy, r)} fill="url(#practice-moonlit)" />
+      {d && (
+        <g transform={`rotate(${phiDeg.toFixed(2)} ${cx} ${cy})`}>
+          <path d={d} fill="url(#practice-moonlit)" />
+        </g>
+      )}
       <circle cx={cx} cy={cy} r={r} fill="none" stroke={close ? '#34d399' : '#e2e8f0'} strokeOpacity={0.9} strokeWidth={close ? 3 : 2} />
     </g>
   );
@@ -203,14 +207,14 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
           <circle cx={CX} cy={CY} r="31" fill="url(#practice-earth)" filter="url(#practice-glow)" />
           <text x={CX} y={CY + 51} textAnchor="middle" fill="#bae6fd" fontSize="12" fontWeight="800">EARTH</text>
 
-          {/* Draggable Moon — lit on the side facing the Sun (top-down physics) */}
+          {/* Draggable Moon — morphs through phases; its lit limb faces the Sun */}
           <motion.g
             animate={reduce ? false : { scale: close ? [1, 1.16, 1] : 1 }}
             transition={{ repeat: close ? Infinity : 0, duration: 0.7 }}
             style={{ cursor: doneRef.current ? 'default' : 'grab' }}
             filter="url(#moon-soft-glow)"
           >
-            <SunLitMoon cx={moon.x} cy={moon.y} r={MOON_R} close={close} />
+            <PhasedMoon angle={angle} cx={moon.x} cy={moon.y} r={MOON_R} close={close} />
           </motion.g>
 
           {/* From-Earth insets: what YOU SEE now vs the GOAL phase to match */}
