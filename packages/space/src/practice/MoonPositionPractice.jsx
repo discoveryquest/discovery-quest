@@ -40,7 +40,8 @@ function phaseAngleFromPoint(clientX, clientY, svg) {
   return clampAngle(screenDeg + 180);
 }
 
-/** From-Earth phase disc (dark globe + lit region) centred at (cx,cy). */
+/** From-Earth phase disc (dark globe + lit region) centred at (cx,cy). Used for
+ * the small "YOU SEE" / "GOAL" insets — the phase an observer on Earth sees. */
 function PhaseGlobe({ angle, cx, cy, r, lit = '#ece7d6', dark = '#0a0c15', litOpacity = 1, stroke, strokeOpacity = 1, strokeWidth = 2 }) {
   const d = litPath(angle, r, cx, cy);
   return (
@@ -48,6 +49,29 @@ function PhaseGlobe({ angle, cx, cy, r, lit = '#ece7d6', dark = '#0a0c15', litOp
       <circle cx={cx} cy={cy} r={r} fill={dark} />
       {d && <path d={d} fill={lit} fillOpacity={litOpacity} />}
       {stroke && <circle cx={cx} cy={cy} r={r} fill="none" stroke={stroke} strokeOpacity={strokeOpacity} strokeWidth={strokeWidth} />}
+    </g>
+  );
+}
+
+// The Sun is drawn on the left; sunlight is parallel, so the Moon's SUN-FACING
+// hemisphere is lit in this top-down view (NOT the from-Earth phase — that is a
+// separate inset). Lit half = the semicircle bulging toward the Sun direction.
+const SUN = { x: 34, y: CY };
+function sunLitPath(cx, cy, r) {
+  const phi = Math.atan2(SUN.y - cy, SUN.x - cx); // Moon → Sun direction
+  const p1 = { x: cx + r * Math.cos(phi + Math.PI / 2), y: cy + r * Math.sin(phi + Math.PI / 2) };
+  const p2 = { x: cx + r * Math.cos(phi - Math.PI / 2), y: cy + r * Math.sin(phi - Math.PI / 2) };
+  // sweep=0 traces the semicircle bulging toward the Sun (through angle phi).
+  return `M ${p1.x.toFixed(2)} ${p1.y.toFixed(2)} A ${r} ${r} 0 0 0 ${p2.x.toFixed(2)} ${p2.y.toFixed(2)} Z`;
+}
+
+/** The draggable Moon on its orbit — lit on the side facing the Sun. */
+function SunLitMoon({ cx, cy, r, close }) {
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={r} fill="#0b0d16" />
+      <path d={sunLitPath(cx, cy, r)} fill="url(#practice-moonlit)" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke={close ? '#34d399' : '#e2e8f0'} strokeOpacity={0.9} strokeWidth={close ? 3 : 2} />
     </g>
   );
 }
@@ -140,6 +164,11 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
               <feGaussianBlur stdDeviation="3" result="b" />
               <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
+            <radialGradient id="practice-moonlit" cx="42%" cy="38%">
+              <stop offset="0%" stopColor="#fbfaf4" />
+              <stop offset="60%" stopColor="#dcd7c6" />
+              <stop offset="100%" stopColor="#b7b19c" />
+            </radialGradient>
           </defs>
 
           {/* Sun and light */}
@@ -152,31 +181,36 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
           {/* Orbit path */}
           <ellipse cx={CX} cy={CY} rx={R} ry={R * SQUISH} fill="none" stroke="#67e8f9" strokeOpacity="0.24" strokeWidth="2" strokeDasharray="5 7" />
 
-          {/* Target ghost: dashed ring + the phase shape the child is aiming for */}
-          <circle cx={targetPoint.x} cy={targetPoint.y} r={MOON_R + 5} fill="none" stroke="#22d3ee" strokeOpacity={close ? 0.9 : 0.5} strokeWidth="3" strokeDasharray="4 4" />
-          <PhaseGlobe angle={target} cx={targetPoint.x} cy={targetPoint.y} r={MOON_R} lit="#67e8f9" dark="rgba(8,14,26,0.55)" litOpacity={0.28} />
+          {/* Target: where on the orbit to drag the Moon */}
+          <circle cx={targetPoint.x} cy={targetPoint.y} r={MOON_R + 6} fill="none" stroke="#22d3ee" strokeOpacity={close ? 0.95 : 0.55} strokeWidth="3" strokeDasharray="4 4" />
           <text x={targetPoint.x} y={targetPoint.y - MOON_R - 12} textAnchor="middle" fill="#67e8f9" fontSize="11" fontWeight="900">TARGET</text>
 
           {/* Earth */}
           <circle cx={CX} cy={CY} r="31" fill="url(#practice-earth)" filter="url(#practice-glow)" />
           <text x={CX} y={CY + 51} textAnchor="middle" fill="#bae6fd" fontSize="12" fontWeight="800">EARTH</text>
 
-          {/* Draggable Moon — shows the phase as seen from Earth, updating as it moves */}
+          {/* Draggable Moon — lit on the side facing the Sun (top-down physics) */}
           <motion.g
             animate={reduce ? false : { scale: close ? [1, 1.16, 1] : 1 }}
             transition={{ repeat: close ? Infinity : 0, duration: 0.7 }}
             style={{ cursor: doneRef.current ? 'default' : 'grab' }}
             filter="url(#moon-soft-glow)"
           >
-            <PhaseGlobe angle={angle} cx={moon.x} cy={moon.y} r={MOON_R} stroke={close ? '#34d399' : '#e2e8f0'} strokeOpacity={0.9} strokeWidth={3} />
+            <SunLitMoon cx={moon.x} cy={moon.y} r={MOON_R} close={close} />
           </motion.g>
+
+          {/* From-Earth insets: what YOU SEE now vs the GOAL phase to match */}
+          <text x={54} y={18} textAnchor="middle" fill="rgba(148,163,184,0.75)" fontSize="8" fontWeight="800" letterSpacing="0.06em">YOU SEE</text>
+          <PhaseGlobe angle={angle} cx={54} cy={46} r={20} stroke="rgba(226,232,240,0.5)" strokeWidth={1} />
+          <text x={246} y={18} textAnchor="middle" fill="rgba(103,232,249,0.85)" fontSize="8" fontWeight="800" letterSpacing="0.06em">GOAL</text>
+          <PhaseGlobe angle={target} cx={246} cy={46} r={20} lit="#67e8f9" litOpacity={0.9} stroke={close ? '#34d399' : 'rgba(103,232,249,0.6)'} strokeWidth={close ? 2.5 : 1} />
         </svg>
       </div>
 
       <div className="text-center">
-        <p className="text-sm font-extrabold text-cyan-200">Current: {current.label}</p>
+        <p className="text-sm font-extrabold text-cyan-200">From Earth you see: {current.label}</p>
         <p className="mt-0.5 text-xs font-bold text-slate-400">
-          Drag the Moon around Earth — watch its lit face change. Keyboard: arrow keys nudge it.
+          Drag the Moon around Earth — its lit half always faces the Sun. Match the GOAL. Keyboard: arrow keys.
         </p>
       </div>
     </div>
