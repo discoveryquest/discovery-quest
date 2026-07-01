@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { resolveRenderer } from './registry.js';
-import { orbitPosition, phaseMaskShift } from './geometry.js';
+import { orbitPosition, phaseMaskShift, litFraction, litPath } from './geometry.js';
 import { clampIndex, indexFromFraction, fractionFromIndex } from './scrub.js';
 
 // Task 1 — Renderer registry + resolution
@@ -38,6 +38,36 @@ test('phaseMaskShift maps fraction 0 to full-left, 0.5 centered, 1 full-right', 
   assert.equal(phaseMaskShift(0, 56), -56);
   assert.equal(phaseMaskShift(0.5, 56), 0);
   assert.equal(phaseMaskShift(1, 56), 56);
+});
+
+// From-Earth phase geometry (shared by the learn-it diagram + practice mechanic)
+test('litFraction: new=0, quarter=0.5, full=1', () => {
+  assert.ok(litFraction(0) < 0.001);
+  assert.ok(Math.abs(litFraction(90) - 0.5) < 1e-9);
+  assert.ok(litFraction(180) > 0.999);
+  assert.ok(Math.abs(litFraction(270) - 0.5) < 1e-9);
+});
+test('litPath: new moon returns null (fully dark)', () => {
+  assert.equal(litPath(0, 20, 100, 100), null);
+});
+test('litPath: full moon is a closed two-arc disc', () => {
+  const d = litPath(180, 20, 100, 100);
+  assert.match(d, /^M 100 80 A 20 20 0 1 1 100 120 A 20 20 0 1 1 100 80 Z$/);
+});
+test('litPath: waxing (θ<180) lit on the right → terminator sweep differs by gibbous', () => {
+  const crescent = litPath(45, 20, 100, 100); // f<0.5
+  const gibbous = litPath(135, 20, 100, 100); // f>0.5
+  assert.match(crescent, /A 20 20 0 0 1 100 120/); // lit limb: right semicircle
+  assert.match(gibbous, /A 20 20 0 0 1 100 120/);
+  assert.ok(crescent.endsWith('0 0 0 100 80 Z')); // crescent terminator sweep 0
+  assert.ok(gibbous.endsWith('0 0 1 100 80 Z')); // gibbous terminator sweep 1
+});
+test('litPath: waning (θ>180) is the mirror image — lit on the left', () => {
+  const waningGibbous = litPath(225, 20, 100, 100);
+  const waningCrescent = litPath(315, 20, 100, 100);
+  assert.match(waningGibbous, /A 20 20 0 0 0 100 120/); // lit limb: left semicircle
+  assert.ok(waningGibbous.endsWith('0 0 0 100 80 Z')); // gibbous sweep 0
+  assert.ok(waningCrescent.endsWith('0 0 1 100 80 Z')); // crescent sweep 1
 });
 
 // Task 3 — Scrub (interactive state) math
