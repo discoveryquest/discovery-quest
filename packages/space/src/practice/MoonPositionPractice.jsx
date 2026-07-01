@@ -13,9 +13,15 @@ const R = 92;
 // (the quarters) become impossible to hit precisely.
 const SQUISH = 0.72;
 const MOON_R = 19;
+const START_ANGLE = 35;
 
 function clampAngle(n) {
   return ((n % 360) + 360) % 360;
+}
+
+// easeInOutQuad — smooth start/stop for the auto-solve demo glide.
+function easeInOut(p) {
+  return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
 }
 
 // Screen position of the Moon for a phase angle (phaseLock convention: 0=new,
@@ -46,11 +52,11 @@ function PhaseGlobe({ angle, cx, cy, r, lit = '#ece7d6', dark = '#0a0c15', litOp
   );
 }
 
-export default function MoonPositionPractice({ step, onCorrect }) {
+export default function MoonPositionPractice({ step, onCorrect, demo = false }) {
   const reduce = useReducedMotion();
   const svgRef = useRef(null);
   const doneRef = useRef(false);
-  const [angle, setAngle] = useState(35);
+  const [angle, setAngle] = useState(START_ANGLE);
   const targetPhase = step?.target?.phase ?? 'full';
   const tolerance = step?.target?.toleranceDeg ?? 16;
   const target = targetAngle(targetPhase);
@@ -69,6 +75,25 @@ export default function MoonPositionPractice({ step, onCorrect }) {
     const t = setTimeout(() => onCorrect?.(), 550);
     return () => clearTimeout(t);
   }, [close, onCorrect, target]);
+
+  // Demo mode ("Watch Luna solve it"): glide the Moon from its start to the
+  // target so the recorder can capture Luna solving. The `close` effect above
+  // then snaps it into the ring and fires onCorrect, exactly as a real drag.
+  useEffect(() => {
+    if (!demo || doneRef.current) return;
+    let delta = ((target - START_ANGLE + 540) % 360) - 180; // shortest way round
+    const DURATION = 3400;
+    const startAt = performance.now() + 900; // let Luna read the prompt first
+    let raf;
+    const tick = (now) => {
+      if (doneRef.current) return;
+      const p = Math.min(1, Math.max(0, (now - startAt) / DURATION));
+      setAngle(clampAngle(START_ANGLE + delta * easeInOut(p)));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [demo, target]);
 
   const updateFromPointer = (e) => {
     if (doneRef.current || !svgRef.current) return;

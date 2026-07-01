@@ -2,12 +2,12 @@
 // this plays an authored ordered mission sequence from content.practice. Luna narrates
 // every prompt (`step.say`), mechanics determine correctness, and persistence mirrors
 // QuizScreen so map progression/stars keep working.
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, RotateCcw, Star } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Star, Tv, X } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
-import { mutateSave } from '@discoveryquest/engine/save';
+import { mutateSave, loadSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
 import MoonPositionPractice from './practice/MoonPositionPractice.jsx';
 import StateDialPractice from './practice/StateDialPractice.jsx';
@@ -15,6 +15,7 @@ import TargetTapPractice from './practice/TargetTapPractice.jsx';
 import SortZonesPractice from './practice/SortZonesPractice.jsx';
 import OrderLinePractice from './practice/OrderLinePractice.jsx';
 import ConnectStarsPractice from './practice/ConnectStarsPractice.jsx';
+import TUTORIALS from './tutorials.json'; // station ids with a recorded "Luna solves it" video
 
 const MECHANICS = {
   'moon-position': MoonPositionPractice,
@@ -29,7 +30,7 @@ const MECHANICS = {
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
 
-export default function PracticeScreen({ station, course, onExit }) {
+export default function PracticeScreen({ station, course, onExit, demo = false, demoMax = 1 }) {
   const band = Math.max(...(station?.bands ?? [0]));
   const mission = useMemo(() => station.generate(), [station]);
   const steps = mission.steps || [];
@@ -43,19 +44,35 @@ export default function PracticeScreen({ station, course, onExit }) {
   const mood = useLivelyMood(base);
   const talking = useSpeaking();
 
+  // "See how Luna solves it": a recorded video with baked narration. Autoplays on
+  // the child's first visit to this station's practice, replayable from the header.
+  const hasTutorial = !demo && !!station?.id && TUTORIALS.includes(station.id);
+  const [tutorial, setTutorial] = useState(() => hasTutorial && !loadSave().tutorialSeen?.[station.id]);
+  const videoRef = useRef(null);
+  useEffect(() => {
+    if (!tutorial || !station?.id) return;
+    mutateSave((s) => { s.tutorialSeen = { ...(s.tutorialSeen || {}), [station.id]: true }; });
+    hushAll(); // the video carries its own narration — no live Luna over it
+  }, [tutorial, station?.id]);
+  function closeTutorial() {
+    const v = videoRef.current;
+    if (v) { v.pause(); v.currentTime = 0; }
+    setTutorial(false);
+  }
+
   const color = course.worlds?.find((w) => w.id === station?.worldId)?.color || '#22d3ee';
   const ui = course.meta.ui || {};
   const step = steps[idx];
   const Mechanic = step ? MECHANICS[step.kind] : null;
 
   useEffect(() => {
-    if (!step || done) return;
+    if (!step || done || tutorial) return; // don't talk over the tutorial video
     setLocked(false);
     setBase('idle');
     setBubble(step.prompt);
     const t = setTimeout(() => speak(step.say, { important: true }), 250);
     return () => clearTimeout(t);
-  }, [step?.say, done]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [step?.say, done, tutorial]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function replayPrompt() {
     if (!step?.say) return;
@@ -74,7 +91,9 @@ export default function PracticeScreen({ station, course, onExit }) {
     hushAll();
     if (say) speak(say, { important: true });
     setTimeout(() => {
-      if (idx + 1 >= steps.length) setDone(true);
+      // Demo ("Watch Luna solve it") solves a short run of missions, then stops.
+      if (demo && idx + 1 >= demoMax) setDone(true);
+      else if (idx + 1 >= steps.length) setDone(true);
       else setIdx((i) => i + 1);
     }, 1700);
   }
@@ -121,7 +140,13 @@ export default function PracticeScreen({ station, course, onExit }) {
           <ArrowLeft size={18} />
         </button>
         <span className="truncate font-extrabold text-white">{station?.title}</span>
-        <span className="ml-auto text-xs font-bold uppercase tracking-wider text-slate-400">
+        {hasTutorial && !done && (
+          <button type="button" onClick={() => setTutorial(true)} title="Watch Luna solve one"
+            className="ml-auto flex items-center gap-1.5 rounded-xl border border-cyan-300/25 bg-cyan-400/10 px-2.5 py-1.5 text-xs font-extrabold text-cyan-200 hover:bg-cyan-400/20">
+            <Tv size={14} /> Watch Luna
+          </button>
+        )}
+        <span className={`text-xs font-bold uppercase tracking-wider text-slate-400 ${hasTutorial && !done ? '' : 'ml-auto'}`}>
           {done ? 'Done' : `Mission ${Math.min(idx + 1, total)} of ${total}`}
         </span>
       </div>
@@ -167,7 +192,7 @@ export default function PracticeScreen({ station, course, onExit }) {
         ) : (
           <motion.div key={step?.say ?? 'empty'} initial={{ x: 28, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -28, opacity: 0 }} className="mt-5">
             {Mechanic ? (
-              <Mechanic step={step} disabled={locked} onCorrect={completeStep} onHint={showHint} />
+              <Mechanic step={step} disabled={locked} onCorrect={completeStep} onHint={showHint} demo={demo} />
             ) : (
               <div className="rounded-3xl border border-amber-300/20 bg-amber-300/10 p-5 text-center">
                 <p className="font-extrabold text-amber-100">This practice mechanic is not implemented yet.</p>
@@ -175,6 +200,35 @@ export default function PracticeScreen({ station, course, onExit }) {
               </div>
             )}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* "See how Luna solves it" — recorded video with baked narration */}
+      <AnimatePresence>
+        {tutorial && hasTutorial && (
+          <>
+            <motion.div className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeTutorial} />
+            <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+              <motion.div className="pointer-events-auto relative w-full max-w-[520px] rounded-3xl border-2 border-cyan-300/30 bg-[#14171f] p-5 shadow-2xl"
+                initial={{ scale: 0.7, y: 40, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.75, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 280, damping: 24 }}>
+                <button type="button" aria-label="Close" onClick={closeTutorial}
+                  className="absolute right-3 top-3 z-10 rounded-lg bg-black/40 p-1.5 text-slate-300 hover:bg-white/10 hover:text-white">
+                  <X size={20} />
+                </button>
+                <h3 className="mb-3 text-center text-lg font-extrabold text-white">📺 Watch Luna solve one: {station?.title}!</h3>
+                <video ref={videoRef} src={`/tutorials/${station.id}.webm`} autoPlay controls playsInline
+                  className="w-full rounded-2xl border border-white/10" onEnded={() => setBase('idle')} />
+                <div className="mt-4 flex justify-center">
+                  <button type="button" onClick={closeTutorial}
+                    className="rounded-xl bg-cyan-400 px-6 py-2.5 text-lg font-extrabold text-slate-900 shadow-[0_0_24px_rgba(34,211,238,0.4)] hover:bg-cyan-300">
+                    My turn! →
+                  </button>
+                </div>
+              </motion.div>
+            </div>
+          </>
         )}
       </AnimatePresence>
     </div>

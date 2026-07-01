@@ -17,6 +17,7 @@
     "course:changelog": "node scripts/gen-changelog.mjs",
     "validate": "node scripts/gen-capabilities.mjs --check && node scripts/gen-schema.mjs --check && node scripts/gen-changelog.mjs --check",
     "voice:space": "node packages/space/scripts/gen-voice.mjs",
+    "tutorial:space": "node packages/space/scripts/record-tutorial.mjs",
     "course:check:space": "node scripts/course-check.mjs packages/space/space.course.yml --app packages/space --voice examples/space-preview"
   },
   "devDependencies": {

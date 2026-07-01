@@ -13,3 +13,4 @@ dist
 
 # scratch space (e.g. raw model outputs to vet before integrating)
 scratch/
+examples/space-preview/tutorials-src/
