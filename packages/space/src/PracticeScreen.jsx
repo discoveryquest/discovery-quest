@@ -43,6 +43,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
   const [bubble, setBubble] = useState("Listen to Luna, then solve the mission.");
   const mood = useLivelyMood(base);
   const talking = useSpeaking();
+  const owlAreaRef = useRef(null); // full-screen layer Luna can be dragged around in
 
   // "See how Luna solves it": a recorded video with baked narration. Autoplays on
   // the child's first visit to this station's practice, replayable from the header.
@@ -199,17 +200,30 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
         )}
       </AnimatePresence>
 
-      {/* Luna — a floating companion (like math): reacts + narrates from the corner,
-          never the main focus. Bubble carries her reactions (praise / hints). */}
+      {/* Luna — the draggable companion, same as math's QuestScreen: she lives in a
+          full-screen fixed layer, bobs idly, and can be dragged anywhere. Bubble
+          carries her reactions (praise / hints) and travels with her. */}
       {!tutorial && (
-        <div className="pointer-events-none fixed bottom-2 left-2 z-30 flex items-end sm:bottom-3 sm:left-3">
-          <div className="w-16 shrink-0 sm:w-20"><LunaOwl mood={mood} talking={talking} /></div>
-          <AnimatePresence mode="wait">
-            <motion.div key={bubble} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-              className="pointer-events-auto mb-4 -ml-1 max-w-[200px] rounded-2xl rounded-bl-sm border border-white/10 bg-[#141822]/92 px-3 py-1.5 text-xs font-bold text-slate-200 shadow-lg backdrop-blur-md">
-              {bubble}
+        <div ref={owlAreaRef} className="pointer-events-none fixed inset-0 z-30">
+          <motion.div
+            className="pointer-events-auto absolute bottom-2 left-2 flex items-end cursor-grab active:cursor-grabbing sm:bottom-3 sm:left-3"
+            style={{ touchAction: 'none' }}
+            drag
+            dragConstraints={owlAreaRef}
+            dragElastic={0.12}
+            dragMomentum={false}
+            whileDrag={{ scale: 1.08 }}
+          >
+            <motion.div animate={{ y: [0, -9, 0] }} transition={{ repeat: Infinity, duration: 3.2, ease: 'easeInOut' }}>
+              <div className="w-16 shrink-0 sm:w-20"><LunaOwl mood={mood} talking={talking} /></div>
             </motion.div>
-          </AnimatePresence>
+            <AnimatePresence mode="wait">
+              <motion.div key={bubble} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                className="mb-4 -ml-1 max-w-[200px] rounded-2xl rounded-bl-sm border border-white/10 bg-[#141822]/92 px-3 py-1.5 text-xs font-bold text-slate-200 shadow-lg backdrop-blur-md">
+                {bubble}
+              </motion.div>
+            </AnimatePresence>
+          </motion.div>
         </div>
       )}
 
