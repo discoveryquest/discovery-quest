@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 export default function OrderLinePractice({ step, onCorrect, onHint }) {
   const items = step?.target?.items || [];
@@ -11,11 +11,16 @@ export default function OrderLinePractice({ step, onCorrect, onHint }) {
     setList(initial);
   }, [initial]);
 
+  // Latest onCorrect without making it an effect dep: the parent recreates it on
+  // every render (Luna's talking flips re-render PracticeScreen), and as a dep the
+  // effect cleanup could cancel the pending timer mid-window.
+  const onCorrectRef = useRef(onCorrect);
+  onCorrectRef.current = onCorrect;
   useEffect(() => {
     if (!correct) return;
-    const t = setTimeout(() => onCorrect?.(), 550);
+    const t = setTimeout(() => onCorrectRef.current?.(), 550);
     return () => clearTimeout(t);
-  }, [correct, onCorrect]);
+  }, [correct]);
 
   const move = (idx, delta) => {
     const j = idx + delta;

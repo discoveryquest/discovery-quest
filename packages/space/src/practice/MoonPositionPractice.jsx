@@ -95,15 +95,20 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
   const targetPoint = moonPoint(target);
   const close = err <= tolerance;
 
+  // Latest onCorrect without making it an effect dep: the parent recreates it on
+  // every render (Luna's talking flips re-render PracticeScreen), and as a dep the
+  // effect cleanup could cancel the pending timer mid-window.
+  const onCorrectRef = useRef(onCorrect);
+  onCorrectRef.current = onCorrect;
   useEffect(() => {
     if (!close || doneRef.current) return;
     doneRef.current = true;
     // Snap the Moon exactly onto the target so it visibly lands inside the ring,
     // instead of completing while still a tolerance-width away.
     setAngle(target);
-    const t = setTimeout(() => onCorrect?.(), 550);
+    const t = setTimeout(() => onCorrectRef.current?.(), 550);
     return () => clearTimeout(t);
-  }, [close, onCorrect, target]);
+  }, [close, target]);
 
   // Demo mode ("Watch Luna solve it"): glide the Moon from its start to the
   // target so the recorder can capture Luna solving. The `close` effect above

@@ -1,5 +1,14 @@
-import { useEffect, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+// StateDialPractice — slider-driven state practice for two World-1 stations, sharing
+// the lesson visuals so practice looks like what was just taught:
+//   earth-spin    → Spin2DContent (fixed sunlight, rotating globe, YOU marker): "your
+//                   town" is the marker, so "spin until your town has noon" is readable.
+//   orbit-season  → SeasonOrbit: Sun at centre, Earth placed on its orbit by the slider
+//                   with a FIXED 23.5° axis (N label) — summer is where the northern
+//                   half leans toward the Sun, matching the lesson's state positions
+//                   (spring top, summer right, autumn bottom, winter left).
+import { useEffect, useRef, useState } from 'react';
+import { useReducedMotion, useSpring, useMotionValueEvent } from 'framer-motion';
+import { Spin2DContent } from '../scenes/2d/Spin2D.jsx';
 
 const DEFAULT_STATES = [
   { id: 'dawn', label: 'Dawn' },
@@ -17,62 +26,93 @@ function iconFor(kind, id) {
   return { dawn: '🌅', noon: '☀️', dusk: '🌇', night: '🌙' }[id] || '🌍';
 }
 
-export default function StateDialPractice({ step, onCorrect }) {
+// Season orbit diagram (responsive SVG). Earth's axis keeps the same fixed lean the
+// whole year — that's the entire point of seasons — so the axis is drawn leaning
+// LEFT (N pole up-left): on the right of the Sun the north half faces the Sun
+// (summer), on the left it faces away (winter).
+const SO = { w: 300, h: 170, cx: 150, cy: 85, rx: 96, ry: 50, er: 15, tilt: -23.5 };
+
+function SeasonOrbit({ fraction }) {
   const reduce = useReducedMotion();
+  const target = -90 + fraction * 270; // spring top → summer right → autumn bottom → winter left
+  const spring = useSpring(-90, { stiffness: 70, damping: 16 });
+  const [sprung, setSprung] = useState(-90);
+  useEffect(() => {
+    spring.set(target);
+  }, [spring, target]);
+  useMotionValueEvent(spring, 'change', (v) => setSprung(v));
+  const deg = reduce ? target : sprung;
+  const rad = (deg * Math.PI) / 180;
+  const ex = SO.cx + Math.cos(rad) * SO.rx;
+  const ey = SO.cy + Math.sin(rad) * SO.ry;
+  return (
+    <svg width="100%" height="100%" viewBox={`0 0 ${SO.w} ${SO.h}`} preserveAspectRatio="xMidYMid meet" className="block"
+      role="img" aria-label="Earth on its orbit around the Sun; its tilted axis always leans the same way.">
+      <defs>
+        <radialGradient id="season-sun" cx="38%" cy="38%">
+          <stop offset="0%" stopColor="#fff7cf" />
+          <stop offset="60%" stopColor="#facc15" />
+          <stop offset="100%" stopColor="#d97706" />
+        </radialGradient>
+        <radialGradient id="season-earth" cx="38%" cy="34%">
+          <stop offset="0%" stopColor="#7dd3fc" />
+          <stop offset="55%" stopColor="#2779c4" />
+          <stop offset="100%" stopColor="#0b2f5e" />
+        </radialGradient>
+        <filter id="season-glow">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+      <ellipse cx={SO.cx} cy={SO.cy} rx={SO.rx} ry={SO.ry} fill="none" stroke="#67e8f9" strokeOpacity="0.25" strokeWidth="1.5" strokeDasharray="4 6" />
+      <circle cx={SO.cx} cy={SO.cy} r={19} fill="url(#season-sun)" filter="url(#season-glow)" />
+      <text x={SO.cx} y={SO.cy + 34} textAnchor="middle" fill="#fde68a" fontSize="9" fontWeight="800">SUN</text>
+      {/* Earth + its never-changing tilted axis */}
+      <g transform={`translate(${ex.toFixed(1)} ${ey.toFixed(1)})`}>
+        <g transform={`rotate(${SO.tilt})`}>
+          <line x1="0" y1={-SO.er - 8} x2="0" y2={SO.er + 8} stroke="#e2e8f0" strokeOpacity="0.85" strokeWidth="2" strokeLinecap="round" strokeDasharray="3 3" />
+          <circle cx="0" cy="0" r={SO.er} fill="url(#season-earth)" filter="url(#season-glow)" />
+          <text x="0" y={-SO.er - 11} textAnchor="middle" fill="#fda4af" fontSize="10" fontWeight="900">N</text>
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+export default function StateDialPractice({ step, onCorrect }) {
   const states = step?.target?.states || DEFAULT_STATES;
   const targetId = step?.target?.state || states[0]?.id;
   const [index, setIndex] = useState(0);
   const [done, setDone] = useState(false);
+  const doneRef = useRef(false);
   const current = states[index] || states[0];
   const close = current?.id === targetId;
   const kind = step?.kind;
+  const fraction = states.length > 1 ? index / (states.length - 1) : 0;
 
+  // Latest onCorrect without making it an effect dep: the parent recreates it on
+  // every render (Luna's talking flips re-render PracticeScreen), and as a dep the
+  // effect cleanup would cancel the pending timer — the mission would never advance.
+  const onCorrectRef = useRef(onCorrect);
+  onCorrectRef.current = onCorrect;
   useEffect(() => {
-    if (!close || done) return;
+    if (!close || doneRef.current) return;
+    doneRef.current = true;
     setDone(true);
-    const t = setTimeout(() => onCorrect?.(), 500);
+    const t = setTimeout(() => onCorrectRef.current?.(), 500);
     return () => clearTimeout(t);
-  }, [close, done, onCorrect]);
-
-  const angle = states.length > 1 ? (index / states.length) * 360 - 90 : -90;
-  const rad = (angle * Math.PI) / 180;
-  const px = 50 + Math.cos(rad) * 32;
-  const py = 50 + Math.sin(rad) * 32;
+  }, [close]);
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="relative h-[300px] w-full max-w-[340px] overflow-hidden rounded-[28px] border border-cyan-300/15 bg-slate-950/40 shadow-2xl shadow-cyan-950/30">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.14),transparent_45%),radial-gradient(circle_at_20%_80%,rgba(167,139,250,0.16),transparent_40%)]" />
+      <div className="relative w-full max-w-[340px] overflow-hidden rounded-[28px] border border-cyan-300/15 bg-slate-950/40 shadow-2xl shadow-cyan-950/30">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.10),transparent_45%),radial-gradient(circle_at_20%_80%,rgba(167,139,250,0.12),transparent_40%)]" />
 
-        {kind === 'orbit-season' ? (
-          <>
-            <div className="absolute left-[18%] top-1/2 -translate-y-1/2 text-5xl drop-shadow-[0_0_18px_rgba(250,204,21,0.7)]">☀️</div>
-            <div className="absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-200/20 border-dashed" />
-            <motion.div
-              className="absolute flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-blue-500 shadow-[0_0_24px_rgba(56,189,248,0.65)]"
-              style={{ left: `${px}%`, top: `${py}%` }}
-              animate={reduce ? false : { rotate: [-12, 12, -12] }}
-              transition={{ repeat: Infinity, duration: 2.2 }}
-            >
-              <span className="text-3xl">🌍</span>
-              <span className="absolute -right-1 -top-2 rotate-[23.5deg] text-cyan-100">|</span>
-            </motion.div>
-          </>
-        ) : (
-          <>
-            <div className="absolute left-8 top-1/2 -translate-y-1/2 text-5xl drop-shadow-[0_0_18px_rgba(250,204,21,0.7)]">☀️</div>
-            <motion.div
-              className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full shadow-[0_0_28px_rgba(56,189,248,0.55)]"
-              style={{ background: 'linear-gradient(90deg,#38bdf8 0 50%,#06111f 50% 100%)' }}
-              animate={reduce ? false : { rotate: index * 90 }}
-              transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-            >
-              <span className="text-5xl">🌍</span>
-            </motion.div>
-          </>
-        )}
+        <div className="relative h-[200px] w-full pt-2">
+          {kind === 'orbit-season' ? <SeasonOrbit fraction={fraction} /> : <Spin2DContent fraction={fraction} />}
+        </div>
 
-        <div className="absolute bottom-4 left-0 right-0 text-center">
+        <div className="relative pb-3 text-center">
           <p className="text-lg font-extrabold text-white">{iconFor(kind, current?.id)} {current?.label}</p>
           <p className="text-xs font-bold text-slate-400">Target: {states.find((s) => s.id === targetId)?.label || targetId}</p>
         </div>

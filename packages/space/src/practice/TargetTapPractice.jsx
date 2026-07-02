@@ -31,7 +31,8 @@ export default function TargetTapPractice({ step, onCorrect, onHint }) {
         <div className="absolute inset-0 flex items-end justify-center gap-5 px-5 pb-16">
           {items.map((item) => {
             const size = item.size || 70;
-            const state = picked == null ? 'idle' : item.id === targetId ? 'correct' : picked === item.id ? 'wrong' : 'idle';
+            // Only the tapped item shows its state — never reveal the answer on a miss.
+            const state = picked === item.id ? (item.id === targetId ? 'correct' : 'wrong') : 'idle';
             return (
               <motion.button
                 key={item.id}
@@ -49,9 +50,16 @@ export default function TargetTapPractice({ step, onCorrect, onHint }) {
         </div>
       ) : (
         <>
+          {/* Rays streaming outward so a "rays" hotspot has something to sit on */}
+          <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            {[[64, 30], [72, 42], [74, 56]].map(([x, y], i) => (
+              <line key={i} x1="52" y1="48" x2={x} y2={y} stroke="#fde68a" strokeOpacity="0.5" strokeWidth="0.9" strokeLinecap="round" strokeDasharray="2 2" />
+            ))}
+          </svg>
           <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-yellow-300 text-6xl shadow-[0_0_42px_rgba(250,204,21,.7)]">☀️</div>
           {items.map((item) => {
-            const state = picked == null ? 'idle' : item.id === targetId ? 'correct' : picked === item.id ? 'wrong' : 'idle';
+            // Only the tapped item shows its state — never reveal the answer on a miss.
+            const state = picked === item.id ? (item.id === targetId ? 'correct' : 'wrong') : 'idle';
             return (
               <motion.button
                 key={item.id}
