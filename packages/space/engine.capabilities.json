@@ -76,8 +76,16 @@
       ]
     },
     {
+      "kind": "spin",
+      "description": "Day & night on a spinning planet, top-down: the Sun shines from the left so the light never moves; `fraction` (0..1, usually injected by a scrub base) turns the globe, carrying continents and a 'YOU' marker dawn → noon → dusk → night through the fixed day/night halves.",
+      "fields": [
+        { "name": "fraction", "type": "number", "required": false, "note": "0..1 spin position (0=dawn, 1/3=noon, 2/3=dusk, 1=night); injected automatically when used as a scrub base" },
+        { "name": "markerLabel", "type": "string", "required": false, "note": "label on the surface marker riding the spin (default YOU)" }
+      ]
+    },
+    {
       "kind": "scrub",
-      "description": "Interactive: the learner drags a handle through ordered states; each state shows a caption and speaks its line. Optional `base` scene rendered underneath (a `body` or `orbit` whose phase reflects the scrub position).",
+      "description": "Interactive: the learner drags a handle through ordered states; each state shows a caption and speaks its line. Optional `base` scene rendered underneath: a `body` base reflects the scrub as its phase, a `spin` base as globe rotation, and an `orbit` base places its orbiters by the scrub position instead of free-running.",
       "fields": [
         { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. { kind: orbit, bodies: [...] }) the interaction renders on", "example": { "kind": "orbit", "bodies": [ { "id": "earth", "role": "planet" }, { "id": "moon", "role": "moon", "orbits": "earth", "phaseLit": true } ] } },
         { "name": "states", "type": "object[]", "required": true, "note": "ordered { id, label, say, caption }; each `say` must exist in narration", "example": [ { "id": "full", "label": "Full Moon", "say": "mp-x-full", "caption": "Full Moon — the whole lit side faces Earth." } ] }

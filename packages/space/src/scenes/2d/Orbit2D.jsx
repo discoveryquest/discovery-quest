@@ -57,6 +57,11 @@ function OrbitingBody({ body, index, count }) {
   const size = ROLE_SIZE[body.role] ?? 20;
   const staticAngle = (360 / count) * index;
   const time = useTime();
+  // Scrub-driven: the learner's drag (not a timer) places the body on its orbit.
+  // Starts at the top and sweeps a quarter turn per state (4 states = 3/4 circle),
+  // spring-gliding between notches instead of free-running.
+  const scrubbed = body.scrubFraction != null;
+  const scrubAngle = ((body.scrubFraction ?? 0) * 270 - 90) * (Math.PI / 180);
   const x = useTransform(time, (t) => {
     const angle = ((t / 1000 / body.period) * 360 + staticAngle) * (Math.PI / 180);
     return Math.cos(angle) * body.radius;
@@ -65,6 +70,28 @@ function OrbitingBody({ body, index, count }) {
     const angle = ((t / 1000 / body.period) * 360 + staticAngle) * (Math.PI / 180);
     return Math.sin(angle) * body.radius * ORBIT_Y_SCALE;
   });
+
+  if (scrubbed) {
+    return (
+      <motion.div
+        style={{
+          position: 'absolute',
+          left: CX,
+          top: CY,
+          marginLeft: -size / 2,
+          marginTop: -size / 2,
+          zIndex: 3,
+        }}
+        animate={{
+          x: Math.cos(scrubAngle) * body.radius,
+          y: Math.sin(scrubAngle) * body.radius * ORBIT_Y_SCALE,
+        }}
+        transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 70, damping: 16 }}
+      >
+        <CelestialBody role={body.role} color={body.color} size={size} phaseLit={body.phaseLit} />
+      </motion.div>
+    );
+  }
 
   if (reduce) {
     const pos = orbitPosition({ cx: CX, cy: CY, radius: body.radius, angleDeg: staticAngle });

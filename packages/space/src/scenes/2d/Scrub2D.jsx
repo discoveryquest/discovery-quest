@@ -11,16 +11,26 @@ import SceneContent from '../SceneContent.jsx';
 
 // Inject the scrub's phase fraction (0..1) into a base descriptor:
 //  - body base → set body.phase (moon-phase shadow)
-//  - orbit base → set phaseLit on the orbiting body flagged phaseLit (drives its lit fraction)
+//  - spin base → set fraction (turns the globe: dawn → noon → dusk → night)
+//  - orbit base → set phaseLit on bodies flagged phaseLit, AND drive every orbiter's
+//    position from the scrub (scrubFraction stops the free-running orbit animation —
+//    the learner's drag, not a timer, moves the body around its orbit)
 function withPhase(base, fraction) {
   if (!base) return base;
   if (base.kind === 'body') {
     return { ...base, body: { ...(base.body ?? {}), phase: fraction } };
   }
+  if (base.kind === 'spin') {
+    return { ...base, fraction };
+  }
   if (base.kind === 'orbit') {
     return {
       ...base,
-      bodies: (base.bodies ?? []).map((b) => (b.phaseLit != null ? { ...b, phaseLit: fraction } : b)),
+      bodies: (base.bodies ?? []).map((b) => {
+        let next = b.phaseLit != null ? { ...b, phaseLit: fraction } : b;
+        if (b.orbits) next = { ...next, scrubFraction: fraction };
+        return next;
+      }),
     };
   }
   return base;
@@ -52,14 +62,16 @@ export default function Scrub2D({ base, states = [] }) {
 
   return (
     <SpaceStage>
-      <div className="flex h-full w-full flex-col items-center justify-between py-3 px-4">
-        {/* Base scene underneath (bare — shares the outer stage) */}
+      <div className="relative h-full w-full">
+        {/* Base scene fills the stage above the control scrim (bare — shares the outer
+            stage). Reserving the bottom strip keeps the scene clear of the labels —
+            previously the fixed-pixel scene bled underneath the caption text. */}
         {enrichedBase ? (
-          <div className="w-full flex-1 min-h-0">
+          <div className="absolute inset-x-0 top-0 bottom-16">
             <SceneContent descriptor={enrichedBase} />
           </div>
         ) : (
-          <div className="flex flex-1 items-center justify-center">
+          <div className="absolute inset-x-0 top-0 bottom-16 flex items-center justify-center">
             {current?.label && (
               <p
                 className="text-2xl font-extrabold text-white text-center"
@@ -71,21 +83,21 @@ export default function Scrub2D({ base, states = [] }) {
           </div>
         )}
 
-        {/* State label (shown above scrubber when base is rendered) */}
-        {enrichedBase && current?.label && (
-          <p className="text-sm font-bold text-cyan-300 text-center">{current.label}</p>
-        )}
+        {/* Controls — a bottom scrim overlay: state label + caption + scrubber */}
+        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/85 via-black/55 to-transparent px-4 pb-1.5 pt-6">
+          {/* One caption line ("Dawn — ...") — captions open with the state name, so no
+              separate label row; the highlighted tick under the slider marks the state too. */}
+          {current?.caption ? (
+            <p className="mx-auto max-w-[360px] text-center text-xs font-bold leading-snug text-slate-200 line-clamp-2">
+              {current.caption}
+            </p>
+          ) : enrichedBase && current?.label ? (
+            <p className="text-center text-sm font-extrabold text-cyan-300">{current.label}</p>
+          ) : null}
 
-        {/* Caption */}
-        {current?.caption && (
-          <p className="text-xs font-bold text-slate-400 text-center leading-snug max-w-[340px]">
-            {current.caption}
-          </p>
-        )}
-
-        {/* Range scrubber — custom track + thumb so it's clearly draggable on iOS Safari */}
-        {states.length > 1 && (
-          <div className="w-full mt-2">
+          {/* Range scrubber — custom track + thumb so it's clearly draggable on iOS Safari */}
+          {states.length > 1 && (
+          <div className="w-full mt-1.5">
             <style>{`
               .scrub-range { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; }
               .scrub-range:focus { outline: none; }
@@ -118,7 +130,8 @@ export default function Scrub2D({ base, states = [] }) {
               ))}
             </div>
           </div>
-        )}
+          )}
+        </div>
       </div>
     </SpaceStage>
   );

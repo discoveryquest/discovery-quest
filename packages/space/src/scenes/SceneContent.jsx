@@ -7,12 +7,14 @@ import { Body2DContent } from './2d/Body2D.jsx';
 import { Orbit2DContent } from './2d/Orbit2D.jsx';
 import { FieldContent } from './2d/Field2D.jsx';
 import { MoonPhase2DContent } from './2d/MoonPhase2D.jsx';
+import { Spin2DContent } from './2d/Spin2D.jsx';
 
 const BARE_RENDERERS = {
   body: Body2DContent,
   orbit: Orbit2DContent,
   field: FieldContent,
   moonPhase: MoonPhase2DContent,
+  spin: Spin2DContent,
 };
 
 export default function SceneContent({ descriptor }) {

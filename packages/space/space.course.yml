@@ -114,7 +114,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: dn-5, caption: "Drag to spin Earth through a full day!", advance: hold, view: { kind: scrub, key: dn-explore, base: { kind: orbit, bodies: [ { id: sun, role: star }, { id: earth, role: planet, color: earth, orbits: sun, radius: 70 } ] }, states: [ { id: dawn, label: Dawn, say: dn-x-dawn, caption: "Dawn — the Sun peeks over the horizon as Earth turns toward it." }, { id: noon, label: Noon, say: dn-x-noon, caption: "Noon — your part of Earth faces the Sun directly." }, { id: dusk, label: Dusk, say: dn-x-dusk, caption: "Dusk — Earth turns away and the Sun sinks toward the horizon." }, { id: night, label: Night, say: dn-x-night, caption: "Night — your side of Earth faces away from the Sun." } ] } }
+            - { say: dn-5, caption: "Drag to spin Earth through a full day!", advance: hold, view: { kind: scrub, key: dn-explore, base: { kind: spin }, states: [ { id: dawn, label: Dawn, say: dn-x-dawn, caption: "Dawn — the Sun peeks over the horizon as Earth turns toward it." }, { id: noon, label: Noon, say: dn-x-noon, caption: "Noon — your part of Earth faces the Sun directly." }, { id: dusk, label: Dusk, say: dn-x-dusk, caption: "Dusk — Earth turns away and the Sun sinks toward the horizon." }, { id: night, label: Night, say: dn-x-night, caption: "Night — your side of Earth faces away from the Sun." } ] } }
     the-sun:
       title: Our Star
       sections:
