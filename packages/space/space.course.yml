@@ -411,7 +411,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: lo-5, caption: "Tap parts of an astronaut's orbit day!", advance: hold, view: { kind: reveal, key: lo-explore, base: { kind: orbit, bodies: [ { id: earth, role: planet, color: earth }, { id: station, role: moon, color: "#dbeafe", orbits: earth, radius: 82, period: 6 } ] }, hotspots: [ { id: orbit, label: "Orbit", say: lo-x-orbit, caption: "One lap around Earth takes the station about 90 minutes.", x: 42, y: 36 }, { id: float, label: "Float", say: lo-x-float, caption: "Astronauts float because they are in continuous free-fall.", x: 60, y: 52 }, { id: lab, label: "Lab", say: lo-x-lab, caption: "The ISS is a laboratory for science in microgravity.", x: 72, y: 66 } ] } }
+            - { say: lo-5, caption: "Tap parts of an astronaut's orbit day!", advance: hold, view: { kind: reveal, key: lo-explore, base: { kind: orbit, bodies: [ { id: earth, role: planet, color: earth }, { id: station, role: moon, color: "#dbeafe", orbits: earth, radius: 82, period: 6 } ] }, hotspots: [ { id: orbit, label: "Orbit", emoji: "🛰️", say: lo-x-orbit, caption: "One lap around Earth takes the station about 90 minutes.", x: 42, y: 36 }, { id: float, label: "Float", emoji: "🧑‍🚀", say: lo-x-float, caption: "Astronauts float because they are in continuous free-fall.", x: 60, y: 52 }, { id: lab, label: "Lab", emoji: "🔬", say: lo-x-lab, caption: "The ISS is a laboratory for science in microgravity.", x: 72, y: 66 } ] } }
     getting-there:
       title: Getting There
       sections:
@@ -432,7 +432,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: gt-5, caption: "Tap the launch steps to see what a rocket needs!", advance: hold, view: { kind: reveal, key: gt-explore, base: { kind: field, tint: deep-space, density: medium, label: "Launch checklist" }, hotspots: [ { id: thrust, label: "Thrust", say: gt-x-thrust, caption: "Thrust pushes a rocket upward by throwing hot gas downward.", x: 38, y: 58 }, { id: speed, label: "Speed", say: gt-x-speed, caption: "Orbital speed lets a spacecraft keep falling around Earth instead of back to the ground.", x: 56, y: 42 }, { id: reuse, label: "Reuse", say: gt-x-reuse, caption: "Reusable boosters can land and fly again on later missions.", x: 70, y: 64 } ] } }
+            - { say: gt-5, caption: "Tap the launch steps to see what a rocket needs!", advance: hold, view: { kind: reveal, key: gt-explore, base: { kind: field, tint: deep-space, density: medium, label: "Launch checklist" }, hotspots: [ { id: thrust, label: "Thrust", emoji: "🔥", say: gt-x-thrust, caption: "Thrust pushes a rocket upward by throwing hot gas downward.", x: 38, y: 58 }, { id: speed, label: "Speed", emoji: "🚀", say: gt-x-speed, caption: "Orbital speed lets a spacecraft keep falling around Earth instead of back to the ground.", x: 56, y: 42 }, { id: reuse, label: "Reuse", emoji: "♻️", say: gt-x-reuse, caption: "Reusable boosters can land and fly again on later missions.", x: 70, y: 64 } ] } }
     satellites:
       title: Satellites
       sections:
@@ -453,7 +453,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: sa-5, caption: "Tap each satellite signal to match it with a helpful job!", advance: hold, view: { kind: reveal, key: sa-explore, base: { kind: orbit, bodies: [ { id: earth, role: planet, color: earth }, { id: satellite, role: moon, color: "#dbeafe", orbits: earth, radius: 86, period: 6 } ] }, hotspots: [ { id: gps, label: "GPS", say: sa-x-gps, caption: "GPS satellites help phones and cars find their location.", x: 35, y: 40 }, { id: comms, label: "Comms", say: sa-x-comms, caption: "Communication satellites relay messages, broadcasts, and internet data.", x: 62, y: 44 }, { id: storm, label: "Weather", say: sa-x-storm, caption: "Weather satellites track storms and cloud patterns from space.", x: 72, y: 66 } ] } }
+            - { say: sa-5, caption: "Tap each satellite signal to match it with a helpful job!", advance: hold, view: { kind: reveal, key: sa-explore, base: { kind: orbit, bodies: [ { id: earth, role: planet, color: earth }, { id: satellite, role: moon, color: "#dbeafe", orbits: earth, radius: 86, period: 6 } ] }, hotspots: [ { id: gps, label: "GPS", emoji: "📍", say: sa-x-gps, caption: "GPS satellites help phones and cars find their location.", x: 35, y: 40 }, { id: comms, label: "Comms", emoji: "📡", say: sa-x-comms, caption: "Communication satellites relay messages, broadcasts, and internet data.", x: 62, y: 44 }, { id: storm, label: "Weather", emoji: "⛈️", say: sa-x-storm, caption: "Weather satellites track storms and cloud patterns from space.", x: 72, y: 66 } ] } }
     spacewalks:
       title: Spacewalks
       sections:
@@ -474,7 +474,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: sw-5, caption: "Tap the spacesuit parts that keep an astronaut safe!", advance: hold, view: { kind: reveal, key: sw-explore, base: { kind: field, tint: deep-space, density: high, label: "Spacesuit checklist" }, hotspots: [ { id: air, label: "Air", say: sw-x-air, caption: "The backpack supplies oxygen so the astronaut can breathe.", x: 35, y: 42 }, { id: cooling, label: "Cooling", say: sw-x-cooling, caption: "Cooling loops carry heat away from the astronaut's body.", x: 58, y: 38 }, { id: tether, label: "Tether", say: sw-x-tether, caption: "A tether keeps the astronaut attached to the spacecraft.", x: 70, y: 64 } ] } }
+            - { say: sw-5, caption: "Tap the spacesuit parts that keep an astronaut safe!", advance: hold, view: { kind: reveal, key: sw-explore, base: { kind: field, tint: deep-space, density: high, label: "Spacesuit checklist" }, hotspots: [ { id: air, label: "Air", emoji: "🫁", say: sw-x-air, caption: "The backpack supplies oxygen so the astronaut can breathe.", x: 35, y: 42 }, { id: cooling, label: "Cooling", emoji: "❄️", say: sw-x-cooling, caption: "Cooling loops carry heat away from the astronaut's body.", x: 58, y: 38 }, { id: tether, label: "Tether", emoji: "🪢", say: sw-x-tether, caption: "A tether keeps the astronaut attached to the spacecraft.", x: 70, y: 64 } ] } }
     mars-base:
       title: Mars Base
       sections:
@@ -495,7 +495,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: mb-5, caption: "Tap the Mars base systems that would help people live off Earth!", advance: hold, view: { kind: reveal, key: mb-explore, base: { kind: body, body: { role: planet, color: mars, glow: true }, label: "Build a Mars base" }, hotspots: [ { id: habitat, label: "Habitat", say: mb-x-habitat, caption: "A habitat keeps breathable air inside and Mars dust outside.", x: 34, y: 45 }, { id: power, label: "Power", say: mb-x-power, caption: "Solar panels or nuclear power could run heaters, labs, and life support.", x: 58, y: 36 }, { id: rover, label: "Rover", say: mb-x-rover, caption: "Rovers would carry explorers and tools across the Martian surface.", x: 72, y: 62 } ] } }
+            - { say: mb-5, caption: "Tap the Mars base systems that would help people live off Earth!", advance: hold, view: { kind: reveal, key: mb-explore, base: { kind: body, body: { role: planet, color: mars, glow: true }, label: "Build a Mars base" }, hotspots: [ { id: habitat, label: "Habitat", emoji: "🏠", say: mb-x-habitat, caption: "A habitat keeps breathable air inside and Mars dust outside.", x: 34, y: 45 }, { id: power, label: "Power", emoji: "⚡", say: mb-x-power, caption: "Solar panels or nuclear power could run heaters, labs, and life support.", x: 58, y: 36 }, { id: rover, label: "Rover", emoji: "🚙", say: mb-x-rover, caption: "Rovers would carry explorers and tools across the Martian surface.", x: 72, y: 62 } ] } }
 
   content:
     questions:
