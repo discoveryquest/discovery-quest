@@ -103,7 +103,8 @@ export default function App() {
       {screen === 'quest' ? (
         <Quest key={station?.id} station={station} course={course} onExit={() => { setSaveTick((t) => t + 1); setScreen('map'); }} />
       ) : (
-        <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile} onPlay={onPlay} onLearn={onLearn} />
+        <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile} onPlay={onPlay} onLearn={onLearn}
+          onSwitchPlayer={() => { hushAll(); setRoute({ mode: 'picker' }); }} />
       )}
 
       {lesson && course.lessonsById[lesson.id] && (
