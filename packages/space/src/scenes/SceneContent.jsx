@@ -10,6 +10,7 @@ import { MoonPhase2DContent } from './2d/MoonPhase2D.jsx';
 import { Spin2DContent } from './2d/Spin2D.jsx';
 import { SeasonOrbit2DContent } from './2d/SeasonOrbit2D.jsx';
 import { Fall2DContent } from './2d/Fall2D.jsx';
+import { StarLife2DContent } from './2d/StarLife2D.jsx';
 
 const BARE_RENDERERS = {
   body: Body2DContent,
@@ -19,6 +20,7 @@ const BARE_RENDERERS = {
   spin: Spin2DContent,
   seasons: SeasonOrbit2DContent,
   fall: Fall2DContent,
+  starLife: StarLife2DContent,
 };
 
 export default function SceneContent({ descriptor }) {

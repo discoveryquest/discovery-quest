@@ -306,7 +306,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: cn-5, caption: "Tap the sky clues to learn how people use constellations!", advance: hold, view: { kind: reveal, key: cn-explore, base: { kind: field, tint: deep-space, density: high, label: "Night-sky clues" }, hotspots: [ { id: picture, label: "Picture", say: cn-x-picture, caption: "A constellation picture helps people remember a star pattern.", x: 30, y: 42 }, { id: compass, label: "Guide", say: cn-x-guide, caption: "Some star patterns helped travelers keep direction at night.", x: 55, y: 36 }, { id: season, label: "Season", say: cn-x-season, caption: "Different constellations mark different parts of Earth's year.", x: 72, y: 62 } ] } }
+            - { say: cn-5, caption: "Tap the sky clues to learn how people use constellations!", advance: hold, view: { kind: reveal, key: cn-explore, base: { kind: field, tint: deep-space, density: high, label: "Night-sky clues" }, hotspots: [ { id: picture, label: "Picture", emoji: "✨", say: cn-x-picture, caption: "A constellation picture helps people remember a star pattern.", x: 30, y: 42 }, { id: compass, label: "Guide", emoji: "🧭", say: cn-x-guide, caption: "Some star patterns helped travelers keep direction at night.", x: 55, y: 36 }, { id: season, label: "Season", emoji: "🍂", say: cn-x-season, caption: "Different constellations mark different parts of Earth's year.", x: 72, y: 62 } ] } }
     star-life:
       title: A Star's Life
       sections:
@@ -327,7 +327,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: sl-5, caption: "Drag through the stages of a massive star's life!", advance: hold, view: { kind: scrub, key: sl-explore, base: { kind: body, body: { role: star, glow: true }, label: "Star life cycle" }, states: [ { id: nebula, label: Nebula, say: sl-x-nebula, caption: "Nebula — gas and dust gather in a glowing star nursery." }, { id: newborn, label: New star, say: sl-x-newborn, caption: "New star — gravity makes the center hot enough to shine." }, { id: giant, label: Red giant, say: sl-x-giant, caption: "Red giant — the star swells as its fuel changes." }, { id: supernova, label: Supernova, say: sl-x-supernova, caption: "Supernova — a massive star can explode and scatter new ingredients into space." } ] } }
+            - { say: sl-5, caption: "Drag through the stages of a massive star's life!", advance: hold, view: { kind: scrub, key: sl-explore, base: { kind: starLife }, states: [ { id: nebula, label: Nebula, say: sl-x-nebula, caption: "Nebula — gas and dust gather in a glowing star nursery." }, { id: newborn, label: New star, say: sl-x-newborn, caption: "New star — gravity makes the center hot enough to shine." }, { id: giant, label: Red giant, say: sl-x-giant, caption: "Red giant — the star swells as its fuel changes." }, { id: supernova, label: Supernova, say: sl-x-supernova, caption: "Supernova — a massive star can explode and scatter new ingredients into space." } ] } }
     nebulae:
       title: Nebulae
       sections:
@@ -348,7 +348,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: ne-5, caption: "Tap the glowing cloud to find what nebulae are made for!", advance: hold, view: { kind: reveal, key: ne-explore, base: { kind: field, tint: nebula, density: high, label: "Inside a nebula" }, hotspots: [ { id: gas, label: "Gas", say: ne-x-gas, caption: "Gas is the main material in many nebulae.", x: 28, y: 48 }, { id: dust, label: "Dust", say: ne-x-dust, caption: "Tiny dust grains help clouds block and reflect starlight.", x: 55, y: 38 }, { id: stars, label: "Stars", say: ne-x-stars, caption: "Some nebulae are nurseries where new stars begin.", x: 70, y: 64 } ] } }
+            - { say: ne-5, caption: "Tap the glowing cloud to find what nebulae are made for!", advance: hold, view: { kind: reveal, key: ne-explore, base: { kind: field, tint: nebula, density: high, label: "Inside a nebula" }, hotspots: [ { id: gas, label: "Gas", emoji: "💨", say: ne-x-gas, caption: "Gas is the main material in many nebulae.", x: 28, y: 48 }, { id: dust, label: "Dust", emoji: "✨", say: ne-x-dust, caption: "Tiny dust grains help clouds block and reflect starlight.", x: 55, y: 38 }, { id: stars, label: "Stars", emoji: "⭐", say: ne-x-stars, caption: "Some nebulae are nurseries where new stars begin.", x: 70, y: 64 } ] } }
     galaxies:
       title: Galaxies
       sections:
@@ -369,7 +369,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: ga-5, caption: "Tap the galaxy map to compare where we are and what galaxies contain!", advance: hold, view: { kind: reveal, key: ga-explore, base: { kind: field, tint: deep-space, density: high, label: "Galaxy map" }, hotspots: [ { id: stars, label: "Stars", say: ga-x-stars, caption: "Galaxies can contain billions or even trillions of stars.", x: 32, y: 42 }, { id: milky, label: "Milky Way", say: ga-x-milky, caption: "The Milky Way is our home galaxy.", x: 54, y: 52 }, { id: universe, label: "Universe", say: ga-x-universe, caption: "The universe contains billions of galaxies beyond our own.", x: 74, y: 60 } ] } }
+            - { say: ga-5, caption: "Tap the galaxy map to compare where we are and what galaxies contain!", advance: hold, view: { kind: reveal, key: ga-explore, base: { kind: field, tint: deep-space, density: high, label: "Galaxy map" }, hotspots: [ { id: stars, label: "Stars", emoji: "⭐", say: ga-x-stars, caption: "Galaxies can contain billions or even trillions of stars.", x: 32, y: 42 }, { id: milky, label: "Milky Way", emoji: "🌌", say: ga-x-milky, caption: "The Milky Way is our home galaxy.", x: 54, y: 52 }, { id: universe, label: "Universe", emoji: "🌠", say: ga-x-universe, caption: "The universe contains billions of galaxies beyond our own.", x: 74, y: 60 } ] } }
     black-holes:
       title: Black Holes
       sections:
@@ -390,7 +390,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: bh-5, caption: "Tap the clues astronomers use to find hidden black holes!", advance: hold, view: { kind: reveal, key: bh-explore, base: { kind: body, body: { role: blackhole, rings: 18, glow: true }, label: "Hidden, but not helpless" }, hotspots: [ { id: light, label: "Bent light", say: bh-x-light, caption: "Strong gravity can bend the path of light around a black hole.", x: 30, y: 40 }, { id: gas, label: "Hot gas", say: bh-x-gas, caption: "Gas falling inward can heat up and glow before it crosses the event horizon.", x: 58, y: 36 }, { id: tug, label: "Star tug", say: bh-x-tug, caption: "Nearby stars can reveal a black hole by orbiting something invisible.", x: 70, y: 62 } ] } }
+            - { say: bh-5, caption: "Tap the clues astronomers use to find hidden black holes!", advance: hold, view: { kind: reveal, key: bh-explore, base: { kind: body, body: { role: blackhole, rings: 18, glow: true }, label: "Hidden, but not helpless" }, hotspots: [ { id: light, label: "Bent light", emoji: "〰️", say: bh-x-light, caption: "Strong gravity can bend the path of light around a black hole.", x: 30, y: 40 }, { id: gas, label: "Hot gas", emoji: "🔥", say: bh-x-gas, caption: "Gas falling inward can heat up and glow before it crosses the event horizon.", x: 58, y: 36 }, { id: tug, label: "Star tug", emoji: "⭐", say: bh-x-tug, caption: "Nearby stars can reveal a black hole by orbiting something invisible.", x: 70, y: 62 } ] } }
     life-in-orbit:
       title: Life in Orbit
       sections:

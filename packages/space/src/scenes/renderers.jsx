@@ -13,6 +13,7 @@ import MoonPhase2D from './2d/MoonPhase2D.jsx';
 import Spin2D from './2d/Spin2D.jsx';
 import SeasonOrbit2D from './2d/SeasonOrbit2D.jsx';
 import Fall2D from './2d/Fall2D.jsx';
+import StarLife2D from './2d/StarLife2D.jsx';
 
 export const SCENE_RENDERERS = {
   '2d': {
@@ -28,5 +29,6 @@ export const SCENE_RENDERERS = {
     spin: Spin2D,
     seasons: SeasonOrbit2D,
     fall: Fall2D,
+    starLife: StarLife2D,
   },
 };
