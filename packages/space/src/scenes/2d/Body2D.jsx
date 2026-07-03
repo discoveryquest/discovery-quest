@@ -6,7 +6,7 @@ import { useId } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { phaseMaskShift } from '../geometry.js';
 import { celestialGradient, celestialGlow } from './roles.js';
-import { SpaceStage } from './base.jsx';
+import { SpaceStage, EmojiGlobe } from './base.jsx';
 
 const BODY_SIZE = 120; // px diameter
 
@@ -89,7 +89,7 @@ export function Body2DContent({ body = {}, label }) {
             width: BODY_SIZE,
             height: BODY_SIZE,
             borderRadius: '50%',
-            background: gradient,
+            background: role === 'planet' && color === 'earth' ? 'transparent' : gradient,
             boxShadow,
             transform: tiltDeg ? `rotate(${tiltDeg}deg)` : undefined,
             position: 'relative',
@@ -98,6 +98,7 @@ export function Body2DContent({ body = {}, label }) {
           animate={reduce ? {} : { y: [-5, 5, -5] }}
           transition={reduce ? {} : { repeat: Infinity, duration: 4, ease: 'easeInOut' }}
         >
+          {role === 'planet' && color === 'earth' && <EmojiGlobe size={BODY_SIZE} />}
           {phaseShift != null && (
             <div
               style={{

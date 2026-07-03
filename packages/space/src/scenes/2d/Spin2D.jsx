@@ -8,7 +8,7 @@
 // CSS transform-origin on SVG groups is unreliable, so we never rely on it.
 import { useEffect, useState } from 'react';
 import { useReducedMotion, useSpring, useMotionValueEvent } from 'framer-motion';
-import { SpaceStage } from './base.jsx';
+import { SpaceStage, SvgEmoji } from './base.jsx';
 
 const W = 300;
 const H = 160;
@@ -20,13 +20,6 @@ const EARTH = { x: 192, y: 74, r: 46 };
 // top=dusk → right(away from sun)=night. Four states span three quarter-turns.
 const MARKER = { x: EARTH.x, y: EARTH.y + EARTH.r };
 const FULL_SWEEP = 270;
-
-// Simple continent blobs (local coords around the earth centre) that make the spin visible.
-const CONTINENTS = [
-  'M -26 -19 q 12 -10 24 -3 q 9 5 2 14 q -12 8 -22 1 q -10 -5 -4 -12 Z',
-  'M 5 7 q 14 -5 20 5 q 5 10 -5 15 q -14 5 -19 -5 q -3 -10 4 -15 Z',
-  'M -32 10 q 8 -3 12 3 q 2 7 -7 9 q -8 0 -10 -5 q 0 -5 5 -7 Z',
-];
 
 export function Spin2DContent({ fraction = 0, markerLabel = 'YOU' }) {
   const reduce = useReducedMotion();
@@ -55,11 +48,6 @@ export function Spin2DContent({ fraction = 0, markerLabel = 'YOU' }) {
           <stop offset="60%" stopColor="#facc15" />
           <stop offset="100%" stopColor="#d97706" />
         </radialGradient>
-        <radialGradient id="spin-ocean" cx="38%" cy="34%">
-          <stop offset="0%" stopColor="#7dd3fc" />
-          <stop offset="55%" stopColor="#2779c4" />
-          <stop offset="100%" stopColor="#0b2f5e" />
-        </radialGradient>
         <filter id="spin-glow">
           <feGaussianBlur stdDeviation="5" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
@@ -86,15 +74,10 @@ export function Spin2DContent({ fraction = 0, markerLabel = 'YOU' }) {
           stroke="#fde68a" strokeOpacity="0.4" strokeWidth="2.5" strokeLinecap="round" />
       ))}
 
-      {/* Ocean disc */}
-      <circle cx={EARTH.x} cy={EARTH.y} r={EARTH.r} fill="url(#spin-ocean)" />
-
-      {/* Rotating globe: continents spin with the planet */}
+      {/* Rotating globe: the 🌍 emoji turns with the planet, so the spin is visible */}
       <g clipPath="url(#spin-disc)">
         <g transform={`rotate(${deg} ${EARTH.x} ${EARTH.y})`}>
-          <g transform={`translate(${EARTH.x} ${EARTH.y})`} fill="#3fae6a" stroke="#2b7a4b" strokeWidth="1">
-            {CONTINENTS.map((d, i) => <path key={i} d={d} />)}
-          </g>
+          <SvgEmoji x={EARTH.x} y={EARTH.y} r={EARTH.r + 2} />
         </g>
         {/* Fixed night side — always the half facing away from the Sun */}
         <rect x={EARTH.x - 6} y={EARTH.y - EARTH.r} width={EARTH.r + 8} height={EARTH.r * 2} fill="url(#spin-night)" />

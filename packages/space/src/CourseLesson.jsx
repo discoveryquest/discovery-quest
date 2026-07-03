@@ -5,7 +5,7 @@
 import LessonScreen from '@discoveryquest/engine-ui/LessonScreen';
 import { renderLessonView } from './lessons/views.jsx';
 
-export default function CourseLesson({ lesson, narration = {}, onDone }) {
+export default function CourseLesson({ lesson, narration = {}, onDone, onClose }) {
   if (!lesson) { onDone?.(); return null; }
   const withCaptions = {
     ...lesson,
@@ -14,5 +14,5 @@ export default function CourseLesson({ lesson, narration = {}, onDone }) {
       beats: (s.beats || []).map((b) => ({ ...b, caption: narration[b.say] ?? b.caption })),
     })),
   };
-  return <LessonScreen lesson={withCaptions} renderView={(view) => renderLessonView(view)} onDone={onDone} />;
+  return <LessonScreen lesson={withCaptions} renderView={(view) => renderLessonView(view)} onDone={onDone} onClose={onClose} />;
 }

@@ -26,6 +26,34 @@ let desired = null; // what the current screen wants playing
 let paused = false; // explicitly suppressed (e.g. tutorial video)
 let ducker = null;
 
+// iOS Safari ignores HTMLMediaElement.volume (it's hardware-controlled), which
+// silently kills the fade-in AND the duck-under-Luna on iPhones/iPads. Routing the
+// element through a WebAudio GainNode gives us a volume control iOS respects.
+// One MediaElementSource per element (the API allows only one, ever), so the gain
+// node is created alongside the element in startTrack. If WebAudio is unavailable
+// or wiring throws, fall back to element.volume (desktop behavior, already fine).
+let actx = null;
+function wireGain(a) {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    actx ??= new Ctx();
+    const src = actx.createMediaElementSource(a);
+    const gain = actx.createGain();
+    src.connect(gain);
+    gain.connect(actx.destination);
+    return gain;
+  } catch {
+    return null;
+  }
+}
+let currentGain = null; // GainNode for `current`, or null when on the volume fallback
+const setVol = (a, v) => {
+  if (currentGain) currentGain.gain.value = v;
+  else a.volume = v;
+};
+const getVol = (a) => (currentGain ? currentGain.gain.value : a.volume);
+
 function startTrack(name) {
   if (current) {
     current.pause();
@@ -35,8 +63,9 @@ function startTrack(name) {
   currentName = name;
   const a = new Audio(`/music/${name}.mp3`);
   a.loop = true;
-  a.volume = 0;
   current = a;
+  currentGain = wireGain(a);
+  setVol(a, 0);
 
   // Set up the fade-in + ducker REGARDLESS of whether the initial play() is allowed. If
   // autoplay is blocked, this element still ramps its volume (silently, while paused), so
@@ -48,13 +77,13 @@ function startTrack(name) {
   const fade = setInterval(() => {
     if (current !== a) { clearInterval(fade); return; }
     v = Math.min(BASE_VOL, v + 0.02);
-    a.volume = v;
+    setVol(a, v);
     if (v >= BASE_VOL) clearInterval(fade);
   }, 60);
   ducker = setInterval(() => {
     if (current !== a) return;
     const target = isSpeaking() ? DUCK_VOL : BASE_VOL;
-    a.volume += (target - a.volume) * 0.3;
+    setVol(a, getVol(a) + (target - getVol(a)) * 0.3);
   }, 150);
 
   a.play().catch(() => {
@@ -110,8 +139,12 @@ export function setMusicEnabled(v) {
 }
 
 // First user gesture unlocks autoplay; reconcile then starts the desired track.
+// The AudioContext also starts suspended until a gesture on iOS — resume it here.
 if (typeof window !== 'undefined') {
-  const onGesture = () => reconcile();
+  const onGesture = () => {
+    if (actx?.state === 'suspended') actx.resume().catch(() => {});
+    reconcile();
+  };
   for (const e of ['pointerdown', 'keydown', 'touchstart']) {
     window.addEventListener(e, onGesture, { passive: true });
   }

@@ -20,7 +20,7 @@ function withPhase(base, fraction) {
   if (base.kind === 'body') {
     return { ...base, body: { ...(base.body ?? {}), phase: fraction } };
   }
-  if (base.kind === 'spin') {
+  if (base.kind === 'spin' || base.kind === 'seasons') {
     return { ...base, fraction };
   }
   if (base.kind === 'orbit') {

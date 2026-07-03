@@ -332,6 +332,8 @@
             "launch",
             "compare",
             "spin",
+            "seasons",
+            "fall",
             "scrub",
             "reveal",
             "moonPhase"
@@ -611,6 +613,81 @@
                   "null"
                 ],
                 "description": "label on the surface marker riding the spin (default YOU)"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "seasons"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "seasons"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "fraction": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "0..1 orbit position (0=spring/top, 1/3=summer/right, 2/3=autumn/bottom, 1=winter/left); injected automatically when used as a scrub base"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "fall"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "fall"
+              },
+              "key": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "items": {
+                "type": [
+                  "array",
+                  "null"
+                ],
+                "items": {
+                  "type": "object"
+                },
+                "description": "each { label, emoji, g } where g is surface gravity relative to Earth; defaults to Jupiter 2.5 / Earth 1 / Moon 0.17"
               }
             },
             "required": [

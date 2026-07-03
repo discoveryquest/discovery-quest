@@ -159,7 +159,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: se-5, caption: "Drag Earth around its orbit to walk through the four seasons!", advance: hold, view: { kind: scrub, key: se-explore, base: { kind: orbit, bodies: [ { id: sun, role: star }, { id: earth, role: planet, color: earth, orbits: sun, radius: 70 } ] }, states: [ { id: spring, label: Spring, say: se-x-spring, caption: "Spring — neither hemisphere tilts much toward the Sun; days grow longer." }, { id: summer, label: Summer, say: se-x-summer, caption: "Summer — your hemisphere tilts toward the Sun; long days and strong sunlight." }, { id: autumn, label: Autumn, say: se-x-autumn, caption: "Autumn — your hemisphere tilts away again; days shorten and cool." }, { id: winter, label: Winter, say: se-x-winter, caption: "Winter — your hemisphere tilts away the most; short days and weak sunlight." } ] } }
+            - { say: se-5, caption: "Drag Earth around its orbit to walk through the four seasons!", advance: hold, view: { kind: scrub, key: se-explore, base: { kind: seasons }, states: [ { id: spring, label: Spring, say: se-x-spring, caption: "Spring — neither hemisphere tilts much toward the Sun; days grow longer." }, { id: summer, label: Summer, say: se-x-summer, caption: "Summer — your hemisphere tilts toward the Sun; long days and strong sunlight." }, { id: autumn, label: Autumn, say: se-x-autumn, caption: "Autumn — your hemisphere tilts away again; days shorten and cool." }, { id: winter, label: Winter, say: se-x-winter, caption: "Winter — your hemisphere tilts away the most; short days and weak sunlight." } ] } }
     gravity:
       title: Gravity
       sections:
@@ -180,7 +180,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: gr-5, caption: "Tap each world to feel its gravity!", advance: hold, view: { kind: reveal, key: gr-explore, base: { kind: compare, items: [ { label: "Jupiter", relSize: 11, role: planet, color: jupiter }, { label: "Earth", relSize: 4, role: planet, color: earth }, { label: "Moon", relSize: 1, role: moon } ] }, hotspots: [ { id: jupiter, label: "Jupiter", say: gr-x-jupiter, caption: "Jupiter is enormous — its gravity is 2.5 times stronger than Earth's.", x: 15, y: 50 }, { id: earth, label: "Earth", say: gr-x-earth, caption: "Earth's gravity feels normal to you — it's what you were born with!", x: 50, y: 50 }, { id: moon, label: "Moon", say: gr-x-moon, caption: "The Moon is small — its gravity is about one-sixth of Earth's.", x: 80, y: 50 } ] } }
+            - { say: gr-5, caption: "Tap each world to feel its gravity!", advance: hold, view: { kind: reveal, key: gr-explore, base: { kind: fall, items: [ { label: "Jupiter", emoji: "🪐", g: 2.5 }, { label: "Earth", emoji: "🌍", g: 1 }, { label: "Moon", emoji: "🌙", g: 0.17 } ] }, hotspots: [ { id: jupiter, label: "Jupiter", say: gr-x-jupiter, caption: "Jupiter is enormous — its gravity is 2.5 times stronger than Earth's.", x: 25, y: 42 }, { id: earth, label: "Earth", say: gr-x-earth, caption: "Earth's gravity feels normal to you — it's what you were born with!", x: 58, y: 42 }, { id: moon, label: "Moon", say: gr-x-moon, caption: "The Moon is small — its gravity is about one-sixth of Earth's.", x: 91, y: 42 } ] } }
     inner-outer:
       title: Inner & Outer Planets
       sections:

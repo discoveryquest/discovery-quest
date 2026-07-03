@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { angularError, phaseForAngle, targetAngle } from '../gates/phaseLock.js';
 import { litFraction, litPath } from '../scenes/geometry.js';
+import { SvgEmoji } from '../scenes/2d/base.jsx';
 
 const SIZE = 300;
 const CX = SIZE / 2;
@@ -209,7 +210,7 @@ export default function MoonPositionPractice({ step, onCorrect, demo = false }) 
           <text x={targetPoint.x} y={targetPoint.y - MOON_R - 12} textAnchor="middle" fill="#67e8f9" fontSize="11" fontWeight="900">TARGET</text>
 
           {/* Earth */}
-          <circle cx={CX} cy={CY} r="31" fill="url(#practice-earth)" filter="url(#practice-glow)" />
+          <g filter="url(#practice-glow)"><SvgEmoji x={CX} y={CY} r={31} /></g>
           <text x={CX} y={CY + 51} textAnchor="middle" fill="#bae6fd" fontSize="12" fontWeight="800">EARTH</text>
 
           {/* Draggable Moon — morphs through phases; its lit limb faces the Sun */}

@@ -5,7 +5,7 @@
 import { motion, useReducedMotion, useTime, useTransform } from 'framer-motion';
 import { orbitPosition, phaseMaskShift } from '../geometry.js';
 import { celestialGradient, celestialGlow } from './roles.js';
-import { SpaceStage } from './base.jsx';
+import { SpaceStage, EmojiGlobe } from './base.jsx';
 
 // Width of the stage area for orbit placement
 const W = 430;
@@ -24,19 +24,21 @@ function CelestialBody({ role = 'planet', color, size, phaseLit, style: extraSty
   const glow = celestialGlow(role, color);
   const boxShadow = `0 0 ${size * 0.5}px ${size * 0.25}px ${glow}`;
   const phaseShift = phaseLit != null ? phaseMaskShift(phaseLit, size) : null;
+  const isEarth = role === 'planet' && color === 'earth'; // Earth is always the 🌍 emoji
   return (
     <div
       style={{
         width: size,
         height: size,
         borderRadius: '50%',
-        background: grad,
+        background: isEarth ? 'transparent' : grad,
         boxShadow,
         position: 'relative',
         overflow: 'hidden',
         ...extraStyle,
       }}
     >
+      {isEarth && <EmojiGlobe size={size} />}
       {phaseShift != null && (
         <div
           style={{

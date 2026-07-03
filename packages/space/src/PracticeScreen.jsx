@@ -45,10 +45,11 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
   const talking = useSpeaking();
   const owlAreaRef = useRef(null); // full-screen layer Luna can be dragged around in
 
-  // "See how Luna solves it": a recorded video with baked narration. Autoplays on
-  // the child's first visit to this station's practice, replayable from the header.
+  // "See how Luna solves it": a recorded video with baked narration, on demand via
+  // the header's "Watch Luna" button. Never autoplays — pressing Practice must land
+  // in practice, not a video.
   const hasTutorial = !demo && !!station?.id && TUTORIALS.includes(station.id);
-  const [tutorial, setTutorial] = useState(() => hasTutorial && !loadSave().tutorialSeen?.[station.id]);
+  const [tutorial, setTutorial] = useState(false);
   const videoRef = useRef(null);
   useEffect(() => {
     if (!tutorial || !station?.id) return;
@@ -99,7 +100,12 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
     }, 1700);
   }
 
+  // A mission "counts" for stars only if it was solved without a hint (a hint fires
+  // on a wrong attempt). Everyone finishes every mission, so basing stars on
+  // completions alone would always award 3 — this makes them earned, like math.
+  const flawedRef = useRef(new Set());
   function showHint(say = step?.feedback?.hintSay) {
+    flawedRef.current.add(idx);
     setBase('hint');
     const line = say && course.narration?.[say] ? course.narration[say] : 'Not quite — try again.';
     setBubble(line);
@@ -108,7 +114,9 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
   }
 
   const total = Math.max(steps.length, 1);
-  const stars = correct >= total ? 3 : correct >= total - 1 ? 2 : correct >= Math.ceil(total / 2) ? 1 : 0;
+  const clean = total - flawedRef.current.size;
+  // Finishing always earns at least 1 star; flawless = 3, one hint-mission = 2.
+  const stars = clean >= total ? 3 : clean >= total - 1 ? 2 : 1;
 
   useEffect(() => {
     if (!done || !station?.id) return;
@@ -147,9 +155,16 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
             <Tv size={14} /> Watch Luna
           </button>
         )}
-        <span className={`text-xs font-bold uppercase tracking-wider text-slate-400 ${hasTutorial && !done ? '' : 'ml-auto'}`}>
-          {done ? 'Done' : `Mission ${Math.min(idx + 1, total)} of ${total}`}
-        </span>
+        {done ? (
+          <button type="button" onClick={() => { hushAll(); onExit(); }}
+            className="ml-auto text-xs font-extrabold uppercase tracking-wider text-cyan-300 hover:text-cyan-100">
+            Done ✓
+          </button>
+        ) : (
+          <span className={`text-xs font-bold uppercase tracking-wider text-slate-400 ${hasTutorial ? '' : 'ml-auto'}`}>
+            {`Mission ${Math.min(idx + 1, total)} of ${total}`}
+          </span>
+        )}
       </div>
 
       <div className="mt-3 flex justify-center gap-1.5">

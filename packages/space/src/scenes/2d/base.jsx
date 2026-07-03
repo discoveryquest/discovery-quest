@@ -32,6 +32,41 @@ export function Starfield({ count = 26 }) {
   );
 }
 
+// Earth is drawn everywhere as the platform's 🌍 emoji (the globe kids see on the
+// map icon), not a hand-painted gradient ball. Two helpers, one per render context.
+export const EARTH_EMOJI = '🌍';
+
+/** DOM context: an emoji sized to fill a `size`×`size` box (crop to a circle via
+ * the parent's border-radius/overflow when needed). */
+export function EmojiGlobe({ size, emoji = EARTH_EMOJI, style }) {
+  return (
+    <span
+      aria-hidden
+      style={{
+        display: 'block',
+        width: size,
+        height: size,
+        fontSize: size * 0.92,
+        lineHeight: `${size}px`,
+        textAlign: 'center',
+        userSelect: 'none',
+        ...style,
+      }}
+    >
+      {emoji}
+    </span>
+  );
+}
+
+/** SVG context: an emoji glyph centred on (x,y) filling a circle of radius r. */
+export function SvgEmoji({ x, y, r, emoji = EARTH_EMOJI }) {
+  return (
+    <text x={x} y={y} fontSize={r * 2} textAnchor="middle" dominantBaseline="central" aria-hidden>
+      {emoji}
+    </text>
+  );
+}
+
 export function SpaceStage({ children, tint }) {
   const bg =
     tint === 'nebula'

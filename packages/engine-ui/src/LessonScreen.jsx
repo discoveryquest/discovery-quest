@@ -14,7 +14,12 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Pause, Play, RotateCcw } from 'lucide-react';
 import { speak, hushAll, isSpeaking, currentClipDuration } from '@discoveryquest/voice-kit/audio';
 
-export default function LessonScreen({ lesson, renderView, onDone }) {
+// onDone   — the learner is finished and wants to practice (parent starts the board).
+// onClose  — the learner backs out (X); just close, don't start practice. Falls back to onDone.
+// autoAdvance — once the lesson has played through, fill the CTA (Waze-style) and
+//   auto-start practice unless the learner cancels (replays a section, or closes).
+const AUTO_ADVANCE_MS = 4000;
+export default function LessonScreen({ lesson, renderView, onDone, onClose, autoAdvance = false }) {
   const reduce = useReducedMotion();
   // flatten beats, remembering each beat's section index for the scrub bar
   const beats = [];
@@ -23,6 +28,7 @@ export default function LessonScreen({ lesson, renderView, onDone }) {
   const [i, setI] = useState(0);
   const [done, setDone] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [autoRunning, setAutoRunning] = useState(false); // Waze-style auto-advance in progress
 
   // narrate the current beat (also runs on replay/jump). Hush first so a beat's line
   // always starts fresh — never queues behind a previous line that ran long.
@@ -69,6 +75,20 @@ export default function LessonScreen({ lesson, renderView, onDone }) {
   // clean up audio on unmount
   useEffect(() => () => hushAll(), []);
 
+  // Waze-style auto-advance: once the lesson finishes, give the learner a few seconds
+  // (the CTA fills left→right) then start practice for them. Cancels if they replay/jump
+  // (done flips false). Reduced-motion users get a short, fill-free delay.
+  useEffect(() => {
+    if (!(done && autoAdvance)) {
+      setAutoRunning(false);
+      return;
+    }
+    setAutoRunning(true);
+    const t = setTimeout(() => onDone(), reduce ? 1200 : AUTO_ADVANCE_MS);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done, autoAdvance]);
+
   if (!lesson || !beats.length) {
     onDone();
     return null;
@@ -108,7 +128,7 @@ export default function LessonScreen({ lesson, renderView, onDone }) {
           <button
             type="button"
             aria-label="Close"
-            onClick={onDone}
+            onClick={onClose || onDone}
             className="absolute right-3 top-3 z-10 rounded-lg p-1.5 text-slate-400 hover:bg-white/10 hover:text-white"
           >
             <X size={18} />
@@ -183,11 +203,23 @@ export default function LessonScreen({ lesson, renderView, onDone }) {
           <motion.button
             type="button"
             onClick={onDone}
-            animate={done ? { scale: [1, 1.035, 1] } : { scale: 1 }}
-            transition={done ? { repeat: Infinity, duration: 1.5 } : { duration: 0.2 }}
-            className="mt-4 w-full rounded-xl bg-cyan-400 py-3 text-lg font-extrabold text-slate-900 hover:bg-cyan-300"
+            animate={done && !autoRunning ? { scale: [1, 1.035, 1] } : { scale: 1 }}
+            transition={done && !autoRunning ? { repeat: Infinity, duration: 1.5 } : { duration: 0.2 }}
+            className="relative mt-4 w-full overflow-hidden rounded-xl bg-cyan-400 py-3 text-lg font-extrabold text-slate-900 hover:bg-cyan-300"
           >
-            Let's practice! →
+            {/* Waze-style fill: darker blue sweeps left→right over the countdown */}
+            {autoRunning && (
+              <motion.span
+                aria-hidden="true"
+                className="absolute inset-y-0 left-0 bg-cyan-600/80"
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: AUTO_ADVANCE_MS / 1000, ease: 'linear' }}
+              />
+            )}
+            <span className="relative">
+              {autoRunning ? 'Starting practice…' : "Let's practice! →"}
+            </span>
           </motion.button>
         </motion.div>
       </motion.div>

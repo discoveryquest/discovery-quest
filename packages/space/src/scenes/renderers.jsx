@@ -11,6 +11,8 @@ import Scrub2D from './2d/Scrub2D.jsx';
 import Reveal2D from './2d/Reveal2D.jsx';
 import MoonPhase2D from './2d/MoonPhase2D.jsx';
 import Spin2D from './2d/Spin2D.jsx';
+import SeasonOrbit2D from './2d/SeasonOrbit2D.jsx';
+import Fall2D from './2d/Fall2D.jsx';
 
 export const SCENE_RENDERERS = {
   '2d': {
@@ -24,5 +26,7 @@ export const SCENE_RENDERERS = {
     reveal: Reveal2D,
     moonPhase: MoonPhase2D,
     spin: Spin2D,
+    seasons: SeasonOrbit2D,
+    fall: Fall2D,
   },
 };

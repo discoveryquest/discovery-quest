@@ -4,7 +4,7 @@
 // validated space.course.yml). Saves under its own 'sq-save' key; profiles are the
 // shared device-wide registry, so a hero from Math/English is offered here too.
 import { useState, useEffect } from 'react';
-import { setSaveKey, loadSave, mutateSave } from '@discoveryquest/engine/save';
+import { setSaveKey, loadSave } from '@discoveryquest/engine/save';
 import { ensureRegistry, loadRegistry, resolveActiveProfile, createProfile, setActiveProfile } from '@discoveryquest/engine/profiles';
 import { hushAll } from '@discoveryquest/voice-kit/audio';
 import ProfileSetup from '@discoveryquest/engine-ui/ProfileSetup';
@@ -89,16 +89,12 @@ export default function App() {
   // ── Game ──
   const save = loadSave();
   const profile = reg.profiles.find((p) => p.id === route.profileId) || save.profile;
-  const hasLesson = (st) => st?.lessonId && course.lessonsById[st.lessonId];
   const startQuest = (st) => { setStation(st); setScreen('quest'); };
   const Quest = station?.board === 'practice' ? PracticeScreen : QuizScreen;
-  // First visit to a station with a lesson → "Learn it", then play; otherwise play.
-  const onPlay = (st) => {
-    if (hasLesson(st) && !save.conceptSeen?.[st.lessonId]) {
-      mutateSave((s) => { s.conceptSeen = { ...(s.conceptSeen || {}), [st.lessonId]: true }; });
-      setLesson({ id: st.lessonId, then: () => startQuest(st) });
-    } else startQuest(st);
-  };
+  // Play means play: the button goes straight to practice, every time. The lesson
+  // stays one tap away ("Learn it" in the popover), and its final CTA still chains
+  // into practice — but pressing Practice must never open something else first.
+  const onPlay = (st) => startQuest(st);
   // Replaying Learn it should still let the final "Let's practice!" CTA launch practice.
   const onLearn = (st) => setLesson({ id: st.lessonId, then: () => startQuest(st) });
 
@@ -115,6 +111,7 @@ export default function App() {
           lesson={course.lessonsById[lesson.id]}
           narration={course.narration}
           onDone={() => { const then = lesson.then; hushAll(); setLesson(null); then?.(); }}
+          onClose={() => { hushAll(); setLesson(null); }}
         />
       )}
     </Shell>
