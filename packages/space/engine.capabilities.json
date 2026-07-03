@@ -110,7 +110,7 @@
       "description": "Interactive: tappable hotspots on a scene; tapping reveals a label and speaks its fact. Optional `base` scene underneath.",
       "fields": [
         { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. { kind: field, tint: nebula }) the hotspots sit on" },
-        { "name": "hotspots", "type": "object[]", "required": true, "note": "each { id, label, say, caption, x?, y?(percent positions) }; each `say` must exist in narration", "example": [ { "id": "jupiter", "label": "Jupiter", "say": "io-x-jupiter", "caption": "Jupiter — the largest planet.", "x": 68, "y": 40 } ] }
+        { "name": "hotspots", "type": "object[]", "required": true, "note": "each { id, label, say, caption, x?, y?(percent positions), emoji? }; with `emoji` the hotspot renders as that object (tap the 🪐 itself) instead of an anonymous + pin; each `say` must exist in narration", "example": [ { "id": "jupiter", "label": "Jupiter", "emoji": "🪐", "say": "io-x-jupiter", "caption": "Jupiter — the largest planet.", "x": 68, "y": 40 } ] }
       ]
     },
     {

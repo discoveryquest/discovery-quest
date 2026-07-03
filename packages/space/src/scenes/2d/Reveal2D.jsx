@@ -63,10 +63,12 @@ export default function Reveal2D({ base, hotspots = [] }) {
                 className="flex items-center justify-center"
               >
                 <motion.div
-                  className="rounded-full border-2 flex items-center justify-center"
+                  className="relative rounded-full border-2 flex items-center justify-center"
                   style={{
-                    width: 32,
-                    height: 32,
+                    // With an emoji the hotspot IS the object (a planet, a comet…);
+                    // without one it stays the small "+" pin.
+                    width: h.emoji ? 46 : 32,
+                    height: h.emoji ? 46 : 32,
                     borderColor: isRevealed ? '#22d3ee' : 'rgba(148,163,184,0.5)',
                     background: isActive
                       ? 'rgba(34,211,238,0.25)'
@@ -78,9 +80,21 @@ export default function Reveal2D({ base, hotspots = [] }) {
                   whileTap={tapAnim}
                   animate={isRevealed ? { boxShadow: '0 0 12px 3px rgba(34,211,238,0.45)' } : {}}
                 >
-                  <span className="text-xs font-extrabold text-cyan-300">
-                    {isRevealed ? '✓' : '+'}
-                  </span>
+                  {h.emoji ? (
+                    <>
+                      <span className="text-[26px] leading-none" aria-hidden>{h.emoji}</span>
+                      <span
+                        className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-extrabold text-slate-900"
+                        style={{ background: isRevealed ? '#22d3ee' : 'rgba(148,163,184,0.85)' }}
+                      >
+                        {isRevealed ? '✓' : '+'}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xs font-extrabold text-cyan-300">
+                      {isRevealed ? '✓' : '+'}
+                    </span>
+                  )}
                 </motion.div>
                 {isRevealed && (
                   <span

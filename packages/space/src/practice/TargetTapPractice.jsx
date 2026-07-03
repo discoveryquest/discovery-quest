@@ -17,6 +17,9 @@ export default function TargetTapPractice({ step, onCorrect, onHint }) {
   const items = step?.target?.items || DEFAULT_ITEMS;
   const targetId = step?.target?.id || step?.target?.hotspot || items[0]?.id;
   const kind = step?.kind;
+  // The big glowing Sun backdrop only belongs to missions ABOUT the Sun — for
+  // "Saturn's rings" or "asteroid belt" it was a nonsense centrepiece.
+  const aboutSun = items.some((i) => ['core', 'rays', 'surface'].includes(i.id));
 
   const tap = (item) => {
     if (picked === targetId) return;
@@ -50,13 +53,17 @@ export default function TargetTapPractice({ step, onCorrect, onHint }) {
         </div>
       ) : (
         <>
-          {/* Rays streaming outward so a "rays" hotspot has something to sit on */}
-          <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            {[[64, 30], [72, 42], [74, 56]].map(([x, y], i) => (
-              <line key={i} x1="52" y1="48" x2={x} y2={y} stroke="#fde68a" strokeOpacity="0.5" strokeWidth="0.9" strokeLinecap="round" strokeDasharray="2 2" />
-            ))}
-          </svg>
-          <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-yellow-300 text-6xl shadow-[0_0_42px_rgba(250,204,21,.7)]">☀️</div>
+          {aboutSun && (
+            <>
+              {/* Rays streaming outward so a "rays" hotspot has something to sit on */}
+              <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                {[[64, 30], [72, 42], [74, 56]].map(([x, y], i) => (
+                  <line key={i} x1="52" y1="48" x2={x} y2={y} stroke="#fde68a" strokeOpacity="0.5" strokeWidth="0.9" strokeLinecap="round" strokeDasharray="2 2" />
+                ))}
+              </svg>
+              <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-yellow-300 text-6xl shadow-[0_0_42px_rgba(250,204,21,.7)]">☀️</div>
+            </>
+          )}
           {items.map((item) => {
             // Only the tapped item shows its state — never reveal the answer on a miss.
             const state = picked === item.id ? (item.id === targetId ? 'correct' : 'wrong') : 'idle';
@@ -69,7 +76,7 @@ export default function TargetTapPractice({ step, onCorrect, onHint }) {
                 className="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center rounded-2xl border px-3 py-2 text-xs font-extrabold text-white"
                 style={{ left: `${item.x ?? 50}%`, top: `${item.y ?? 50}%`, borderColor: state === 'correct' ? '#34d399' : state === 'wrong' ? '#fb7185' : 'rgba(255,255,255,.22)', background: 'rgba(2,6,23,.68)' }}
               >
-                <span className="text-2xl">{item.emoji}</span>
+                <span className={aboutSun ? 'text-2xl' : 'text-4xl'}>{item.emoji}</span>
                 {item.label}
               </motion.button>
             );

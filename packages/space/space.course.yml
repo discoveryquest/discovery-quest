@@ -201,7 +201,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: io-5, caption: "Tap planets to sort the inner rocky worlds from the outer giants!", advance: hold, view: { kind: reveal, key: io-explore, base: { kind: field, tint: deep-space, density: high, label: "Inner or outer?" }, hotspots: [ { id: mercury, label: "Mercury", say: io-x-mercury, caption: "Mercury is an inner planet — small, rocky, and closest to the Sun.", x: 22, y: 58 }, { id: earth, label: "Earth", say: io-x-earth, caption: "Earth is an inner rocky planet with a solid surface.", x: 38, y: 42 }, { id: jupiter, label: "Jupiter", say: io-x-jupiter, caption: "Jupiter is an outer gas giant, far larger than Earth.", x: 62, y: 44 }, { id: neptune, label: "Neptune", say: io-x-neptune, caption: "Neptune is an outer ice giant, deep in the cold Solar System.", x: 78, y: 58 } ] } }
+            - { say: io-5, caption: "Tap planets to sort the inner rocky worlds from the outer giants!", advance: hold, view: { kind: reveal, key: io-explore, base: { kind: field, tint: deep-space, density: high, label: "Inner or outer?" }, hotspots: [ { id: mercury, label: "Mercury", emoji: "☿️", say: io-x-mercury, caption: "Mercury is an inner planet — small, rocky, and closest to the Sun.", x: 22, y: 58 }, { id: earth, label: "Earth", emoji: "🌍", say: io-x-earth, caption: "Earth is an inner rocky planet with a solid surface.", x: 38, y: 42 }, { id: jupiter, label: "Jupiter", emoji: "🪐", say: io-x-jupiter, caption: "Jupiter is an outer gas giant, far larger than Earth.", x: 62, y: 44 }, { id: neptune, label: "Neptune", emoji: "🔵", say: io-x-neptune, caption: "Neptune is an outer ice giant, deep in the cold Solar System.", x: 78, y: 58 } ] } }
     gas-giants:
       title: The Gas Giants
       sections:
@@ -222,7 +222,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: gg-5, caption: "Tap each giant planet to hear what makes it stand out!", advance: hold, view: { kind: reveal, key: gg-explore, base: { kind: field, tint: deep-space, density: high, label: "The giant planets" }, hotspots: [ { id: jupiter, label: "Jupiter", say: gg-x-jupiter, caption: "Jupiter is the largest planet and has a giant storm called the Great Red Spot.", x: 22, y: 45 }, { id: saturn, label: "Saturn", say: gg-x-saturn, caption: "Saturn's rings are wide, bright, and made of ice and rock.", x: 42, y: 58 }, { id: uranus, label: "Uranus", say: gg-x-uranus, caption: "Uranus is tipped on its side as it rolls around the Sun.", x: 62, y: 42 }, { id: neptune, label: "Neptune", say: gg-x-neptune, caption: "Neptune is the farthest planet and has supersonic winds.", x: 80, y: 56 } ] } }
+            - { say: gg-5, caption: "Tap each giant planet to hear what makes it stand out!", advance: hold, view: { kind: reveal, key: gg-explore, base: { kind: field, tint: deep-space, density: high, label: "The giant planets" }, hotspots: [ { id: jupiter, label: "Jupiter", emoji: "🪐", say: gg-x-jupiter, caption: "Jupiter is the largest planet and has a giant storm called the Great Red Spot.", x: 22, y: 45 }, { id: saturn, label: "Saturn", emoji: "💍", say: gg-x-saturn, caption: "Saturn's rings are wide, bright, and made of ice and rock.", x: 42, y: 58 }, { id: uranus, label: "Uranus", emoji: "🧊", say: gg-x-uranus, caption: "Uranus is tipped on its side as it rolls around the Sun.", x: 62, y: 42 }, { id: neptune, label: "Neptune", emoji: "🔵", say: gg-x-neptune, caption: "Neptune is the farthest planet and has supersonic winds.", x: 80, y: 56 } ] } }
     moons-rings:
       title: Moons & Rings
       sections:
@@ -243,7 +243,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: mr-5, caption: "Tap the orbiting pieces to compare moons and rings!", advance: hold, view: { kind: reveal, key: mr-explore, base: { kind: orbit, bodies: [ { id: planet, role: planet }, { id: moon, role: moon, orbits: planet, radius: 76, period: 6 }, { id: ringbit, role: moon, orbits: planet, radius: 108, period: 10 } ] }, hotspots: [ { id: moon, label: "Moon", say: mr-x-moon, caption: "A moon is one larger natural world orbiting a planet.", x: 34, y: 42 }, { id: ring, label: "Ring pieces", say: mr-x-ring, caption: "A ring is made from many small pieces sharing nearby orbits.", x: 66, y: 58 }, { id: gravity, label: "Gravity", say: mr-x-gravity, caption: "Gravity keeps both moons and ring pieces looping around the planet.", x: 50, y: 28 } ] } }
+            - { say: mr-5, caption: "Tap the orbiting pieces to compare moons and rings!", advance: hold, view: { kind: reveal, key: mr-explore, base: { kind: orbit, bodies: [ { id: planet, role: planet }, { id: moon, role: moon, orbits: planet, radius: 76, period: 6 }, { id: ringbit, role: moon, orbits: planet, radius: 108, period: 10 } ] }, hotspots: [ { id: moon, label: "Moon", emoji: "🌙", say: mr-x-moon, caption: "A moon is one larger natural world orbiting a planet.", x: 34, y: 42 }, { id: ring, label: "Ring pieces", emoji: "💍", say: mr-x-ring, caption: "A ring is made from many small pieces sharing nearby orbits.", x: 66, y: 58 }, { id: gravity, label: "Gravity", emoji: "⬇️", say: mr-x-gravity, caption: "Gravity keeps both moons and ring pieces looping around the planet.", x: 50, y: 28 } ] } }
     asteroids-comets:
       title: Asteroids & Comets
       sections:
@@ -264,7 +264,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: ac-5, caption: "Tap each small body to decide: rocky asteroid or icy comet?", advance: hold, view: { kind: reveal, key: ac-explore, base: { kind: field, tint: deep-space, density: high, label: "Rock or ice?" }, hotspots: [ { id: asteroid, label: "Asteroid", say: ac-x-asteroid, caption: "Asteroid — rocky, cratered, and often found between Mars and Jupiter.", x: 30, y: 55 }, { id: comet, label: "Comet", say: ac-x-comet, caption: "Comet — icy and dusty, with a tail that points away from the Sun.", x: 58, y: 40 }, { id: belt, label: "Asteroid belt", say: ac-x-belt, caption: "The asteroid belt is the busy zone between Mars and Jupiter.", x: 72, y: 62 } ] } }
+            - { say: ac-5, caption: "Tap each small body to decide: rocky asteroid or icy comet?", advance: hold, view: { kind: reveal, key: ac-explore, base: { kind: field, tint: deep-space, density: high, label: "Rock or ice?" }, hotspots: [ { id: asteroid, label: "Asteroid", emoji: "🪨", say: ac-x-asteroid, caption: "Asteroid — rocky, cratered, and often found between Mars and Jupiter.", x: 30, y: 55 }, { id: comet, label: "Comet", emoji: "☄️", say: ac-x-comet, caption: "Comet — icy and dusty, with a tail that points away from the Sun.", x: 58, y: 40 }, { id: belt, label: "Asteroid belt", emoji: "✨", say: ac-x-belt, caption: "The asteroid belt is the busy zone between Mars and Jupiter.", x: 72, y: 62 } ] } }
     whole-system:
       title: The Whole System
       sections:
@@ -285,7 +285,7 @@ course:
         - id: explore
           label: Explore
           beats:
-            - { say: ws-5, caption: "Tap the map to practice order, distance, and temperature!", advance: hold, view: { kind: reveal, key: ws-explore, base: { kind: field, tint: deep-space, density: high, label: "Solar System map" }, hotspots: [ { id: first, label: "Closest", say: ws-x-closest, caption: "Mercury is closest to the Sun.", x: 26, y: 48 }, { id: earth, label: "Home", say: ws-x-earth, caption: "Earth is the third planet from the Sun.", x: 42, y: 56 }, { id: giants, label: "Giants", say: ws-x-giants, caption: "Jupiter and Saturn begin the giant outer planet zone.", x: 62, y: 42 }, { id: cold, label: "Coldest", say: ws-x-cold, caption: "Neptune is far away, so sunlight there is very weak.", x: 80, y: 58 } ] } }
+            - { say: ws-5, caption: "Tap the map to practice order, distance, and temperature!", advance: hold, view: { kind: reveal, key: ws-explore, base: { kind: field, tint: deep-space, density: high, label: "Solar System map" }, hotspots: [ { id: first, label: "Closest", emoji: "☿️", say: ws-x-closest, caption: "Mercury is closest to the Sun.", x: 26, y: 48 }, { id: earth, label: "Home", emoji: "🌍", say: ws-x-earth, caption: "Earth is the third planet from the Sun.", x: 42, y: 56 }, { id: giants, label: "Giants", emoji: "🪐", say: ws-x-giants, caption: "Jupiter and Saturn begin the giant outer planet zone.", x: 62, y: 42 }, { id: cold, label: "Coldest", emoji: "🔵", say: ws-x-cold, caption: "Neptune is far away, so sunlight there is very weak.", x: 80, y: 58 } ] } }
     constellations:
       title: Constellations
       sections:

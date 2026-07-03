@@ -774,7 +774,7 @@
                 "items": {
                   "type": "object"
                 },
-                "description": "each { id, label, say, caption, x?, y?(percent positions) }; each `say` must exist in narration"
+                "description": "each { id, label, say, caption, x?, y?(percent positions), emoji? }; with `emoji` the hotspot renders as that object (tap the 🪐 itself) instead of an anonymous + pin; each `say` must exist in narration"
               }
             },
             "required": [
