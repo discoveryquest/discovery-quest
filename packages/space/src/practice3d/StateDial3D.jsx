@@ -19,11 +19,6 @@ const DEFAULT_STATES = [
   { id: 'dusk', label: 'Dusk' },
   { id: 'night', label: 'Night' },
 ];
-const ICONS = {
-  dawn: '🌅', noon: '☀️', dusk: '🌇', night: '🌙',
-  spring: '🌱', summer: '☀️', autumn: '🍂', winter: '❄️',
-};
-
 const SPIN_SUN = [-13, 0.6, 0];
 
 // YOU pin rides the equator; rotating this group moves the town dawn→noon→
@@ -110,7 +105,7 @@ export default function StateDial3D({ step, onCorrect }) {
         <div data-practice3d={kind} data-state={current?.id} data-done={done ? 1 : 0}>
           <div className="absolute inset-x-0 bottom-3 mx-auto flex w-fit max-w-[92vw] flex-col items-center gap-2 rounded-3xl border border-white/10 bg-slate-950/70 px-5 py-3 backdrop-blur-sm">
             <p className="text-sm font-extrabold text-white">
-              {ICONS[current?.id] ?? '🌍'} {current?.label}
+              {current?.label}
               <span className="ml-3 text-xs font-bold text-slate-400">Target: {states.find((s) => s.id === targetId)?.label ?? targetId}</span>
             </p>
             <input
@@ -121,7 +116,7 @@ export default function StateDial3D({ step, onCorrect }) {
               aria-label={kind === 'orbit-season' ? 'Move Earth around its orbit' : 'Spin the Earth'}
             />
             <div className="flex w-64 justify-between text-[10px] font-bold text-slate-500">
-              {states.map((s) => <span key={s.id} className={s.id === current?.id ? 'text-cyan-300' : ''}>{ICONS[s.id] ?? ''}</span>)}
+              {states.map((s) => <span key={s.id} className={s.id === current?.id ? 'text-cyan-300' : ''}>{s.label}</span>)}
             </div>
           </div>
         </div>

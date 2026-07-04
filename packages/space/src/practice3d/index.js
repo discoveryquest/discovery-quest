@@ -9,4 +9,5 @@ export { default as OrbitOrder3D } from './OrbitOrder3D.jsx';
 export { default as SortZones3D } from './SortZones3D.jsx';
 export { default as StateDial3D } from './StateDial3D.jsx';
 export { default as ConnectStars3D } from './ConnectStars3D.jsx';
-export { EmojiOrb, renderPiece } from './pieces.jsx';
+export { renderPiece } from './pieces.jsx';
+export { CONCEPTS } from './concepts3d.jsx';

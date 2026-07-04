@@ -56,11 +56,9 @@ function ZonePad({ zone, center, drag, rightTokenIds, count }) {
         <circleGeometry args={[2.15, 48]} />
         <meshBasicMaterial ref={mat} color="#38bdf8" transparent opacity={0.2} side={THREE.DoubleSide} depthWrite={false} />
       </mesh>
-      <Html center position={[0, 1.9, 0]} zIndexRange={[10, 0]}>
-        <div data-zone={zone.id} className="pointer-events-none flex flex-col items-center">
-          <span className="text-2xl leading-none drop-shadow">{zone.emoji}</span>
-          <span className="mt-1 whitespace-nowrap rounded-full border border-white/12 bg-slate-950/60 px-2.5 py-0.5 text-[11px] font-extrabold text-slate-200 backdrop-blur-sm">{zone.label}</span>
-        </div>
+      <Html center position={[0, 1.7, 0]} zIndexRange={[10, 0]}>
+        {/* text-only header — no emoji glyphs in 3D practice */}
+        <span data-zone={zone.id} className="pointer-events-none whitespace-nowrap rounded-full border border-white/12 bg-slate-950/60 px-3 py-1 text-xs font-extrabold text-slate-200 backdrop-blur-sm">{zone.label}</span>
       </Html>
     </group>
   );
