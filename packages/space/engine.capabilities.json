@@ -6,25 +6,83 @@
       "description": "Read a question and pick the correct answer from the choices. Reused across every Space Quest station (content partitioned by band, one band per station).",
       "content": "questions",
       "item": [
-        { "name": "question", "type": "string", "example": "What gives the Moon its light?" },
-        { "name": "answer", "type": "string", "example": "The Sun", "note": "the correct choice" },
-        { "name": "distractors", "type": "string[]", "example": ["The Moon itself", "Earth's glow"], "note": "wrong-but-plausible choices" },
-        { "name": "band", "type": "int", "example": 0, "note": "which station this question belongs to" }
+        {
+          "name": "question",
+          "type": "string",
+          "example": "What gives the Moon its light?"
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "example": "The Sun",
+          "note": "the correct choice"
+        },
+        {
+          "name": "distractors",
+          "type": "string[]",
+          "example": [
+            "The Moon itself",
+            "Earth's glow"
+          ],
+          "note": "wrong-but-plausible choices"
+        },
+        {
+          "name": "band",
+          "type": "int",
+          "example": 0,
+          "note": "which station this question belongs to"
+        }
       ]
     },
     {
       "kind": "practice",
-      "description": "Interactive mission practice: the learner answers by manipulating a scene (drag/spin/sort/arrange/tap/trace/match). One band per station; items are an ordered mission list. Luna narrates each prompt via `say`.",
+      "description": "Interactive mission practice on a FULL-SCREEN 3D stage (three.js): the learner answers by manipulating real 3D objects (drag/spin/sort/arrange/tap/trace). One band per station; items are an ordered mission list. Luna narrates each prompt via `say`. NO EMOJIS render in 3D: every item id must resolve to a real model — planet/moon ids use the textured bodies kit; any other id needs an entry in packages/space/src/practice3d/concepts3d.jsx (unknown ids warn and fall back to a plain glow orb). The `emoji` field on items is legacy/inert for space.",
       "content": "practice",
       "item": [
-        { "name": "station", "type": "string", "example": "moon-phases", "note": "descriptive owner id; routing is by band" },
-        { "name": "band", "type": "int", "example": 0, "note": "which station this mission belongs to" },
-        { "name": "kind", "type": "string", "example": "moon-position", "note": "mechanic id; selects the interactive component" },
-        { "name": "say", "type": "string", "example": "pr-mp-full", "note": "narration key Luna speaks for the prompt (text must equal `prompt`)" },
-        { "name": "prompt", "type": "string", "example": "Move the Moon to make a Full Moon." },
-        { "name": "scene", "type": "object", "note": "optional scene descriptor the mechanic renders on" },
-        { "name": "target", "type": "object", "note": "correctness target for the mechanic (e.g. { phase: full, toleranceDeg: 16 })" },
-        { "name": "feedback", "type": "object", "note": "optional { correctSay, hintSay } narration keys" }
+        {
+          "name": "station",
+          "type": "string",
+          "example": "moon-phases",
+          "note": "descriptive owner id; routing is by band"
+        },
+        {
+          "name": "band",
+          "type": "int",
+          "example": 0,
+          "note": "which station this mission belongs to"
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "example": "moon-position",
+          "note": "mechanic id; selects the 3D component: moon-position, earth-spin, orbit-season, tap-hotspot, compare-strength, sort-zones, order-line, connect-stars"
+        },
+        {
+          "name": "say",
+          "type": "string",
+          "example": "pr-mp-full",
+          "note": "narration key Luna speaks for the prompt (text must equal `prompt`)"
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "example": "Move the Moon to make a Full Moon."
+        },
+        {
+          "name": "scene",
+          "type": "object",
+          "note": "optional scene descriptor the mechanic renders on"
+        },
+        {
+          "name": "target",
+          "type": "object",
+          "note": "correctness target for the mechanic (e.g. { phase: full, toleranceDeg: 16 })"
+        },
+        {
+          "name": "feedback",
+          "type": "object",
+          "note": "optional { correctSay, hintSay } narration keys"
+        }
       ]
     }
   ],
@@ -33,101 +91,298 @@
       "kind": "fact",
       "description": "A Discovery Deck fact card: a big emoji and a short caption, on the cinematic space stage. Legacy/simple beats.",
       "fields": [
-        { "name": "emoji", "type": "string", "required": true, "example": "🌙" },
-        { "name": "text", "type": "string", "required": true, "example": "The Moon shines by reflecting the Sun." }
+        {
+          "name": "emoji",
+          "type": "string",
+          "required": true,
+          "example": "🌙"
+        },
+        {
+          "name": "text",
+          "type": "string",
+          "required": true,
+          "example": "The Moon shines by reflecting the Sun."
+        }
       ]
     },
     {
       "kind": "body",
       "description": "One glowing gradient celestial body on the space stage. Style by role; options for rings, axis tilt, glow, and a moon phase fraction.",
       "fields": [
-        { "name": "body", "type": "object", "required": true, "note": "{ role: star|planet|moon|blackhole, color?, rings?(bool|deg), tilt?(deg), glow?(bool), phase?(0..1 lit fraction for a moon) }", "example": { "role": "star", "glow": true } },
-        { "name": "label", "type": "string", "required": false, "note": "caption under the body", "example": "The Sun" }
+        {
+          "name": "body",
+          "type": "object",
+          "required": true,
+          "note": "{ role: star|planet|moon|blackhole, color?, rings?(bool|deg), tilt?(deg), glow?(bool), phase?(0..1 lit fraction for a moon) }",
+          "example": {
+            "role": "star",
+            "glow": true
+          }
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "note": "caption under the body",
+          "example": "The Sun"
+        }
       ]
     },
     {
       "kind": "orbit",
       "description": "A central body with one or more bodies orbiting it on dashed paths; a phaseLit moon shows its lit fraction. The body with no `orbits` is the center.",
       "fields": [
-        { "name": "bodies", "type": "object[]", "required": true, "note": "each { id, role, orbits?(id of body it circles), radius?, period?(seconds), phaseLit?(bool) }", "example": [ { "id": "earth", "role": "planet" }, { "id": "moon", "role": "moon", "orbits": "earth", "period": 6, "phaseLit": true } ] }
+        {
+          "name": "bodies",
+          "type": "object[]",
+          "required": true,
+          "note": "each { id, role, orbits?(id of body it circles), radius?, period?(seconds), phaseLit?(bool) }",
+          "example": [
+            {
+              "id": "earth",
+              "role": "planet"
+            },
+            {
+              "id": "moon",
+              "role": "moon",
+              "orbits": "earth",
+              "period": 6,
+              "phaseLit": true
+            }
+          ]
+        }
       ]
     },
     {
       "kind": "field",
       "description": "A drifting, tintable particle cloud (stars / nebula / galaxy) over the space stage, with an optional label.",
       "fields": [
-        { "name": "tint", "type": "enum", "required": false, "note": "backdrop tint, e.g. nebula | deep-space (default)", "example": "nebula" },
-        { "name": "density", "type": "enum", "required": false, "note": "low | medium (default) | high", "example": "medium" },
-        { "name": "label", "type": "string", "required": false, "example": "A Nebula" }
+        {
+          "name": "tint",
+          "type": "enum",
+          "required": false,
+          "note": "backdrop tint, e.g. nebula | deep-space (default)",
+          "example": "nebula"
+        },
+        {
+          "name": "density",
+          "type": "enum",
+          "required": false,
+          "note": "low | medium (default) | high",
+          "example": "medium"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": false,
+          "example": "A Nebula"
+        }
       ]
     },
     {
       "kind": "launch",
       "description": "A rocket rising with an animated thrust plume and parallax star streaks.",
       "fields": [
-        { "name": "payload", "type": "string", "required": false, "note": "optional emoji/label riding the rocket", "example": "🛰️" }
+        {
+          "name": "payload",
+          "type": "string",
+          "required": false,
+          "note": "optional emoji/label riding the rocket",
+          "example": "🛰️"
+        }
       ]
     },
     {
       "kind": "compare",
       "description": "Two or more bodies side by side, scaled by relative size, to show scale; each with a size label.",
       "fields": [
-        { "name": "items", "type": "object[]", "required": true, "note": "each { label, relSize(0..1 of the largest), color? }", "example": [ { "label": "Earth", "relSize": 0.22 }, { "label": "Jupiter", "relSize": 1 } ] }
+        {
+          "name": "items",
+          "type": "object[]",
+          "required": true,
+          "note": "each { label, relSize(0..1 of the largest), color? }",
+          "example": [
+            {
+              "label": "Earth",
+              "relSize": 0.22
+            },
+            {
+              "label": "Jupiter",
+              "relSize": 1
+            }
+          ]
+        }
       ]
     },
     {
       "kind": "spin",
       "description": "Day & night on a spinning planet seen from above the North Pole (white polar cap at centre = the axis): the Sun shines from the left so the light never moves; `fraction` (0..1, usually injected by a scrub base) spins the globe counterclockwise — Earth's real direction from above the pole — carrying continents and a 'YOU' marker dawn → noon → dusk → night through the fixed day/night halves.",
       "fields": [
-        { "name": "fraction", "type": "number", "required": false, "note": "0..1 spin position (0=dawn, 1/3=noon, 2/3=dusk, 1=night); injected automatically when used as a scrub base" },
-        { "name": "markerLabel", "type": "string", "required": false, "note": "label on the surface marker riding the spin (default YOU)" }
+        {
+          "name": "fraction",
+          "type": "number",
+          "required": false,
+          "note": "0..1 spin position (0=dawn, 1/3=noon, 2/3=dusk, 1=night); injected automatically when used as a scrub base"
+        },
+        {
+          "name": "markerLabel",
+          "type": "string",
+          "required": false,
+          "note": "label on the surface marker riding the spin (default YOU)"
+        }
       ]
     },
     {
       "kind": "seasons",
       "description": "Seasons diagram: Sun at the centre, Earth carried around its orbit by `fraction` (0..1, injected by a scrub base or slider) with its axis keeping the SAME fixed 23.5° lean all year (N label marks the north end). Right of the Sun = northern summer, left = winter, top/bottom = the equinoxes; Earth passes behind the Sun on the top half of the orbit.",
       "fields": [
-        { "name": "fraction", "type": "number", "required": false, "note": "0..1 orbit position (0=spring/top, 1/3=summer/right, 2/3=autumn/bottom, 1=winter/left); injected automatically when used as a scrub base" }
+        {
+          "name": "fraction",
+          "type": "number",
+          "required": false,
+          "note": "0..1 orbit position (0=spring/top, 1/3=summer/right, 2/3=autumn/bottom, 1=winter/left); injected automatically when used as a scrub base"
+        }
       ]
     },
     {
       "kind": "fall",
       "description": "Gravity comparison: identical balls released together fall onto different worlds side by side, each with its world's surface gravity (t = sqrt(2h/g)) — Jupiter's slams down, the Moon's floats. Loops forever. Designed as a `reveal` base so hotspots can name each world.",
       "fields": [
-        { "name": "items", "type": "object[]", "required": false, "note": "each { label, emoji, g } where g is surface gravity relative to Earth; defaults to Jupiter 2.5 / Earth 1 / Moon 0.17", "example": [ { "label": "Jupiter", "emoji": "🪐", "g": 2.5 }, { "label": "Earth", "emoji": "🌍", "g": 1 }, { "label": "Moon", "emoji": "🌙", "g": 0.17 } ] }
+        {
+          "name": "items",
+          "type": "object[]",
+          "required": false,
+          "note": "each { label, emoji, g } where g is surface gravity relative to Earth; defaults to Jupiter 2.5 / Earth 1 / Moon 0.17",
+          "example": [
+            {
+              "label": "Jupiter",
+              "emoji": "🪐",
+              "g": 2.5
+            },
+            {
+              "label": "Earth",
+              "emoji": "🌍",
+              "g": 1
+            },
+            {
+              "label": "Moon",
+              "emoji": "🌙",
+              "g": 0.17
+            }
+          ]
+        }
       ]
     },
     {
       "kind": "starLife",
       "description": "A massive star's life as one morphing scene: `fraction` (0..1, injected by a scrub base) crossfades nebula → new star → red giant → supernova, so the star visibly gathers, ignites, swells, and explodes as the learner drags.",
       "fields": [
-        { "name": "fraction", "type": "number", "required": false, "note": "0..1 life position (0=nebula, 1/3=new star, 2/3=red giant, 1=supernova); injected automatically when used as a scrub base" }
+        {
+          "name": "fraction",
+          "type": "number",
+          "required": false,
+          "note": "0..1 life position (0=nebula, 1/3=new star, 2/3=red giant, 1=supernova); injected automatically when used as a scrub base"
+        }
       ]
     },
     {
       "kind": "scrub",
       "description": "Interactive: the learner drags a handle through ordered states; each state shows a caption and speaks its line. Optional `base` scene rendered underneath: a `body` base reflects the scrub as its phase, a `spin` base as globe rotation, and an `orbit` base places its orbiters by the scrub position instead of free-running.",
       "fields": [
-        { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. { kind: orbit, bodies: [...] }) the interaction renders on", "example": { "kind": "orbit", "bodies": [ { "id": "earth", "role": "planet" }, { "id": "moon", "role": "moon", "orbits": "earth", "phaseLit": true } ] } },
-        { "name": "states", "type": "object[]", "required": true, "note": "ordered { id, label, say, caption }; each `say` must exist in narration", "example": [ { "id": "full", "label": "Full Moon", "say": "mp-x-full", "caption": "Full Moon — the whole lit side faces Earth." } ] }
+        {
+          "name": "base",
+          "type": "object",
+          "required": false,
+          "note": "an underlying scene descriptor (e.g. { kind: orbit, bodies: [...] }) the interaction renders on",
+          "example": {
+            "kind": "orbit",
+            "bodies": [
+              {
+                "id": "earth",
+                "role": "planet"
+              },
+              {
+                "id": "moon",
+                "role": "moon",
+                "orbits": "earth",
+                "phaseLit": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "states",
+          "type": "object[]",
+          "required": true,
+          "note": "ordered { id, label, say, caption }; each `say` must exist in narration",
+          "example": [
+            {
+              "id": "full",
+              "label": "Full Moon",
+              "say": "mp-x-full",
+              "caption": "Full Moon — the whole lit side faces Earth."
+            }
+          ]
+        }
       ]
     },
     {
       "kind": "reveal",
       "description": "Interactive: tappable hotspots on a scene; tapping reveals a label and speaks its fact. Optional `base` scene underneath.",
       "fields": [
-        { "name": "base", "type": "object", "required": false, "note": "an underlying scene descriptor (e.g. { kind: field, tint: nebula }) the hotspots sit on" },
-        { "name": "hotspots", "type": "object[]", "required": true, "note": "each { id, label, say, caption, x?, y?(percent positions), emoji? }; with `emoji` the hotspot renders as that object (tap the 🪐 itself) instead of an anonymous + pin; each `say` must exist in narration", "example": [ { "id": "jupiter", "label": "Jupiter", "emoji": "🪐", "say": "io-x-jupiter", "caption": "Jupiter — the largest planet.", "x": 68, "y": 40 } ] }
+        {
+          "name": "base",
+          "type": "object",
+          "required": false,
+          "note": "an underlying scene descriptor (e.g. { kind: field, tint: nebula }) the hotspots sit on"
+        },
+        {
+          "name": "hotspots",
+          "type": "object[]",
+          "required": true,
+          "note": "each { id, label, say, caption, x?, y?(percent positions), emoji? }; with `emoji` the hotspot renders as that object (tap the 🪐 itself) instead of an anonymous + pin; each `say` must exist in narration",
+          "example": [
+            {
+              "id": "jupiter",
+              "label": "Jupiter",
+              "emoji": "🪐",
+              "say": "io-x-jupiter",
+              "caption": "Jupiter — the largest planet.",
+              "x": 68,
+              "y": 40
+            }
+          ]
+        }
       ]
     },
     {
       "kind": "moonPhase",
       "description": "A physically-meaningful top-down moon-phase diagram: Sun (left) emits parallel light rays, Earth at centre, Moon orbits with its sun-facing hemisphere always lit. An inset disc shows the phase as seen from Earth, updating continuously. variant=diagram has two modes (auto-orbit default, or slider-driven exploration); variant=strip shows all 8 from-Earth phases in a row with a highlight advancing along the cycle.",
       "fields": [
-        { "name": "variant", "type": "enum", "required": false, "note": "diagram (default) | strip" },
-        { "name": "active", "type": "int", "required": false, "note": "strip variant only: index 0..7 of the phase to statically highlight (lesson engine drives one per beat); -1 = all phases shown with no highlight. When set it overrides the auto-cycle and narrated tour and ignores `says`." },
-        { "name": "interactive", "type": "bool", "required": false, "note": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases (diagram variant only)" },
-        { "name": "says", "type": "object", "required": false, "note": "{ new, waxingCrescent, first, waxingGibbous, full, waningGibbous, last, waningCrescent } narration keys; in diagram+interactive they're spoken when the slider enters each named phase, in strip (without `active`) they drive the audio-paced narrated tour" }
+        {
+          "name": "variant",
+          "type": "enum",
+          "required": false,
+          "note": "diagram (default) | strip"
+        },
+        {
+          "name": "active",
+          "type": "int",
+          "required": false,
+          "note": "strip variant only: index 0..7 of the phase to statically highlight (lesson engine drives one per beat); -1 = all phases shown with no highlight. When set it overrides the auto-cycle and narrated tour and ignores `says`."
+        },
+        {
+          "name": "interactive",
+          "type": "bool",
+          "required": false,
+          "note": "false (default) = auto-orbiting animation; true = learner drags a slider to explore all phases (diagram variant only)"
+        },
+        {
+          "name": "says",
+          "type": "object",
+          "required": false,
+          "note": "{ new, waxingCrescent, first, waxingGibbous, full, waningGibbous, last, waningCrescent } narration keys; in diagram+interactive they're spoken when the slider enters each named phase, in strip (without `active`) they drive the audio-paced narrated tour"
+        }
       ]
     }
   ],
@@ -137,10 +392,26 @@
       "description": "Multiple-choice questions for the quiz board, partitioned by band (one band per station).",
       "collection": "objects",
       "item": [
-        { "name": "question", "type": "string", "required": true },
-        { "name": "answer", "type": "string", "required": true },
-        { "name": "distractors", "type": "string[]", "required": true },
-        { "name": "band", "type": "number", "required": true }
+        {
+          "name": "question",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "answer",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "distractors",
+          "type": "string[]",
+          "required": true
+        },
+        {
+          "name": "band",
+          "type": "number",
+          "required": true
+        }
       ]
     },
     {
@@ -148,14 +419,46 @@
       "description": "Interactive practice missions for the practice board, partitioned by band (one band per station). Ordered: the host plays them in array order.",
       "collection": "objects",
       "item": [
-        { "name": "station", "type": "string", "required": true },
-        { "name": "band", "type": "number", "required": true },
-        { "name": "kind", "type": "string", "required": true },
-        { "name": "say", "type": "string", "required": true },
-        { "name": "prompt", "type": "string", "required": true },
-        { "name": "scene", "type": "object", "required": false },
-        { "name": "target", "type": "object", "required": true },
-        { "name": "feedback", "type": "object", "required": false }
+        {
+          "name": "station",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "band",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "say",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "scene",
+          "type": "object",
+          "required": false
+        },
+        {
+          "name": "target",
+          "type": "object",
+          "required": true
+        },
+        {
+          "name": "feedback",
+          "type": "object",
+          "required": false
+        }
       ]
     }
   ]

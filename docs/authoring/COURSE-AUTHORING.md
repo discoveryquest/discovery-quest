@@ -240,3 +240,39 @@ CLA. Questions or commercial licensing: **hello@discoveryquest.app**.
 - [ ] View props match the catalog's field types; no extra props.
 - [ ] Content is original, age-appropriate, no PII, no external links.
 - [ ] `npm run course:check` prints `✓ … [schema+semantic]`.
+
+---
+
+## 8. 3D scenes & the no-emoji rule (Space Quest, 2026-07-04)
+
+Space Quest practice runs on **full-screen 3D stages** (three.js via
+`@discoveryquest/space/bodies` + `packages/space/src/practice3d/`). Rules for
+authoring against it:
+
+- **No emoji glyphs render in 3D practice.** Every practice item id resolves
+  to a real 3D model: planet/moon ids use the textured bodies kit
+  (`packages/space/src/scene/bodies/physics.js` — mercury…neptune, moon,
+  ceres; `luna` aliases to the Moon; `asteroid`/`belt-rock`/`crater-rock` are
+  seeded rocks), and every other id must have an entry in
+  `packages/space/src/practice3d/concepts3d.jsx` (~55 procedural models:
+  galaxy, nebula, rocket, rover, flask…). An unknown id logs a console
+  warning and falls back to a plain glow orb — **add the model before
+  shipping**. The `emoji` field in YAML items is now legacy/inert for space.
+- Mechanics are drag-first (grab → follow → snap, generous magnets, hover
+  rings tint green/red); tap-tap chips remain as a hidden fallback for
+  accessibility and E2E. Interactive DOM anchors carry `[data-*]` hooks.
+- Answer keys stay derived where possible (planet order comes from real
+  orbital distance) — never author a key a script can compute.
+
+## 9. Profiles, XP & Hero badges (platform rules)
+
+- One child profile spans all courses; cross-course continuity **requires an
+  account** (Clerk sign-in; localStorage is per-subdomain, the account API
+  syncs saves + roster). New course apps must wire `syncQuest`/`syncRoster`
+  from `@discoveryquest/engine/sync`.
+- XP is **derived** from the save (`@discoveryquest/engine/xp`): corrects
+  (capped per station), stars, streak days, concepts. Don't invent new
+  counters.
+- **Hero badges**: a course's Hero badge ("Math Hero", "Space Hero"…) is
+  earned when every playable station has **≥1 star**; all-3-star earns the
+  gold variant; **Super Hero** = any 3 course badges.
