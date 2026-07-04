@@ -4,7 +4,7 @@
 // QuizScreen so map progression/stars keep working.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, RotateCcw, Star, Tv, X } from 'lucide-react';
+import { RotateCcw, Star, Tv, X } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave, loadSave } from '@discoveryquest/engine/save';
@@ -16,6 +16,7 @@ import SortZones3D from './practice3d/SortZones3D.jsx';
 import OrbitOrder3D from './practice3d/OrbitOrder3D.jsx';
 import ConnectStars3D from './practice3d/ConnectStars3D.jsx';
 import TUTORIALS from './tutorials.json'; // station ids with a recorded "Luna solves it" video
+import { totalStars } from './curriculum.js';
 
 // Space-3D upgrade (2026-07-04): practice plays on full-screen 3D stages —
 // the fixed-position Canvas escapes this column; header/prompt sit above it
@@ -46,6 +47,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
   const [bubble, setBubble] = useState("Listen to Luna, then solve the mission.");
   const mood = useLivelyMood(base);
   const talking = useSpeaking();
+  const [starTotal, setStarTotal] = useState(() => totalStars(loadSave(), course.worlds || []));
   const owlAreaRef = useRef(null); // full-screen layer Luna can be dragged around in
 
   // "See how Luna solves it": a recorded video with baked narration, on demand via
@@ -138,6 +140,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
     track(station.id, 'missed', total - correct);
     track(station.id, 'quests', 1);
     track(station.id, 'sec', elapsed);
+    setStarTotal(totalStars(loadSave(), course.worlds || [])); // header ⭐ bumps with the fresh save
   }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const scoreText = (ui.score ?? 'You logged {correct} of {total} discoveries!')
@@ -146,29 +149,29 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
 
   return (
     <div className="font-display relative mx-auto flex min-h-full w-full max-w-md flex-col px-5 pb-10 pt-4 text-slate-200">
-      {/* z-20: the 3D stage is a fixed full-bleed canvas behind everything */}
-      <div className="relative z-20 flex items-center gap-3">
-        <button type="button" onClick={() => { hushAll(); onExit(); }} aria-label={ui.backToMap ?? 'Back'}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
-          <ArrowLeft size={18} />
+      {/* z-20: the 3D stage is a fixed full-bleed canvas behind everything.
+          Header matches math's quest chrome: labeled Map button + live ⭐ tally. */}
+      <div className="relative z-20 flex items-center gap-2.5">
+        <button type="button" onClick={() => { hushAll(); onExit(); }} aria-label={ui.backToMap ?? 'Back to map'}
+          className="flex h-9 shrink-0 touch-manipulation items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 text-sm font-extrabold text-slate-300 transition-colors hover:bg-white/10 hover:text-white">
+          🗺️ <span className="hidden sm:inline">Map</span>
         </button>
         <span className="truncate font-extrabold text-white">{station?.title}</span>
         {hasTutorial && !done && (
           <button type="button" onClick={() => setTutorial(true)} title="Watch Luna solve one"
-            className="ml-auto flex items-center gap-1.5 rounded-xl border border-cyan-300/25 bg-cyan-400/10 px-2.5 py-1.5 text-xs font-extrabold text-cyan-200 hover:bg-cyan-400/20">
-            <Tv size={14} /> Watch Luna
+            className="flex shrink-0 items-center gap-1.5 rounded-xl border border-cyan-300/25 bg-cyan-400/10 px-2.5 py-1.5 text-xs font-extrabold text-cyan-200 hover:bg-cyan-400/20">
+            <Tv size={14} /> <span className="hidden sm:inline">Watch Luna</span>
           </button>
         )}
-        {done ? (
-          <button type="button" onClick={() => { hushAll(); onExit(); }}
-            className="ml-auto text-xs font-extrabold uppercase tracking-wider text-cyan-300 hover:text-cyan-100">
-            Done ✓
-          </button>
-        ) : (
-          <span className={`text-xs font-bold uppercase tracking-wider text-slate-400 ${hasTutorial ? '' : 'ml-auto'}`}>
-            {`Mission ${Math.min(idx + 1, total)} of ${total}`}
-          </span>
-        )}
+        <span className="ml-auto shrink-0 font-mono text-xs font-bold text-slate-400">
+          {done ? '✓' : `${Math.min(idx + 1, total)} / ${total}`}
+        </span>
+        <span className="flex shrink-0 items-center gap-1 text-yellow-300">
+          <Star size={18} className="fill-yellow-300/40" />
+          <motion.span key={starTotal} initial={{ scale: 1.5 }} animate={{ scale: 1 }} className="font-mono text-lg font-bold">
+            {starTotal}
+          </motion.span>
+        </span>
       </div>
 
       <div className="relative z-20 mt-3 flex justify-center gap-1.5">
