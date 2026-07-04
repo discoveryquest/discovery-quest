@@ -22,9 +22,13 @@ items are marked `[platform]`.
 
 ## Cross-course profiles, XP & badges (decisions locked 2026-07-04)
 
-- [ ] `[platform]` Wire syncQuest/syncRoster into math, space, logic apps (only english/english-ru sync today)
-- [ ] Tap-the-⭐ breakdown sheet (shared engine-ui): XP by source + per-station contributions (engine xpByStation exists) + badges
-- [ ] Hero badges: course Hero = every station ≥1 star (gold at all-3-star); **Super Hero at 3 course badges**; Luna celebration; show in kid sheet + grown-ups Dashboard
+- [x] Hero badge logic (engine `badges.js`): course Hero = star on every station (gold at all-3-star); Super Hero = Hero on 3 courses; tested (2026-07-04)
+- [x] Tap-the-⭐ breakdown sheet (engine-ui `StarBreakdownSheet`): hero level + XP by source + course Hero badge + cross-course Super Hero; live in Space on prod (2026-07-04)
+- [ ] Show badges + breakdown in **math, English, EFL, Logic** map headers too (same sheet; each passes its `playableStationIds`)
+- [ ] Super Hero live cross-course: pass the signed-in roster bundle (`xpByCourse` + per-course badges) into the sheet — needs the account wiring below
+- [ ] `[platform]` Wire syncQuest/syncRoster into math, space, logic apps (only english/english-ru sync today); add per-course badge to the roster so Super Hero is real
+- [ ] Grown-ups Dashboard: show Hero badges per course + total (server `overview()` has every save)
+- [ ] Luna celebration when a Hero/Super Hero badge is first earned (deferred; YAGNI per XP spec)
 - [ ] Cross-course continuity requires an account (Clerk sync is the bridge; subdomains stay)
 
 ## Trailers & YouTube
