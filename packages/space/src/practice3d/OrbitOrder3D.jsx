@@ -1,19 +1,23 @@
-// Order-the-planets, full-screen 3D: the Sun burns at the left, empty orbit
-// slots run outward, and real mini-planets wait in a tray below. DRAG a
-// planet — it follows the pointer — and release it near a ring to snap in;
-// a miss flies it home (Pavel 2026-07-04: drag, not tap-tap). The correct
-// order is DERIVED from BODIES[..].orbit.aAU (authors can never write a
-// wrong answer key). When all slots fill: right → onCorrect; wrong → only
-// the misplaced ones fly back and onHint fires. Name chips live INSIDE each
-// planet's group (they move together, always on screen) and stay tappable as
-// a two-tap fallback (accessibility + E2E hooks).
-// step.scene.bodies: unordered [bodyId,...] (any subset of planets).
+// Order-the-sequence, full-screen 3D. Two flavours from the same component:
+//   • all items are planets → the Sun burns at the left, orbit slots run
+//     outward, and the correct order is DERIVED from BODIES aAU (authors can
+//     never write a wrong key). Real mini-planets as pieces.
+//   • generic sequence (star life, rocket trip…) → START➜ marker at the left,
+//     numbered slots, EmojiOrb pieces, order from the authored target.order.
+// DRAG a piece — it follows the pointer — release near a ring to snap in; a
+// miss flies it home (Pavel: drag, not tap-tap). Hovered rings tint green/red.
+// All slots full: right → onCorrect; wrong → only the misplaced fly back +
+// onHint. Name chips live INSIDE each piece's group (always on screen, travel
+// with it) and stay tappable as a two-tap fallback (a11y + E2E hooks).
+// Accepts step.scene.bodies [id,...] OR step.target.items [{id,label,emoji}]
+// (+ target.order for non-planet sequences).
 import { useMemo, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import * as THREE from 'three';
-import { Planet, Sun, BODIES } from '../scene/bodies/index.js';
+import { Sun, BODIES } from '../scene/bodies/index.js';
 import Stage3D from './Stage3D.jsx';
+import { renderPiece, chipClass } from './pieces.jsx';
 
 const SUN_X = -8.6;
 const DRAG_PLANE = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0); // everything plays on z=0
@@ -73,7 +77,8 @@ function SlotRing({ center, wouldBeRight, filled, drag }) {
   );
 }
 
-function PlanetPiece({ body, radius, target, drag, held, done, onGrab, onMove, onRelease, onChipTap }) {
+function PlanetPiece({ item, radius, target, drag, held, done, onGrab, onMove, onRelease, onChipTap }) {
+  const body = item.id;
   const ref = useRef();
   const dest = useMemo(() => new THREE.Vector3(), []);
   const tmp = useMemo(() => new THREE.Vector3(), []);
@@ -96,7 +101,7 @@ function PlanetPiece({ body, radius, target, drag, held, done, onGrab, onMove, o
   });
   return (
     <group ref={ref} position={target}>
-      <Planet body={body} radius={radius} timeScale={6000} detail={body === 'saturn' || body === 'uranus'} />
+      {renderPiece(item, radius)}
       {(drag.current.body === body || held) && (
         <mesh>
           <sphereGeometry args={[radius * 1.6, 24, 24]} />
@@ -120,11 +125,9 @@ function PlanetPiece({ body, radius, target, drag, held, done, onGrab, onMove, o
       </mesh>
       <Html center position={[0, -radius - 0.75, 0]} zIndexRange={[10, 0]}>
         <button type="button" data-planet={body} onClick={() => onChipTap(body)}
-          className={`touch-manipulation whitespace-nowrap rounded-full border px-3 py-1 text-xs font-extrabold capitalize backdrop-blur-sm
-            ${held ? 'border-amber-300 bg-amber-400/20 text-amber-100'
-              : done ? 'border-emerald-300/50 bg-emerald-400/15 text-emerald-200'
-              : 'border-white/15 bg-slate-950/60 text-slate-200'}`}>
-          {body}
+          style={{ pointerEvents: drag.current.body ? 'none' : 'auto' }}
+          className={chipClass(held ? 'held' : done ? 'won' : 'idle')}>
+          {item.label ?? body}
         </button>
       </Html>
     </group>
@@ -132,9 +135,17 @@ function PlanetPiece({ body, radius, target, drag, held, done, onGrab, onMove, o
 }
 
 export default function OrbitOrder3D({ step, onCorrect, onHint }) {
-  const bodies = step?.scene?.bodies ?? ['earth', 'mercury', 'mars', 'venus'];
-  const solution = useMemo(() => [...bodies].sort((a, b) => (BODIES[a]?.orbit?.aAU ?? 99) - (BODIES[b]?.orbit?.aAU ?? 99)), [bodies]);
-  const n = bodies.length;
+  const items = useMemo(() => {
+    if (step?.target?.items) return step.target.items;
+    return (step?.scene?.bodies ?? ['earth', 'mercury', 'mars', 'venus']).map((id) => ({ id }));
+  }, [step]);
+  const allPlanets = items.every((it) => BODIES[it.id]?.orbit);
+  const solution = useMemo(() => {
+    if (allPlanets) return [...items].sort((a, b) => BODIES[a.id].orbit.aAU - BODIES[b.id].orbit.aAU).map((it) => it.id);
+    return step?.target?.order ?? items.map((it) => it.id);
+  }, [items, allPlanets, step]);
+  const n = items.length;
+  const compact = n > 5; // 8-planet missions pack tighter with smaller pieces
   const [placed, setPlaced] = useState({}); // slotIdx -> bodyId
   const [held, setHeld] = useState(null); // chip-tap fallback selection
   const [, force] = useState(0); // re-render when a drag starts/ends (halo)
@@ -147,11 +158,16 @@ export default function OrbitOrder3D({ step, onCorrect, onHint }) {
   onCorrectRef.current = onCorrect;
   onHintRef.current = onHint;
 
-  const slotSpan = Math.min(13.5, n * 3.4);
-  const slotPos = (j) => [SUN_X + 3.4 + (j * slotSpan) / Math.max(1, n), 0.2, 0];
-  const trayPos = (i) => [-(n - 1) * 1.6 + i * 3.2, -3.1, 0];
+  const slotSpan = Math.min(14.5, n * 3.4);
+  const anchorX = allPlanets ? SUN_X + 3.4 : -7.2;
+  const slotPos = (j) => [anchorX + ((j + (allPlanets ? 0 : 0.5)) * slotSpan) / Math.max(1, n), 0.2, 0];
+  const traySpan = Math.min(15, n * 3.2);
+  const trayPos = (i) => [-traySpan / 2 + ((i + 0.5) * traySpan) / n, -3.1, 0];
   const slotOf = (body) => Object.entries(placed).find(([, b]) => b === body)?.[0];
-  const radiusFor = (body) => 0.62 + Math.min(0.75, (BODIES[body]?.radiusKm ?? 6000) / 90000);
+  const radiusFor = (item) => {
+    const base = BODIES[item.id] ? 0.62 + Math.min(0.75, BODIES[item.id].radiusKm / 90000) : 0.8;
+    return base * (compact ? 0.62 : 1);
+  };
 
   function commit(next) {
     setPlaced(next);
@@ -232,8 +248,17 @@ export default function OrbitOrder3D({ step, onCorrect, onHint }) {
   };
 
   return (
-    <Stage3D camera={{ position: [1.5, 2.6, 12.5], fov: 50 }} ambient={0.2} portraitScale={0.58}>
-      <Sun radius={2.1} position={[SUN_X, 0.2, 0]} timeScale={4000} lightIntensity={900} />
+    <Stage3D camera={{ position: [1.5, 2.6, 12.5], fov: 50 }} ambient={allPlanets ? 0.2 : 0.42} portraitScale={0.58}>
+      {allPlanets ? (
+        <Sun radius={2.1} position={[SUN_X, 0.2, 0]} timeScale={4000} lightIntensity={900} />
+      ) : (
+        <>
+          <directionalLight position={[6, 8, 10]} intensity={1.5} color="#fff4de" />
+          <Html center position={[anchorX - 1.7, 0.2, 0]} zIndexRange={[10, 0]}>
+            <span className="pointer-events-none whitespace-nowrap rounded-full border border-white/12 bg-slate-950/60 px-3 py-1 text-xs font-black tracking-widest text-cyan-200 backdrop-blur-sm">START ➜</span>
+          </Html>
+        </>
+      )}
       <DragCatcher drag={drag} onMove={move} onRelease={release} />
       {Array.from({ length: n }, (_, j) => {
         const p = slotPos(j);
@@ -243,6 +268,7 @@ export default function OrbitOrder3D({ step, onCorrect, onHint }) {
             <SlotRing center={p} wouldBeRight={(b) => solution[j] === b} filled={!!filled} drag={drag} />
             <Html center position={[0, -1.75, 0]} zIndexRange={[10, 0]}>
               <button type="button" data-slot={j} onClick={() => tapSlot(j)}
+                style={{ pointerEvents: drag.current.body ? 'none' : 'auto' }}
                 className={`touch-manipulation rounded-full border px-2.5 py-0.5 text-[11px] font-black backdrop-blur-sm
                   ${held ? 'animate-pulse border-amber-300/70 bg-amber-400/15 text-amber-200' : 'border-white/12 bg-slate-950/55 text-slate-400'}`}>
                 {j + 1}
@@ -251,14 +277,16 @@ export default function OrbitOrder3D({ step, onCorrect, onHint }) {
           </group>
         );
       })}
-      {bodies.map((body, i) => (
-        <PlanetPiece key={body} body={body} radius={radiusFor(body)} target={posFor(body, i)}
-          drag={drag} held={held === body} done={done}
+      {items.map((item, i) => (
+        <PlanetPiece key={item.id} item={item} radius={radiusFor(item)} target={posFor(item.id, i)}
+          drag={drag} held={held === item.id} done={done}
           onGrab={grab} onMove={move} onRelease={release} onChipTap={tapBody} />
       ))}
       <Html center position={[0, 4.2, 0]} zIndexRange={[10, 0]}>
         <p data-order-state={done ? 'won' : failNote ? 'retry' : 'playing'} className="pointer-events-none whitespace-nowrap text-sm font-bold text-slate-300 drop-shadow">
-          {done ? '🎉 Perfect orbit order!' : 'Drag each planet onto a ring — closest to the Sun first!'}
+          {done ? (allPlanets ? '🎉 Perfect orbit order!' : '🎉 Perfect sequence!')
+            : allPlanets ? 'Drag each planet onto a ring — closest to the Sun first!'
+            : 'Drag each one onto a ring — first to last!'}
         </p>
       </Html>
     </Stage3D>

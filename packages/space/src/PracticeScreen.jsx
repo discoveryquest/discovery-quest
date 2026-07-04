@@ -9,23 +9,26 @@ import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/L
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave, loadSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
-import MoonPositionPractice from './practice/MoonPositionPractice.jsx';
-import StateDialPractice from './practice/StateDialPractice.jsx';
-import TargetTapPractice from './practice/TargetTapPractice.jsx';
-import SortZonesPractice from './practice/SortZonesPractice.jsx';
-import OrderLinePractice from './practice/OrderLinePractice.jsx';
-import ConnectStarsPractice from './practice/ConnectStarsPractice.jsx';
+import MoonPhase3D from './practice3d/MoonPhase3D.jsx';
+import StateDial3D from './practice3d/StateDial3D.jsx';
+import TargetTap3D from './practice3d/TargetTap3D.jsx';
+import SortZones3D from './practice3d/SortZones3D.jsx';
+import OrbitOrder3D from './practice3d/OrbitOrder3D.jsx';
+import ConnectStars3D from './practice3d/ConnectStars3D.jsx';
 import TUTORIALS from './tutorials.json'; // station ids with a recorded "Luna solves it" video
 
+// Space-3D upgrade (2026-07-04): practice plays on full-screen 3D stages —
+// the fixed-position Canvas escapes this column; header/prompt sit above it
+// via z-index. The 2D mechanics live on in ./practice/ for reference.
 const MECHANICS = {
-  'moon-position': MoonPositionPractice,
-  'earth-spin': StateDialPractice,
-  'orbit-season': StateDialPractice,
-  'tap-hotspot': TargetTapPractice,
-  'compare-strength': TargetTapPractice,
-  'sort-zones': SortZonesPractice,
-  'order-line': OrderLinePractice,
-  'connect-stars': ConnectStarsPractice,
+  'moon-position': MoonPhase3D,
+  'earth-spin': StateDial3D,
+  'orbit-season': StateDial3D,
+  'tap-hotspot': TargetTap3D,
+  'compare-strength': TargetTap3D,
+  'sort-zones': SortZones3D,
+  'order-line': OrbitOrder3D,
+  'connect-stars': ConnectStars3D,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
@@ -143,7 +146,8 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
 
   return (
     <div className="font-display relative mx-auto flex min-h-full w-full max-w-md flex-col px-5 pb-10 pt-4 text-slate-200">
-      <div className="flex items-center gap-3">
+      {/* z-20: the 3D stage is a fixed full-bleed canvas behind everything */}
+      <div className="relative z-20 flex items-center gap-3">
         <button type="button" onClick={() => { hushAll(); onExit(); }} aria-label={ui.backToMap ?? 'Back'}
           className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
           <ArrowLeft size={18} />
@@ -167,7 +171,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
         )}
       </div>
 
-      <div className="mt-3 flex justify-center gap-1.5">
+      <div className="relative z-20 mt-3 flex justify-center gap-1.5">
         {Array.from({ length: total }, (_, i) => (
           <span key={i} className="h-2 w-2 rounded-full transition-colors"
             style={{ background: i < idx || done ? color : i === idx ? `${color}99` : '#ffffff22' }} />
@@ -176,7 +180,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
 
       {/* The mission goal — the main instruction, above the interactive scene */}
       {!done && (
-        <div className="mx-auto mt-3 flex max-w-[340px] items-center justify-center gap-2 text-center">
+        <div className="relative z-20 mx-auto mt-3 flex max-w-[340px] items-center justify-center gap-2 rounded-2xl bg-slate-950/45 px-3 py-1.5 text-center backdrop-blur-[2px]">
           <p className="text-sm font-extrabold text-slate-100">{step?.prompt}</p>
           {step?.say && (
             <button type="button" onClick={replayPrompt} aria-label="Replay Luna's prompt"
@@ -189,7 +193,7 @@ export default function PracticeScreen({ station, course, onExit, demo = false, 
 
       <AnimatePresence mode="wait">
         {done ? (
-          <motion.div key="done" initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-8 text-center">
+          <motion.div key="done" initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="relative z-20 mt-8 text-center">
             <h2 className="text-3xl font-extrabold text-white">{ui.done ?? 'Mission complete!'}</h2>
             <div className="mt-3 flex justify-center gap-1.5">
               {[0, 1, 2].map((k) => <Star key={k} size={42} className={k < stars ? 'fill-yellow-300 text-yellow-300' : 'text-slate-700'} />)}

@@ -1,14 +1,17 @@
-// Tap-the-right-body, full-screen 3D: real spinning planets float in an arc
-// and the child taps the one Luna asked for. Covers the course's tap-hotspot /
-// compare-strength quiz kinds. Each body carries a DOM name chip (drei Html)
-// — readable for kids, raycast-free tap target for phones, and a stable
-// [data-body] hook for E2E. Wrong tap wobbles the planet and calls onHint.
-// step.scene.options: [bodyId,...]; step.target.id: the right one.
+// Tap-the-right-one, full-screen 3D: items float in an arc — REAL spinning
+// planets when the item id is a body, glowing EmojiOrbs for concepts (Core,
+// GPS, Nebula…) — and the child taps the one Luna asked for. Covers the
+// course's tap-hotspot / compare-strength kinds with their YAML shape
+// (target.items [{id,label,emoji,size?}], target.id) plus the body-list shape
+// (scene.options: [bodyId…]). Name chips are DOM (drei Html): readable for
+// kids, phone-friendly tap targets, stable [data-body] E2E hooks. Wrong tap
+// wobbles the item and calls onHint.
 import { useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import { Planet, Sun, Asteroid, BODIES, displayRadius } from '../scene/bodies/index.js';
+import { Sun, BODIES, displayRadius } from '../scene/bodies/index.js';
 import Stage3D from './Stage3D.jsx';
+import { renderPiece, chipClass } from './pieces.jsx';
 
 const SUN_POS = [-19, 5, -9];
 
@@ -25,14 +28,16 @@ function Bobbing({ position, wobble = 0, children }) {
 }
 
 // Normalize display radii into a tap-friendly band while keeping relative size
-// order (Jupiter still clearly bigger than Mercury).
-function tapRadius(body) {
-  const r = displayRadius(body);
-  return 0.7 + Math.min(1.15, r * 0.16);
+// order (Jupiter still clearly bigger than Mercury). Authored `size` (the
+// compare-strength 48-96px scale) wins when present.
+function tapRadius(item) {
+  if (item.size) return 0.55 + (item.size / 96) * 0.95;
+  if (BODIES[item.id]) return 0.7 + Math.min(1.15, displayRadius(item.id) * 0.16);
+  return 0.85;
 }
 
 export default function TargetTap3D({ step, onCorrect, onHint }) {
-  const options = step?.scene?.options ?? ['mars', 'saturn', 'neptune'];
+  const options = step?.target?.items ?? (step?.scene?.options ?? ['mars', 'saturn', 'neptune']).map((id) => ({ id }));
   const answer = step?.target?.id;
   const doneRef = useRef(false);
   const [picked, setPicked] = useState(null); // body just tapped (for feedback)
@@ -63,23 +68,22 @@ export default function TargetTap3D({ step, onCorrect, onHint }) {
   }
 
   return (
-    <Stage3D camera={{ position: [0, 1.6, 10.5], fov: 50 }} ambient={0.26} portraitScale={0.7}>
+    <Stage3D camera={{ position: [0, 1.6, 10.5], fov: 50 }} ambient={0.3} portraitScale={0.7}>
       <Sun radius={1.2} position={SUN_POS} timeScale={4000} lightIntensity={2000} />
-      {options.map((body, i) => {
+      {options.map((item, i) => {
+        const id = item.id;
         const pos = posFor(i);
-        const r = tapRadius(body);
-        const isPick = picked === body;
-        const won = doneRef.current && body === answer;
+        const r = tapRadius(item);
+        const isPick = picked === id;
+        const won = doneRef.current && id === answer;
         return (
-          <Bobbing key={body} position={pos} wobble={isPick && !won && wrongAt ? 1 : 0}>
+          <Bobbing key={id} position={pos} wobble={isPick && !won && wrongAt ? 1 : 0}>
             <group
-              onClick={() => tap(body)}
-              onPointerOver={(e) => (e.object.parent ? (document.body.style.cursor = 'pointer') : null)}
-              onPointerOut={() => (document.body.style.cursor = 'auto')}
+              onClick={() => tap(id)}
+              onPointerOver={() => { document.body.style.cursor = 'pointer'; }}
+              onPointerOut={() => { document.body.style.cursor = 'auto'; }}
             >
-              {body === 'asteroid'
-                ? <Asteroid seed={13} radius={r * 0.8} spin={0.3} />
-                : <Planet body={body} radius={r} timeScale={6000} />}
+              {renderPiece(item, r)}
               {/* win halo */}
               {won && (
                 <mesh>
@@ -88,16 +92,9 @@ export default function TargetTap3D({ step, onCorrect, onHint }) {
                 </mesh>
               )}
             </group>
-            <Html center position={[0, -(r + (BODIES[body]?.ring ? r * 0.7 : 0.5)) - 0.35, 0]} zIndexRange={[10, 0]}>
-              <button
-                type="button"
-                data-body={body}
-                onClick={() => tap(body)}
-                className={`touch-manipulation whitespace-nowrap rounded-full border px-3 py-1 text-xs font-extrabold capitalize backdrop-blur-sm
-                  ${won ? 'border-emerald-300/60 bg-emerald-400/20 text-emerald-200'
-                    : 'border-white/15 bg-slate-950/60 text-slate-200'}`}
-              >
-                {body}
+            <Html center position={[0, -(r + (BODIES[id]?.ring ? r * 0.7 : 0.5)) - 0.35, 0]} zIndexRange={[10, 0]}>
+              <button type="button" data-body={id} onClick={() => tap(id)} className={chipClass(won ? 'won' : 'idle')}>
+                {item.label ?? id}
               </button>
             </Html>
           </Bobbing>
