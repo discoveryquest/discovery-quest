@@ -12,7 +12,7 @@ items are marked `[platform]`.
 - [x] Live on space.discoveryquest.app (fiber 8 / react 18 build) (2026-07-04)
 - [x] Phone polish: header collisions, Luna overlap, map returns to next step (2026-07-04)
 - [x] Math-style quest header: Map button + live star tally (2026-07-04)
-- [ ] **Learn-it lessons in 3D** — port the 2D scene kinds (Body/Orbit/Spin/MoonPhase/SeasonOrbit/Fall/Field/Launch/Reveal/Compare/StarLife/Scrub) onto the bodies kit ← IN PROGRESS, before hero badges (Pavel)
+- [x] **Learn-it lessons in 3D** — all scene kinds (Body/Orbit/Spin/MoonPhase/SeasonOrbit/Fall/Field/Launch/Reveal/Compare/StarLife/Scrub) on the bodies kit; live on prod (2026-07-04)
 - [ ] Record "Watch Luna solve it" tutorials against the 3D screens (tutorials.json is cleared until then)
 - [ ] Map screen with 3D flavor / map art
 - [ ] Code-split three.js (bundle is 417 KB gzip)
