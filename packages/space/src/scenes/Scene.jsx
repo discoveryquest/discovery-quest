@@ -7,5 +7,8 @@ import { SCENE_RENDERERS } from './renderers.jsx';
 export default function Scene({ descriptor, mode = SCENE_MODE }) {
   if (!descriptor) return null;
   const Renderer = resolveRenderer(SCENE_RENDERERS, mode, descriptor.kind);
-  return Renderer ? <Renderer {...descriptor} /> : null;
+  if (!Renderer) return null;
+  // `key` is reserved by React in spreads — pass it explicitly (remounts per beat).
+  const { key, ...props } = descriptor;
+  return <Renderer key={key} {...props} />;
 }

@@ -14,8 +14,10 @@ import Spin2D from './2d/Spin2D.jsx';
 import SeasonOrbit2D from './2d/SeasonOrbit2D.jsx';
 import Fall2D from './2d/Fall2D.jsx';
 import StarLife2D from './2d/StarLife2D.jsx';
+import { RENDERERS_3D } from './3d/renderers3d.jsx';
 
 export const SCENE_RENDERERS = {
+  '3d': RENDERERS_3D,
   '2d': {
     fact: Fact2D,
     body: Body2D,

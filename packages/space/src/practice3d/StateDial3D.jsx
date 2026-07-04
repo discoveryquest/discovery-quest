@@ -23,7 +23,7 @@ const SPIN_SUN = [-13, 0.6, 0];
 
 // YOU pin rides the equator; rotating this group moves the town dawn→noon→
 // dusk→night relative to the fixed Sun on -X.
-function SpinScene({ fraction }) {
+export function SpinScene({ fraction }) {
   const angle = -Math.PI / 2 - fraction * Math.PI * 1.5;
   return (
     <>
@@ -47,7 +47,7 @@ function SpinScene({ fraction }) {
 // Earth on its orbit; axis fixed in world space (leaning toward -X), so the
 // season falls out of the geometry. spring top → summer right → autumn bottom
 // → winter left over fraction 0..1 (three-quarter turn, like the 2D lesson).
-function SeasonScene({ fraction }) {
+export function SeasonScene({ fraction }) {
   const R = 6.4;
   const phi = Math.PI * 2 * (fraction * 0.75);
   const pos = [Math.sin(phi) * R, 0, -Math.cos(phi) * R];

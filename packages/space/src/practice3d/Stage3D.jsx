@@ -7,6 +7,7 @@
 import { Suspense, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { MilkyWay } from '../scene/bodies/index.js';
+import ReleaseContextOnUnmount from '../scene/ReleaseContextOnUnmount.jsx';
 
 // Portrait phones see a much narrower slice of the scene than landscape, so
 // the camera pulls back as the aspect ratio drops (and returns on rotate) —
@@ -40,6 +41,7 @@ export default function Stage3D({ camera = { position: [0, 4, 12], fov: 46 }, am
           ~2 moves and fires pointercancel — THE mobile drag killer */}
       <Canvas dpr={[1, 2]} camera={camera} gl={{ antialias: true }} style={{ touchAction: 'none' }}>
         <FitCamera position={camera.position} fov={camera.fov ?? 46} />
+        <ReleaseContextOnUnmount />
         <color attach="background" args={['#01020a']} />
         <ambientLight intensity={ambient} />
         <Suspense fallback={null}>
