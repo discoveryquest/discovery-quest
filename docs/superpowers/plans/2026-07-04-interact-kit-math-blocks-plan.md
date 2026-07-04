@@ -12,6 +12,19 @@ Numberblocks-style cubes — regrouping (carry) and borrowing made physical.
 **Spec:** `docs/superpowers/specs/2026-07-04-interactive-courses-design.md`
 (§1, §2 — read it first; decisions in §8 are final).
 
+> **STATUS 2026-07-04 (Fable session):** Tasks 1-3 + 5-7 DONE with one big
+> course-correction: **the live Math game's authoritative code is in the
+> PLATFORM repo** (`apps/math-quest` → platform `packages/math`, with the
+> BOARDS registry QuestScreen) — the open repo's packages/math is a divergent
+> mirror. So the kit + boards landed on platform branch `interactive-math`
+> (worktree `.worktrees/platform-interactive`, commit a20a087), with the kit
+> also committed to the open repo's `interactive-math` branch (06ff738) for
+> Space. E2E green: full 8-question add quest (5 blockAdd then band→2 keypad
+> graduation), blockTake incl. rod burst, bonds with Check; smoke green;
+> phone viewport verified. Task 4 (SortZones regression proof) DEFERRED — do
+> it when adopting the kit in Space. Task 8 gates remain: NO merge/deploy
+> until Pavel reviews visuals (dev server: `npm run math -- --host`).
+
 **Architecture:** kit = pointer-events drag core + slot registry + feedback
 primitives + shared block visuals, exported from `@discoveryquest/engine-ui`.
 Math boards consume the kit; topic generators gain an optional `manip`
