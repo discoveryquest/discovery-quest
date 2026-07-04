@@ -1,0 +1,99 @@
+course:
+  formatVersion: 1
+  id: logic
+  title: Logic Quest
+  subject: Thinking
+  companion: luna
+  voice:
+    id: jessica
+    profile: teaching-slow
+  ui:
+    done: "Puzzle cracked!"
+    backToMap: "Back to the puzzle trail"
+    score: "You cracked {correct} of {total} puzzles!"
+  reactions:
+    praise: [praise-0, praise-1, praise-2]
+    oops: [oops-0, oops-1]
+    solved: [solved-0, solved-1]
+  engine: ">=1.0"
+
+  worlds:
+    - id: matchstick-meadow
+      title: Matchstick Meadow
+      emoji: 🔥
+      color: "#FBBF24"
+      blurb: Move matchsticks to fix numbers, mend equations, and build the biggest number you can.
+      stations:
+        - { id: fix-digit, title: Number Fixer, icon: 🔢, sub: turn one digit into another, board: practice, bands: [0] }
+        - { id: true-equations, title: Make It True, icon: ⚖️, sub: mend a broken equation, board: practice, bands: [1] }
+        - { id: biggest-number, title: Go Big, icon: 💯, sub: build the biggest number, board: practice, bands: [2] }
+        - { id: two-move-master, title: Two-Move Master, icon: 🎩, sub: two moves, big magic, board: practice, bands: [3] }
+
+  content:
+    practice:
+      # ── Number Fixer: one move, one digit → another (any valid target accepted) ──
+      - { station: fix-digit, band: 0, kind: matchstick, say: pr-fd-5to3, prompt: "Move one match to turn the 5 into a 3.", scene: { start: "5", moves: 1 }, target: { goal: digits, accept: ["3"] }, feedback: { correctSay: pr-fd-5to3-ok, hintSay: pr-fd-5to3-hint } }
+      - { station: fix-digit, band: 0, kind: matchstick, say: pr-fd-6to9, prompt: "Move one match to turn the 6 into a 9.", scene: { start: "6", moves: 1 }, target: { goal: digits, accept: ["9"] }, feedback: { correctSay: pr-fd-6to9-ok, hintSay: pr-fd-6to9-hint } }
+      - { station: fix-digit, band: 0, kind: matchstick, say: pr-fd-2to3, prompt: "Move one match to turn the 2 into a 3.", scene: { start: "2", moves: 1 }, target: { goal: digits, accept: ["3"] }, feedback: { correctSay: pr-fd-2to3-ok, hintSay: pr-fd-2to3-hint } }
+
+      # ── Make It True: one move anywhere fixes the equation (every true result counts) ──
+      - { station: true-equations, band: 1, kind: matchstick, say: pr-te-225, prompt: "This says 2 plus 2 equals 5 — that's wrong! Move one match to make it true.", scene: { start: "2+2=5", moves: 1 }, target: { goal: equation }, feedback: { correctSay: pr-te-225-ok, hintSay: pr-te-225-hint } }
+      - { station: true-equations, band: 1, kind: matchstick, say: pr-te-546, prompt: "5 plus 4 equals 6? No way! Move one match to fix it.", scene: { start: "5+4=6", moves: 1 }, target: { goal: equation }, feedback: { correctSay: pr-te-546-ok, hintSay: pr-te-546-hint } }
+      - { station: true-equations, band: 1, kind: matchstick, say: pr-te-609, prompt: "6 plus 0 equals 9 is broken. One match move makes it true!", scene: { start: "6+0=9", moves: 1 }, target: { goal: equation }, feedback: { correctSay: pr-te-609-ok, hintSay: pr-te-609-hint } }
+
+      # ── Go Big: one move, make the biggest possible number ──
+      - { station: biggest-number, band: 2, kind: matchstick, say: pr-bn-50, prompt: "Move one match to make the biggest number you can from 50.", scene: { start: "50", moves: 1 }, target: { goal: largest }, feedback: { correctSay: pr-bn-50-ok, hintSay: pr-bn-50-hint } }
+      - { station: biggest-number, band: 2, kind: matchstick, say: pr-bn-16, prompt: "Make the biggest number you can from 16 — one move!", scene: { start: "16", moves: 1 }, target: { goal: largest }, feedback: { correctSay: pr-bn-16-ok, hintSay: pr-bn-16-hint } }
+      - { station: biggest-number, band: 2, kind: matchstick, say: pr-bn-23, prompt: "One match move — turn 23 into the biggest number possible.", scene: { start: "23", moves: 1 }, target: { goal: largest }, feedback: { correctSay: pr-bn-23-ok, hintSay: pr-bn-23-hint } }
+
+      # ── Two-Move Master: two moves, biggest number ──
+      - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-60, prompt: "Two moves this time! Make the biggest number you can from 60.", scene: { start: "60", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-60-ok, hintSay: pr-tm-60-hint } }
+      - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-68, prompt: "With two moves, push 68 as high as it will go!", scene: { start: "68", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-68-ok, hintSay: pr-tm-68-hint } }
+      - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-26, prompt: "Last one, master puzzler — two moves to make 26 as big as possible!", scene: { start: "26", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-26-ok, hintSay: pr-tm-26-hint } }
+
+  narration:
+    # prompts (must equal each mission's prompt text)
+    pr-fd-5to3: "Move one match to turn the 5 into a 3."
+    pr-fd-5to3-ok: "Yes! Slide the left match over and the 5 becomes a 3. Same matches, new number!"
+    pr-fd-5to3-hint: "Look at the top-left match. Where could it go to close up the 3?"
+    pr-fd-6to9: "Move one match to turn the 6 into a 9."
+    pr-fd-6to9-ok: "A 9! You flipped it by moving one match from the bottom to the top."
+    pr-fd-6to9-hint: "A 9 is just a 6 standing on its head. Try moving the bottom-left match up."
+    pr-fd-2to3: "Move one match to turn the 2 into a 3."
+    pr-fd-2to3-ok: "That's a 3! The bottom-left match swung around to the right side."
+    pr-fd-2to3-hint: "A 2 and a 3 are almost twins. Only the bottom-left corner is different!"
+    pr-te-225: "This says 2 plus 2 equals 5 — that's wrong! Move one match to make it true."
+    pr-te-225-ok: "Three plus two IS five. One little match fixed the whole equation!"
+    pr-te-225-hint: "Could one of those 2s become a 3? Check its bottom corner."
+    pr-te-546: "5 plus 4 equals 6? No way! Move one match to fix it."
+    pr-te-546-ok: "Five plus four is nine — you turned the 6 into a 9 and made it true!"
+    pr-te-546-hint: "The answer side is the problem. What number is 5 plus 4? Can the 6 become it?"
+    pr-te-609: "6 plus 0 equals 9 is broken. One match move makes it true!"
+    pr-te-609-ok: "True at last! Sometimes more than one move works — any true equation wins."
+    pr-te-609-hint: "Try changing the 6 or the 9 — they're one match apart from each other."
+    pr-bn-50: "Move one match to make the biggest number you can from 50."
+    pr-bn-50-ok: "Fifty-nine! Moving one match inside the 0 turned it into a 9."
+    pr-bn-50-hint: "You can't grow the 5. But that 0 is hiding a bigger digit inside it!"
+    pr-bn-16: "Make the biggest number you can from 16 — one move!"
+    pr-bn-16-ok: "Nineteen! The 6 flipped into a 9 — biggest possible."
+    pr-bn-16-hint: "Which digit can become a 9 with one move?"
+    pr-bn-23: "One match move — turn 23 into the biggest number possible."
+    pr-bn-23-ok: "Thirty-three! Turning the 2 into a 3 beats every other move."
+    pr-bn-23-hint: "Try making the FIRST digit bigger — that helps the most!"
+    pr-tm-60: "Two moves this time! Make the biggest number you can from 60."
+    pr-tm-60-ok: "Ninety-nine! Both digits flipped into 9s — the biggest two-digit number there is!"
+    pr-tm-60-hint: "The 6 can become a 9... and so can the 0. That's your two moves!"
+    pr-tm-68: "With two moves, push 68 as high as it will go!"
+    pr-tm-68-ok: "You found the biggest! Two clever moves, maximum number."
+    pr-tm-68-hint: "Start by making the first digit as big as it can get, then look at the second."
+    pr-tm-26: "Last one, master puzzler — two moves to make 26 as big as possible!"
+    pr-tm-26-ok: "Maximum reached! You're a true Two-Move Master!"
+    pr-tm-26-hint: "Bigger first digit first! Then see what the 6 can turn into."
+    # reactions
+    praise-0: "Brilliant thinking!"
+    praise-1: "You cracked it!"
+    praise-2: "What a clever move!"
+    oops-0: "Hmm, not quite — try another match!"
+    oops-1: "So close! Reset and think about which match to move."
+    solved-0: "Puzzle master! You solved every single one!"
+    solved-1: "Incredible! Your brain is on fire today!"

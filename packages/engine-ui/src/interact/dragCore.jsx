@@ -95,6 +95,7 @@ export function DragPiece({ id, data, disabled = false, onRejected, className = 
 
   return (
     <motion.div
+      data-drag-piece={id}
       style={{ x, y, touchAction: 'none' }}
       className={`${disabled ? '' : 'cursor-grab active:cursor-grabbing'} select-none ${dragging ? 'z-30' : ''} ${className}`}
       animate={dragging ? { scale: 1.08 } : { scale: isSelected ? 1.06 : 1 }}
@@ -150,7 +151,7 @@ export function DropSlot({ id, accepts, onTapPlace, className = '', children }) 
   };
 
   return (
-    <div ref={ref} onClick={place} className={`relative ${className}`}>
+    <div ref={ref} data-drop-slot={id} onClick={place} className={`relative ${className}`}>
       {lit && (
         <span aria-hidden className="pointer-events-none absolute -inset-1 rounded-2xl ring-2 ring-amber-300/70 animate-pulse" />
       )}

@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const root = (p) => fileURLToPath(new URL(p, import.meta.url));
-const APPS = ['packages/math', 'packages/english', 'packages/space'];
+const APPS = ['packages/math', 'packages/english', 'packages/space', 'packages/logic'];
 
 // catalog field type → JSON Schema fragment. Optional (non-required) fields also accept
 // `null`, because the exporter serializes "no value" as an explicit null (e.g. `active: null`
@@ -165,12 +165,14 @@ function buildSchema(appDir, cap) {
           view: { $ref: '#/$defs/view' },
         },
       },
-      view: {
-        type: 'object',
-        required: ['kind'],
-        properties: { kind: { enum: viewKinds } },
-        allOf: cap.views.map(viewBranch),
-      },
+      view: viewKinds.length
+        ? {
+            type: 'object',
+            required: ['kind'],
+            properties: { kind: { enum: viewKinds } },
+            allOf: cap.views.map(viewBranch),
+          }
+        : { type: 'object' }, // lesson-less course (no views yet) — ajv rejects empty enums
     },
   };
 }

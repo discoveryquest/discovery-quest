@@ -1,0 +1,27 @@
+{
+  "name": "@discoveryquest/logic",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Logic Quest — creative thinking & puzzles on the shared 2D Discovery Quest engine (worlds/stations/missions as data in logic.course.yml; matchstick seven-segment mechanic on the engine-ui interact kit). Design: docs/superpowers/specs/2026-07-04-logic-quest-design.md.",
+  "exports": {
+    ".": "./src/App.jsx",
+    "./course": "./src/course.js",
+    "./curriculum": "./src/curriculum.js",
+    "./MapScreen": "./src/MapScreen.jsx",
+    "./boardRegistry": "./src/boardRegistry.js"
+  },
+  "scripts": { "test": "node --test" },
+  "dependencies": {
+    "@discoveryquest/engine": "*",
+    "@discoveryquest/engine-ui": "*",
+    "@discoveryquest/voice-kit": "*",
+    "@discoveryquest/course-loader": "*",
+    "js-yaml": "^4.2.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "framer-motion": "*",
+    "lucide-react": "*"
+  }
+}

@@ -18,7 +18,10 @@
     "validate": "node scripts/gen-capabilities.mjs --check && node scripts/gen-schema.mjs --check && node scripts/gen-changelog.mjs --check",
     "voice:space": "node packages/space/scripts/gen-voice.mjs",
     "tutorial:space": "node packages/space/scripts/record-tutorial.mjs",
-    "course:check:space": "node scripts/course-check.mjs packages/space/space.course.yml --app packages/space --voice examples/space-preview"
+    "course:check:space": "node scripts/course-check.mjs packages/space/space.course.yml --app packages/space --voice examples/space-preview",
+    "course:check:logic": "node scripts/course-check.mjs packages/logic/logic.course.yml --app packages/logic --voice examples/logic-preview",
+    "voice:logic": "node packages/logic/scripts/gen-voice.mjs",
+    "preview:logic": "npm --workspace logic-preview run dev"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
