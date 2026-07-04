@@ -51,6 +51,17 @@ course:
         - { id: odd-one-out, title: Odd One Out, icon: 🕵️‍♀️, sub: one of these is not like the others, board: practice, bands: [10] }
         - { id: pattern-grid, title: Pattern Grid, icon: 🔮, sub: crack the three-by-three code, board: practice, bands: [11] }
 
+    - id: riddle-rapids
+      title: Riddle Rapids
+      emoji: 🛶
+      color: "#34D399"
+      blurb: Classic riddles come alive — ferry friends across, measure with jugs, and outsmart the pipes.
+      stations:
+        - { id: river-crossing, title: River Crossing, icon: 🛶, sub: everyone across, nobody eaten, board: practice, bands: [12] }
+        - { id: water-jugs, title: Water Jugs, icon: 🫗, sub: measure the impossible, board: practice, bands: [13] }
+        - { id: which-fills, title: Which Cup Fills, icon: 🚰, sub: predict where the water goes, board: practice, bands: [14] }
+        - { id: riddle-pairs, title: Riddle Pairs, icon: 🔗, sub: dog is to bone as bunny is to…, board: practice, bands: [15] }
+
   content:
     practice:
       # ── Number Fixer: one move, one digit → another (any valid target accepted) ──
@@ -99,6 +110,20 @@ course:
       - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-latin, prompt: "Every row has a sun, a moon, and a star. What's missing?", scene: { layout: matrix, cells: ["☀️","🌙","⭐","⭐","☀️","🌙","🌙","⭐","?"] }, choices: ["☀️","🌙","⭐"], target: { answer: "☀️" }, feedback: { correctSay: pr-pg-latin-ok, hintSay: pr-pg-latin-hint } }
       - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-count, prompt: "Each row grows: one, two, three. Finish the last row!", scene: { layout: matrix, cells: ["❤️","❤️❤️","❤️❤️❤️","💙","💙💙","💙💙💙","💚","💚💚","?"] }, choices: ["💚💚💚","💚💚","💚💚💚💚"], target: { answer: "💚💚💚" }, feedback: { correctSay: pr-pg-count-ok, hintSay: pr-pg-count-hint } }
       - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-colors, prompt: "The colour code shifts every row. Crack the last square!", scene: { layout: matrix, cells: ["🟥","🟨","🟦","🟨","🟦","🟥","🟦","🟥","?"] }, choices: ["🟨","🟥","🟦"], target: { answer: "🟨" }, feedback: { correctSay: pr-pg-colors-ok, hintSay: pr-pg-colors-hint } }
+
+      # ── Riddle Rapids: animated classic riddles ──
+      - { station: river-crossing, band: 12, kind: river-cross, say: pr-rc-fox, prompt: "Ferry the fox, the chicken and the corn across — but some can't be left alone!", scene: { cast: [ { id: fox, emoji: "🦊", label: Fox }, { id: chicken, emoji: "🐔", label: Chicken }, { id: corn, emoji: "🌽", label: Corn } ], forbidden: [ [fox, chicken], [chicken, corn] ] }, target: { allAcross: true }, feedback: { correctSay: pr-rc-fox-ok, hintSay: pr-rc-fox-hint } }
+      - { station: river-crossing, band: 12, kind: river-cross, say: pr-rc-wolf, prompt: "Now the wolf, the goat and the cabbage. Same river, same rules!", scene: { cast: [ { id: wolf, emoji: "🐺", label: Wolf }, { id: goat, emoji: "🐐", label: Goat }, { id: cabbage, emoji: "🥬", label: Cabbage } ], forbidden: [ [wolf, goat], [goat, cabbage] ] }, target: { allAcross: true }, feedback: { correctSay: pr-rc-wolf-ok, hintSay: pr-rc-wolf-hint } }
+      - { station: river-crossing, band: 12, kind: river-cross, say: pr-rc-cat, prompt: "One more trip: the cat, the mouse and the cheese!", scene: { cast: [ { id: cat, emoji: "🐱", label: Cat }, { id: mouse, emoji: "🐭", label: Mouse }, { id: cheese, emoji: "🧀", label: Cheese } ], forbidden: [ [cat, mouse], [mouse, cheese] ] }, target: { allAcross: true }, feedback: { correctSay: pr-rc-cat-ok, hintSay: pr-rc-cat-hint } }
+      - { station: water-jugs, band: 13, kind: pour-jugs, say: pr-wj-3, prompt: "With a 2-jug and a 5-jug, measure exactly 3!", scene: { jugs: [2, 5] }, target: { amount: 3 }, feedback: { correctSay: pr-wj-3-ok, hintSay: pr-wj-3-hint } }
+      - { station: water-jugs, band: 13, kind: pour-jugs, say: pr-wj-4, prompt: "The famous one: a 3-jug, a 5-jug, and you need exactly 4!", scene: { jugs: [3, 5] }, target: { amount: 4 }, feedback: { correctSay: pr-wj-4-ok, hintSay: pr-wj-4-hint } }
+      - { station: water-jugs, band: 13, kind: pour-jugs, say: pr-wj-1, prompt: "Master level: use the 3-jug and the 5-jug to end with exactly 1!", scene: { jugs: [3, 5] }, target: { amount: 1 }, feedback: { correctSay: pr-wj-1-ok, hintSay: pr-wj-1-hint } }
+      - { station: which-fills, band: 14, kind: which-fills, say: pr-wf-1, prompt: "Water is about to pour! Which cup will it fill? Tap your guess!", scene: { segs: [ { id: s0, x1: 50, y1: 9, x2: 50, y2: 26, to: [s1, s2] }, { id: s1, x1: 50, y1: 26, x2: 25, y2: 42, to: [s3] }, { id: s2, x1: 50, y1: 26, x2: 75, y2: 42, to: [s4] }, { id: s3, x1: 25, y1: 42, x2: 25, y2: 78, cup: a }, { id: s4, x1: 75, y1: 42, x2: 75, y2: 78, cup: b } ], blocked: [s2], cups: [ { id: a, x: 25 }, { id: b, x: 75 } ] }, target: { predict: true }, feedback: { correctSay: pr-wf-1-ok, hintSay: pr-wf-1-hint } }
+      - { station: which-fills, band: 14, kind: which-fills, say: pr-wf-2, prompt: "Three cups this time — follow the pipes past the plugs!", scene: { segs: [ { id: s0, x1: 50, y1: 9, x2: 50, y2: 24, to: [s1, s2] }, { id: s1, x1: 50, y1: 24, x2: 22, y2: 40, to: [s3] }, { id: s2, x1: 50, y1: 24, x2: 78, y2: 40, to: [s4] }, { id: s3, x1: 22, y1: 40, x2: 22, y2: 78, cup: a }, { id: s4, x1: 78, y1: 40, x2: 78, y2: 52, to: [s5, s6] }, { id: s5, x1: 78, y1: 52, x2: 50, y2: 66, to: [s7] }, { id: s6, x1: 78, y1: 52, x2: 78, y2: 78, cup: c }, { id: s7, x1: 50, y1: 66, x2: 50, y2: 78, cup: b } ], blocked: [s1, s6], cups: [ { id: a, x: 22 }, { id: b, x: 50 }, { id: c, x: 78 } ] }, target: { predict: true }, feedback: { correctSay: pr-wf-2-ok, hintSay: pr-wf-2-hint } }
+      - { station: which-fills, band: 14, kind: which-fills, say: pr-wf-3, prompt: "The trickiest pipes yet. Where does the water end up?", scene: { segs: [ { id: s0, x1: 50, y1: 9, x2: 50, y2: 22, to: [s1, s2] }, { id: s1, x1: 50, y1: 22, x2: 25, y2: 36, to: [s3] }, { id: s2, x1: 50, y1: 22, x2: 75, y2: 36, to: [s4] }, { id: s3, x1: 25, y1: 36, x2: 25, y2: 50, to: [s5, s8] }, { id: s4, x1: 75, y1: 36, x2: 75, y2: 50, to: [s6] }, { id: s5, x1: 25, y1: 50, x2: 50, y2: 64, to: [s7] }, { id: s6, x1: 75, y1: 50, x2: 75, y2: 78, cup: c }, { id: s7, x1: 50, y1: 64, x2: 50, y2: 78, cup: b }, { id: s8, x1: 25, y1: 50, x2: 25, y2: 78, cup: a } ], blocked: [s4, s5], cups: [ { id: a, x: 25 }, { id: b, x: 50 }, { id: c, x: 75 } ] }, target: { predict: true }, feedback: { correctSay: pr-wf-3-ok, hintSay: pr-wf-3-hint } }
+      - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-dog, prompt: "Dog goes with bone. What goes with bunny?", scene: { layout: sequence, cells: ["🐶","🦴","🐰","?"] }, choices: ["🥕","🍖","🎾"], target: { answer: "🥕" }, feedback: { correctSay: pr-rp-dog-ok, hintSay: pr-rp-dog-hint } }
+      - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-fish, prompt: "Fish goes with the sea. Where does the bird go?", scene: { layout: sequence, cells: ["🐟","🌊","🐦","?"] }, choices: ["☁️","🌊","🕳️"], target: { answer: "☁️" }, feedback: { correctSay: pr-rp-fish-ok, hintSay: pr-rp-fish-hint } }
+      - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-glove, prompt: "A glove goes on a hand. What does a sock go on?", scene: { layout: sequence, cells: ["🧤","🖐️","🧦","?"] }, choices: ["🦶","🖐️","👒"], target: { answer: "🦶" }, feedback: { correctSay: pr-rp-glove-ok, hintSay: pr-rp-glove-hint } }
 
 
   narration:
@@ -213,6 +238,43 @@ course:
     pr-pg-colors: "The colour code shifts every row. Crack the last square!"
     pr-pg-colors-ok: "Yellow! Each row slides the colours one step — you cracked the code."
     pr-pg-colors-hint: "Every row and every column needs all three colours. Which one is missing at the end?"
+    # Riddle Rapids
+    pr-rc-fox: "Ferry the fox, the chicken and the corn across — but some can't be left alone!"
+    pr-rc-fox-ok: "Everyone made it! The secret: take the chicken first, and bring it BACK when you need to."
+    pr-rc-fox-hint: "The fox eats the chicken, and the chicken eats the corn — never leave those pairs alone. Try taking the chicken first!"
+    pr-rc-wolf: "Now the wolf, the goat and the cabbage. Same river, same rules!"
+    pr-rc-wolf-ok: "Across again! You spotted it — it's the same puzzle wearing a different costume."
+    pr-rc-wolf-hint: "Who's the one everyone bothers? The goat! It should ride first — and maybe ride back."
+    pr-rc-cat: "One more trip: the cat, the mouse and the cheese!"
+    pr-rc-cat-ok: "Champion ferry-captain! Three riddles, one clever trick."
+    pr-rc-cat-hint: "The mouse is the troublemaker here — the cat wants it, and it wants the cheese!"
+    pr-wj-3: "With a 2-jug and a 5-jug, measure exactly 3!"
+    pr-wj-3-ok: "Exactly three! Fill the big jug, pour into the small one — what's left is three."
+    pr-wj-3-hint: "Five minus two is three… fill the 5-jug and pour some away into the 2-jug!"
+    pr-wj-4: "The famous one: a 3-jug, a 5-jug, and you need exactly 4!"
+    pr-wj-4-ok: "Four! That riddle has stumped grown-ups for hundreds of years — not you!"
+    pr-wj-4-hint: "Fill the 5, pour into the 3 — that leaves 2. Where could you keep those 2 while you refill?"
+    pr-wj-1: "Master level: use the 3-jug and the 5-jug to end with exactly 1!"
+    pr-wj-1-ok: "Exactly one! Three plus three is six — one more than the big jug holds. Genius!"
+    pr-wj-1-hint: "What happens if you pour a full 3-jug into the 5-jug… twice? The second pour won't all fit!"
+    pr-wf-1: "Water is about to pour! Which cup will it fill? Tap your guess!"
+    pr-wf-1-ok: "You followed the pipes perfectly — the plug sent all the water the other way!"
+    pr-wf-1-hint: "Look for the red plug — water can't get past it. Follow the OPEN pipe with your finger."
+    pr-wf-2: "Three cups this time — follow the pipes past the plugs!"
+    pr-wf-2-ok: "Right again! The water zig-zagged past both plugs, straight to the middle."
+    pr-wf-2-hint: "Start at the funnel and trace down. At every fork, ask: is this pipe plugged?"
+    pr-wf-3: "The trickiest pipes yet. Where does the water end up?"
+    pr-wf-3-ok: "Incredible! You traced every twist — the water had exactly one way down."
+    pr-wf-3-hint: "Two plugs this time. Trace slowly from the top — only one path stays open."
+    pr-rp-dog: "Dog goes with bone. What goes with bunny?"
+    pr-rp-dog-ok: "A carrot! Dogs love bones, bunnies love carrots — that's the pattern."
+    pr-rp-dog-hint: "The bone is the dog's favourite food. What's a bunny's favourite?"
+    pr-rp-fish: "Fish goes with the sea. Where does the bird go?"
+    pr-rp-fish-ok: "The sky! Fish swim in the sea, birds fly in the sky."
+    pr-rp-fish-hint: "The sea is where the fish LIVES. Where do birds spend their day?"
+    pr-rp-glove: "A glove goes on a hand. What does a sock go on?"
+    pr-rp-glove-ok: "A foot! Glove is to hand as sock is to foot — a perfect pair."
+    pr-rp-glove-hint: "Think about where you WEAR each one. Gloves warm hands, socks warm…?"
     # reactions
     praise-0: "Brilliant thinking!"
     praise-1: "You cracked it!"
