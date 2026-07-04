@@ -44,6 +44,35 @@ function DragCatcher({ drag, onMove, onRelease }) {
   );
 }
 
+// Slot ring that reacts to the live drag: hovering a planet within snap range
+// tints it green when that slot is the planet's rightful place, red when not
+// (Pavel 2026-07-04). Reads drag.current in useFrame — no re-renders.
+function SlotRing({ center, wouldBeRight, filled, drag }) {
+  const mat = useRef();
+  const mesh = useRef();
+  useFrame((state) => {
+    if (!mat.current || !mesh.current) return;
+    const d = drag.current;
+    const hovering = d.body && Math.hypot(d.point.x - center[0], d.point.y - center[1]) < SNAP_DIST;
+    if (hovering) {
+      const right = wouldBeRight(d.body);
+      mat.current.color.set(right ? '#4ade80' : '#f87171');
+      mat.current.opacity = 0.95;
+      mesh.current.scale.setScalar(1.1 + Math.sin(state.clock.elapsedTime * 6) * 0.06);
+    } else {
+      mat.current.color.set(filled ? '#34d399' : '#67e8f9');
+      mat.current.opacity = filled ? 0.8 : 0.4;
+      mesh.current.scale.setScalar(1);
+    }
+  });
+  return (
+    <mesh ref={mesh} rotation-x={-Math.PI / 2} position={[0, -0.9, 0]}>
+      <ringGeometry args={[0.75, 0.9, 48]} />
+      <meshBasicMaterial ref={mat} color="#67e8f9" transparent opacity={0.4} side={THREE.DoubleSide} depthWrite={false} />
+    </mesh>
+  );
+}
+
 function PlanetPiece({ body, radius, target, drag, held, done, onGrab, onMove, onRelease, onChipTap }) {
   const ref = useRef();
   const dest = useMemo(() => new THREE.Vector3(), []);
@@ -211,10 +240,7 @@ export default function OrbitOrder3D({ step, onCorrect, onHint }) {
         const filled = placed[j];
         return (
           <group key={j} position={p}>
-            <mesh rotation-x={-Math.PI / 2} position={[0, -0.9, 0]}>
-              <ringGeometry args={[0.75, 0.9, 48]} />
-              <meshBasicMaterial color={filled ? '#34d399' : '#67e8f9'} transparent opacity={filled ? 0.8 : 0.4} side={THREE.DoubleSide} depthWrite={false} />
-            </mesh>
+            <SlotRing center={p} wouldBeRight={(b) => solution[j] === b} filled={!!filled} drag={drag} />
             <Html center position={[0, -1.75, 0]} zIndexRange={[10, 0]}>
               <button type="button" data-slot={j} onClick={() => tapSlot(j)}
                 className={`touch-manipulation rounded-full border px-2.5 py-0.5 text-[11px] font-black backdrop-blur-sm
