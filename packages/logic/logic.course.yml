@@ -62,6 +62,17 @@ course:
         - { id: which-fills, title: Which Cup Fills, icon: 🚰, sub: predict where the water goes, board: practice, bands: [14] }
         - { id: riddle-pairs, title: Riddle Pairs, icon: 🔗, sub: dog is to bone as bunny is to…, board: practice, bands: [15] }
 
+    - id: logic-lagoon
+      title: Logic Lagoon
+      emoji: 🐊
+      color: "#2DD4BF"
+      blurb: Pure deduction — tilting scales, who-owns-what mysteries, and pond sudoku.
+      stations:
+        - { id: balance-scales, title: Balance Scales, icon: ⚖️, sub: heavier sinks, lighter rises, board: practice, bands: [16] }
+        - { id: who-owns-what, title: Who Owns What, icon: 🏠, sub: match everyone to theirs, board: practice, bands: [17] }
+        - { id: mini-sudoku, title: Pond Sudoku, icon: 🐸, sub: four friends, no repeats, board: practice, bands: [18] }
+        - { id: detective-case, title: Detective's Case, icon: 🕵️, sub: only NO clues — deduce the YES, board: practice, bands: [19] }
+
   content:
     practice:
       # ── Number Fixer: one move, one digit → another (any valid target accepted) ──
@@ -124,6 +135,20 @@ course:
       - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-dog, prompt: "Dog goes with bone. What goes with bunny?", scene: { layout: sequence, cells: ["🐶","🦴","🐰","?"] }, choices: ["🥕","🍖","🎾"], target: { answer: "🥕" }, feedback: { correctSay: pr-rp-dog-ok, hintSay: pr-rp-dog-hint } }
       - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-fish, prompt: "Fish goes with the sea. Where does the bird go?", scene: { layout: sequence, cells: ["🐟","🌊","🐦","?"] }, choices: ["☁️","🌊","🕳️"], target: { answer: "☁️" }, feedback: { correctSay: pr-rp-fish-ok, hintSay: pr-rp-fish-hint } }
       - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-glove, prompt: "A glove goes on a hand. What does a sock go on?", scene: { layout: sequence, cells: ["🧤","🖐️","🧦","?"] }, choices: ["🦶","🖐️","👒"], target: { answer: "🦶" }, feedback: { correctSay: pr-rp-glove-ok, hintSay: pr-rp-glove-hint } }
+
+      # ── Logic Lagoon: deduction (balance / who-owns-what / sudoku) ──
+      - { station: balance-scales, band: 16, kind: balance, say: pr-bs-3, prompt: "The scales never lie! Who is the heaviest of all?", scene: { scales: [ { left: "🐘", right: "🐕", heavier: L }, { left: "🐕", right: "🐁", heavier: L } ], items: [ { id: elephant, emoji: "🐘", label: Elephant }, { id: dog, emoji: "🐕", label: Dog }, { id: mouse, emoji: "🐁", label: Mouse } ] }, target: { ask: heaviest, id: elephant }, feedback: { correctSay: pr-bs-3-ok, hintSay: pr-bs-3-hint } }
+      - { station: balance-scales, band: 16, kind: balance, say: pr-bs-light, prompt: "Now the twist — who is the LIGHTEST of all?", scene: { scales: [ { left: "🐻", right: "🦊", heavier: L }, { left: "🦊", right: "🐿️", heavier: L } ], items: [ { id: bear, emoji: "🐻", label: Bear }, { id: fox, emoji: "🦊", label: Fox }, { id: squirrel, emoji: "🐿️", label: Squirrel } ] }, target: { ask: lightest, id: squirrel }, feedback: { correctSay: pr-bs-light-ok, hintSay: pr-bs-light-hint } }
+      - { station: balance-scales, band: 16, kind: balance, say: pr-bs-4, prompt: "Three scales, four animals. Who outweighs everyone?", scene: { scales: [ { left: "🐊", right: "🐼", heavier: L }, { left: "🐼", right: "🐨", heavier: L }, { left: "🐨", right: "🐧", heavier: L } ], items: [ { id: croc, emoji: "🐊", label: Crocodile }, { id: panda, emoji: "🐼", label: Panda }, { id: koala, emoji: "🐨", label: Koala }, { id: penguin, emoji: "🐧", label: Penguin } ] }, target: { ask: heaviest, id: croc }, feedback: { correctSay: pr-bs-4-ok, hintSay: pr-bs-4-hint } }
+      - { station: who-owns-what, band: 17, kind: logic-grid, say: pr-wo-food, prompt: "Lunch mystery! Use the clues to give everyone the right meal.", scene: { owners: [ { id: fire, emoji: "🧑‍🚒", label: Firefighter }, { id: artist, emoji: "🧑‍🎨", label: Artist }, { id: chef, emoji: "🧑‍🍳", label: Chef } ], items: [ { id: pizza, emoji: "🍕", label: Pizza }, { id: burger, emoji: "🍔", label: Burger }, { id: icecream, emoji: "🍦", label: Ice cream } ], clues: [ { a: fire, rel: is, b: pizza }, { a: artist, rel: not, b: icecream } ] }, target: { assign: { fire: pizza, artist: burger, chef: icecream } }, feedback: { correctSay: pr-wo-food-ok, hintSay: pr-wo-food-hint } }
+      - { station: who-owns-what, band: 17, kind: logic-grid, say: pr-wo-pets, prompt: "Pet mix-up! Whose pet is whose?", scene: { owners: [ { id: girl, emoji: "👧", label: Girl }, { id: boy, emoji: "👦", label: Boy }, { id: baby, emoji: "👶", label: Baby } ], items: [ { id: cat, emoji: "🐱", label: Cat }, { id: dog, emoji: "🐶", label: Dog }, { id: fish, emoji: "🐠", label: Fish } ], clues: [ { a: girl, rel: is, b: cat }, { a: boy, rel: not, b: fish } ] }, target: { assign: { girl: cat, boy: dog, baby: fish } }, feedback: { correctSay: pr-wo-pets-ok, hintSay: pr-wo-pets-hint } }
+      - { station: who-owns-what, band: 17, kind: logic-grid, say: pr-wo-drinks, prompt: "Monster snack time — who drinks what?", scene: { owners: [ { id: vampire, emoji: "🧛", label: Vampire }, { id: ghost, emoji: "👻", label: Ghost }, { id: robot, emoji: "🤖", label: Robot } ], items: [ { id: smoothie, emoji: "🍹", label: Smoothie }, { id: juice, emoji: "🧃", label: Juice }, { id: milk, emoji: "🥛", label: Milk } ], clues: [ { a: vampire, rel: is, b: smoothie }, { a: ghost, rel: not, b: juice } ] }, target: { assign: { vampire: smoothie, ghost: milk, robot: juice } }, feedback: { correctSay: pr-wo-drinks-ok, hintSay: pr-wo-drinks-hint } }
+      - { station: mini-sudoku, band: 18, kind: sudoku, say: pr-su-easy, prompt: "Pond sudoku! Every row, column and box needs all four friends.", scene: { symbols: ["🐟","🐸","🐢","🦆"], solution: [1,2,3,4,3,4,1,2,2,1,4,3,4,3,2,1], given: [1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1] }, target: { complete: true }, feedback: { correctSay: pr-su-easy-ok, hintSay: pr-su-easy-hint } }
+      - { station: mini-sudoku, band: 18, kind: sudoku, say: pr-su-med, prompt: "Fewer clues this time — the pond is trickier!", scene: { symbols: ["🐟","🐸","🐢","🦆"], solution: [1,2,3,4,3,4,1,2,2,1,4,3,4,3,2,1], given: [1,0,0,1,0,0,0,0,0,1,1,1,0,1,0,1] }, target: { complete: true }, feedback: { correctSay: pr-su-med-ok, hintSay: pr-su-med-hint } }
+      - { station: mini-sudoku, band: 18, kind: sudoku, say: pr-su-hard, prompt: "Master pond! Only six clues — deduce the rest.", scene: { symbols: ["🐟","🐸","🐢","🦆"], solution: [1,2,3,4,3,4,1,2,2,1,4,3,4,3,2,1], given: [1,1,0,0,0,0,0,0,1,0,1,0,0,1,1,0] }, target: { complete: true }, feedback: { correctSay: pr-su-hard-ok, hintSay: pr-su-hard-hint } }
+      - { station: detective-case, band: 19, kind: logic-grid, say: pr-dc-hats, prompt: "Detective case: only NO clues! Who wears what?", scene: { owners: [ { id: owl, emoji: "🦉", label: Owl }, { id: penguin, emoji: "🐧", label: Penguin }, { id: flamingo, emoji: "🦩", label: Flamingo } ], items: [ { id: hat, emoji: "🎩", label: Top hat }, { id: scarf, emoji: "🧣", label: Scarf }, { id: glasses, emoji: "👓", label: Glasses } ], clues: [ { a: owl, rel: not, b: hat }, { a: owl, rel: not, b: scarf }, { a: penguin, rel: not, b: hat } ] }, target: { assign: { owl: glasses, penguin: scarf, flamingo: hat } }, feedback: { correctSay: pr-dc-hats-ok, hintSay: pr-dc-hats-hint } }
+      - { station: detective-case, band: 19, kind: logic-grid, say: pr-dc-rides, prompt: "Case two: three friends, three rides, zero YES clues!", scene: { owners: [ { id: monkey, emoji: "🐵", label: Monkey }, { id: frog, emoji: "🐸", label: Frog }, { id: pig, emoji: "🐷", label: Pig } ], items: [ { id: car, emoji: "🚗", label: Car }, { id: bike, emoji: "🚲", label: Bike }, { id: scooter, emoji: "🛴", label: Scooter } ], clues: [ { a: monkey, rel: not, b: scooter }, { a: frog, rel: not, b: car }, { a: frog, rel: not, b: scooter } ] }, target: { assign: { monkey: car, frog: bike, pig: scooter } }, feedback: { correctSay: pr-dc-rides-ok, hintSay: pr-dc-rides-hint } }
+      - { station: detective-case, band: 19, kind: logic-grid, say: pr-dc-berry, prompt: "Final case! Mixed clues — read each one carefully.", scene: { owners: [ { id: bunny, emoji: "🐰", label: Bunny }, { id: hedgehog, emoji: "🦔", label: Hedgehog }, { id: parrot, emoji: "🦜", label: Parrot } ], items: [ { id: strawberry, emoji: "🍓", label: Strawberry }, { id: lemon, emoji: "🍋", label: Lemon }, { id: blueberry, emoji: "🫐", label: Blueberries } ], clues: [ { a: hedgehog, rel: is, b: lemon }, { a: parrot, rel: not, b: strawberry } ] }, target: { assign: { bunny: strawberry, hedgehog: lemon, parrot: blueberry } }, feedback: { correctSay: pr-dc-berry-ok, hintSay: pr-dc-berry-hint } }
 
 
   narration:
@@ -275,6 +300,43 @@ course:
     pr-rp-glove: "A glove goes on a hand. What does a sock go on?"
     pr-rp-glove-ok: "A foot! Glove is to hand as sock is to foot — a perfect pair."
     pr-rp-glove-hint: "Think about where you WEAR each one. Gloves warm hands, socks warm…?"
+    # Logic Lagoon
+    pr-bs-3: "The scales never lie! Who is the heaviest of all?"
+    pr-bs-3-ok: "The elephant! Heavier than the dog, who's heavier than the mouse — the chain tells all."
+    pr-bs-3-hint: "The heavy side always sinks DOWN. Follow the chain: who beats everyone?"
+    pr-bs-light: "Now the twist — who is the LIGHTEST of all?"
+    pr-bs-light-ok: "The squirrel! Lighter than the fox, who's lighter than the bear. You flipped the chain!"
+    pr-bs-light-hint: "Careful — this time you want the side that rises UP! Who never sinks?"
+    pr-bs-4: "Three scales, four animals. Who outweighs everyone?"
+    pr-bs-4-ok: "The crocodile! Croc beats panda, panda beats koala, koala beats penguin. One long chain!"
+    pr-bs-4-hint: "Link the scales into one line, heaviest to lightest. Who starts the line?"
+    pr-wo-food: "Lunch mystery! Use the clues to give everyone the right meal."
+    pr-wo-food-ok: "Solved! The firefighter's pizza was given, and the no-ice-cream clue told you the rest."
+    pr-wo-food-hint: "Start with the heart clue — it's a sure thing. Then the artist can't have ice cream… so who can?"
+    pr-wo-pets: "Pet mix-up! Whose pet is whose?"
+    pr-wo-pets-ok: "The cat purrs for the girl, the dog runs to the boy, and the baby giggles at the fish!"
+    pr-wo-pets-hint: "The girl's cat is certain. The boy says no to the fish — so what's left for him?"
+    pr-wo-drinks: "Monster snack time — who drinks what?"
+    pr-wo-drinks-ok: "The vampire slurps the smoothie, the ghost sips milk, and the robot… juices up!"
+    pr-wo-drinks-hint: "The vampire's drink is given. The ghost refuses juice — so which drink is the ghost's?"
+    pr-su-easy: "Pond sudoku! Every row, column and box needs all four friends."
+    pr-su-easy-ok: "The pond is perfectly balanced — every row, column and box has all four friends!"
+    pr-su-easy-hint: "Two of the same friend are clashing! Find a row or box with a repeat and fix it."
+    pr-su-med: "Fewer clues this time — the pond is trickier!"
+    pr-su-med-ok: "Beautiful deduction! You found every friend's spot with fewer clues."
+    pr-su-med-hint: "Look for a row or box that already has three friends — the fourth spot is forced!"
+    pr-su-hard: "Master pond! Only six clues — deduce the rest."
+    pr-su-hard-ok: "Six clues were enough for you — that's true master deduction!"
+    pr-su-hard-hint: "Don't guess — find the one cell where only ONE friend can legally go, and start there."
+    pr-dc-hats: "Detective case: only NO clues! Who wears what?"
+    pr-dc-hats-ok: "Elementary! Two NOs left the owl only the glasses — and the rest fell into place."
+    pr-dc-hats-hint: "The owl says no to the hat AND the scarf… so what MUST the owl wear?"
+    pr-dc-rides: "Case two: three friends, three rides, zero YES clues!"
+    pr-dc-rides-ok: "Case closed! The frog's two NOs forced the bike, and everything followed."
+    pr-dc-rides-hint: "The frog rejects the car and the scooter. That leaves exactly one ride…"
+    pr-dc-berry: "Final case! Mixed clues — read each one carefully."
+    pr-dc-berry-ok: "Master detective! Lemon for the hedgehog, and the parrot's NO gave the bunny her strawberry."
+    pr-dc-berry-hint: "The hedgehog's lemon is certain. The parrot won't touch the strawberry — so who gets it?"
     # reactions
     praise-0: "Brilliant thinking!"
     praise-1: "You cracked it!"
