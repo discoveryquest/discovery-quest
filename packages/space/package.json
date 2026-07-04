@@ -11,7 +11,8 @@
     "./MapScreen": "./src/MapScreen.jsx",
     "./CourseLesson": "./src/CourseLesson.jsx",
     "./boardRegistry": "./src/boardRegistry.js",
-    "./SpaceQuest3D": "./src/SpaceQuest.jsx"
+    "./SpaceQuest3D": "./src/SpaceQuest.jsx",
+    "./bodies": "./src/scene/bodies/index.js"
   },
   "scripts": { "test": "node --test" },
   "dependencies": {
