@@ -36,7 +36,9 @@ function PortraitGroup({ portraitScale, children }) {
 export default function Stage3D({ camera = { position: [0, 4, 12], fov: 46 }, ambient = 0.14, portraitScale = 1, overlay, children }) {
   return (
     <div className="fixed inset-0" data-stage3d>
-      <Canvas dpr={[1, 2]} camera={camera} gl={{ antialias: true }}>
+      {/* touch-action none or the browser steals drags for scrolling after
+          ~2 moves and fires pointercancel — THE mobile drag killer */}
+      <Canvas dpr={[1, 2]} camera={camera} gl={{ antialias: true }} style={{ touchAction: 'none' }}>
         <FitCamera position={camera.position} fov={camera.fov ?? 46} />
         <color attach="background" args={['#01020a']} />
         <ambientLight intensity={ambient} />
