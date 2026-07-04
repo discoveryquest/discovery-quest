@@ -36,6 +36,8 @@ export function isStationOpen(save, world, index) {
 }
 
 const playableOf = (worlds) => worlds.flatMap((w) => w.stations.filter((s) => !s.soon));
+// Station ids that count toward the course Hero badge (every playable station).
+export const playableStationIds = (worlds) => playableOf(worlds).map((s) => s.id);
 export const totalStars = (save, worlds) => playableOf(worlds).reduce((n, s) => n + starsOf(save, s.id), 0);
 export const maxStars = (worlds) => playableOf(worlds).length * 3;
 

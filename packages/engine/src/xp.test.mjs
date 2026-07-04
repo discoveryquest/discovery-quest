@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computeXp, XP } from './xp.js';
+import { computeXp, xpBreakdown, XP } from './xp.js';
 
 const save = (over = {}) => ({ stations: {}, telemetry: {}, conceptSeen: {}, ...over });
 
@@ -74,4 +74,21 @@ test('heroProgress returns level + pct in [0,1)', () => {
 test('totalXp sums an xpByCourse map', () => {
   assert.equal(totalXp({ math: 3100, english: 980, 'english-ru': 740 }), 4820);
   assert.equal(totalXp(undefined), 0);
+});
+
+test('xpBreakdown splits by source and sums to computeXp', () => {
+  const s = { stations: { s1: { stars: 3 } }, conceptSeen: { c1: 1 },
+    telemetry: { '2026-06-10': { s1: { correct: 4, reviewsHit: 2 } } } };
+  const b = xpBreakdown(s);
+  assert.equal(b.stars, 3 * XP.PER_STAR);
+  assert.equal(b.correct, 4 * XP.CORRECT);
+  assert.equal(b.reviews, 2 * XP.REVIEW);
+  assert.equal(b.streak, 1 * XP.STREAK);
+  assert.equal(b.concepts, 1 * XP.CONCEPT);
+  assert.equal(b.total, computeXp(s));
+});
+
+test('xpBreakdown of empty/null → zeros', () => {
+  assert.equal(xpBreakdown(null).total, 0);
+  assert.equal(xpBreakdown({}).total, 0);
 });
