@@ -7,10 +7,10 @@ this spec assumes zero session context; every convention is spelled out).*
 ages 6–10: matchstick puzzles, count-the-shapes, pattern matrices,
 riddles/analogies, and grid deduction — many worlds with increasing difficulty.
 
-**Working name:** Logic Quest (`logic`, save key `lq-save`, fly app
-`discoveryquest-logic`, subdomain `logic.discoveryquest.app`). Kid-facing brand
-on the map: **Logic <span cyan>Quest</span>** — Pavel may rename (alternatives
-considered: Puzzle Quest, Brain Quest).
+**Name (APPROVED by Pavel 2026-07-04):** Logic Quest (`logic`, save key
+`lq-save`, fly app `discoveryquest-logic`, subdomain
+`logic.discoveryquest.app`). Kid-facing brand on the map:
+**Logic <span cyan>Quest</span>**.
 
 ## 1. Why this shape
 
@@ -21,23 +21,28 @@ matches stays the same — count them!") and the **practice applies it**. Stars
 reward flawless application (existing `flawedRef` mechanic: hint used = flawed
 mission; clean ≥ total → 3⭐).
 
-## 2. Course structure — 6 worlds × 4 stations
+## 2. Course structure — 6 worlds × 4 stations to start, open-ended
 
-Worlds are themed by mechanic family early (kids master one tool at a time) and
-mix at the end; difficulty ramps both across stations within a world and across
-worlds. `startWorldForAge` gates like Space (older kids start higher).
+Pavel's guidance: structure is whatever the content supports — the course can
+grow to many worlds (he floated "20 × 5") as long as difficulty keeps ramping.
+So: ship the 6-world arc below first, and treat it as the spine of an
+**extensible ladder** — new worlds append harder remixes of the same mechanics
+(the YAML pipeline makes adding a world pure content work, no code). Worlds are
+themed by mechanic family early (kids master one tool at a time) and mix at the
+end; difficulty ramps both across stations within a world and across worlds.
+`startWorldForAge` gates like Space (older kids start higher).
 
 | # | World | Mechanic focus | Sample stations (each = lesson + 3-5 missions) |
 |---|-------|----------------|--------------------------------------------|
 | 1 | Matchstick Meadow | `matchstick` | fix a digit (move 1), make the biggest number, fix an equation (6+3=8), two-move equations |
 | 2 | Shape Shore | `shapeCount` | count squares in a grid, triangles easy (no overlaps), triangles with composites, hidden rectangles |
 | 3 | Pattern Peaks | `patternPick` | what comes next (ABAB…), growing patterns, odd one out, 3×3 matrices (Raven-style) |
-| 4 | Riddle Rapids | `patternPick` + quiz | picture analogies (A:B :: C:?), lateral riddles with picture answers, "which is impossible?", estimation riddles |
+| 4 | Riddle Rapids | `riverCross`, `pourJugs`, `whichFills` | ferry the fox/chicken/grain across, measure 4 with a 3-jug and a 5-jug, which cup fills first (animated pipe maze), analogies (A:B :: C:?) |
 | 5 | Logic Lagoon | `logicGrid`, `balance` | balance scales (which is heavier, given A>B, B>C), who-owns-what 3×3 deduction, mini-sudoku 4×4 with emoji, true/false detectives |
 | 6 | Master Mountain | all, hard | 2-move matchsticks, big composite shape counts, 3×3 matrices hard, mixed gauntlet |
 
-Worlds 1–3 = MVP ship; 4–6 = fast-follow (mechanics for 4 already exist by then;
-5 adds two, 6 adds none).
+Worlds 1–3 = MVP ship; 4–6 = fast-follow (4 adds the three riddle engines,
+5 adds two mechanics, 6 adds none — pure content).
 
 ## 3. New practice mechanics (the real work)
 
@@ -91,7 +96,34 @@ grid prompt earns its own mechanic.
 - YAML: `scene: { kind: patternPick, grid: [[...],[...],[...]] | sequence: [...] , choices: [...] }`,
   `target: { answer: <choice id> }`.
 
-### 3.4 `logicGrid` + `balance` (world 5, fast-follow)
+### 3.4 Riddle mechanics (world 4) — interactive, animated, touch + mouse
+Pavel's requirement (2026-07-04): riddles must NOT be static picture
+multiple-choice — they are **manipulable animated scenes**, working equally on
+phone (tap/drag) and desktop. Three classic-riddle engines:
+
+- `riverCross`: the fox/chicken/grain family. Emoji characters on a river bank,
+  a boat that holds the farmer + one passenger; tap a character to load, tap GO
+  to row across (spring-animated boat + bobbing water). Forbidden pairs left
+  alone trigger a playful fail animation (🦊 chases 🐔) and reset the trip —
+  the fail IS the feedback. YAML: `scene: { kind: riverCross, cast: [...],
+  boatSeats: 1, forbidden: [[fox,chicken],[chicken,grain]] }`,
+  `target: { allAcross: true }`. Variants rethemed (🐺🐐🥬, aliens…) and scaled
+  (2-seat boats, 4 characters) for harder worlds.
+- `pourJugs`: water-measuring riddles. 2-3 jugs with animated fill levels
+  (liquid wobble on pour); tap source jug → tap destination to pour (fills to
+  capacity or empties source); tap the tap 🚰 to refill, drain to empty.
+  Move counter optional. `target: { amount: 4 }` in any jug.
+- `whichFills`: an animated pipe/cup maze — water pours from the top through
+  branching pipes, some secretly blocked; kid predicts which cup fills first by
+  tapping it, THEN the water animates down and proves it. Wrong guess still
+  gets the full animation (the payoff teaches), then retry on a sibling puzzle.
+  YAML declares the pipe graph + blocked edges; the renderer animates flow
+  along it.
+
+All three obey standard touch rules: tap-to-select (no precision dragging
+required), ≥44px touch targets, works with the draggable Luna overlay.
+
+### 3.5 `logicGrid` + `balance` (world 5, fast-follow)
 - `logicGrid`: 3×3 board, clue list read by Luna one at a time, drag emoji from
   a tray into cells; check button validates against the unique solution.
 - `balance`: a see-saw scale (spring-animated tilt); given pictured
@@ -119,9 +151,9 @@ grid prompt earns its own mechanic.
 
 Warm workshop-at-night vibe to contrast Space's deep blue: aubergine→amber
 gradient shell, matchsticks with glowing tips, chalk-on-slate figures for
-shapeCount. Luna wears tiny round glasses? (ask Pavel — one SVG accessory prop
-on LunaOwl, opt-in per course). Keep all typography/buttons identical to other
-courses (consistency directive).
+shapeCount. **Luna stays byte-identical to every other course** (Pavel's call —
+no per-course accessories; do not fork LunaOwl). Keep all typography/buttons
+identical to other courses (consistency directive).
 
 ## 6. Build plan (phases, each independently shippable)
 
@@ -135,10 +167,13 @@ courses (consistency directive).
    visuals**, then bake voice, then public: landing card + subdomain.
 5. **Worlds 4-6** — riddles content, logicGrid + balance, Master Mountain.
 
-## 7. Open questions for Pavel
+## 7. Decisions (answered by Pavel 2026-07-04 — spec is build-ready)
 
-1. Name: Logic Quest vs Puzzle Quest?
-2. 6×4 structure OK, or match Space's 4×5?
-3. Luna accessory (glasses/detective hat) per-course, or keep her identical?
-4. Riddle Rapids: text riddles need reading — gate world 4 by age, or keep all
-   riddles picture-based?
+1. **Name:** Logic Quest. ✅
+2. **Structure:** flexible — whatever the content supports; grow past 6 worlds
+   freely (even 20×5) as long as difficulty keeps climbing. Ship the 6-world
+   spine first.
+3. **Luna:** identical across all courses, no accessories.
+4. **Riddles:** not picture-only MCQ — real interactive animated scenes
+   (riverCross / pourJugs / whichFills, §3.4), first-class on both mobile and
+   desktop.
