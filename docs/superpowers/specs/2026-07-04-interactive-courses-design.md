@@ -205,13 +205,14 @@ ARE tap questions. What changes:
    course beats retrofits for motivation
 7. Math long-board sidekicks + geometry/decimals; Space kit retrofit; polish
 
-## 8. Open questions for Pavel
+## 8. Decisions (answered by Pavel 2026-07-04 — spec is build-ready)
 
-1. Build order: Math retrofit first (flagship, §7 as written) or Logic Quest
-   first (greenfield, no regression risk, kit matures before touching live
-   courses)?
-2. Band 2 = keypad fluency mode: agreed that older/mastery play graduates from
-   blocks to digits, or should manipulatives stay available at every band
-   (toggle button)?
-3. Sentence act-it-out scenes (English/EFL): worth the content-tagging cost,
-   or ship tile-fusion feedback first and add scenes as delight later?
+1. **Math first.** Build order stands exactly as §7: kit → Math blockAdd/
+   blockTake → Math phases 3-5 → English → EFL → Logic → polish.
+2. **Confirmed:** bands 0-1 manipulative, band 2 graduates to keypad fluency.
+   No toggle.
+3. **Act-it-out scenes: NOW** — the sentence mini-scenes ship with the English
+   builder rework, not as a later delight layer.
+
+Implementation plan for the first slice (kit + Math blocks):
+`docs/superpowers/plans/2026-07-04-interact-kit-math-blocks-plan.md`.
