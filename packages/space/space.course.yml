@@ -1,0 +1,358 @@
+course:
+  formatVersion: 1
+  id: space
+  title: Space Quest
+  subject: Science
+  companion: luna
+  voice:
+    id: jessica
+    profile: teaching-slow
+  ui:
+    done: "Mission complete!"
+    backToMap: "Back to the star map"
+    score: "You logged {correct} of {total} discoveries!"
+  reactions:
+    praise: [praise-0, praise-1, praise-2, praise-3]
+    oops: [oops-0, oops-1, oops-2]
+    solved: [solved-0, solved-1]
+  engine: ">=1.0"
+
+  worlds:
+    - id: backyard-sky
+      title: The Backyard Sky
+      emoji: 🌙
+      color: "#22D3EE"
+      blurb: Earth, the Moon, the Sun, seasons, and gravity.
+      stations:
+        - { id: moon-phases, title: Moon Phases, icon: 🌗, sub: why the Moon changes shape, board: quiz, bands: [0], lesson: moon-phases, concept: moon-phases }
+        - { id: day-night, title: Day & Night, icon: 🌍, sub: why we have day and night, board: quiz, bands: [1], lesson: day-night, concept: day-night-cycle }
+        - { id: the-sun, title: Our Star, icon: 🌞, sub: the Sun, our nearest star, board: quiz, bands: [2], lesson: the-sun, concept: our-star }
+        - { id: seasons, title: The Seasons, icon: 🍂, sub: why the year changes, board: quiz, bands: [3], lesson: seasons, concept: seasons }
+        - { id: gravity, title: Gravity, icon: ⬇️, sub: the pull that holds us down, board: quiz, bands: [4], lesson: gravity, concept: gravity-pulls-down }
+
+    - id: cosmic-neighborhood
+      title: Cosmic Neighborhood
+      emoji: 🪐
+      color: "#A78BFA"
+      blurb: The Solar System — planets, moons, rings, and space rocks.
+      stations:
+        - { id: inner-outer, title: Inner & Outer Planets, icon: 🪨, sub: rocky planets vs gas giants, board: quiz, bands: [5], lesson: inner-outer, concept: inner-vs-outer-planets }
+        - { id: gas-giants, title: The Gas Giants, icon: 🪐, sub: the giant outer planets, board: quiz, bands: [6], lesson: gas-giants, concept: gas-giants }
+        - { id: moons-rings, title: Moons & Rings, icon: 💍, sub: moons and ring systems, board: quiz, bands: [7], lesson: moons-rings, concept: moons-and-rings }
+        - { id: asteroids-comets, title: Asteroids & Comets, icon: ☄️, sub: space rocks and icy visitors, board: quiz, bands: [8], lesson: asteroids-comets, concept: small-bodies }
+        - { id: whole-system, title: The Whole System, icon: 📏, sub: order and scale, board: quiz, bands: [9], lesson: whole-system, concept: solar-system-order }
+
+    - id: deep-space
+      title: Deep Space
+      emoji: 🌌
+      color: "#818CF8"
+      blurb: Constellations, the lives of stars, nebulae, galaxies, and black holes.
+      stations:
+        - { id: constellations, title: Constellations, icon: ✨, sub: patterns in the stars, board: quiz, bands: [10], lesson: constellations, concept: constellations }
+        - { id: star-life, title: A Star's Life, icon: ⭐, sub: how stars are born and die, board: quiz, bands: [11], lesson: star-life, concept: star-lifecycle }
+        - { id: nebulae, title: Nebulae, icon: ☁️, sub: where stars are born, board: quiz, bands: [12], lesson: nebulae, concept: nebulae }
+        - { id: galaxies, title: Galaxies, icon: 🌌, sub: islands of billions of stars, board: quiz, bands: [13], lesson: galaxies, concept: galaxies }
+        - { id: black-holes, title: Black Holes, icon: 🕳️, sub: gravity so strong light can't escape, board: quiz, bands: [14], lesson: black-holes, concept: black-holes }
+
+    - id: human-element
+      title: The Human Element
+      emoji: 🛰️
+      color: "#2DD4BF"
+      blurb: Satellites, the ISS, spacewalks, rockets, and living on Mars.
+      stations:
+        - { id: life-in-orbit, title: Life in Orbit, icon: 🛰️, sub: living on the ISS, board: quiz, bands: [15], lesson: life-in-orbit, concept: iss-astronauts }
+        - { id: getting-there, title: Getting There, icon: 🚀, sub: how we reach space, board: quiz, bands: [16], lesson: getting-there, concept: space-travel-tech }
+        - { id: satellites, title: Satellites, icon: 📡, sub: helpers orbiting Earth, board: quiz, bands: [17], lesson: satellites, concept: satellites }
+        - { id: spacewalks, title: Spacewalks, icon: 🧑‍🚀, sub: working outside the ship, board: quiz, bands: [18], lesson: spacewalks, concept: spacesuits }
+        - { id: mars-base, title: Mars Base, icon: 🔴, sub: living on another world, board: quiz, bands: [19], lesson: mars-base, concept: living-off-earth }
+
+  lessons:
+    moon-phases:
+      title: Moon Phases
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: mp-0, caption: "The Moon makes no light of its own — it shines by reflecting sunlight.", advance: hold, view: { kind: fact, key: mp0, emoji: 🌙, text: "The Moon makes no light of its own — it shines by reflecting sunlight." } }
+            - { say: mp-1, caption: "As the Moon orbits Earth, we see more or less of its sunlit half. That's a phase!", advance: hold, view: { kind: fact, key: mp1, emoji: 🌗, text: "As the Moon orbits Earth, we see more or less of its sunlit half. That's a phase!" } }
+            - { say: mp-2, caption: "The phases cycle about every 29 days — new moon to full moon and back.", advance: hold, view: { kind: fact, key: mp2, emoji: 🔁, text: "The phases cycle about every 29 days — new moon to full moon and back." } }
+    day-night:
+      title: Day & Night
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: dn-0, caption: "Earth spins like a top — one full spin takes about 24 hours.", advance: hold, view: { kind: fact, key: dn0, emoji: 🌍, text: "Earth spins like a top — one full spin takes about 24 hours." } }
+            - { say: dn-1, caption: "The side facing the Sun has daytime; the side facing away has night.", advance: hold, view: { kind: fact, key: dn1, emoji: ☀️, text: "The side facing the Sun has daytime; the side facing away has night." } }
+            - { say: dn-2, caption: "It's Earth's spinning — not the Sun moving — that gives us day and night.", advance: hold, view: { kind: fact, key: dn2, emoji: 🔄, text: "It's Earth's spinning — not the Sun moving — that gives us day and night." } }
+    the-sun:
+      title: Our Star
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: su-0, caption: "The Sun is a star — the closest one to Earth.", advance: hold, view: { kind: fact, key: su0, emoji: 🌞, text: "The Sun is a star — the closest one to Earth." } }
+            - { say: su-1, caption: "It's a giant ball of super-hot, glowing gas.", advance: hold, view: { kind: fact, key: su1, emoji: 🔥, text: "It's a giant ball of super-hot, glowing gas." } }
+            - { say: su-2, caption: "The Sun gives Earth almost all of its light and heat.", advance: hold, view: { kind: fact, key: su2, emoji: 💡, text: "The Sun gives Earth almost all of its light and heat." } }
+    seasons:
+      title: The Seasons
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: se-0, caption: "Earth is tilted as it circles the Sun.", advance: hold, view: { kind: fact, key: se0, emoji: 🌍, text: "Earth is tilted as it circles the Sun." } }
+            - { say: se-1, caption: "That tilt makes sunlight stronger at some times of year — that's seasons.", advance: hold, view: { kind: fact, key: se1, emoji: ☀️, text: "That tilt makes sunlight stronger at some times of year — that's seasons." } }
+            - { say: se-2, caption: "When your half of Earth tilts toward the Sun, it's summer; tilted away, it's winter.", advance: hold, view: { kind: fact, key: se2, emoji: 🍂, text: "When your half of Earth tilts toward the Sun, it's summer; tilted away, it's winter." } }
+    gravity:
+      title: Gravity
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: gr-0, caption: "Gravity is a pull. Everything with mass pulls on everything else.", advance: hold, view: { kind: fact, key: gr0, emoji: 🪐, text: "Gravity is a pull. Everything with mass pulls on everything else." } }
+            - { say: gr-1, caption: "Earth's gravity pulls things toward its center — that's why things fall down.", advance: hold, view: { kind: fact, key: gr1, emoji: ⬇️, text: "Earth's gravity pulls things toward its center — that's why things fall down." } }
+            - { say: gr-2, caption: "The more mass something has, the stronger its gravity pull.", advance: hold, view: { kind: fact, key: gr2, emoji: 🚀, text: "The more mass something has, the stronger its gravity pull." } }
+    inner-outer:
+      title: Inner & Outer Planets
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: io-0, caption: "Our Solar System has 8 planets, all circling the Sun.", advance: hold, view: { kind: fact, key: io0, emoji: ☀️, text: "Our Solar System has 8 planets, all circling the Sun." } }
+            - { say: io-1, caption: "The 4 inner planets — Mercury, Venus, Earth, Mars — are small and rocky.", advance: hold, view: { kind: fact, key: io1, emoji: 🪨, text: "The 4 inner planets — Mercury, Venus, Earth, Mars — are small and rocky." } }
+            - { say: io-2, caption: "The 4 outer planets are huge balls of gas and ice, much farther out.", advance: hold, view: { kind: fact, key: io2, emoji: 🎈, text: "The 4 outer planets are huge balls of gas and ice, much farther out." } }
+    gas-giants:
+      title: The Gas Giants
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: gg-0, caption: "Jupiter is the biggest planet — over 1,000 Earths could fit inside!", advance: hold, view: { kind: fact, key: gg0, emoji: 🪐, text: "Jupiter is the biggest planet — over 1,000 Earths could fit inside!" } }
+            - { say: gg-1, caption: "Saturn is famous for its bright rings, made of ice and rock.", advance: hold, view: { kind: fact, key: gg1, emoji: 💍, text: "Saturn is famous for its bright rings, made of ice and rock." } }
+            - { say: gg-2, caption: "Uranus and Neptune are icy giants, way out in the cold.", advance: hold, view: { kind: fact, key: gg2, emoji: ❄️, text: "Uranus and Neptune are icy giants, way out in the cold." } }
+    moons-rings:
+      title: Moons & Rings
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: mr-0, caption: "Many planets have moons — Jupiter has dozens of them!", advance: hold, view: { kind: fact, key: mr0, emoji: 🌝, text: "Many planets have moons — Jupiter has dozens of them!" } }
+            - { say: mr-1, caption: "Saturn's rings are made of billions of icy chunks.", advance: hold, view: { kind: fact, key: mr1, emoji: 💍, text: "Saturn's rings are made of billions of icy chunks." } }
+            - { say: mr-2, caption: "Earth has just one moon, but some planets have many.", advance: hold, view: { kind: fact, key: mr2, emoji: 🌚, text: "Earth has just one moon, but some planets have many." } }
+    asteroids-comets:
+      title: Asteroids & Comets
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: ac-0, caption: "A comet is an icy ball that grows a glowing tail near the Sun.", advance: hold, view: { kind: fact, key: ac0, emoji: ☄️, text: "A comet is an icy ball that grows a glowing tail near the Sun." } }
+            - { say: ac-1, caption: "Asteroids are rocky leftovers from when the planets formed.", advance: hold, view: { kind: fact, key: ac1, emoji: 🪨, text: "Asteroids are rocky leftovers from when the planets formed." } }
+            - { say: ac-2, caption: "Most asteroids orbit in a belt between Mars and Jupiter.", advance: hold, view: { kind: fact, key: ac2, emoji: 🌌, text: "Most asteroids orbit in a belt between Mars and Jupiter." } }
+    whole-system:
+      title: The Whole System
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: ws-0, caption: "Space is huge — the outer planets are billions of kilometers from the Sun.", advance: hold, view: { kind: fact, key: ws0, emoji: 📏, text: "Space is huge — the outer planets are billions of kilometers from the Sun." } }
+            - { say: ws-1, caption: "Mercury is closest to the Sun; Neptune is the farthest of the 8 planets.", advance: hold, view: { kind: fact, key: ws1, emoji: 🥇, text: "Mercury is closest to the Sun; Neptune is the farthest of the 8 planets." } }
+            - { say: ws-2, caption: "Planets near the Sun are hot; far-away planets are freezing cold.", advance: hold, view: { kind: fact, key: ws2, emoji: 🌡️, text: "Planets near the Sun are hot; far-away planets are freezing cold." } }
+    constellations:
+      title: Constellations
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: cn-0, caption: "A constellation is a pattern of stars that people imagined into pictures.", advance: hold, view: { kind: fact, key: cn0, emoji: ✨, text: "A constellation is a pattern of stars that people imagined into pictures." } }
+            - { say: cn-1, caption: "Sailors and explorers used constellations to find their way at night.", advance: hold, view: { kind: fact, key: cn1, emoji: 🧭, text: "Sailors and explorers used constellations to find their way at night." } }
+            - { say: cn-2, caption: "As Earth orbits the Sun, different constellations appear with the seasons.", advance: hold, view: { kind: fact, key: cn2, emoji: 🌍, text: "As Earth orbits the Sun, different constellations appear with the seasons." } }
+    star-life:
+      title: A Star's Life
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: sl-0, caption: "Stars are born inside giant clouds of gas and dust called nebulae.", advance: hold, view: { kind: fact, key: sl0, emoji: ☁️, text: "Stars are born inside giant clouds of gas and dust called nebulae." } }
+            - { say: sl-1, caption: "A star shines for millions or billions of years by burning fuel in its core.", advance: hold, view: { kind: fact, key: sl1, emoji: ⭐, text: "A star shines for millions or billions of years by burning fuel in its core." } }
+            - { say: sl-2, caption: "When a giant star runs out of fuel, it can explode in a supernova.", advance: hold, view: { kind: fact, key: sl2, emoji: 💥, text: "When a giant star runs out of fuel, it can explode in a supernova." } }
+    nebulae:
+      title: Nebulae
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: ne-0, caption: "A nebula is a giant cloud of gas and dust floating in space.", advance: hold, view: { kind: fact, key: ne0, emoji: ☁️, text: "A nebula is a giant cloud of gas and dust floating in space." } }
+            - { say: ne-1, caption: "New stars are born deep inside nebulae.", advance: hold, view: { kind: fact, key: ne1, emoji: ⭐, text: "New stars are born deep inside nebulae." } }
+            - { say: ne-2, caption: "Nebulae glow in beautiful colors — pink, teal, and violet.", advance: hold, view: { kind: fact, key: ne2, emoji: 🎨, text: "Nebulae glow in beautiful colors — pink, teal, and violet." } }
+    galaxies:
+      title: Galaxies
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: ga-0, caption: "A galaxy is a huge family of billions of stars.", advance: hold, view: { kind: fact, key: ga0, emoji: 🌌, text: "A galaxy is a huge family of billions of stars." } }
+            - { say: ga-1, caption: "We live in the Milky Way galaxy.", advance: hold, view: { kind: fact, key: ga1, emoji: 🏠, text: "We live in the Milky Way galaxy." } }
+            - { say: ga-2, caption: "There are billions of galaxies scattered across the universe.", advance: hold, view: { kind: fact, key: ga2, emoji: 🔭, text: "There are billions of galaxies scattered across the universe." } }
+    black-holes:
+      title: Black Holes
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: bh-0, caption: "A black hole has gravity so strong that not even light can escape it.", advance: hold, view: { kind: fact, key: bh0, emoji: 🕳️, text: "A black hole has gravity so strong that not even light can escape it." } }
+            - { say: bh-1, caption: "Many black holes form when a giant star collapses at the end of its life.", advance: hold, view: { kind: fact, key: bh1, emoji: 🌟, text: "Many black holes form when a giant star collapses at the end of its life." } }
+            - { say: bh-2, caption: "We can't see black holes directly — we spot them by how they pull on nearby stars.", advance: hold, view: { kind: fact, key: bh2, emoji: 🔭, text: "We can't see black holes directly — we spot them by how they pull on nearby stars." } }
+    life-in-orbit:
+      title: Life in Orbit
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: lo-0, caption: "The International Space Station orbits Earth about every 90 minutes.", advance: hold, view: { kind: fact, key: lo0, emoji: 🛰️, text: "The International Space Station orbits Earth about every 90 minutes." } }
+            - { say: lo-1, caption: "Astronauts float because they're in constant free-fall around Earth.", advance: hold, view: { kind: fact, key: lo1, emoji: 🧑‍🚀, text: "Astronauts float because they're in constant free-fall around Earth." } }
+            - { say: lo-2, caption: "Crews run science experiments you can't do on the ground.", advance: hold, view: { kind: fact, key: lo2, emoji: 🔬, text: "Crews run science experiments you can't do on the ground." } }
+    getting-there:
+      title: Getting There
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: gt-0, caption: "Rockets push hot gas down hard, and that thrust pushes them up into space.", advance: hold, view: { kind: fact, key: gt0, emoji: 🚀, text: "Rockets push hot gas down hard, and that thrust pushes them up into space." } }
+            - { say: gt-1, caption: "Reaching orbit takes enormous speed — about 28,000 km/h!", advance: hold, view: { kind: fact, key: gt1, emoji: ⛽, text: "Reaching orbit takes enormous speed — about 28,000 km/h!" } }
+            - { say: gt-2, caption: "Many rockets now land back on Earth so they can be flown again.", advance: hold, view: { kind: fact, key: gt2, emoji: 🪂, text: "Many rockets now land back on Earth so they can be flown again." } }
+    satellites:
+      title: Satellites
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: sa-0, caption: "Satellites are machines that circle Earth doing helpful jobs.", advance: hold, view: { kind: fact, key: sa0, emoji: 🛰️, text: "Satellites are machines that circle Earth doing helpful jobs." } }
+            - { say: sa-1, caption: "They help with TV, phones, maps, and weather forecasts.", advance: hold, view: { kind: fact, key: sa1, emoji: 📡, text: "They help with TV, phones, maps, and weather forecasts." } }
+            - { say: sa-2, caption: "Weather satellites watch storms from high above the Earth.", advance: hold, view: { kind: fact, key: sa2, emoji: 🌦️, text: "Weather satellites watch storms from high above the Earth." } }
+    spacewalks:
+      title: Spacewalks
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: sw-0, caption: "A spacesuit gives astronauts air to breathe and keeps them safe.", advance: hold, view: { kind: fact, key: sw0, emoji: 🧑‍🚀, text: "A spacesuit gives astronauts air to breathe and keeps them safe." } }
+            - { say: sw-1, caption: "A spacewalk is when astronauts work outside their spacecraft.", advance: hold, view: { kind: fact, key: sw1, emoji: 🚶, text: "A spacewalk is when astronauts work outside their spacecraft." } }
+            - { say: sw-2, caption: "Suits protect them from the freezing, airless vacuum of space.", advance: hold, view: { kind: fact, key: sw2, emoji: 🧤, text: "Suits protect them from the freezing, airless vacuum of space." } }
+    mars-base:
+      title: Mars Base
+      sections:
+        - id: learn
+          label: Learn it
+          beats:
+            - { say: mb-0, caption: "Mars is a cold, dusty desert world — about half the size of Earth.", advance: hold, view: { kind: fact, key: mb0, emoji: 🔴, text: "Mars is a cold, dusty desert world — about half the size of Earth." } }
+            - { say: mb-1, caption: "A trip to Mars takes around 7 months with today's rockets.", advance: hold, view: { kind: fact, key: mb1, emoji: 🥶, text: "A trip to Mars takes around 7 months with today's rockets." } }
+            - { say: mb-2, caption: "Future explorers will need to bring or make their own air, water, and food.", advance: hold, view: { kind: fact, key: mb2, emoji: 🏠, text: "Future explorers will need to bring or make their own air, water, and food." } }
+
+  content:
+    questions:
+      # ── Backyard Sky ──
+      - { question: "What gives the Moon its light?", answer: "The Sun", distractors: ["The Moon itself", "Earth's glow"], band: 0 }
+      - { question: "Why does the Moon look different on different nights?", answer: "We see more or less of its sunlit half", distractors: ["It changes its shape", "Clouds cover parts of it"], band: 0 }
+      - { question: "What causes day and night?", answer: "Earth spinning", distractors: ["The Sun turning off", "The Moon blocking the Sun"], band: 1 }
+      - { question: "About how long is one full spin of Earth?", answer: "24 hours", distractors: ["1 hour", "1 week"], band: 1 }
+      - { question: "What is the Sun?", answer: "A star", distractors: ["A planet", "A moon"], band: 2 }
+      - { question: "Why does the Sun look so much bigger than other stars?", answer: "It's the closest star to us", distractors: ["It's the biggest thing in space", "It is on fire"], band: 2 }
+      - { question: "What causes the seasons?", answer: "Earth's tilt", distractors: ["The Sun moving", "Clouds"], band: 3 }
+      - { question: "When is it summer where you live?", answer: "When your half of Earth tilts toward the Sun", distractors: ["When Earth is closest to the Sun", "When it rains a lot"], band: 3 }
+      - { question: "Which way does Earth's gravity pull things?", answer: "Down, toward Earth's center", distractors: ["Up, into the sky", "Sideways"], band: 4 }
+      - { question: "What has stronger gravity?", answer: "Something with more mass", distractors: ["Something more colorful", "Something moving faster"], band: 4 }
+      # ── Cosmic Neighborhood ──
+      - { question: "How many planets orbit our Sun?", answer: "8", distractors: ["5", "12"], band: 5 }
+      - { question: "What are the inner planets mostly made of?", answer: "Rock", distractors: ["Gas", "Ice"], band: 5 }
+      - { question: "Which is the biggest planet?", answer: "Jupiter", distractors: ["Earth", "Mars"], band: 6 }
+      - { question: "What are Saturn's rings made of?", answer: "Ice and rock", distractors: ["Gas", "Fire"], band: 6 }
+      - { question: "Which planet is famous for its rings?", answer: "Saturn", distractors: ["Mars", "Mercury"], band: 7 }
+      - { question: "How many moons does Earth have?", answer: "One", distractors: ["Zero", "Twelve"], band: 7 }
+      - { question: "What grows a glowing tail near the Sun?", answer: "A comet", distractors: ["A planet", "A moon"], band: 8 }
+      - { question: "Where is the asteroid belt?", answer: "Between Mars and Jupiter", distractors: ["Around the Moon", "Past Neptune"], band: 8 }
+      - { question: "Which planet is closest to the Sun?", answer: "Mercury", distractors: ["Earth", "Neptune"], band: 9 }
+      - { question: "Why are the far-away planets so cold?", answer: "They get less heat from the Sun", distractors: ["They have no color", "They spin slower"], band: 9 }
+      # ── Deep Space ──
+      - { question: "What is a constellation?", answer: "A pattern of stars", distractors: ["A kind of planet", "A space rock"], band: 10 }
+      - { question: "What did people use constellations for?", answer: "To find their way", distractors: ["To cook food", "To make rain"], band: 10 }
+      - { question: "Where are stars born?", answer: "In clouds of gas and dust", distractors: ["Inside planets", "On the Moon"], band: 11 }
+      - { question: "What can happen when a giant star dies?", answer: "It explodes in a supernova", distractors: ["It turns into a planet", "Nothing at all"], band: 11 }
+      - { question: "What is a nebula?", answer: "A cloud of gas and dust", distractors: ["A kind of planet", "A spaceship"], band: 12 }
+      - { question: "What happens deep inside nebulae?", answer: "New stars are born", distractors: ["Rockets refuel", "Nothing at all"], band: 12 }
+      - { question: "What galaxy do we live in?", answer: "The Milky Way", distractors: ["Andromeda", "The Sun"], band: 13 }
+      - { question: "What is a galaxy?", answer: "Billions of stars together", distractors: ["A single big star", "A planet"], band: 13 }
+      - { question: "What can't escape a black hole?", answer: "Even light", distractors: ["Only rockets", "Only sound"], band: 14 }
+      - { question: "How do scientists find black holes?", answer: "By how they pull on nearby stars", distractors: ["By their bright color", "By listening for them"], band: 14 }
+      # ── The Human Element ──
+      - { question: "How often does the ISS circle Earth?", answer: "About every 90 minutes", distractors: ["Once a day", "Once a year"], band: 15 }
+      - { question: "Why do astronauts float on the ISS?", answer: "They're in free-fall around Earth", distractors: ["There is no gravity in space", "They wear special shoes"], band: 15 }
+      - { question: "What pushes a rocket upward?", answer: "Thrust from its engines", distractors: ["Wind", "Magnets"], band: 16 }
+      - { question: "What's special about many modern rockets?", answer: "They can land and be reused", distractors: ["They never need fuel", "They are made of paper"], band: 16 }
+      - { question: "What do satellites help us with?", answer: "Maps, phones, and weather", distractors: ["Cooking dinner", "Growing plants"], band: 17 }
+      - { question: "Where do satellites travel?", answer: "Around Earth", distractors: ["Inside the Sun", "On the Moon"], band: 17 }
+      - { question: "Why do astronauts wear spacesuits?", answer: "For air and protection", distractors: ["To look cool", "To go swimming"], band: 18 }
+      - { question: "What is a spacewalk?", answer: "Working outside the spacecraft", distractors: ["Walking on Earth", "A type of rocket"], band: 18 }
+      - { question: "What is Mars like?", answer: "A cold, dusty desert", distractors: ["A warm ocean world", "A ball of gas"], band: 19 }
+      - { question: "What will Mars explorers need to make or bring?", answer: "Air, water, and food", distractors: ["Just sunglasses", "Nothing at all"], band: 19 }
+
+  narration:
+    mp-0: "The Moon makes no light of its own — it shines by reflecting sunlight."
+    mp-1: "As the Moon orbits Earth, we see more or less of its sunlit half. That's a phase!"
+    mp-2: "The phases cycle about every 29 days — new moon to full moon and back."
+    dn-0: "Earth spins like a top — one full spin takes about 24 hours."
+    dn-1: "The side facing the Sun has daytime; the side facing away has night."
+    dn-2: "It's Earth's spinning — not the Sun moving — that gives us day and night."
+    su-0: "The Sun is a star — the closest one to Earth."
+    su-1: "It's a giant ball of super-hot, glowing gas."
+    su-2: "The Sun gives Earth almost all of its light and heat."
+    se-0: "Earth is tilted as it circles the Sun."
+    se-1: "That tilt makes sunlight stronger at some times of year — that's seasons."
+    se-2: "When your half of Earth tilts toward the Sun, it's summer; tilted away, it's winter."
+    gr-0: "Gravity is a pull. Everything with mass pulls on everything else."
+    gr-1: "Earth's gravity pulls things toward its center — that's why things fall down."
+    gr-2: "The more mass something has, the stronger its gravity pull."
+    io-0: "Our Solar System has 8 planets, all circling the Sun."
+    io-1: "The 4 inner planets — Mercury, Venus, Earth, Mars — are small and rocky."
+    io-2: "The 4 outer planets are huge balls of gas and ice, much farther out."
+    gg-0: "Jupiter is the biggest planet — over 1,000 Earths could fit inside!"
+    gg-1: "Saturn is famous for its bright rings, made of ice and rock."
+    gg-2: "Uranus and Neptune are icy giants, way out in the cold."
+    mr-0: "Many planets have moons — Jupiter has dozens of them!"
+    mr-1: "Saturn's rings are made of billions of icy chunks."
+    mr-2: "Earth has just one moon, but some planets have many."
+    ac-0: "A comet is an icy ball that grows a glowing tail near the Sun."
+    ac-1: "Asteroids are rocky leftovers from when the planets formed."
+    ac-2: "Most asteroids orbit in a belt between Mars and Jupiter."
+    ws-0: "Space is huge — the outer planets are billions of kilometers from the Sun."
+    ws-1: "Mercury is closest to the Sun; Neptune is the farthest of the 8 planets."
+    ws-2: "Planets near the Sun are hot; far-away planets are freezing cold."
+    cn-0: "A constellation is a pattern of stars that people imagined into pictures."
+    cn-1: "Sailors and explorers used constellations to find their way at night."
+    cn-2: "As Earth orbits the Sun, different constellations appear with the seasons."
+    sl-0: "Stars are born inside giant clouds of gas and dust called nebulae."
+    sl-1: "A star shines for millions or billions of years by burning fuel in its core."
+    sl-2: "When a giant star runs out of fuel, it can explode in a supernova."
+    ne-0: "A nebula is a giant cloud of gas and dust floating in space."
+    ne-1: "New stars are born deep inside nebulae."
+    ne-2: "Nebulae glow in beautiful colors — pink, teal, and violet."
+    ga-0: "A galaxy is a huge family of billions of stars."
+    ga-1: "We live in the Milky Way galaxy."
+    ga-2: "There are billions of galaxies scattered across the universe."
+    bh-0: "A black hole has gravity so strong that not even light can escape it."
+    bh-1: "Many black holes form when a giant star collapses at the end of its life."
+    bh-2: "We can't see black holes directly — we spot them by how they pull on nearby stars."
+    lo-0: "The International Space Station orbits Earth about every 90 minutes."
+    lo-1: "Astronauts float because they're in constant free-fall around Earth."
+    lo-2: "Crews run science experiments you can't do on the ground."
+    gt-0: "Rockets push hot gas down hard, and that thrust pushes them up into space."
+    gt-1: "Reaching orbit takes enormous speed — about 28,000 km/h!"
+    gt-2: "Many rockets now land back on Earth so they can be flown again."
+    sa-0: "Satellites are machines that circle Earth doing helpful jobs."
+    sa-1: "They help with TV, phones, maps, and weather forecasts."
+    sa-2: "Weather satellites watch storms from high above the Earth."
+    sw-0: "A spacesuit gives astronauts air to breathe and keeps them safe."
+    sw-1: "A spacewalk is when astronauts work outside their spacecraft."
+    sw-2: "Suits protect them from the freezing, airless vacuum of space."
+    mb-0: "Mars is a cold, dusty desert world — about half the size of Earth."
+    mb-1: "A trip to Mars takes around 7 months with today's rockets."
+    mb-2: "Future explorers will need to bring or make their own air, water, and food."

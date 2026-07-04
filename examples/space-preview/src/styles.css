@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* The Tailwind-styled components live in sibling workspace packages (symlinked into
+   node_modules, which Tailwind skips by default), so point the scanner at their source
+   to pick up the utility classes they use. */
+@source "../../../packages/space/src";
+@source "../../../packages/engine-ui/src";
+@source "../../../packages/english/src";
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0;
+  height: 100%;
+  background: #05060f;
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, input { touch-action: manipulation; }

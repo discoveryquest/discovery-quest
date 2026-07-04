@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "boards": [
+    {
+      "kind": "quiz",
+      "description": "Read a question and pick the correct answer from the choices. Reused across every Space Quest station (content partitioned by band, one band per station).",
+      "content": "questions",
+      "item": [
+        { "name": "question", "type": "string", "example": "What gives the Moon its light?" },
+        { "name": "answer", "type": "string", "example": "The Sun", "note": "the correct choice" },
+        { "name": "distractors", "type": "string[]", "example": ["The Moon itself", "Earth's glow"], "note": "wrong-but-plausible choices" },
+        { "name": "band", "type": "int", "example": 0, "note": "which station this question belongs to" }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "kind": "fact",
+      "description": "A Discovery Deck fact card: a big emoji and a short caption that Luna narrates.",
+      "fields": [
+        { "name": "key", "type": "string", "required": true, "example": "f0", "note": "unique id of the beat within the lesson" },
+        { "name": "emoji", "type": "string", "required": true, "example": "🌙" },
+        { "name": "text", "type": "string", "required": true, "example": "The Moon shines by reflecting the Sun." }
+      ]
+    }
+  ],
+  "content": [
+    {
+      "id": "questions",
+      "description": "Multiple-choice questions for the quiz board, partitioned by band (one band per station).",
+      "collection": "objects",
+      "item": [
+        { "name": "question", "type": "string", "required": true },
+        { "name": "answer", "type": "string", "required": true },
+        { "name": "distractors", "type": "string[]", "required": true },
+        { "name": "band", "type": "number", "required": true }
+      ]
+    }
+  ]
+}

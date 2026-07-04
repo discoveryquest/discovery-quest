@@ -1,0 +1,100 @@
+<h2>Which visual style for the animated lessons?</h2>
+<p class="subtitle">Same beat — "the Moon orbits Earth and shines by reflecting sunlight" — shown three ways. They're live-animated. Click the one that feels right (the stage is the ~250px box inside the real lesson card).</p>
+
+<style>
+  .style-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:8px; }
+  @media (max-width:900px){ .style-grid{ grid-template-columns:1fr; } }
+  .stage { position:relative; height:230px; border-radius:18px; overflow:hidden; background:#0e1014; display:flex; align-items:center; justify-content:center; }
+  .opt-card { border:2px solid rgba(255,255,255,.10); border-radius:20px; padding:12px; background:#14171f; cursor:pointer; transition:border-color .15s, transform .15s; }
+  .opt-card:hover{ transform:translateY(-3px); }
+  .opt-card h3{ margin:.6rem 0 .2rem; color:#fff; font-size:1.05rem; }
+  .opt-card p{ color:#9aa3b2; font-size:.82rem; line-height:1.35; margin:0; }
+
+  /* ---------- A: Playful animated emoji ---------- */
+  .a-star{ position:absolute; color:#cfe8ff; font-size:9px; opacity:.5; animation:tw 2.4s infinite; }
+  @keyframes tw{ 0%,100%{opacity:.25} 50%{opacity:.9} }
+  .a-sun{ position:absolute; left:14px; font-size:42px; animation:apulse 3s ease-in-out infinite; }
+  @keyframes apulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+  .a-earth{ font-size:50px; animation:aspin 8s linear infinite; }
+  @keyframes aspin{ to{transform:rotate(360deg)} }
+  .a-orbit{ position:absolute; width:150px; height:150px; animation:arot 6s linear infinite; }
+  @keyframes arot{ to{transform:rotate(360deg)} }
+  .a-moon{ position:absolute; top:-6px; left:50%; margin-left:-14px; font-size:28px; }
+
+  /* ---------- B: Polished SVG diagram ---------- */
+  .b-orbit-spin{ transform-origin:130px 115px; animation:arot 7s linear infinite; }
+
+  /* ---------- C: Cinematic immersive ---------- */
+  .c-stage{ background:radial-gradient(120% 90% at 70% 30%, #1a1140 0%, #0a0a18 55%, #05060d 100%); }
+  .c-p{ position:absolute; border-radius:50%; background:#fff; opacity:.0; animation:cdrift linear infinite; }
+  @keyframes cdrift{ 0%{opacity:0; transform:translateY(8px)} 20%{opacity:.8} 80%{opacity:.8} 100%{opacity:0; transform:translateY(-14px)} }
+  .c-planet{ position:absolute; left:-34px; bottom:-34px; width:150px; height:150px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #6ee7ff 0%, #2b6fe0 45%, #0b2a6b 100%);
+    box-shadow:0 0 60px rgba(80,160,255,.45), inset -18px -10px 40px rgba(0,0,0,.55); }
+  .c-moon{ position:absolute; top:34px; right:42px; width:54px; height:54px; border-radius:50%;
+    background:#d9dee8; box-shadow:0 0 28px rgba(255,255,255,.35); overflow:hidden; }
+  .c-moon::after{ content:""; position:absolute; inset:0; border-radius:50%;
+    background:#0b0d16; animation:cphase 6s ease-in-out infinite; }
+  @keyframes cphase{ 0%{transform:translateX(0)} 50%{transform:translateX(56px)} 100%{transform:translateX(0)} }
+  .c-glow{ position:absolute; right:30px; top:24px; width:78px; height:78px; border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.25),transparent 70%); animation:apulse 3.2s infinite; }
+</style>
+
+<div class="style-grid">
+
+  <!-- A -->
+  <div class="opt-card option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="stage" id="a-stage">
+      <span class="a-sun">☀️</span>
+      <span class="a-earth">🌍</span>
+      <div class="a-orbit"><span class="a-moon">🌙</span></div>
+    </div>
+    <h3>A · Playful Emoji + Motion</h3>
+    <p>Keeps today's friendly emoji look, but everything moves — Moon orbits, Earth spins, stars twinkle. Lightest to build, most on-brand with the current app.</p>
+  </div>
+
+  <!-- B -->
+  <div class="opt-card option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="stage">
+      <svg viewBox="0 0 260 230" width="100%" height="100%">
+        <defs>
+          <radialGradient id="bsun" cx="50%" cy="50%"><stop offset="0%" stop-color="#fff4c2"/><stop offset="60%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></radialGradient>
+          <radialGradient id="bearth" cx="35%" cy="30%"><stop offset="0%" stop-color="#7dd3fc"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient>
+        </defs>
+        <circle cx="36" cy="115" r="22" fill="url(#bsun)"/>
+        <line x1="58" y1="115" x2="108" y2="115" stroke="#fde68a" stroke-width="2" stroke-dasharray="3 4" opacity=".6"/>
+        <circle cx="130" cy="115" r="60" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 5"/>
+        <circle cx="130" cy="115" r="26" fill="url(#bearth)"/>
+        <g class="b-orbit-spin"><circle cx="190" cy="115" r="10" fill="#e5e7eb"/></g>
+        <text x="130" y="210" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="sans-serif">Sun · Earth · Moon</text>
+      </svg>
+    </div>
+    <h3>B · Polished SVG Diagram</h3>
+    <p>Clean vector "planetarium" scenes — drawn bodies, glow, dashed orbit paths, labels. Reads as real science, crisp at any size. Medium effort.</p>
+  </div>
+
+  <!-- C -->
+  <div class="opt-card option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="stage c-stage" id="c-stage">
+      <div class="c-planet"></div>
+      <div class="c-glow"></div>
+      <div class="c-moon"></div>
+    </div>
+    <h3>C · Cinematic / Immersive</h3>
+    <p>Dark space, glowing gradient bodies, drifting star particles, the Moon's lit face morphing through phases. Biggest "wow", heaviest to build & tune.</p>
+  </div>
+
+</div>
+
+<script>
+  // sprinkle stars into A and C
+  (function(){
+    const a=document.getElementById('a-stage');
+    for(let i=0;i<14;i++){const s=document.createElement('span');s.className='a-star';s.textContent='✦';
+      s.style.left=(Math.random()*100)+'%';s.style.top=(Math.random()*100)+'%';s.style.animationDelay=(Math.random()*2.4)+'s';a.appendChild(s);}
+    const c=document.getElementById('c-stage');
+    for(let i=0;i<26;i++){const p=document.createElement('span');p.className='c-p';const sz=(1+Math.random()*2).toFixed(1);
+      p.style.width=sz+'px';p.style.height=sz+'px';p.style.left=(Math.random()*100)+'%';p.style.top=(Math.random()*100)+'%';
+      p.style.animationDuration=(3+Math.random()*4)+'s';p.style.animationDelay=(Math.random()*5)+'s';c.appendChild(p);}
+  })();
+</script>

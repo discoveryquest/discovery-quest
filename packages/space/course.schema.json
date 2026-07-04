@@ -1,0 +1,324 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://discoveryquest.app/schema/space/course.schema.json",
+  "title": "Discovery Quest course — space",
+  "$comment": "GENERATED from engine.capabilities.json v1 by gen-schema.mjs. Do not edit by hand.",
+  "type": "object",
+  "required": [
+    "course"
+  ],
+  "properties": {
+    "course": {
+      "$ref": "#/$defs/course"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "course": {
+      "type": "object",
+      "required": [
+        "formatVersion",
+        "id",
+        "title",
+        "subject",
+        "worlds"
+      ],
+      "properties": {
+        "formatVersion": {
+          "type": "integer"
+        },
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "companion": {
+          "type": "string"
+        },
+        "voice": {
+          "type": "object"
+        },
+        "engine": {
+          "type": "string"
+        },
+        "lowercase": {
+          "type": "boolean"
+        },
+        "ui": {
+          "type": "object"
+        },
+        "reactions": {
+          "type": "object"
+        },
+        "worlds": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/world"
+          }
+        },
+        "lessons": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/lesson"
+          }
+        },
+        "narration": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "questions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string"
+                  },
+                  "answer": {
+                    "type": "string"
+                  },
+                  "distractors": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "band": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "question",
+                  "answer",
+                  "distractors",
+                  "band"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "world": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "emoji": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "blurb": {
+          "type": "string"
+        },
+        "soon": {
+          "type": "boolean"
+        },
+        "stations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/station"
+          }
+        }
+      }
+    },
+    "station": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "sub": {
+          "type": "string"
+        },
+        "board": {
+          "enum": [
+            "quiz"
+          ]
+        },
+        "bands": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "lesson": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "concept": {
+          "type": "string"
+        },
+        "soon": {
+          "type": "boolean"
+        }
+      },
+      "if": {
+        "properties": {
+          "soon": {
+            "const": true
+          }
+        },
+        "required": [
+          "soon"
+        ]
+      },
+      "then": true,
+      "else": {
+        "required": [
+          "board",
+          "bands"
+        ]
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "required": [
+        "title",
+        "sections"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        }
+      }
+    },
+    "section": {
+      "type": "object",
+      "required": [
+        "id",
+        "beats"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/beat"
+          }
+        }
+      }
+    },
+    "beat": {
+      "type": "object",
+      "required": [
+        "say",
+        "caption",
+        "view"
+      ],
+      "properties": {
+        "say": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "advance": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "view": {
+          "$ref": "#/$defs/view"
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "fact"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "fact"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "kind": {
+                "const": "fact"
+              },
+              "key": {
+                "type": "string",
+                "description": "unique id of the beat within the lesson"
+              },
+              "emoji": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "key",
+              "emoji",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ]
+    }
+  }
+}

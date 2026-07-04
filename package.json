@@ -5,9 +5,11 @@
   "type": "module",
   "description": "Discovery Quest — open learning engine, course format, and official courses.",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "scripts": {
+    "preview:space": "npm --workspace space-preview run dev",
     "course:check": "node scripts/course-check.mjs",
     "course:export": "node scripts/export-course.mjs",
     "course:capabilities": "node scripts/gen-capabilities.mjs",

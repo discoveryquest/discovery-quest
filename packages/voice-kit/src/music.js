@@ -37,23 +37,29 @@ function startTrack(name) {
   a.loop = true;
   a.volume = 0;
   current = a;
-  a.play()
-    .then(() => {
-      let v = 0;
-      const fade = setInterval(() => {
-        v = Math.min(BASE_VOL, v + 0.02);
-        a.volume = v;
-        if (v >= BASE_VOL) clearInterval(fade);
-      }, 60);
-      ducker = setInterval(() => {
-        if (current !== a) return;
-        const target = isSpeaking() ? DUCK_VOL : BASE_VOL;
-        a.volume += (target - a.volume) * 0.3;
-      }, 150);
-    })
-    .catch(() => {
-      /* autoplay blocked or missing file — a later gesture re-runs reconcile() */
-    });
+
+  // Set up the fade-in + ducker REGARDLESS of whether the initial play() is allowed. If
+  // autoplay is blocked, this element still ramps its volume (silently, while paused), so
+  // when a later gesture's reconcile() resumes it, it's already audible. (Previously the
+  // fade lived inside play().then(), so a blocked start would resume at volume 0 — silent —
+  // until a *fresh* startTrack ran, e.g. on returning to a screen.) The `current === a`
+  // guards make a track swap cancel these cleanly.
+  let v = 0;
+  const fade = setInterval(() => {
+    if (current !== a) { clearInterval(fade); return; }
+    v = Math.min(BASE_VOL, v + 0.02);
+    a.volume = v;
+    if (v >= BASE_VOL) clearInterval(fade);
+  }, 60);
+  ducker = setInterval(() => {
+    if (current !== a) return;
+    const target = isSpeaking() ? DUCK_VOL : BASE_VOL;
+    a.volume += (target - a.volume) * 0.3;
+  }, 150);
+
+  a.play().catch(() => {
+    /* autoplay blocked or missing file — a later gesture's reconcile() resumes this element */
+  });
 }
 
 // Make playback match intent. Safe to call repeatedly (idempotent).

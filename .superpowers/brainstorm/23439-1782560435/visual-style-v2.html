@@ -1,0 +1,97 @@
+<h2>Which visual style for the animated lessons?</h2>
+<p class="subtitle">Same beat — "the Moon orbits Earth and shines by reflecting sunlight" — shown three ways, live-animated. Click the one that feels right.</p>
+
+<style>
+  .cards{ display:grid !important; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:900px){ .cards{ grid-template-columns:1fr !important; } }
+  .card .stage{ position:relative; height:240px; width:100%; border-radius:14px; overflow:hidden; background:#0e1014; display:flex; align-items:center; justify-content:center; }
+
+  /* A: playful emoji */
+  .a-star{ position:absolute; color:#cfe8ff; font-size:10px; opacity:.5; animation:tw 2.4s infinite; }
+  @keyframes tw{ 0%,100%{opacity:.25} 50%{opacity:.95} }
+  .a-sun{ position:absolute; left:16px; font-size:46px; animation:apulse 3s ease-in-out infinite; }
+  @keyframes apulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.09)} }
+  .a-earth{ font-size:54px; animation:aspin 8s linear infinite; }
+  @keyframes aspin{ to{transform:rotate(360deg)} }
+  .a-orbit{ position:absolute; width:160px; height:160px; animation:arot 6s linear infinite; }
+  @keyframes arot{ to{transform:rotate(360deg)} }
+  .a-moon{ position:absolute; top:-8px; left:50%; margin-left:-15px; font-size:30px; }
+
+  /* B: svg diagram */
+  .b-orbit-spin{ transform-origin:130px 120px; animation:arot 7s linear infinite; }
+
+  /* C: cinematic */
+  .c-stage{ background:radial-gradient(120% 90% at 70% 30%, #1a1140 0%, #0a0a18 55%, #05060d 100%); }
+  .c-p{ position:absolute; border-radius:50%; background:#fff; opacity:0; animation:cdrift linear infinite; }
+  @keyframes cdrift{ 0%{opacity:0; transform:translateY(8px)} 20%{opacity:.85} 80%{opacity:.85} 100%{opacity:0; transform:translateY(-14px)} }
+  .c-planet{ position:absolute; left:-30px; bottom:-30px; width:150px; height:150px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #6ee7ff 0%, #2b6fe0 45%, #0b2a6b 100%);
+    box-shadow:0 0 60px rgba(80,160,255,.45), inset -18px -10px 40px rgba(0,0,0,.55); }
+  .c-moon{ position:absolute; top:40px; right:46px; width:56px; height:56px; border-radius:50%;
+    background:#d9dee8; box-shadow:0 0 30px rgba(255,255,255,.4); overflow:hidden; }
+  .c-moon::after{ content:""; position:absolute; inset:0; border-radius:50%; background:#0b0d16; animation:cphase 6s ease-in-out infinite; }
+  @keyframes cphase{ 0%{transform:translateX(0)} 50%{transform:translateX(58px)} 100%{transform:translateX(0)} }
+  .c-glow{ position:absolute; right:34px; top:30px; width:80px; height:80px; border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.25),transparent 70%); animation:apulse 3.2s infinite; }
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="stage" id="a-stage">
+      <span class="a-sun">☀️</span>
+      <span class="a-earth">🌍</span>
+      <div class="a-orbit"><span class="a-moon">🌙</span></div>
+    </div>
+    <div class="card-body">
+      <h3>A · Playful Emoji + Motion</h3>
+      <p>Today's friendly emoji look, but alive — Moon orbits, Earth spins, stars twinkle. Lightest to build, most on-brand.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="stage">
+      <svg viewBox="0 0 260 240" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <radialGradient id="bsun" cx="50%" cy="50%"><stop offset="0%" stop-color="#fff4c2"/><stop offset="60%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></radialGradient>
+          <radialGradient id="bearth" cx="35%" cy="30%"><stop offset="0%" stop-color="#7dd3fc"/><stop offset="100%" stop-color="#1d4ed8"/></radialGradient>
+        </defs>
+        <circle cx="38" cy="120" r="24" fill="url(#bsun)"/>
+        <line x1="62" y1="120" x2="104" y2="120" stroke="#fde68a" stroke-width="2" stroke-dasharray="3 4" opacity=".6"/>
+        <circle cx="130" cy="120" r="62" fill="none" stroke="#3a4658" stroke-width="1.5" stroke-dasharray="4 5"/>
+        <circle cx="130" cy="120" r="28" fill="url(#bearth)"/>
+        <g class="b-orbit-spin"><circle cx="192" cy="120" r="11" fill="#e5e7eb"/></g>
+        <text x="130" y="222" fill="#94a3b8" font-size="12" text-anchor="middle" font-family="sans-serif">Sun · Earth · Moon</text>
+      </svg>
+    </div>
+    <div class="card-body">
+      <h3>B · Polished SVG Diagram</h3>
+      <p>Clean vector "planetarium" scenes — drawn bodies, glow, dashed orbits, labels. Reads as real science, crisp at any size.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="stage c-stage" id="c-stage">
+      <div class="c-planet"></div>
+      <div class="c-glow"></div>
+      <div class="c-moon"></div>
+    </div>
+    <div class="card-body">
+      <h3>C · Cinematic / Immersive</h3>
+      <p>Dark space, glowing gradient bodies, drifting star particles, Moon morphing through phases. Biggest "wow", heaviest to build.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    const a=document.getElementById('a-stage');
+    for(let i=0;i<14;i++){const s=document.createElement('span');s.className='a-star';s.textContent='✦';
+      s.style.left=(Math.random()*100)+'%';s.style.top=(Math.random()*100)+'%';s.style.animationDelay=(Math.random()*2.4)+'s';a.appendChild(s);}
+    const c=document.getElementById('c-stage');
+    for(let i=0;i<26;i++){const p=document.createElement('span');p.className='c-p';const sz=(1+Math.random()*2).toFixed(1);
+      p.style.width=sz+'px';p.style.height=sz+'px';p.style.left=(Math.random()*100)+'%';p.style.top=(Math.random()*100)+'%';
+      p.style.animationDuration=(3+Math.random()*4)+'s';p.style.animationDelay=(Math.random()*5)+'s';c.appendChild(p);}
+  })();
+</script>
