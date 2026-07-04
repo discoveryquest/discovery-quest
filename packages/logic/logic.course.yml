@@ -40,6 +40,17 @@ course:
         - { id: hidden-triangles, title: Hidden Triangles, icon: 🕵️, sub: some triangles hide inside others, board: practice, bands: [6] }
         - { id: rectangle-hunt, title: Rectangle Hunt, icon: 🖼️, sub: the great rectangle round-up, board: practice, bands: [7] }
 
+    - id: pattern-peaks
+      title: Pattern Peaks
+      emoji: 🌈
+      color: "#A78BFA"
+      blurb: Spot what comes next, what grows, what repeats — and what doesn't belong.
+      stations:
+        - { id: what-comes-next, title: What Comes Next, icon: ➡️, sub: continue the pattern, board: practice, bands: [8] }
+        - { id: growing-patterns, title: Growing Patterns, icon: 🌱, sub: patterns that grow and shrink, board: practice, bands: [9] }
+        - { id: odd-one-out, title: Odd One Out, icon: 🕵️‍♀️, sub: one of these is not like the others, board: practice, bands: [10] }
+        - { id: pattern-grid, title: Pattern Grid, icon: 🔮, sub: crack the three-by-three code, board: practice, bands: [11] }
+
   content:
     practice:
       # ── Number Fixer: one move, one digit → another (any valid target accepted) ──
@@ -75,6 +86,20 @@ course:
       - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-row, prompt: "How many rectangles in this strip? Squares count too!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-row-ok, hintSay: pr-rh-row-hint } }
       - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-2x2, prompt: "Count all the rectangles — wide ones, tall ones, square ones!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [0, 4], [4, 4], [8, 4], [0, 8], [4, 8], [8, 8]], edges: [[0, 1], [0, 3], [1, 2], [1, 4], [2, 5], [3, 4], [3, 6], [4, 5], [4, 7], [5, 8], [6, 7], [7, 8]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-2x2-ok, hintSay: pr-rh-2x2-hint } }
       - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-2x3, prompt: "The final hunt! Every rectangle in the big grid counts.", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4], [0, 8], [4, 8], [8, 8], [12, 8]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [4, 8], [5, 6], [5, 9], [6, 7], [6, 10], [7, 11], [8, 9], [9, 10], [10, 11]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-2x3-ok, hintSay: pr-rh-2x3-hint } }
+      # ── Pattern Peaks: sequences / growing / odd-one-out / 3×3 grids ──
+      - { station: what-comes-next, band: 8, kind: pattern-pick, say: pr-wn-ab, prompt: "Apple, banana, apple, banana… what comes next?", scene: { layout: sequence, cells: ["🍎","🍌","🍎","🍌","🍎","?"] }, choices: ["🍌","🍎","🍇"], target: { answer: "🍌" }, feedback: { correctSay: pr-wn-ab-ok, hintSay: pr-wn-ab-hint } }
+      - { station: what-comes-next, band: 8, kind: pattern-pick, say: pr-wn-abb, prompt: "Red, blue, blue… the pattern repeats. What's next?", scene: { layout: sequence, cells: ["🔴","🔵","🔵","🔴","🔵","🔵","🔴","?"] }, choices: ["🔵","🔴","🟡"], target: { answer: "🔵" }, feedback: { correctSay: pr-wn-abb-ok, hintSay: pr-wn-abb-hint } }
+      - { station: what-comes-next, band: 8, kind: pattern-pick, say: pr-wn-abc, prompt: "Dog, cat, mouse, dog, cat… who's next?", scene: { layout: sequence, cells: ["🐶","🐱","🐭","🐶","🐱","?"] }, choices: ["🐭","🐶","🐱"], target: { answer: "🐭" }, feedback: { correctSay: pr-wn-abc-ok, hintSay: pr-wn-abc-hint } }
+      - { station: growing-patterns, band: 9, kind: pattern-pick, say: pr-gp-plus1, prompt: "The dots keep growing! How many come next?", scene: { layout: sequence, cells: ["🔵","🔵🔵","🔵🔵🔵","?"] }, choices: ["🔵🔵🔵🔵","🔵🔵🔵","🔵🔵🔵🔵🔵"], target: { answer: "🔵🔵🔵🔵" }, feedback: { correctSay: pr-gp-plus1-ok, hintSay: pr-gp-plus1-hint } }
+      - { station: growing-patterns, band: 9, kind: pattern-pick, say: pr-gp-plus2, prompt: "One star, three stars, five stars… what comes next?", scene: { layout: sequence, cells: ["⭐","⭐⭐⭐","⭐⭐⭐⭐⭐","?"] }, choices: ["⭐⭐⭐⭐⭐⭐⭐","⭐⭐⭐⭐⭐⭐","⭐⭐⭐⭐⭐⭐⭐⭐"], target: { answer: "⭐⭐⭐⭐⭐⭐⭐" }, feedback: { correctSay: pr-gp-plus2-ok, hintSay: pr-gp-plus2-hint } }
+      - { station: growing-patterns, band: 9, kind: pattern-pick, say: pr-gp-shrink, prompt: "This pattern shrinks! What comes next?", scene: { layout: sequence, cells: ["🟩🟩🟩🟩","🟩🟩🟩","🟩🟩","?"] }, choices: ["🟩","🟩🟩","🟩🟩🟩"], target: { answer: "🟩" }, feedback: { correctSay: pr-gp-shrink-ok, hintSay: pr-gp-shrink-hint } }
+      - { station: odd-one-out, band: 10, kind: pattern-pick, say: pr-oo-fruit, prompt: "Three of these are fruit. Tap the one that doesn't belong!", scene: { layout: odd, cells: ["🍎","🍐","🚗","🍌"] }, target: { index: 2 }, feedback: { correctSay: pr-oo-fruit-ok, hintSay: pr-oo-fruit-hint } }
+      - { station: odd-one-out, band: 10, kind: pattern-pick, say: pr-oo-sea, prompt: "Almost all of these live in the sea. Who doesn't?", scene: { layout: odd, cells: ["🐟","🐬","🦈","🦅"] }, target: { index: 3 }, feedback: { correctSay: pr-oo-sea-ok, hintSay: pr-oo-sea-hint } }
+      - { station: odd-one-out, band: 10, kind: pattern-pick, say: pr-oo-flip, prompt: "Look closely at the triangles. Tap the different one!", scene: { layout: odd, cells: ["🔺","🔺","🔻","🔺"] }, target: { index: 2 }, feedback: { correctSay: pr-oo-flip-ok, hintSay: pr-oo-flip-hint } }
+      - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-latin, prompt: "Every row has a sun, a moon, and a star. What's missing?", scene: { layout: matrix, cells: ["☀️","🌙","⭐","⭐","☀️","🌙","🌙","⭐","?"] }, choices: ["☀️","🌙","⭐"], target: { answer: "☀️" }, feedback: { correctSay: pr-pg-latin-ok, hintSay: pr-pg-latin-hint } }
+      - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-count, prompt: "Each row grows: one, two, three. Finish the last row!", scene: { layout: matrix, cells: ["❤️","❤️❤️","❤️❤️❤️","💙","💙💙","💙💙💙","💚","💚💚","?"] }, choices: ["💚💚💚","💚💚","💚💚💚💚"], target: { answer: "💚💚💚" }, feedback: { correctSay: pr-pg-count-ok, hintSay: pr-pg-count-hint } }
+      - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-colors, prompt: "The colour code shifts every row. Crack the last square!", scene: { layout: matrix, cells: ["🟥","🟨","🟦","🟨","🟦","🟥","🟦","🟥","?"] }, choices: ["🟨","🟥","🟦"], target: { answer: "🟨" }, feedback: { correctSay: pr-pg-colors-ok, hintSay: pr-pg-colors-hint } }
+
 
   narration:
     # prompts (must equal each mission's prompt text)
@@ -151,6 +176,43 @@ course:
     pr-rh-2x3: "The final hunt! Every rectangle in the big grid counts."
     pr-rh-2x3-ok: "Eighteen! You found every size — the grid held a whole family of rectangles."
     pr-rh-2x3-hint: "Go size by size: singles, dominoes across and down, rows, big squares… take your time!"
+    # Pattern Peaks
+    pr-wn-ab: "Apple, banana, apple, banana… what comes next?"
+    pr-wn-ab-ok: "Banana! The pattern takes turns: apple, banana, again and again."
+    pr-wn-ab-hint: "Say the pattern out loud — apple, banana, apple, banana, apple…"
+    pr-wn-abb: "Red, blue, blue… the pattern repeats. What's next?"
+    pr-wn-abb-ok: "Blue! The rule is red, then TWO blues — and the blues weren't finished."
+    pr-wn-abb-hint: "Clap it out: red, blue, blue! Red, blue, blue! What follows red?"
+    pr-wn-abc: "Dog, cat, mouse, dog, cat… who's next?"
+    pr-wn-abc-ok: "The mouse! Three friends take turns, and it was mouse's turn."
+    pr-wn-abc-hint: "The parade repeats every three: dog, cat, mouse. Who follows the cat?"
+    pr-gp-plus1: "The dots keep growing! How many come next?"
+    pr-gp-plus1-ok: "Four dots! The pattern grows by one each time: one, two, three, four."
+    pr-gp-plus1-hint: "Count each group: one, two, three… how many should come next?"
+    pr-gp-plus2: "One star, three stars, five stars… what comes next?"
+    pr-gp-plus2-ok: "Seven stars! It jumps by two each time: one, three, five, seven."
+    pr-gp-plus2-hint: "Count the jump: from one to three is two more. From three to five? Keep jumping!"
+    pr-gp-shrink: "This pattern shrinks! What comes next?"
+    pr-gp-shrink-ok: "Just one! The pattern loses a square each step: four, three, two, one."
+    pr-gp-shrink-hint: "It's going DOWN: four, three, two… what's left?"
+    pr-oo-fruit: "Three of these are fruit. Tap the one that doesn't belong!"
+    pr-oo-fruit-ok: "The car! Apples, pears and bananas are fruit — a car definitely isn't."
+    pr-oo-fruit-hint: "Which of these can you NOT eat?"
+    pr-oo-sea: "Almost all of these live in the sea. Who doesn't?"
+    pr-oo-sea-ok: "The eagle! Fish, dolphins and sharks swim — eagles fly."
+    pr-oo-sea-hint: "Think about where each animal lives. Who belongs in the sky?"
+    pr-oo-flip: "Look closely at the triangles. Tap the different one!"
+    pr-oo-flip-ok: "That one points DOWN while the others point up. Sharp eyes!"
+    pr-oo-flip-hint: "They're all triangles… but look at which way each one points."
+    pr-pg-latin: "Every row has a sun, a moon, and a star. What's missing?"
+    pr-pg-latin-ok: "The sun! The last row had a moon and a star — it needed its sun."
+    pr-pg-latin-hint: "Check the last row: moon, star… which of the three friends is missing?"
+    pr-pg-count: "Each row grows: one, two, three. Finish the last row!"
+    pr-pg-count-ok: "Three green hearts! Every row counts up: one, two, three."
+    pr-pg-count-hint: "Look at the red row and the blue row: one, two, three. The green row wants the same!"
+    pr-pg-colors: "The colour code shifts every row. Crack the last square!"
+    pr-pg-colors-ok: "Yellow! Each row slides the colours one step — you cracked the code."
+    pr-pg-colors-hint: "Every row and every column needs all three colours. Which one is missing at the end?"
     # reactions
     praise-0: "Brilliant thinking!"
     praise-1: "You cracked it!"

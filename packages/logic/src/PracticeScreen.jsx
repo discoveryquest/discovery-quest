@@ -11,11 +11,13 @@ import { mutateSave, loadSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
 import MatchstickPractice from './practice/MatchstickPractice.jsx';
 import ShapeCountPractice from './practice/ShapeCountPractice.jsx';
+import PatternPickPractice from './practice/PatternPickPractice.jsx';
 import TUTORIALS from './tutorials.json'; // station ids with a recorded "Luna solves it" video
 
 const MECHANICS = {
   matchstick: MatchstickPractice,
   'shape-count': ShapeCountPractice,
+  'pattern-pick': PatternPickPractice,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);

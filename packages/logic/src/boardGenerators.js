@@ -41,6 +41,7 @@ export function genPractice(items = [], _ctx = {}) {
     say: item.say,
     prompt: item.prompt,
     scene: item.scene,
+    choices: item.choices, // pattern-pick answer tiles (optional)
     target: item.target || {},
     feedback: item.feedback || {},
     station: item.station,

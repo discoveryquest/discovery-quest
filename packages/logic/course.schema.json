@@ -107,6 +107,15 @@
                       "object",
                       "null"
                     ]
+                  },
+                  "choices": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
                   }
                 },
                 "required": [
