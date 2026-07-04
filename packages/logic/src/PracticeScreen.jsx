@@ -10,10 +10,12 @@ import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave, loadSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
 import MatchstickPractice from './practice/MatchstickPractice.jsx';
+import ShapeCountPractice from './practice/ShapeCountPractice.jsx';
 import TUTORIALS from './tutorials.json'; // station ids with a recorded "Luna solves it" video
 
 const MECHANICS = {
   matchstick: MatchstickPractice,
+  'shape-count': ShapeCountPractice,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);

@@ -6,14 +6,50 @@
       "description": "Interactive puzzle practice: the learner solves by manipulating the scene. One band per station; items are an ordered mission list. Luna narrates each prompt via `say`.",
       "content": "practice",
       "item": [
-        { "name": "station", "type": "string", "example": "fix-digit", "note": "descriptive owner id; routing is by band" },
-        { "name": "band", "type": "int", "example": 0, "note": "which station this mission belongs to" },
-        { "name": "kind", "type": "string", "example": "matchstick", "note": "mechanic id; selects the interactive component" },
-        { "name": "say", "type": "string", "example": "pr-fd-5to3", "note": "narration key Luna speaks for the prompt (text must equal `prompt`)" },
-        { "name": "prompt", "type": "string", "example": "Move one match to turn the 5 into a 3." },
-        { "name": "scene", "type": "object", "note": "mechanic scene descriptor (matchstick: { start, moves })" },
-        { "name": "target", "type": "object", "note": "correctness target (matchstick: { goal: digits|equation|largest, accept?: string[] })" },
-        { "name": "feedback", "type": "object", "note": "optional { correctSay, hintSay } narration keys" }
+        {
+          "name": "station",
+          "type": "string",
+          "example": "fix-digit",
+          "note": "descriptive owner id; routing is by band"
+        },
+        {
+          "name": "band",
+          "type": "int",
+          "example": 0,
+          "note": "which station this mission belongs to"
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "example": "matchstick",
+          "note": "mechanic id; selects the interactive component"
+        },
+        {
+          "name": "say",
+          "type": "string",
+          "example": "pr-fd-5to3",
+          "note": "narration key Luna speaks for the prompt (text must equal `prompt`)"
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "example": "Move one match to turn the 5 into a 3."
+        },
+        {
+          "name": "scene",
+          "type": "object",
+          "note": "mechanic scene descriptor (matchstick: { start, moves })"
+        },
+        {
+          "name": "target",
+          "type": "object",
+          "note": "correctness target (matchstick: { goal: digits|equation|largest, accept?: string[] })"
+        },
+        {
+          "name": "feedback",
+          "type": "object",
+          "note": "optional { correctSay, hintSay } narration keys"
+        }
       ]
     }
   ],
@@ -21,17 +57,49 @@
   "content": [
     {
       "id": "practice",
-      "description": "Interactive puzzle missions for the practice board, partitioned by band (one band per station). Ordered: the host plays them in array order. Mechanic `matchstick`: numbers as seven-segment matchstick layouts; scene { start: \"6+0=9\", moves: 1..2 }; target goals — `digits` (final digits must be in `accept`), `equation` (ANY arithmetically true equation counts), `largest` (must equal the BFS-computed maximum reachable number, so every optimal solution counts and no accept list is authored).",
+      "description": "Interactive puzzle missions for the practice board, partitioned by band (one band per station). Ordered: the host plays them in array order. Mechanic `matchstick`: numbers as seven-segment matchstick layouts; scene { start: \"6+0=9\", moves: 1..2 }; target goals \u2014 `digits` (final digits must be in `accept`), `equation` (ANY arithmetically true equation counts), `largest` (must equal the BFS-computed maximum reachable number, so every optimal solution counts and no accept list is authored). Mechanic `shape-count` (Shape Shore): scene { vertices: [[x,y]\u2026] (integer coords), edges: [[i,j]\u2026], find: triangles|squares|rectangles }; target { mode: choose|claim }. The answer key is DERIVED from the figure by src/practice/shapeGeometry.js (composite shapes whose sides span collinear edges are found automatically) \u2014 authors never write counts, so keys can't be wrong; narration -ok lines that mention a number must match the derived count (verify with the geometry module before baking voice).",
       "collection": "objects",
       "item": [
-        { "name": "station", "type": "string", "required": true },
-        { "name": "band", "type": "number", "required": true },
-        { "name": "kind", "type": "string", "required": true },
-        { "name": "say", "type": "string", "required": true },
-        { "name": "prompt", "type": "string", "required": true },
-        { "name": "scene", "type": "object", "required": true },
-        { "name": "target", "type": "object", "required": true },
-        { "name": "feedback", "type": "object", "required": false }
+        {
+          "name": "station",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "band",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "say",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "scene",
+          "type": "object",
+          "required": true
+        },
+        {
+          "name": "target",
+          "type": "object",
+          "required": true
+        },
+        {
+          "name": "feedback",
+          "type": "object",
+          "required": false
+        }
       ]
     }
   ]

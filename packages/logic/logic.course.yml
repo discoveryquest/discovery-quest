@@ -29,6 +29,17 @@ course:
         - { id: biggest-number, title: Go Big, icon: 💯, sub: build the biggest number, board: practice, bands: [2] }
         - { id: two-move-master, title: Two-Move Master, icon: 🎩, sub: two moves, big magic, board: practice, bands: [3] }
 
+    - id: shape-shore
+      title: Shape Shore
+      emoji: 🔺
+      color: "#22D3EE"
+      blurb: Chalk figures hide extra shapes — spot them, claim them, count them all.
+      stations:
+        - { id: square-search, title: Square Search, icon: 🟨, sub: find every square, board: practice, bands: [4] }
+        - { id: triangle-spotter, title: Triangle Spotter, icon: 🔺, sub: claim triangles corner by corner, board: practice, bands: [5] }
+        - { id: hidden-triangles, title: Hidden Triangles, icon: 🕵️, sub: some triangles hide inside others, board: practice, bands: [6] }
+        - { id: rectangle-hunt, title: Rectangle Hunt, icon: 🖼️, sub: the great rectangle round-up, board: practice, bands: [7] }
+
   content:
     practice:
       # ── Number Fixer: one move, one digit → another (any valid target accepted) ──
@@ -50,6 +61,20 @@ course:
       - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-60, prompt: "Two moves this time! Make the biggest number you can from 60.", scene: { start: "60", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-60-ok, hintSay: pr-tm-60-hint } }
       - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-68, prompt: "With two moves, push 68 as high as it will go!", scene: { start: "68", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-68-ok, hintSay: pr-tm-68-hint } }
       - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-26, prompt: "Last one, master puzzler — two moves to make 26 as big as possible!", scene: { start: "26", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-26-ok, hintSay: pr-tm-26-hint } }
+
+      # ── Shape Shore: derived-answer shape counting (see shapeGeometry.js) ──
+      - { station: square-search, band: 4, kind: shape-count, say: pr-ss-row, prompt: "How many squares can you find in this strip?", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7]], find: squares }, target: { mode: choose }, feedback: { correctSay: pr-ss-row-ok, hintSay: pr-ss-row-hint } }
+      - { station: square-search, band: 4, kind: shape-count, say: pr-ss-2x2, prompt: "Count every square in this window — big ones count too!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [0, 4], [4, 4], [8, 4], [0, 8], [4, 8], [8, 8]], edges: [[0, 1], [0, 3], [1, 2], [1, 4], [2, 5], [3, 4], [3, 6], [4, 5], [4, 7], [5, 8], [6, 7], [7, 8]], find: squares }, target: { mode: choose }, feedback: { correctSay: pr-ss-2x2-ok, hintSay: pr-ss-2x2-hint } }
+      - { station: square-search, band: 4, kind: shape-count, say: pr-ss-2x3, prompt: "Trickier now! How many squares hide in this grid?", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4], [0, 8], [4, 8], [8, 8], [12, 8]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [4, 8], [5, 6], [5, 9], [6, 7], [6, 10], [7, 11], [8, 9], [9, 10], [10, 11]], find: squares }, target: { mode: choose }, feedback: { correctSay: pr-ss-2x3-ok, hintSay: pr-ss-2x3-hint } }
+      - { station: triangle-spotter, band: 5, kind: shape-count, say: pr-ts-cev, prompt: "Tap three corners to claim each triangle you spot!", scene: { vertices: [[3, 0], [0, 4], [6, 4], [3, 4]], edges: [[0, 1], [0, 2], [1, 3], [3, 2], [0, 3]], find: triangles }, target: { mode: claim }, feedback: { correctSay: pr-ts-cev-ok, hintSay: pr-ts-cev-hint } }
+      - { station: triangle-spotter, band: 5, kind: shape-count, say: pr-ts-sqd, prompt: "The diagonal cuts the square — claim both triangles!", scene: { vertices: [[0, 0], [4, 0], [4, 4], [0, 4]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]], find: triangles }, target: { mode: claim }, feedback: { correctSay: pr-ts-sqd-ok, hintSay: pr-ts-sqd-hint } }
+      - { station: triangle-spotter, band: 5, kind: shape-count, say: pr-ts-mid, prompt: "One little triangle rides inside the big one. Claim them both!", scene: { vertices: [[6, 0], [0, 8], [12, 8], [3, 4], [9, 4]], edges: [[0, 3], [3, 1], [1, 2], [2, 4], [4, 0], [3, 4]], find: triangles }, target: { mode: claim }, feedback: { correctSay: pr-ts-mid-ok, hintSay: pr-ts-mid-hint } }
+      - { station: hidden-triangles, band: 6, kind: shape-count, say: pr-ht-2c, prompt: "Count ALL the triangles — some are made of smaller ones!", scene: { vertices: [[6, 0], [0, 6], [4, 6], [8, 6], [12, 6]], edges: [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4]], find: triangles }, target: { mode: choose }, feedback: { correctSay: pr-ht-2c-ok, hintSay: pr-ht-2c-hint } }
+      - { station: hidden-triangles, band: 6, kind: shape-count, say: pr-ht-star, prompt: "The diagonals make a secret X. How many triangles in all?", scene: { vertices: [[0, 0], [4, 0], [4, 4], [0, 4], [2, 2]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [4, 2], [1, 4], [4, 3]], find: triangles }, target: { mode: choose }, feedback: { correctSay: pr-ht-star-ok, hintSay: pr-ht-star-hint } }
+      - { station: hidden-triangles, band: 6, kind: shape-count, say: pr-ht-3c, prompt: "The master fan! Count every triangle, big and small.", scene: { vertices: [[8, 0], [0, 8], [4, 8], [8, 8], [12, 8], [16, 8]], edges: [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 2], [2, 3], [3, 4], [4, 5]], find: triangles }, target: { mode: choose }, feedback: { correctSay: pr-ht-3c-ok, hintSay: pr-ht-3c-hint } }
+      - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-row, prompt: "How many rectangles in this strip? Squares count too!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-row-ok, hintSay: pr-rh-row-hint } }
+      - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-2x2, prompt: "Count all the rectangles — wide ones, tall ones, square ones!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [0, 4], [4, 4], [8, 4], [0, 8], [4, 8], [8, 8]], edges: [[0, 1], [0, 3], [1, 2], [1, 4], [2, 5], [3, 4], [3, 6], [4, 5], [4, 7], [5, 8], [6, 7], [7, 8]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-2x2-ok, hintSay: pr-rh-2x2-hint } }
+      - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-2x3, prompt: "The final hunt! Every rectangle in the big grid counts.", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4], [0, 8], [4, 8], [8, 8], [12, 8]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [4, 8], [5, 6], [5, 9], [6, 7], [6, 10], [7, 11], [8, 9], [9, 10], [10, 11]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-2x3-ok, hintSay: pr-rh-2x3-hint } }
 
   narration:
     # prompts (must equal each mission's prompt text)
@@ -89,6 +114,43 @@ course:
     pr-tm-26: "Last one, master puzzler — two moves to make 26 as big as possible!"
     pr-tm-26-ok: "Maximum reached! You're a true Two-Move Master!"
     pr-tm-26-hint: "Bigger first digit first! Then see what the 6 can turn into."
+    # Shape Shore
+    pr-ss-row: "How many squares can you find in this strip?"
+    pr-ss-row-ok: "Three squares, side by side. Watch them light up!"
+    pr-ss-row-hint: "Count each little square one at a time, left to right."
+    pr-ss-2x2: "Count every square in this window — big ones count too!"
+    pr-ss-2x2-ok: "Five! Four little squares, and the big one made of all four."
+    pr-ss-2x2-hint: "Don't forget: the WHOLE window is a square too!"
+    pr-ss-2x3: "Trickier now! How many squares hide in this grid?"
+    pr-ss-2x3-ok: "Eight! Six little ones, plus two big two-by-two squares hiding inside."
+    pr-ss-2x3-hint: "Count the small squares first. Then look for bigger squares made of four little ones."
+    pr-ts-cev: "Tap three corners to claim each triangle you spot!"
+    pr-ts-cev-ok: "All three claimed! Two small triangles, and the big one holding them both."
+    pr-ts-cev-hint: "That's not one of them — try the two small triangles first, then the big outside one."
+    pr-ts-sqd: "The diagonal cuts the square — claim both triangles!"
+    pr-ts-sqd-ok: "Both halves claimed! One diagonal, two triangles."
+    pr-ts-sqd-hint: "Each triangle uses two square corners and both ends of the diagonal."
+    pr-ts-mid: "One little triangle rides inside the big one. Claim them both!"
+    pr-ts-mid-ok: "Got them! The little triangle at the top, and the big one around it."
+    pr-ts-mid-hint: "The little triangle sits at the very top. The big one uses the three outside corners."
+    pr-ht-2c: "Count ALL the triangles — some are made of smaller ones!"
+    pr-ht-2c-ok: "Six! Three single slices, two doubles, and the whole big triangle."
+    pr-ht-2c-hint: "Count the single slices first, then triangles made of two slices, then the whole thing."
+    pr-ht-star: "The diagonals make a secret X. How many triangles in all?"
+    pr-ht-star-ok: "Eight! Four small ones around the middle, and four bigger halves."
+    pr-ht-star-hint: "Four little triangles touch the centre. Then look for big ones made of two."
+    pr-ht-3c: "The master fan! Count every triangle, big and small."
+    pr-ht-3c-ok: "Ten! Singles, doubles, triples, and the giant one — you counted like a master."
+    pr-ht-3c-hint: "Go by size: four singles, then doubles, then triples, then the whole fan."
+    pr-rh-row: "How many rectangles in this strip? Squares count too!"
+    pr-rh-row-ok: "Six! Three singles, two doubles, and the whole strip."
+    pr-rh-row-hint: "Singles first, then rectangles made of two squares, then the whole strip."
+    pr-rh-2x2: "Count all the rectangles — wide ones, tall ones, square ones!"
+    pr-rh-2x2-ok: "Nine! Four singles, four dominoes, and the big square."
+    pr-rh-2x2-hint: "Squares are rectangles too. Count singles, then two-square dominoes, then the big one."
+    pr-rh-2x3: "The final hunt! Every rectangle in the big grid counts."
+    pr-rh-2x3-ok: "Eighteen! You found every size — the grid held a whole family of rectangles."
+    pr-rh-2x3-hint: "Go size by size: singles, dominoes across and down, rows, big squares… take your time!"
     # reactions
     praise-0: "Brilliant thinking!"
     praise-1: "You cracked it!"
