@@ -55,7 +55,8 @@ function TargetMarker({ angle, close }) {
   );
 }
 
-function Scene({ angle, close, done, onDragTo, timeScale = 30000 }) {
+// timeScale 5200 ≈ one Earth day in ~17s — clearly spinning, never dizzying.
+function Scene({ angle, close, done, onDragTo, timeScale = 5200 }) {
   const draggingRef = useRef(false);
   return (
     <>
@@ -68,8 +69,9 @@ function Scene({ angle, close, done, onDragTo, timeScale = 30000 }) {
         <sphereGeometry args={[0.68, 32, 32]} />
         <meshBasicMaterial color={close ? '#34d399' : '#e2e8f0'} transparent opacity={0.16} depthWrite={false} />
       </mesh>
-      {/* invisible drag surface spanning the orbit plane — grab anywhere, the
-          Moon follows the pointer's angle (fat-finger friendly on phones) */}
+      {/* invisible drag surface far larger than the screen: touch ANYWHERE and
+          the Moon follows the pointer's direction from Earth — no need to hit
+          the orbit line (Pavel's mobile feedback 2026-07-04) */}
       <mesh
         rotation-x={-Math.PI / 2}
         visible={false}
@@ -82,7 +84,7 @@ function Scene({ angle, close, done, onDragTo, timeScale = 30000 }) {
         onPointerMove={(e) => { if (draggingRef.current && !done) onDragTo(angleFromPoint(e.point)); }}
         onPointerUp={(e) => { draggingRef.current = false; e.target.releasePointerCapture?.(e.pointerId); }}
       >
-        <circleGeometry args={[R_ORBIT + 3.4, 48]} />
+        <circleGeometry args={[80, 32]} />
       </mesh>
     </>
   );
@@ -138,6 +140,7 @@ export default function MoonPhase3D({ step, onCorrect, demo = false }) {
   return (
     <Stage3D
       camera={{ position: [0, 6.2, 11.5], fov: 46 }}
+      portraitScale={0.88}
       overlay={
         <div data-practice3d="moon-phase" data-phase={current.name} data-close={close ? 1 : 0}>
           <div className="absolute left-4 top-4 flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-slate-950/60 p-3 backdrop-blur-sm">

@@ -63,7 +63,7 @@ export default function TargetTap3D({ step, onCorrect, onHint }) {
   }
 
   return (
-    <Stage3D camera={{ position: [0, 1.6, 10.5], fov: 50 }} ambient={0.26}>
+    <Stage3D camera={{ position: [0, 1.6, 10.5], fov: 50 }} ambient={0.26} portraitScale={0.7}>
       <Sun radius={1.2} position={SUN_POS} timeScale={4000} lightIntensity={2000} />
       {options.map((body, i) => {
         const pos = posFor(i);
@@ -79,7 +79,7 @@ export default function TargetTap3D({ step, onCorrect, onHint }) {
             >
               {body === 'asteroid'
                 ? <Asteroid seed={13} radius={r * 0.8} spin={0.3} />
-                : <Planet body={body} radius={r} timeScale={26000} />}
+                : <Planet body={body} radius={r} timeScale={6000} />}
               {/* win halo */}
               {won && (
                 <mesh>

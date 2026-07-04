@@ -26,7 +26,7 @@ function FlyingPlanet({ body, radius, target, held }) {
   });
   return (
     <group ref={ref} position={target}>
-      <Planet body={body} radius={radius} timeScale={26000} detail={body === 'saturn' || body === 'uranus'} />
+      <Planet body={body} radius={radius} timeScale={6000} detail={body === 'saturn' || body === 'uranus'} />
       {held && (
         <mesh>
           <sphereGeometry args={[radius * 1.6, 24, 24]} />
@@ -98,7 +98,7 @@ export default function OrbitOrder3D({ step, onCorrect, onHint }) {
   };
 
   return (
-    <Stage3D camera={{ position: [1.5, 2.6, 12.5], fov: 50 }} ambient={0.2}>
+    <Stage3D camera={{ position: [1.5, 2.6, 12.5], fov: 50 }} ambient={0.2} portraitScale={0.58}>
       <Sun radius={2.1} position={[SUN_X, 0.2, 0]} timeScale={4000} lightIntensity={900} />
       {/* orbit slots */}
       {Array.from({ length: n }, (_, j) => {
