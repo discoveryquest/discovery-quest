@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Learning Quest shared UI: the companion character, quest/map shell, board framework, concept ('Learn it') and tutorial surfaces — the reusable presentation layer every quest app composes.",
+  "description": "Learning Quest shared UI: the companion character, quest/map shell, board framework, concept ('Learn it') and tutorial surfaces \u2014 the reusable presentation layer every quest app composes.",
   "exports": {
     "./LunaOwl": "./src/LunaOwl.jsx",
     "./ConceptScreen": "./src/ConceptScreen.jsx",
@@ -15,7 +15,8 @@
     "./ProfilePicker": "./src/ProfilePicker.jsx",
     "./HeroBadge": "./src/HeroBadge.jsx",
     "./QuestSettingsSheet": "./src/QuestSettingsSheet.jsx",
-    "./QuestHeader": "./src/QuestHeader.jsx"
+    "./QuestHeader": "./src/QuestHeader.jsx",
+    "./interact": "./src/interact/index.js"
   },
   "dependencies": {
     "@discoveryquest/engine": "*",

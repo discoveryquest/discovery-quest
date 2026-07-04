@@ -15,11 +15,9 @@ const ANS_C = '#4ADE80'; // the meeting point
 
 // Shared 3D-ish cube face (top highlight + bottom shadow + glow) used across the
 // block reps — add (CombineBlocks), subtract (TakeAwayBlocks), × (ArrayModel),
-// ÷ (ShareGroups) — so manipulatives look like real, consistent Numberblocks cubes.
-const cubeFace = (color) => ({
-  background: color,
-  boxShadow: `inset 0 4px 0 #ffffff77, inset 0 -5px 0 #00000026, 0 0 10px ${color}aa`,
-});
+// ÷ (ShareGroups). Now sourced from the shared interact kit so hint blocks and
+// the draggable manipulative boards stay pixel-identical.
+import { cubeFace } from '@discoveryquest/engine-ui/interact';
 
 // Multiplication grid. Opens as a plain table, then animates: the row sweeps
 // across, the column sweeps down, and they converge on the answer cell which
