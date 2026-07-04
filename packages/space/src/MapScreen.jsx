@@ -15,7 +15,7 @@ import StationPopover from '@discoveryquest/engine-ui/StationPopover';
 import { loadSave } from '@discoveryquest/engine/save';
 import { computeXp, heroProgress } from '@discoveryquest/engine/xp';
 import { ACCOUNT_DASHBOARD_URL } from '@discoveryquest/engine/links';
-import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation } from './curriculum.js';
+import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation, nextStationAfter } from './curriculum.js';
 
 // Per-world station x-positions (%) tuned to the painted stepping-stones in each map-art
 // panel. Indexed by station order, BOTTOM→TOP (station 0 sits at the bottom). The engine
@@ -27,7 +27,7 @@ const TRAIL_X = {
   'human-element': [56, 46, 42, 50, 48],
 };
 
-export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSwitchPlayer }) {
+export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSwitchPlayer, lastPlayedId }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
@@ -74,7 +74,10 @@ export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSw
           return isStationOpen(save, w, k) ? 'open' : 'locked';
         }}
         starsOf={(st) => starsOf(save, st.id)}
-        heroId={frontierStation(save, worlds, startWorld)}
+        // Coming back from a mission, land on the station right after it (even
+        // inside an age-collapsed world — TrailMap expands it); otherwise the
+        // usual at-your-level frontier.
+        heroId={nextStationAfter(save, worlds, lastPlayedId) ?? frontierStation(save, worlds, startWorld)}
         heroAvatar={profile?.avatar || '🚀'}
         onPick={setPicked}
         intro={intro}

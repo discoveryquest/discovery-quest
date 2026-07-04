@@ -103,7 +103,8 @@ export default function StateDial3D({ step, onCorrect }) {
       portraitScale={kind === 'orbit-season' ? 0.72 : 0.9}
       overlay={
         <div data-practice3d={kind} data-state={current?.id} data-done={done ? 1 : 0}>
-          <div className="absolute inset-x-0 bottom-3 mx-auto flex w-fit max-w-[92vw] flex-col items-center gap-2 rounded-3xl border border-white/10 bg-slate-950/70 px-5 py-3 backdrop-blur-sm">
+          {/* bottom-28 on phones keeps the dial clear of Luna */}
+          <div className="absolute inset-x-0 bottom-28 mx-auto flex w-fit max-w-[92vw] flex-col items-center gap-2 rounded-3xl border border-white/10 bg-slate-950/70 px-5 py-3 backdrop-blur-sm sm:bottom-3">
             <p className="text-sm font-extrabold text-white">
               {current?.label}
               <span className="ml-3 text-xs font-bold text-slate-400">Target: {states.find((s) => s.id === targetId)?.label ?? targetId}</span>

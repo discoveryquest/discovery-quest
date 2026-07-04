@@ -143,16 +143,18 @@ export default function MoonPhase3D({ step, onCorrect, demo = false }) {
       portraitScale={0.88}
       overlay={
         <div data-practice3d="moon-phase" data-phase={current.name} data-close={close ? 1 : 0}>
-          <div className="absolute left-4 top-4 flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-slate-950/60 p-3 backdrop-blur-sm">
+          {/* top-44 on phones clears the PracticeScreen header + prompt stack */}
+          <div className="absolute left-3 top-44 flex flex-col items-center gap-1 rounded-2xl border border-white/10 bg-slate-950/60 p-2.5 backdrop-blur-sm sm:left-4 sm:top-4 sm:p-3">
             <span className="text-[10px] font-black tracking-widest text-slate-400">YOU SEE</span>
             <PhaseDisc angle={angle} ring="rgba(226,232,240,0.5)" />
             <span className="text-xs font-extrabold text-cyan-200">{current.label}</span>
           </div>
-          <div className="absolute right-4 top-4 flex flex-col items-center gap-1 rounded-2xl border border-cyan-300/25 bg-slate-950/60 p-3 backdrop-blur-sm">
+          <div className="absolute right-3 top-44 flex flex-col items-center gap-1 rounded-2xl border border-cyan-300/25 bg-slate-950/60 p-2.5 backdrop-blur-sm sm:right-4 sm:top-4 sm:p-3">
             <span className="text-[10px] font-black tracking-widest text-cyan-300">GOAL</span>
             <PhaseDisc angle={target} lit="#67e8f9" ring={close ? '#34d399' : 'rgba(103,232,249,0.6)'} />
           </div>
-          <p className="absolute inset-x-0 bottom-3 mx-auto w-fit rounded-full border border-white/10 bg-slate-950/70 px-4 py-1.5 text-center text-sm font-bold text-slate-300 backdrop-blur-sm">
+          {/* bottom-28 on phones keeps it clear of Luna (she lives bottom-left) */}
+          <p className="absolute inset-x-3 bottom-28 mx-auto w-fit max-w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-1.5 text-center text-sm font-bold text-slate-300 backdrop-blur-sm sm:inset-x-0 sm:bottom-3 sm:rounded-full">
             Drag the Moon around the Earth — sunlight makes the phase. Land inside the ring!
           </p>
         </div>
