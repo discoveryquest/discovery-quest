@@ -24,7 +24,8 @@ items are marked `[platform]`.
 
 - [x] Hero badge logic (engine `badges.js`): course Hero = star on every station (gold at all-3-star); Super Hero = Hero on 3 courses; tested (2026-07-04)
 - [x] Tap-the-⭐ breakdown sheet (engine-ui `StarBreakdownSheet`): hero level + XP by source + course Hero badge + cross-course Super Hero; live in Space on prod (2026-07-04)
-- [ ] Show badges + breakdown in **math, English, EFL, Logic** map headers too (same sheet; each passes its `playableStationIds`)
+- [x] Show badges + breakdown in **math, English, Logic** map headers (same sheet; each exports `playableStationIds`); committed + built, awaiting prod deploy of the 3 apps (2026-07-05)
+- [ ] EFL (english-ru) sheet — needs the sheet localized (Russian chrome) since that app is Russian-facing; add a `strings` prop to StarBreakdownSheet
 - [ ] Super Hero live cross-course: pass the signed-in roster bundle (`xpByCourse` + per-course badges) into the sheet — needs the account wiring below
 - [ ] `[platform]` Wire syncQuest/syncRoster into math, space, logic apps (only english/english-ru sync today); add per-course badge to the roster so Super Hero is real
 - [ ] Grown-ups Dashboard: show Hero badges per course + total (server `overview()` has every save)
