@@ -40,9 +40,9 @@ items are marked `[platform]`.
 
 ## Trailers & YouTube
 
-- [ ] "What will we learn?" button on EVERY course card → full-screen Luna trailer (planetarium-style tour, baked Jessica narration)
-- [ ] Record the trailer for every course (space first — the Planetarium is the stage)
-- [ ] Start a YouTube channel; make every Luna recording an uploadable video (recorder pipeline: capture + baked voice → mp4)
+- [x] **Space trailer** — live in-app cinematic tour (6 beats on the 3D bodies, Luna + baked Jessica narration), opened via `?trailer=1`; "What will we learn?" button on the Space landing card. Live on prod (2026-07-05)
+- [ ] Trailers for math, English, Logic (each needs its own script/scenes + card button; Trailer.jsx is the reusable pattern)
+- [ ] Start a YouTube channel; screen-record each in-app trailer as an uploadable video (the trailer scene IS the recording source)
 
 ## Docs & authoring
 
