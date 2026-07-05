@@ -13,6 +13,7 @@ import QuizScreen from './QuizScreen.jsx'; // Space's richer quest host (draggab
 import PracticeScreen from './PracticeScreen.jsx';
 import MapScreen from './MapScreen.jsx';
 import CourseLesson from './CourseLesson.jsx';
+import Trailer from './Trailer.jsx';
 import { playMusic, trackForWorld, MAP_TRACK } from './music.js';
 import { course } from './course.js';
 
@@ -42,6 +43,19 @@ export default function App() {
   const [station, setStation] = useState(null);
   const [lesson, setLesson] = useState(null); // { id, then }
   const [saveTick, setSaveTick] = useState(0);
+  // "What will we learn?" trailer — opened by ?trailer=1 (the landing-site course
+  // card deep-links here). Plays over everything, before the onboarding gate.
+  const [trailer, setTrailer] = useState(() =>
+    typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('trailer') === '1');
+
+  const closeTrailer = () => {
+    setTrailer(false);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('trailer');
+      window.history.replaceState({}, '', url);
+    }
+  };
 
   // Background music: the map/hub theme on the map, the chapter's theme in a quest.
   // (Engine auto-ducks under Luna's narration; missing tracks are silent.)
@@ -60,6 +74,9 @@ export default function App() {
     setRoute(r);
     if (r.mode === 'game') playMusic(MAP_TRACK);
   };
+
+  // ── Trailer (plays over everything, before the gate) ──
+  if (trailer) return <Trailer onClose={closeTrailer} />;
 
   // ── Onboarding gate (identical to Math/English) ──
   if (route.mode === 'setup') {

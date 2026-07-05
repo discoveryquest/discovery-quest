@@ -138,10 +138,10 @@ function Orbiters({ bodies }) {
   );
 }
 
-export function OrbitContent3D({ bodies = [] }) {
+export function OrbitContent3D({ bodies = [], camera }) {
   return (
     <div className="absolute inset-0">
-      <Content3D camera={{ position: [0, 3.2, 9.5], fov: 44 }}>
+      <Content3D camera={camera ?? { position: [0, 3.2, 9.5], fov: 44 }}>
         <Orbiters bodies={bodies} />
       </Content3D>
     </div>
@@ -227,11 +227,11 @@ function LaunchRig({ payload }) {
   );
 }
 
-export function LaunchContent3D({ payload }) {
+export function LaunchContent3D({ payload, camera, scale = 1 }) {
   return (
     <div className="absolute inset-0">
-      <Content3D>
-        <LaunchRig payload={payload} />
+      <Content3D camera={camera}>
+        <group scale={scale}><LaunchRig payload={payload} /></group>
       </Content3D>
     </div>
   );

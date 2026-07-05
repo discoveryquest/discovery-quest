@@ -904,3 +904,10 @@ course:
     mb-x-habitat: "A habitat keeps breathable air inside and Mars dust outside."
     mb-x-power: "Solar panels or nuclear power could run heaters, labs, and life support."
     mb-x-rover: "Rovers would carry explorers and tools across the Martian surface."
+    # ── "What will we learn?" trailer (Trailer.jsx plays these in order) ──
+    tr-intro: "Welcome to Space Quest! Let's peek at everything we're going to explore."
+    tr-w1: "First, right in our backyard sky — the Moon's phases, day and night, the seasons, and gravity."
+    tr-w2: "Next door, our Cosmic Neighborhood — the planets, their moons and rings, and asteroids and comets."
+    tr-w3: "Way out in Deep Space — constellations, how stars are born and die, glowing nebulae, giant galaxies, and black holes."
+    tr-w4: "And us! Rockets, satellites, spacewalks, the space station, and one day — living on Mars."
+    tr-cta: "Ready to become a Space Hero? Let's blast off!"
