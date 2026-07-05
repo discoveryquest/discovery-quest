@@ -4,6 +4,12 @@ Living checklist so nothing gets lost (Pavel, 2026-07-04). Check items off as
 they ship; add new ones at the bottom of the right section. Platform-repo
 items are marked `[platform]`.
 
+## Recent polish & fixes (shipped)
+
+- [x] Math: Leaderboard hidden/commented out (Pavel — may revisit); code dormant in QuestScreen (2026-07-05)
+- [x] Logic matchsticks: draggable (grab reveals target slots, ghost follows finger, green drop target; tap still works) (2026-07-05)
+- [x] Logic "Go Big" 16 puzzle: biggest-in-one-move is 75 (not 19) — fixed hint/success copy + regenerated the 2 Jessica clips (2026-07-05)
+
 ## Space Quest — 3D upgrade
 
 - [x] 3D bodies kit: textured planets, real physics, rings, atmospheres, asteroid belt, Milky Way (2026-07-04)
