@@ -91,7 +91,7 @@ export default function Trailer({ onClose }) {
       }
     }, 150);
     return () => { clearInterval(poll); clearTimeout(advanceT); };
-  }, [i, paused, last]);
+  }, [i, paused, last, started]);
 
   const exit = () => { hushAll(); onClose?.(); };
   // The Play tap gives the page sticky activation (audio unlocked for its
