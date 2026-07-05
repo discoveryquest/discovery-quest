@@ -111,21 +111,23 @@ const SEG_GEOM = {
   g: { x1: 22, y1: 90, x2: 78, y2: 90 },
 };
 
-function Stick({ geom, state, onTap, held, qa }) {
-  // state: 'filled' | 'empty'; held: this exact stick is picked up
+function Stick({ geom, state, onPointerDown, held, over, ghosted, qa }) {
+  // state: 'filled' | 'empty'; held: this exact stick is picked up;
+  // over: an empty slot the dragged match is hovering (glows green);
+  // ghosted: the source match while it's being dragged (dimmed, ghost follows finger).
   const mid = { x: (geom.x1 + geom.x2) / 2, y: (geom.y1 + geom.y2) / 2 };
   return (
     <g
       role="button"
       data-stick={qa}
-      onClick={onTap}
-      style={{ cursor: 'pointer', pointerEvents: 'all' }}
+      onPointerDown={onPointerDown}
+      style={{ cursor: state === 'filled' ? 'grab' : 'pointer', pointerEvents: 'all', touchAction: 'none' }}
       opacity={state === 'empty' ? 1 : undefined}
     >
       {/* fat invisible hit area (≥44px feel at rendered size) */}
       <line x1={geom.x1} y1={geom.y1} x2={geom.x2} y2={geom.y2} stroke="transparent" strokeWidth="26" strokeLinecap="round" />
       {state === 'filled' ? (
-        <motion.g animate={held ? { y: -5, scale: 1.04 } : { y: 0, scale: 1 }} style={{ transformOrigin: `${mid.x}px ${mid.y}px` }}>
+        <motion.g animate={held ? { y: -5, scale: 1.04 } : { y: 0, scale: 1 }} style={{ transformOrigin: `${mid.x}px ${mid.y}px`, opacity: ghosted ? 0.3 : 1 }}>
           <line x1={geom.x1} y1={geom.y1} x2={geom.x2} y2={geom.y2}
             stroke={held ? '#fde68a' : '#f2c14e'} strokeWidth="11" strokeLinecap="round"
             style={held ? { filter: 'drop-shadow(0 0 6px #fde68a)' } : undefined} />
@@ -133,7 +135,9 @@ function Stick({ geom, state, onTap, held, qa }) {
         </motion.g>
       ) : (
         <line x1={geom.x1} y1={geom.y1} x2={geom.x2} y2={geom.y2}
-          stroke="#67e8f9" strokeOpacity="0.5" strokeWidth="9" strokeLinecap="round" strokeDasharray="4 7" />
+          stroke={over ? '#4ade80' : '#67e8f9'} strokeOpacity={over ? 0.95 : 0.5}
+          strokeWidth={over ? 12 : 9} strokeLinecap="round" strokeDasharray="4 7"
+          style={over ? { filter: 'drop-shadow(0 0 6px #4ade80)' } : undefined} />
       )}
     </g>
   );
@@ -157,13 +161,15 @@ export default function MatchstickPractice({ step, disabled, onCorrect, onHint }
   const [held, setHeld] = useState(null); // { ci, seg }
   const [used, setUsed] = useState(0);
   const [shake, setShake] = useState(0);
+  const [drag, setDrag] = useState(null); // { ci, seg, x0, y0, x, y, moved, wasHeld, over }
+  const svgRef = useRef(null);
   const doneRef = useRef(false);
   const onCorrectRef = useRef(onCorrect);
   const onHintRef = useRef(onHint);
   onCorrectRef.current = onCorrect;
   onHintRef.current = onHint;
 
-  const reset = () => { setCells(initial.map((c) => ({ ...c }))); setHeld(null); setUsed(0); };
+  const reset = () => { setCells(initial.map((c) => ({ ...c }))); setHeld(null); setUsed(0); setDrag(null); };
 
   function evaluate(nextCells) {
     const str = decode(nextCells);
@@ -183,22 +189,66 @@ export default function MatchstickPractice({ step, disabled, onCorrect, onHint }
     }
   }
 
-  function tapStick(ci, seg, filled) {
-    if (disabled || doneRef.current) return;
-    if (filled) {
-      setHeld(held && held.ci === ci && held.seg === seg ? null : { ci, seg });
-      return;
-    }
-    if (!held) return;
-    // place the held match into this empty slot
+  // Move the held match from its slot into an empty target slot.
+  function place(fromCi, fromSeg, toCi, toSeg) {
     const next = cells.map((c) => ({ ...c }));
-    next[held.ci].mask &= ~BIT[held.seg];
-    next[ci].mask |= BIT[seg];
+    next[fromCi].mask &= ~BIT[fromSeg];
+    next[toCi].mask |= BIT[toSeg];
     const nUsed = used + 1;
     setCells(next);
     setHeld(null);
     setUsed(nUsed);
     if (nUsed >= maxMoves) evaluate(next);
+  }
+
+  // client → svg-user coords, so a dragged ghost tracks the finger exactly.
+  function clientToSvg(cx, cy) {
+    const svg = svgRef.current;
+    if (!svg) return { x: 0, y: 0 };
+    const pt = svg.createSVGPoint();
+    pt.x = cx; pt.y = cy;
+    const p = pt.matrixTransform(svg.getScreenCTM().inverse());
+    return { x: p.x, y: p.y };
+  }
+  // The empty slot under the pointer (if any) — targets carry data-stick "ci:seg:0".
+  function slotUnder(cx, cy) {
+    const el = document.elementFromPoint(cx, cy);
+    const g = el && el.closest ? el.closest('[data-stick]') : null;
+    if (!g) return null;
+    const [ci, seg, filled] = g.getAttribute('data-stick').split(':');
+    return filled === '0' ? { ci: Number(ci), seg } : null;
+  }
+
+  // Grab a filled match: lift it (reveals the empty target slots, same as tapping)
+  // and begin a drag session. A tap without movement just leaves it lifted.
+  function grabStick(ci, seg, e) {
+    if (disabled || doneRef.current) return;
+    const wasHeld = held && held.ci === ci && held.seg === seg;
+    setHeld({ ci, seg });
+    const { x, y } = clientToSvg(e.clientX, e.clientY);
+    setDrag({ ci, seg, x0: x, y0: y, x, y, moved: false, wasHeld, over: null });
+    try { svgRef.current.setPointerCapture(e.pointerId); } catch { /* pre-capture browsers */ }
+  }
+  // Tapping an empty slot places the currently-held match there.
+  function tapSlot(ci, seg) {
+    if (disabled || doneRef.current || !held) return;
+    place(held.ci, held.seg, ci, seg);
+  }
+  function dragMove(e) {
+    if (!drag) return;
+    const { x, y } = clientToSvg(e.clientX, e.clientY);
+    const moved = drag.moved || Math.hypot(x - drag.x0, y - drag.y0) > 9;
+    const over = moved ? slotUnder(e.clientX, e.clientY) : null;
+    setDrag({ ...drag, x, y, moved, over });
+  }
+  function dragEnd(e) {
+    if (!drag) return;
+    try { svgRef.current.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    const target = slotUnder(e.clientX, e.clientY);
+    if (drag.moved && target) place(drag.ci, drag.seg, target.ci, target.seg);
+    else if (!drag.moved && drag.wasHeld) setHeld(null); // tap a lifted match again to set it back down
+    // dragged-but-missed: keep it lifted so the glowing slots stay for a tap-place
+    setDrag(null);
   }
 
   const movesLeft = maxMoves - used;
@@ -220,10 +270,15 @@ export default function MatchstickPractice({ step, disabled, onCorrect, onHint }
 
       <div className="rounded-3xl border border-amber-300/15 bg-[#1a1410]/80 px-4 py-3 shadow-2xl">
         <svg
+          ref={svgRef}
           viewBox={`0 0 ${cells.length * 100} 180`}
           className="block h-[150px] w-auto max-w-full sm:h-[180px]"
           role="img"
           aria-label={`Matchstick puzzle: ${start}`}
+          style={{ touchAction: 'none' }}
+          onPointerMove={dragMove}
+          onPointerUp={dragEnd}
+          onPointerCancel={dragEnd}
         >
           {cells.map((cell, ci) => (
             <g key={ci} transform={`translate(${ci * 100} 0)`}>
@@ -235,20 +290,36 @@ export default function MatchstickPractice({ step, disabled, onCorrect, onHint }
                   const isHeld = held && held.ci === ci && held.seg === seg;
                   if (!filled && !held) return null; // empty slots appear once a match is lifted
                   if (!filled && held && held.ci === ci && held.seg === seg) return null;
+                  const isOver = !filled && drag && drag.over && drag.over.ci === ci && drag.over.seg === seg;
+                  const isGhosted = filled && drag && drag.moved && drag.ci === ci && drag.seg === seg;
                   return (
                     <Stick key={seg} geom={SEG_GEOM[seg]} state={filled ? 'filled' : 'empty'} qa={`${ci}:${seg}:${filled ? 1 : 0}`}
-                      held={isHeld} onTap={() => tapStick(ci, seg, filled)} />
+                      held={isHeld} over={isOver} ghosted={isGhosted}
+                      onPointerDown={(e) => (filled ? grabStick(ci, seg, e) : tapSlot(ci, seg))} />
                   );
                 })
               )}
             </g>
           ))}
+          {/* the dragged match, following the finger */}
+          {drag && drag.moved && (() => {
+            const g = SEG_GEOM[drag.seg];
+            const hx = (g.x2 - g.x1) / 2;
+            const hy = (g.y2 - g.y1) / 2;
+            return (
+              <g style={{ pointerEvents: 'none' }}>
+                <line x1={drag.x - hx} y1={drag.y - hy} x2={drag.x + hx} y2={drag.y + hy}
+                  stroke="#fde68a" strokeWidth="11" strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 7px #fde68a)' }} />
+                <circle cx={drag.x - hx} cy={drag.y - hy} r="7.5" fill="#e25e4e" />
+              </g>
+            );
+          })()}
         </svg>
       </div>
 
       <div className="flex items-center gap-3">
         <p className="text-xs font-bold text-slate-500">
-          {held ? 'Now tap a glowing slot to place it!' : 'Tap a match to pick it up.'}
+          {held ? 'Drop it on a glowing slot!' : 'Drag a match — or tap to pick it up.'}
         </p>
         <button type="button" onClick={() => { if (!doneRef.current) reset(); }}
           className="flex h-9 touch-manipulation items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 text-sm font-bold text-slate-400 transition-colors hover:bg-white/10"
