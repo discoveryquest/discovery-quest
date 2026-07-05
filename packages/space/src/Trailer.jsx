@@ -59,18 +59,23 @@ export default function Trailer({ onClose }) {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const mood = useLivelyMood('cheer');
+  // Trailers need a tap to begin: browsers block audio until a gesture happens
+  // in THIS page, and visitors arrive via the landing-card link (no gesture
+  // here). The Play button's tap unlocks audio for the rest of the session, so
+  // Luna's narration actually plays — then the beats auto-advance.
+  const [started, setStarted] = useState(false);
   const beat = BEATS[i];
   const last = i === BEATS.length - 1;
 
-  // narrate each beat (Jessica clips baked to these say-keys)
-  useEffect(() => { speak(beat.id, { important: true }); }, [i, beat.id]);
+  // narrate each beat (Jessica clips baked to these say-keys) once we've started
+  useEffect(() => { if (started) speak(beat.id, { important: true }); }, [i, beat.id, started]);
   useEffect(() => () => hushAll(), []);
 
-  // Advance when the narration ENDS (or, if silent — e.g. autoplay not yet
-  // unlocked — after a comfortable reading beat). Mirrors LessonScreen so long
-  // clips are never cut off. The CTA (last) waits for the Start button.
+  // Advance when the narration ENDS (or, if silent, after a comfortable reading
+  // beat). Mirrors LessonScreen so long clips are never cut off. The CTA (last)
+  // waits for the Start button; nothing advances before the tour begins.
   useEffect(() => {
-    if (paused || last) return undefined;
+    if (!started || paused || last) return undefined;
     const startedAt = Date.now();
     const MIN = 5000;      // min on-screen time so silent beats still read
     const HARD_MAX = 16000; // safety net if a clip never resolves
@@ -89,6 +94,9 @@ export default function Trailer({ onClose }) {
   }, [i, paused, last]);
 
   const exit = () => { hushAll(); onClose?.(); };
+  // The Play tap gives the page sticky activation (audio unlocked for its
+  // lifetime); the narrate effect then plays beat 0 — no double-speak.
+  const begin = () => setStarted(true);
 
   return (
     <motion.div
@@ -105,9 +113,25 @@ export default function Trailer({ onClose }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* skip */}
+      {/* start gate — a tap here unlocks audio so Luna's voice plays */}
+      <AnimatePresence>
+        {!started && (
+          <motion.div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-5 bg-black/45 px-6 text-center backdrop-blur-[2px]"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.35em] text-amber-300">Space Quest</p>
+            <h2 className="max-w-md text-3xl font-extrabold text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">What will we learn?</h2>
+            <button type="button" onClick={begin}
+              className="flex items-center gap-3 rounded-2xl bg-cyan-400 px-8 py-4 text-lg font-extrabold text-slate-900 shadow-[0_0_40px_rgba(34,211,238,0.5)] transition-transform hover:scale-105">
+              <span className="text-xl leading-none">▶</span> Play the tour
+            </button>
+            <p className="text-xs font-bold text-slate-300/80">A quick tour with Luna · sound on 🔊</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* skip (stays above the start gate) */}
       <button type="button" onClick={exit}
-        className="absolute right-4 top-4 z-20 rounded-full border border-white/15 bg-black/40 px-4 py-1.5 text-sm font-bold text-slate-200 backdrop-blur-sm transition-colors hover:bg-black/60">
+        className="absolute right-4 top-4 z-40 rounded-full border border-white/15 bg-black/40 px-4 py-1.5 text-sm font-bold text-slate-200 backdrop-blur-sm transition-colors hover:bg-black/60">
         Skip ✕
       </button>
 
