@@ -6,6 +6,7 @@ import { Suspense, lazy } from 'react';
 // second lazy boundary so it splits from the (later) loading UI; touchAction:none
 // stops mobile Safari page-scroll from fighting the look-drag.
 import Hud from './ui/Hud.jsx';
+import FactCard from './ui/FactCard.jsx';
 const MarsSurface = lazy(() => import('./MarsSurface.jsx'));
 
 export default function MarsRoute() {
@@ -23,6 +24,7 @@ export default function MarsRoute() {
         <MarsSurface />
       </Suspense>
       <Hud />
+      <FactCard />
     </div>
   );
 }

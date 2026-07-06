@@ -37,7 +37,7 @@ section at the bottom of this file too.
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu (M5 complete — wind visuals + HUD gauges, screenshot-verified)
 - **Milestones done:** M0 (route+canvas), M1 (config), M2 (terrain+NASA assets+sky), M3 (player+camera+Luna), **M4 (dynamic throwable rocks + safe reset/respawn)**, **M5 (wind: WindProvider clock + drifting DustParticles + swaying Pennant; HUD wind gauge + −60°C temp + visor-frost vignette; live Mars⇄Earth gravity toggle)**. Plus telemetry HUD + scatter boulders. **Walking/jumping CONFIRMED WORKING by Pavel in-browser.** Tests 19/19 green; mars-preview build green.
-- **Current task:** M6 — landmarks & audio. Next concrete action: **T17** `scene/Lander.jsx` (spawn-anchor glb) + `scene/Rover.jsx` (NASA Perseverance glb as a FIXED collider so thrown rocks bounce) + `ui/FactCard.jsx` (Luna-brand "you found Perseverance" popup on proximity). The Perseverance glb is already fetched to the harness + platform public/mars (T6). Then **T18** audio (ambient wind bed via voice-kit + own WebAudio gain for gust swell + positional SFX — CROSS-REPO).
+- **Current task:** **T18** — audio (CROSS-REPO). Ambient wind bed + own WebAudio gain for gust swell (read `windState.gust`) + positional rock-impact SFX; must start on a user gesture (autoplay blocked) and clean up on unmount. Needs an mp3 in the sibling platform repo (`apps/space-quest/public/music/mars-wind.mp3`) — see decision `voice-kit-music-engine`. Can't be screenshot-verified; needs Pavel's ears. T17 done: rover (real NASA glb) + fact card + lander all live & walkshot-verified.
 - **M4 visual proof:** `/tmp/mars-m4-held-improved.png` (held near Luna's hand) and `/tmp/mars-m4-thrown-improved.png` (rock arcing in low gravity). Automated browser interaction used `E` to pick up and throw; only console error was favicon 404.
 - **After M5:** M6 rover (real NASA glb) + audio · M7 UX (loading/mobile/snapshot) · M8 swap in Meshy-rigged Luna · M9 ship.
 - **Dev/verify reminder:** harness = standalone `tools/mars-preview` (React18/fiber8/rapier1); `npm run dev` → localhost:5173; screenshot via `node tools/mars-preview/shot.mjs`. Pure logic via `node --test`. Capture learnings as `context/candidate/*.md`.
@@ -86,7 +86,7 @@ section at the bottom of this file too.
 - [x] **T16** HUD wind gauge + temperature/visor-frost → screenshot-verified (TEMP −60°C, live WIND gauge bar, faint cool frost vignette) → commit. **M5 complete.** (Mars⇄Earth gravity toggle + live physics switch already shipped in the M4 commit)
 
 ### M6 — Landmarks & audio
-- [ ] **T17** Rover (static collider) + FactCard + Lander → commit
+- [x] **T17** Rover (real NASA Perseverance glb, FIXED cuboid collider) + FactCard (proximity, re-arms) + Lander (primitives) → walkshot-verified (rover renders at scale 0.6 ≈ 2 m, fact card fires at ≤7 m) → commit. Rock-bounce-off-rover = live user check. Added `tools/mars-preview/walkshot.mjs` (keyboard-driven screenshot for off-camera landmarks).
 - [ ] **T18** ambient wind bed + own WebAudio gain + positional SFX + cleanup — CROSS-REPO → commit(s)
 
 ### M7 — Cold-visitor UX

@@ -6,6 +6,8 @@ import ScatterRocks from './scene/ScatterRocks.jsx';
 import RockField from './interact/RockField.jsx';
 import SkyDome from './scene/SkyDome.jsx';
 import Pennant from './scene/Pennant.jsx';
+import Lander from './scene/Lander.jsx';
+import Rover from './scene/Rover.jsx';
 import WindProvider from './fx/WindProvider.jsx';
 import DustParticles from './fx/DustParticles.jsx';
 import Player from './player/Player.jsx';
@@ -37,8 +39,10 @@ export default function MarsSurface() {
         <ScatterRocks />
         <DustParticles />
         <Pennant />
+        <Lander />
         <Physics gravity={[0, -gravity, 0]}>
           <Terrain />
+          <Rover />
           <RockField />
           <Player />
         </Physics>
