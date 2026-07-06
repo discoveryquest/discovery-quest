@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { marsConfig } from './world/marsConfig.js';
 import Terrain from './scene/Terrain.jsx';
+import SkyDome from './scene/SkyDome.jsx';
 
 // Root 3D scene for the Mars POC. gl.preserveDrawingBuffer is required for the
 // snapshot feature (Task 21), set here so Canvas creation isn't re-touched later.
@@ -14,9 +15,13 @@ export default function MarsSurface() {
       gl={{ preserveDrawingBuffer: true }}
       style={{ position: 'fixed', inset: 0 }}
     >
+      {/* Scene fog tinted to the sky horizon blends the near terrain into the
+          distant panorama; the sky sphere opts out via fog={false}. */}
+      <fog attach="fog" args={[marsConfig.sky.horizon, 40, 420]} />
       {/* Warm, low Martian key light + soft fill so the dunes read. */}
       <hemisphereLight args={['#d9a06b', '#3a1e12', 0.5]} />
       <directionalLight position={[8, 10, 4]} intensity={1.5} color="#fff2e0" />
+      <SkyDome top={marsConfig.sky.top} horizon={marsConfig.sky.horizon} />
       <Physics gravity={[0, -marsConfig.gravity, 0]}>
         <Terrain />
       </Physics>

@@ -21,7 +21,7 @@ function makeGeometry(size, segments) {
   return g;
 }
 
-export default function Terrain({ size = 200, color = '#9c5a33' }) {
+export default function Terrain({ size = 200, color = '#8f4a2a' }) {
   // Modest segment count keeps the trimesh collider cheap on mobile.
   const geometry = useMemo(() => makeGeometry(size, 96), [size]);
   return (

@@ -7,7 +7,9 @@ export const marsConfig = {
   id: 'mars', name: 'Mars',
   gravity: 3.72, earthGravity: 9.81, // 0.38 g
   temperatureC: -60,
-  sky: { top: '#b5651d', horizon: '#e9c39a', sunColor: '#fff4e6' },
+  // Real Mars daytime sky is a pale, hazy butterscotch/tan (not deep orange):
+  // desaturated zenith brightening toward a dusty horizon.
+  sky: { top: '#b79b74', horizon: '#e7cfa6', sunColor: '#fff4e6' },
   wind: { seed: 42, baseSpeed: 3, gustSpeed: 12 },
   assets: {
     panorama: '/mars/panorama.jpg',

@@ -36,9 +36,9 @@ section at the bottom of this file too.
 ## Session handoff (update every step)
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
-- **Current milestone:** M2 — static scene. Harness VERIFIED (red cube renders via headless screenshot). Screenshot loop available for all visual tasks.
-- **Current task:** Task 7 — SkyDome (NASA panorama) + fog
-- **Next concrete action:** implement SkyDome.jsx (panorama sphere + Mars sky tint) + scene fog; screenshot-verify.
+- **Current milestone:** M2 done (terrain + sky). Next M3 — walk & gravity (player, camera, Luna).
+- **Current task:** Task 9 — PlayerController (walk + jump); then T10 camera + Luna. (T8 math already done.)
+- **Next concrete action:** inputStore + marsStore + PlayerController (rapier capsule, WASD, jump w/ shared JUMP_V0).
 - **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
 
 ---
@@ -67,7 +67,7 @@ section at the bottom of this file too.
 ### M2 — Static scene
 - [x] **T5** procedural terrain + matching trimesh collider — renders (screenshot-verified); grounding verified in T9
 - [x] **T6** NASA assets (Perseverance glb 11.7MB + Mastcam-Z panorama) fetched to harness + deploy; harness copy gitignored, deploy copy survives ignore patterns
-- [ ] **T7** SkyDome (NASA panorama) + fog → build check → commit
+- [x] **T7** Mars sky (procedural butterscotch gradient — panorama is deck-heavy, deferred) + fog; screenshot-verified
 
 ### M3 — Walk & gravity
 - [x] **T8** gravity/jump math (TDD) — 3/3 pass
@@ -106,3 +106,4 @@ section at the bottom of this file too.
 - context/candidate/space-3d-dev-verify-path.md — platform builds a vendored packages/space, not the open worktree; open space-preview is React19/2D-only. Pick 3D dev/verify path deliberately.
 - context/candidate/visual-verification-via-headless-screenshot.md — screenshot the running scene via puppeteer-core + Chrome; compile success does NOT catch runtime crashes (blank canvas).
 - (hoisting fix) tools/mars-preview is standalone + vite resolve.dedupe: workspace hoists React19/fiber9 which crashes rapier v1; isolate to keep the deploy-matching React18/fiber8/rapier1. Do NOT force react18 via root overrides (ERESOLVE vs React-19 previews).
+- context/candidate/nasa-rover-panorama-not-a-skybox.md — rover panoramas are deck-heavy; use a color gradient sky, not a photographic skybox.
