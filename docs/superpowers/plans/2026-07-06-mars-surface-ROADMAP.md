@@ -37,8 +37,8 @@ section at the bottom of this file too.
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
 - **Current milestone:** M1 done. Jumping ahead to pure-logic TDD tasks (T8/T11/T14) that need no browser, before the visual M2 tasks that await the dev-harness decision.
-- **Current task:** Task 8 — gravity/jump math (TDD)
-- **Next concrete action:** write gravity.test.mjs failing test (T8.1). NOTE: doing T8/T11/T14 out of order (all pure TDD) while visual tasks T5-T7,T9+ await the OPEN DECISION below.
+- **Current task:** ALL pure-logic TDD modules done (T3/T4/T8/T11/T14, suite 19/19). Remaining tasks need 3D/browser → BLOCKED on the OPEN DECISION below.
+- **Next concrete action:** resolve the dev-harness OPEN DECISION, then do T5 (terrain) → T7 (sky) → T9/T10 (player/camera).
 - **⚠️ OPEN DECISION (needs user, blocks *visual* verify from ~T5):** how to browser-verify 3D. The platform app builds a **vendored `platform/packages/space`**, NOT the open worktree (see candidate `space-3d-dev-verify-path.md`), and the open repo's `space-preview` is React 19 / 2D-only. Options to resolve: (1) add a React-18/fiber-v8/rapier-v1 dev preview to the OPEN repo importing worktree source [recommended]; (2) mirror mars files to platform + build each checkpoint; (3) develop in platform's vendored copy. Pure-logic tasks (T3/T4/T8/T11/T14) are unaffected — they run via `node --test` in the open repo.
 - **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
 
@@ -81,7 +81,7 @@ section at the bottom of this file too.
 - [ ] **T13** RockField + safe auto-respawn → commit
 
 ### M5 — Environment feedback
-- [ ] **T14** wind gust profile (TDD) → commit
+- [x] **T14** wind gust profile (TDD) — 3/3 pass
 - [ ] **T15** WindProvider + DustParticles + Pennant → commit
 - [ ] **T16** HUD + Mars⇄Earth gravity toggle + temperature → commit
 
