@@ -1,0 +1,106 @@
+# Mars Surface POC — Execution Roadmap (living status)
+
+> **This file is the source of truth for progress.** It survives model/session
+> handoff. Update the checkboxes and the "Session handoff" block after **every**
+> small step, and commit. A new model taking over should read this file top-to-
+> bottom first, then the plan + spec + decisions.
+
+## How to resume (read this first if you're taking over)
+
+1. **Worktree:** `/Users/pavel/dev/discoveryquest/.worktrees/mars-surface` (branch `mars-surface-poc`).
+2. **Consult first (repo rule `.roo/rules/metatron.md`):** read `context/decisions/*.md`
+   before touching code — esp. `app-shell-state-routing-profile-gate`,
+   `packages-are-libraries-deps-in-app`, `tests-use-node-test-mjs`,
+   `r3f-version-constraints`, `two-repo-open-platform-mirror`, `voice-kit-music-engine`,
+   `static-asset-ignore-gotcha`.
+3. **The full plan** (exact code, commands, expected output) is
+   `docs/superpowers/plans/2026-07-06-mars-surface-poc.md`. **The spec** is
+   `docs/superpowers/specs/2026-07-06-mars-surface-poc-design.md`.
+4. **Two repos:** source lives here in `discovery-quest`; the deploy app + public
+   assets live in the SIBLING repo `/Users/pavel/dev/discoveryquest/platform`.
+   Cross-repo tasks = two commits (see decision `two-repo-open-platform-mirror`).
+5. **Dev/verify app:** `cd /Users/pavel/dev/discoveryquest/platform/apps/space-quest && npm run dev` → `http://localhost:5173/mars`.
+6. **Tests:** `cd packages/space && node --test <file>` (Node's runner, `*.test.mjs`).
+7. Find the **first unchecked box** below and continue. Commit after each box.
+
+## Standing practice: capture learnings as candidates
+
+**Every valuable, non-obvious learning discovered during implementation MUST be
+written as a Metatron candidate** in `context/candidate/*.md` (OKF format; skill
+`context-okf-llm-ingest`) so we learn from it later. Candidates are proposals —
+never self-promote to `decisions/`. Log each one in the "Learnings captured"
+section at the bottom of this file too.
+
+---
+
+## Session handoff (update every step)
+
+- **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
+- **Current milestone:** M0 — Scaffolding & route
+- **Current task:** Task 1 — `/mars` route mount
+- **Next concrete action:** create `packages/space/src/mars/MarsRoute.jsx` placeholder (Task 1, Step 1)
+- **Blockers / notes:** none. Meshy MCP connected; NASA reachable. Context layer merged to main.
+
+---
+
+## Progress checkboxes
+
+### M0 — Scaffolding & route
+- [ ] **T1** `/mars` route mount (no profile, no router)
+  - [ ] T1.1 create `MarsRoute.jsx` placeholder
+  - [ ] T1.2 lazy branch in `App.jsx` on `pathname.startsWith('/mars')`
+  - [ ] T1.3 verify `/mars` placeholder renders; `/` still normal
+  - [ ] T1.4 commit
+- [ ] **T2** Rapier dep (v1, pinned) + R3F canvas stub — CROSS-REPO
+  - [ ] T2.1 `npm install @react-three/rapier@^1` in platform app; verify 1.x
+  - [ ] T2.2 declare Rapier optional peer in `packages/space/package.json`
+  - [ ] T2.3 `MarsSurface.jsx` stub (Canvas + `preserveDrawingBuffer` + Physics + cube)
+  - [ ] T2.4 lazy-load MarsSurface from MarsRoute; `touch-action:none` root
+  - [ ] T2.5 verify red cube at `/mars`, no WASM errors
+  - [ ] T2.6 build check — Mars is a separate lazy chunk
+  - [ ] T2.7 commit (TWO commits: platform + discovery-quest)
+
+### M1 — World config
+- [ ] **T3** WorldConfig runtime validator (TDD) — test → fail → impl → pass → commit
+- [ ] **T4** `marsConfig` instance (TDD against validator) → commit
+
+### M2 — Static scene
+- [ ] **T5** procedural terrain + matching trimesh collider → commit
+- [ ] **T6** download NASA assets (rover glb, panorama, regolith) — CROSS-REPO → 2 commits
+- [ ] **T7** SkyDome (NASA panorama) + fog → build check → commit
+
+### M3 — Walk & gravity
+- [ ] **T8** gravity/jump math (TDD) → commit
+- [ ] **T9** `inputStore` + `marsStore` + PlayerController (walk + jump, shared JUMP_V0) → commit
+- [ ] **T10** CameraController first/third-person + view toggle + Luna placeholder → commit
+
+### M4 — Rocks
+- [ ] **T11** interaction selection (TDD) → commit
+- [ ] **T12** Rock + pick-up + throw → build check → commit
+- [ ] **T13** RockField + safe auto-respawn → commit
+
+### M5 — Environment feedback
+- [ ] **T14** wind gust profile (TDD) → commit
+- [ ] **T15** WindProvider + DustParticles + Pennant → commit
+- [ ] **T16** HUD + Mars⇄Earth gravity toggle + temperature → commit
+
+### M6 — Landmarks & audio
+- [ ] **T17** Rover (static collider) + FactCard + Lander → commit
+- [ ] **T18** ambient wind bed + own WebAudio gain + positional SFX + cleanup — CROSS-REPO → commit(s)
+
+### M7 — Cold-visitor UX
+- [ ] **T19** LoadingScreen + WebGL fallback → build check → commit
+- [ ] **T20** mobile touch controls + first-touch hint + orientation → commit
+- [ ] **T21** reduced-motion + Snapshot → build check → commit
+
+### M8 — Meshy assets
+- [ ] **T22** `meshy_check_balance` → rigged Luna + rocks → swap behind components → commit(s) (get user OK on look first)
+
+### M9 — Ship
+- [ ] **T23** full test run + build + pre-share checklist (mirror, ignore-check, deploy, curl assets, real-phone loop)
+
+---
+
+## Learnings captured (candidates authored)
+
+_None yet. Append `- context/candidate/<slug>.md — one line` as you author them._
