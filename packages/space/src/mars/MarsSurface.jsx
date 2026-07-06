@@ -1,23 +1,24 @@
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
+import { marsConfig } from './world/marsConfig.js';
+import Terrain from './scene/Terrain.jsx';
 
 // Root 3D scene for the Mars POC. gl.preserveDrawingBuffer is required for the
 // snapshot feature (Task 21), set here so Canvas creation isn't re-touched later.
-// Physics gravity is per-world / toggle later; -3.72 m/s^2 = Mars (0.38 g) for now.
+// Gravity comes from marsConfig (toggled Mars/Earth in T16). Camera sits at a
+// standing eye height so the regolith recedes to a horizon.
 export default function MarsSurface() {
   return (
     <Canvas
-      camera={{ position: [0, 1.6, 4], fov: 70 }}
+      camera={{ position: [0, 1.7, 9], fov: 70 }}
       gl={{ preserveDrawingBuffer: true }}
       style={{ position: 'fixed', inset: 0 }}
     >
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 8, 3]} intensity={1.2} />
-      <Physics gravity={[0, -3.72, 0]}>
-        <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="#c1440e" />
-        </mesh>
+      {/* Warm, low Martian key light + soft fill so the dunes read. */}
+      <hemisphereLight args={['#d9a06b', '#3a1e12', 0.5]} />
+      <directionalLight position={[8, 10, 4]} intensity={1.5} color="#fff2e0" />
+      <Physics gravity={[0, -marsConfig.gravity, 0]}>
+        <Terrain />
       </Physics>
     </Canvas>
   );

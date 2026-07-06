@@ -37,8 +37,8 @@ section at the bottom of this file too.
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
 - **Current milestone:** M2 — static scene. Harness VERIFIED (red cube renders via headless screenshot). Screenshot loop available for all visual tasks.
-- **Current task:** Task 5 — procedural terrain + matching trimesh collider
-- **Next concrete action:** implement Terrain.jsx (displaced plane + trimesh collider + regolith texture); verify via `npm run build` in mars-preview.
+- **Current task:** Task 6 — download NASA assets (rover glb, panorama, regolith) + place for harness AND deploy
+- **Next concrete action:** write scripts/fetch-mars-assets.mjs; resolve NASA panorama + Perseverance glb URLs; place into tools/mars-preview/public/mars (harness) + platform public/mars (deploy).
 - **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
 
 ---
@@ -65,7 +65,7 @@ section at the bottom of this file too.
 - [x] **T4** `marsConfig` instance (TDD against validator) — 2/2 pass; M1 done
 
 ### M2 — Static scene
-- [ ] **T5** procedural terrain + matching trimesh collider → commit
+- [x] **T5** procedural terrain + matching trimesh collider — renders (screenshot-verified); grounding verified in T9
 - [ ] **T6** download NASA assets (rover glb, panorama, regolith) — CROSS-REPO → 2 commits
 - [ ] **T7** SkyDome (NASA panorama) + fog → build check → commit
 
