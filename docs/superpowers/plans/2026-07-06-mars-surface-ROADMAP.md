@@ -19,7 +19,7 @@
 4. **Two repos:** source lives here in `discovery-quest`; the deploy app + public
    assets live in the SIBLING repo `/Users/pavel/dev/discoveryquest/platform`.
    Cross-repo tasks = two commits (see decision `two-repo-open-platform-mirror`).
-5. **Dev/verify app:** `cd /Users/pavel/dev/discoveryquest/platform/apps/space-quest && npm run dev` → `http://localhost:5173/mars`.
+5. **Dev/verify app:** ⚠️ NOT straightforward — the platform app builds a *vendored* `platform/packages/space`, not this worktree (candidate `space-3d-dev-verify-path.md`). Browser-verifying 3D needs a resolution (see OPEN DECISION in the handoff block). `node --test` for pure modules works fine in the open repo regardless.
 6. **Tests:** `cd packages/space && node --test <file>` (Node's runner, `*.test.mjs`).
 7. Find the **first unchecked box** below and continue. Commit after each box.
 
@@ -37,8 +37,8 @@ section at the bottom of this file too.
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
 - **Current milestone:** M1 — World config (proceeding on fully-testable modules while a dev-harness decision is pending)
-- **Current task:** Task 3 — WorldConfig validator (TDD, `node --test`, no browser needed)
-- **Next concrete action:** write `worldConfig.test.mjs` failing test (T3.1)
+- **Current task:** Task 4 — marsConfig instance (TDD against validator)
+- **Next concrete action:** write marsConfig.test.mjs failing test (T4.1)
 - **⚠️ OPEN DECISION (needs user, blocks *visual* verify from ~T5):** how to browser-verify 3D. The platform app builds a **vendored `platform/packages/space`**, NOT the open worktree (see candidate `space-3d-dev-verify-path.md`), and the open repo's `space-preview` is React 19 / 2D-only. Options to resolve: (1) add a React-18/fiber-v8/rapier-v1 dev preview to the OPEN repo importing worktree source [recommended]; (2) mirror mars files to platform + build each checkpoint; (3) develop in platform's vendored copy. Pure-logic tasks (T3/T4/T8/T11/T14) are unaffected — they run via `node --test` in the open repo.
 - **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
 
@@ -62,7 +62,7 @@ section at the bottom of this file too.
   - [x] T2.7 commit (TWO commits: platform + discovery-quest)
 
 ### M1 — World config
-- [ ] **T3** WorldConfig runtime validator (TDD) — test → fail → impl → pass → commit
+- [x] **T3** WorldConfig runtime validator (TDD) — 8/8 pass
 - [ ] **T4** `marsConfig` instance (TDD against validator) → commit
 
 ### M2 — Static scene
