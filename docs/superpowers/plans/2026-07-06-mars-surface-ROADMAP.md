@@ -35,9 +35,9 @@ section at the bottom of this file too.
 
 ## Session handoff (update every step)
 
-- **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu (M5 complete — wind visuals + HUD gauges, screenshot-verified)
+- **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu (M6 complete — rover + fact card + lander + ElevenLabs audio)
 - **Milestones done:** M0 (route+canvas), M1 (config), M2 (terrain+NASA assets+sky), M3 (player+camera+Luna), **M4 (dynamic throwable rocks + safe reset/respawn)**, **M5 (wind: WindProvider clock + drifting DustParticles + swaying Pennant; HUD wind gauge + −60°C temp + visor-frost vignette; live Mars⇄Earth gravity toggle)**. Plus telemetry HUD + scatter boulders. **Walking/jumping CONFIRMED WORKING by Pavel in-browser.** Tests 19/19 green; mars-preview build green.
-- **Current task:** **T18** — audio (CROSS-REPO). Ambient wind bed + own WebAudio gain for gust swell (read `windState.gust`) + positional rock-impact SFX; must start on a user gesture (autoplay blocked) and clean up on unmount. Needs an mp3 in the sibling platform repo (`apps/space-quest/public/music/mars-wind.mp3`) — see decision `voice-kit-music-engine`. Can't be screenshot-verified; needs Pavel's ears. T17 done: rover (real NASA glb) + fact card + lander all live & walkshot-verified.
+- **Current task:** **M7 — cold-visitor UX.** Next: **T19** `ui/LoadingScreen.jsx` (progress + Luna line + WebGL-unsupported fallback) → build check → commit; **T20** mobile touch controls (joystick + jump/interact buttons) + first-touch hint + orientation nudge; **T21** reduced-motion honoring (incl. DustParticles) + `ui/Snapshot.jsx` (one-tap canvas→PNG with watermark; Canvas already has `preserveDrawingBuffer`). All screenshot-verifiable. **M6 done** (rover+factcard+lander+audio). Audio sound quality still needs Pavel's on-device listen.
 - **M4 visual proof:** `/tmp/mars-m4-held-improved.png` (held near Luna's hand) and `/tmp/mars-m4-thrown-improved.png` (rock arcing in low gravity). Automated browser interaction used `E` to pick up and throw; only console error was favicon 404.
 - **After M5:** M6 rover (real NASA glb) + audio · M7 UX (loading/mobile/snapshot) · M8 swap in Meshy-rigged Luna · M9 ship.
 - **Dev/verify reminder:** harness = standalone `tools/mars-preview` (React18/fiber8/rapier1); `npm run dev` → localhost:5173; screenshot via `node tools/mars-preview/shot.mjs`. Pure logic via `node --test`. Capture learnings as `context/candidate/*.md`.
@@ -87,7 +87,7 @@ section at the bottom of this file too.
 
 ### M6 — Landmarks & audio
 - [x] **T17** Rover (real NASA Perseverance glb, FIXED cuboid collider) + FactCard (proximity, re-arms) + Lander (primitives) → walkshot-verified (rover renders at scale 0.6 ≈ 2 m, fact card fires at ≤7 m) → commit. Rock-bounce-off-rover = live user check. Added `tools/mars-preview/walkshot.mjs` (keyboard-driven screenshot for off-camera landmarks).
-- [ ] **T18** ambient wind bed + own WebAudio gain + positional SFX + cleanup — CROSS-REPO → commit(s)
+- [x] **T18** audio — ElevenLabs-generated `mars-wind.mp3` (22s loop bed) + `rock-thud.mp3`; own WebAudio graph (`audio/marsAudio.js` + `MarsAudio.jsx`): gust-modulated wind gain, rock `onCollisionEnter` thuds (speed-gated, panned), 🔊 mute, arms on first gesture, disposes on unmount. CROSS-REPO (assets → platform). Plumbing verified (mp3 200s, decode no-error, button renders); **sound itself = Pavel's ears.** **M6 complete.**
 
 ### M7 — Cold-visitor UX
 - [ ] **T19** LoadingScreen + WebGL fallback → build check → commit
@@ -108,4 +108,6 @@ section at the bottom of this file too.
 - context/candidate/visual-verification-via-headless-screenshot.md — screenshot the running scene via puppeteer-core + Chrome; compile success does NOT catch runtime crashes (blank canvas).
 - (hoisting fix) tools/mars-preview is standalone + vite resolve.dedupe: workspace hoists React19/fiber9 which crashes rapier v1; isolate to keep the deploy-matching React18/fiber8/rapier1. Do NOT force react18 via root overrides (ERESOLVE vs React-19 previews).
 - context/candidate/nasa-rover-panorama-not-a-skybox.md — rover panoramas are deck-heavy; use a color gradient sky, not a photographic skybox.
+- context/candidate/mars-poc-own-webaudio-not-voice-kit.md — /mars uses its own WebAudio graph (gust-modulated gain + SFX), not voice-kit: the non-workspace harness can't resolve voice-kit and voice-kit exposes no gain setter (the escape hatch its own decision allows).
+- context/candidate/elevenlabs-sound-generation-scope.md — ElevenLabs SFX use the /v1/sound-generation endpoint and need the separate `sound_generation` key scope (off by default; distinct from text-to-speech); the live key is math-quest/.env's ELEVENLABS_API_KEY, platform/.env's ELEVEN_LABS_API_KEY was stale.
 - context/candidate/third-person-held-physics-object-anchor.md — third-person held physics objects should anchor to Luna/body space, not camera-forward, or they obscure the character and read as a UI overlay.

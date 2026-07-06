@@ -7,6 +7,7 @@ import { Suspense, lazy } from 'react';
 // stops mobile Safari page-scroll from fighting the look-drag.
 import Hud from './ui/Hud.jsx';
 import FactCard from './ui/FactCard.jsx';
+import MarsAudio from './audio/MarsAudio.jsx';
 const MarsSurface = lazy(() => import('./MarsSurface.jsx'));
 
 export default function MarsRoute() {
@@ -25,6 +26,7 @@ export default function MarsRoute() {
       </Suspense>
       <Hud />
       <FactCard />
+      <MarsAudio />
     </div>
   );
 }

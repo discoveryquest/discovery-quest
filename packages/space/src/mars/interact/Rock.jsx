@@ -1,5 +1,21 @@
 import { forwardRef } from 'react';
 import { BallCollider, RigidBody } from '@react-three/rapier';
+import { telemetry } from '../telemetry.js';
+import { playThud } from '../audio/marsAudio.js';
+
+// Impact SFX: on a new contact, scale a thud by the rock's speed (resting rocks
+// read ~0 so settling is silent) and pan by where it landed relative to the
+// player. Audio is a no-op until the context is armed by a user gesture, so
+// spawn-time settling before any click makes no sound.
+function onRockImpact({ target }) {
+  const rb = target?.rigidBody;
+  if (!rb) return;
+  const v = rb.linvel();
+  const speed = Math.hypot(v.x, v.y, v.z);
+  if (speed < 1.2) return;
+  const t = rb.translation();
+  playThud(Math.min(1, speed / 11), Math.max(-1, Math.min(1, (t.x - telemetry.x) / 10)));
+}
 
 // Placeholder throwable rock. The visual is intentionally cheap (an icosahedron)
 // so the POC proves the physics/learning loop first; Meshy rocks can replace the
@@ -30,6 +46,7 @@ const Rock = forwardRef(function Rock(
       restitution={0.35}
       friction={0.9}
       canSleep={!held}
+      onCollisionEnter={onRockImpact}
       ccd
     >
       <BallCollider args={[radius * 0.82]} />
