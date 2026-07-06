@@ -19,7 +19,7 @@
 4. **Two repos:** source lives here in `discovery-quest`; the deploy app + public
    assets live in the SIBLING repo `/Users/pavel/dev/discoveryquest/platform`.
    Cross-repo tasks = two commits (see decision `two-repo-open-platform-mirror`).
-5. **Dev/verify (3D):** `cd examples/mars-preview && npm run dev` → `http://localhost:5173` (React18/fiber8/rapier1 harness importing worktree source). Run `npm install` in the worktree root FIRST (fresh worktree has no node_modules). `node --test` for pure modules needs no install.
+5. **Dev/verify (3D):** `cd tools/mars-preview && npm install` (once — standalone, NOT a workspace member), then `npm run dev` → `http://localhost:5173`. **Visual check:** with the server up, `node tools/mars-preview/shot.mjs [url] [out.png]` screenshots via headless Chrome (an agent can read the PNG). React18/fiber8/rapier1, matches deploy.
 6. **Tests:** `cd packages/space && node --test <file>` (Node's runner, `*.test.mjs`).
 7. Find the **first unchecked box** below and continue. Commit after each box.
 
@@ -36,7 +36,7 @@ section at the bottom of this file too.
 ## Session handoff (update every step)
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
-- **Current milestone:** M2 — static scene. Dev harness (examples/mars-preview) established + T2 verified. Unblocked for visual tasks.
+- **Current milestone:** M2 — static scene. Harness VERIFIED (red cube renders via headless screenshot). Screenshot loop available for all visual tasks.
 - **Current task:** Task 5 — procedural terrain + matching trimesh collider
 - **Next concrete action:** implement Terrain.jsx (displaced plane + trimesh collider + regolith texture); verify via `npm run build` in mars-preview.
 - **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
@@ -104,3 +104,5 @@ section at the bottom of this file too.
 ## Learnings captured (candidates authored)
 
 - context/candidate/space-3d-dev-verify-path.md — platform builds a vendored packages/space, not the open worktree; open space-preview is React19/2D-only. Pick 3D dev/verify path deliberately.
+- context/candidate/visual-verification-via-headless-screenshot.md — screenshot the running scene via puppeteer-core + Chrome; compile success does NOT catch runtime crashes (blank canvas).
+- (hoisting fix) tools/mars-preview is standalone + vite resolve.dedupe: workspace hoists React19/fiber9 which crashes rapier v1; isolate to keep the deploy-matching React18/fiber8/rapier1. Do NOT force react18 via root overrides (ERESOLVE vs React-19 previews).
