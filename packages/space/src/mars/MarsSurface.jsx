@@ -3,6 +3,7 @@ import { Physics } from '@react-three/rapier';
 import { marsConfig } from './world/marsConfig.js';
 import Terrain from './scene/Terrain.jsx';
 import SkyDome from './scene/SkyDome.jsx';
+import Player from './player/Player.jsx';
 
 // Root 3D scene for the Mars POC. gl.preserveDrawingBuffer is required for the
 // snapshot feature (Task 21), set here so Canvas creation isn't re-touched later.
@@ -24,6 +25,7 @@ export default function MarsSurface() {
       <SkyDome top={marsConfig.sky.top} horizon={marsConfig.sky.horizon} />
       <Physics gravity={[0, -marsConfig.gravity, 0]}>
         <Terrain />
+        <Player />
       </Physics>
     </Canvas>
   );
