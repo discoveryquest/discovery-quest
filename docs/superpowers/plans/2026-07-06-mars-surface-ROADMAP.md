@@ -71,7 +71,7 @@ section at the bottom of this file too.
 - [ ] **T7** SkyDome (NASA panorama) + fog → build check → commit
 
 ### M3 — Walk & gravity
-- [ ] **T8** gravity/jump math (TDD) → commit
+- [x] **T8** gravity/jump math (TDD) — 3/3 pass
 - [ ] **T9** `inputStore` + `marsStore` + PlayerController (walk + jump, shared JUMP_V0) → commit
 - [ ] **T10** CameraController first/third-person + view toggle + Luna placeholder → commit
 
