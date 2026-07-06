@@ -37,20 +37,20 @@ section at the bottom of this file too.
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
 - **Current milestone:** M0 — Scaffolding & route
-- **Current task:** Task 1 — `/mars` route mount
-- **Next concrete action:** create `packages/space/src/mars/MarsRoute.jsx` placeholder (Task 1, Step 1)
-- **Blockers / notes:** none. Meshy MCP connected; NASA reachable. Context layer merged to main.
+- **Current task:** Task 2 — Rapier dep (v1) + R3F canvas stub (CROSS-REPO)
+- **Next concrete action:** `npm install @react-three/rapier@^1` in `/Users/pavel/dev/discoveryquest/platform/apps/space-quest`, verify resolved 1.x (T2.1)
+- **Blockers / notes:** T1 verified by compile (`vite build` ok, 2600 modules) + SPA serves `/mars`. On-screen visual ("Mars surface — coming online…" renders; `/` still normal) is a pending real-browser check — I'm headless.
 
 ---
 
 ## Progress checkboxes
 
 ### M0 — Scaffolding & route
-- [ ] **T1** `/mars` route mount (no profile, no router)
-  - [ ] T1.1 create `MarsRoute.jsx` placeholder
-  - [ ] T1.2 lazy branch in `App.jsx` on `pathname.startsWith('/mars')`
-  - [ ] T1.3 verify `/mars` placeholder renders; `/` still normal
-  - [ ] T1.4 commit
+- [x] **T1** `/mars` route mount (no profile, no router)
+  - [x] T1.1 create `MarsRoute.jsx` placeholder
+  - [x] T1.2 lazy branch in `App.jsx` on `pathname.startsWith('/mars')`
+  - [x] T1.3 verify — compile (`vite build` ok) + SPA serves `/mars`; on-screen visual pending real browser
+  - [x] T1.4 commit
 - [ ] **T2** Rapier dep (v1, pinned) + R3F canvas stub — CROSS-REPO
   - [ ] T2.1 `npm install @react-three/rapier@^1` in platform app; verify 1.x
   - [ ] T2.2 declare Rapier optional peer in `packages/space/package.json`
