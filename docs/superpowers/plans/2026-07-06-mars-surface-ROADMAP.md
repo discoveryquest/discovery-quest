@@ -90,7 +90,7 @@ section at the bottom of this file too.
 - [x] **T18** audio — ElevenLabs-generated `mars-wind.mp3` (22s loop bed) + `rock-thud.mp3`; own WebAudio graph (`audio/marsAudio.js` + `MarsAudio.jsx`): gust-modulated wind gain, rock `onCollisionEnter` thuds (speed-gated, panned), 🔊 mute, arms on first gesture, disposes on unmount. CROSS-REPO (assets → platform). Plumbing verified (mp3 200s, decode no-error, button renders); **sound itself = Pavel's ears.** **M6 complete.**
 
 ### M7 — Cold-visitor UX
-- [ ] **T19** LoadingScreen + WebGL fallback → build check → commit
+- [x] **T19** branded LoadingScreen (drei useProgress bar + Luna line) + WebGLFallback card (gated in MarsRoute) → harness build green + fallback screenshot-verified (forced no-WebGL) + no scene regression → commit
 - [ ] **T20** mobile touch controls + first-touch hint + orientation → commit
 - [ ] **T21** reduced-motion + Snapshot → build check → commit
 
