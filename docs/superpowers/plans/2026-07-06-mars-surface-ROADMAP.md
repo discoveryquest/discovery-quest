@@ -35,10 +35,11 @@ section at the bottom of this file too.
 
 ## Session handoff (update every step)
 
-- **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu (handoff to a fresh session)
-- **Milestones done:** M0 (route+canvas), M1 (config), M2 (terrain+NASA assets+sky), M3 (player+camera+Luna). Plus telemetry HUD + scatter boulders. **Walking/jumping CONFIRMED WORKING by Pavel in-browser.** Tests 19/19 green.
-- **Current task:** M4 — rocks. Next concrete action: `Rock.jsx` (rapier dynamic body) + `InteractionController` (pick up & throw, using the existing pure `interact/selection.js`), then `RockField` (T13, safe respawn). Screenshot-verify a rock on the ground, then a thrown rock arcing in low gravity (the money shot).
-- **After M4:** M5 wind/dust + HUD Mars⇄Earth gravity toggle (viral moment) · M6 rover (real NASA glb) + audio · M7 UX (loading/mobile/snapshot) · M8 swap in Meshy-rigged Luna · M9 ship.
+- **Last updated:** 2026-07-06, fugu session (M4 rocks implemented + screenshot-verified)
+- **Milestones done:** M0 (route+canvas), M1 (config), M2 (terrain+NASA assets+sky), M3 (player+camera+Luna), **M4 (dynamic throwable rocks + safe reset/respawn)**. Plus telemetry HUD + scatter boulders. **Walking/jumping CONFIRMED WORKING by Pavel in-browser.** Tests 19/19 green; mars-preview build green.
+- **Current task:** M5 — environment feedback. Next concrete action: `WindProvider.jsx` + `DustParticles.jsx` + `Pennant.jsx` (T15), then finish the full T16 HUD with wind/temp polish. Note: during M4, the HUD already gained buttons for view, reset rocks, and a live Mars⇄Earth gravity toggle; T16 still needs wind gauge/temperature/frost polish before checking off.
+- **M4 visual proof:** `/tmp/mars-m4-held-improved.png` (held near Luna's hand) and `/tmp/mars-m4-thrown-improved.png` (rock arcing in low gravity). Automated browser interaction used `E` to pick up and throw; only console error was favicon 404.
+- **After M5:** M6 rover (real NASA glb) + audio · M7 UX (loading/mobile/snapshot) · M8 swap in Meshy-rigged Luna · M9 ship.
 - **Dev/verify reminder:** harness = standalone `tools/mars-preview` (React18/fiber8/rapier1); `npm run dev` → localhost:5173; screenshot via `node tools/mars-preview/shot.mjs`. Pure logic via `node --test`. Capture learnings as `context/candidate/*.md`.
 
 ---
@@ -76,8 +77,8 @@ section at the bottom of this file too.
 
 ### M4 — Rocks
 - [x] **T11** interaction selection (TDD) — 3/3 pass
-- [ ] **T12** Rock + pick-up + throw → build check → commit
-- [ ] **T13** RockField + safe auto-respawn → commit
+- [x] **T12** Rock + pick-up + throw → build check → commit
+- [x] **T13** RockField + safe auto-respawn → commit
 
 ### M5 — Environment feedback
 - [x] **T14** wind gust profile (TDD) — 3/3 pass
@@ -107,3 +108,4 @@ section at the bottom of this file too.
 - context/candidate/visual-verification-via-headless-screenshot.md — screenshot the running scene via puppeteer-core + Chrome; compile success does NOT catch runtime crashes (blank canvas).
 - (hoisting fix) tools/mars-preview is standalone + vite resolve.dedupe: workspace hoists React19/fiber9 which crashes rapier v1; isolate to keep the deploy-matching React18/fiber8/rapier1. Do NOT force react18 via root overrides (ERESOLVE vs React-19 previews).
 - context/candidate/nasa-rover-panorama-not-a-skybox.md — rover panoramas are deck-heavy; use a color gradient sky, not a photographic skybox.
+- context/candidate/third-person-held-physics-object-anchor.md — third-person held physics objects should anchor to Luna/body space, not camera-forward, or they obscure the character and read as a UI overlay.
