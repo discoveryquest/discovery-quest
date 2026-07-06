@@ -9,6 +9,8 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 // terrain, plus a controls hint. Polls the telemetry + windState objects on rAF
 // rather than re-rendering the scene. A faint cool visor-frost vignette sells the
 // −60 °C cold (temperature is visual only, spec §8).
+const coarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+
 export default function Hud() {
   const { view, gravityMode, interaction } = useMarsState();
   const [t, setT] = useState({ x: 0, y: 0, z: 0, speed: 0, grounded: false, wind: 0, gust: 0 });
@@ -84,9 +86,11 @@ export default function Hud() {
           </button>
           <button type="button" style={button} onClick={marsStore.resetRocks}>Reset rocks</button>
         </div>
-        <div style={{ opacity: 0.65, marginTop: 5 }}>
-          WASD move · SPACE jump · E/click rocks · V view
-        </div>
+        {!coarse && (
+          <div style={{ opacity: 0.65, marginTop: 5 }}>
+            WASD move · SPACE jump · E/click rocks · V view
+          </div>
+        )}
       </div>
       {interaction.prompt && (
         <div

@@ -33,7 +33,7 @@ export default function MarsAudio() {
       onClick={() => { const next = !on; setEnabled(next); setOn(next); startAmbient(); }}
       aria-label={on ? 'Mute sound' : 'Unmute sound'}
       style={{
-        position: 'fixed', top: 12, right: 12, zIndex: 3,
+        position: 'fixed', top: 12, right: 12, zIndex: 5,
         appearance: 'none', width: 40, height: 40, borderRadius: 999, cursor: 'pointer',
         border: '1px solid rgba(255,180,120,0.35)', background: 'rgba(20,8,4,0.5)',
         color: '#ffe9d0', font: '18px system-ui', backdropFilter: 'blur(2px)',

@@ -10,6 +10,8 @@ import Hud from './ui/Hud.jsx';
 import FactCard from './ui/FactCard.jsx';
 import MarsAudio from './audio/MarsAudio.jsx';
 import Snapshot from './ui/Snapshot.jsx';
+import Controls from './ui/Controls.jsx';
+import ControlsHint from './ui/ControlsHint.jsx';
 import LoadingScreen from './ui/LoadingScreen.jsx';
 import WebGLFallback from './ui/WebGLFallback.jsx';
 import { hasWebGL } from './ui/webgl.js';
@@ -30,6 +32,8 @@ export default function MarsRoute() {
       <FactCard />
       <MarsAudio />
       <Snapshot />
+      <Controls />
+      <ControlsHint />
     </div>
   );
 }
