@@ -8,6 +8,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LunaOwl, useLivelyMood } from '@discoveryquest/engine-ui/LunaOwl';
 import { speak, hushAll, isSpeaking, currentClipDuration } from '@discoveryquest/voice-kit/audio';
+import { pauseMusic, resumeMusic, setDuckVol } from '@discoveryquest/voice-kit/music';
 import { OrbitContent3D, FieldContent3D, LaunchContent3D } from './scenes/3d/content3d.jsx';
 
 const SUN = { id: 'sun', role: 'star' };
@@ -67,8 +68,21 @@ export default function Trailer({ onClose }) {
   const beat = BEATS[i];
   const last = i === BEATS.length - 1;
 
-  // narrate each beat (Jessica clips baked to these say-keys) once we've started
-  useEffect(() => { if (started) speak(beat.id, { important: true }); }, [i, beat.id, started]);
+  // Narrate the current beat once we've started. Pause hushes her; Play (or a
+  // beat change) speaks the current line — so pressing Play always continues.
+  useEffect(() => {
+    if (!started) return;
+    if (paused) { hushAll(); return; }
+    speak(beat.id, { important: true });
+  }, [i, beat.id, started, paused]);
+
+  // Push music well under Luna's voice for the whole tour; pause it with her.
+  useEffect(() => {
+    setDuckVol(0.035);
+    return () => { setDuckVol(null); resumeMusic(); };
+  }, []);
+  useEffect(() => { if (started) (paused ? pauseMusic() : resumeMusic()); }, [paused, started]);
+
   useEffect(() => () => hushAll(), []);
 
   // Advance when the narration ENDS (or, if silent, after a comfortable reading
