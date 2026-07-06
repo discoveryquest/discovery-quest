@@ -76,7 +76,7 @@ section at the bottom of this file too.
 - [ ] **T10** CameraController first/third-person + view toggle + Luna placeholder → commit
 
 ### M4 — Rocks
-- [ ] **T11** interaction selection (TDD) → commit
+- [x] **T11** interaction selection (TDD) — 3/3 pass
 - [ ] **T12** Rock + pick-up + throw → build check → commit
 - [ ] **T13** RockField + safe auto-respawn → commit
 
