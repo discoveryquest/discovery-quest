@@ -23,6 +23,15 @@ repo that imports the source directly. The only open-repo harness that imports
 dev/verify path explicitly per feature; do not assume the platform app builds your
 worktree source.
 
+**Resolved harness for the Mars POC:** `examples/mars-preview/` — a Vite dev shell
+(React 18 + `@react-three/fiber@8` + `@react-three/drei@9` + `@react-three/rapier@1`,
+matching the platform deploy target) that imports `packages/space/src/mars/MarsRoute.jsx`
+straight from source. Run `npm install` **in the worktree root first** (a fresh git
+worktree has no `node_modules`; pure `node --test` files don't need it, but the 3D
+harness does), then `cd examples/mars-preview && npm run dev` → `http://localhost:5173`.
+`npm run build` there confirms the scene compiles and that `MarsSurface` (three +
+Rapier WASM) splits into its own lazy chunk, off the main bundle.
+
 ## Rationale
 The two-repo split (open source-of-truth + platform deploy) is wired with a
 *vendored copy*, not a live symlink across repos, so the open worktree and the

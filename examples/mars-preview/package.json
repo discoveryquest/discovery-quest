@@ -1,0 +1,26 @@
+{
+  "name": "mars-preview",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Local dev shell to browser-verify the Mars Surface POC (packages/space/src/mars) against worktree source. React 18 + fiber v8 + rapier v1, matching the platform deploy target (see decision r3f-version-constraints). Not shipped.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.460.0",
+    "three": "^0.169.0",
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/drei": "^9.117.3",
+    "@react-three/rapier": "^1"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0",
+    "@vitejs/plugin-react": "^4.3.0"
+  }
+}

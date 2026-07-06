@@ -19,7 +19,7 @@
 4. **Two repos:** source lives here in `discovery-quest`; the deploy app + public
    assets live in the SIBLING repo `/Users/pavel/dev/discoveryquest/platform`.
    Cross-repo tasks = two commits (see decision `two-repo-open-platform-mirror`).
-5. **Dev/verify app:** ⚠️ NOT straightforward — the platform app builds a *vendored* `platform/packages/space`, not this worktree (candidate `space-3d-dev-verify-path.md`). Browser-verifying 3D needs a resolution (see OPEN DECISION in the handoff block). `node --test` for pure modules works fine in the open repo regardless.
+5. **Dev/verify (3D):** `cd examples/mars-preview && npm run dev` → `http://localhost:5173` (React18/fiber8/rapier1 harness importing worktree source). Run `npm install` in the worktree root FIRST (fresh worktree has no node_modules). `node --test` for pure modules needs no install.
 6. **Tests:** `cd packages/space && node --test <file>` (Node's runner, `*.test.mjs`).
 7. Find the **first unchecked box** below and continue. Commit after each box.
 
@@ -36,10 +36,9 @@ section at the bottom of this file too.
 ## Session handoff (update every step)
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
-- **Current milestone:** M1 done. Jumping ahead to pure-logic TDD tasks (T8/T11/T14) that need no browser, before the visual M2 tasks that await the dev-harness decision.
-- **Current task:** ALL pure-logic TDD modules done (T3/T4/T8/T11/T14, suite 19/19). Remaining tasks need 3D/browser → BLOCKED on the OPEN DECISION below.
-- **Next concrete action:** resolve the dev-harness OPEN DECISION, then do T5 (terrain) → T7 (sky) → T9/T10 (player/camera).
-- **⚠️ OPEN DECISION (needs user, blocks *visual* verify from ~T5):** how to browser-verify 3D. The platform app builds a **vendored `platform/packages/space`**, NOT the open worktree (see candidate `space-3d-dev-verify-path.md`), and the open repo's `space-preview` is React 19 / 2D-only. Options to resolve: (1) add a React-18/fiber-v8/rapier-v1 dev preview to the OPEN repo importing worktree source [recommended]; (2) mirror mars files to platform + build each checkpoint; (3) develop in platform's vendored copy. Pure-logic tasks (T3/T4/T8/T11/T14) are unaffected — they run via `node --test` in the open repo.
+- **Current milestone:** M2 — static scene. Dev harness (examples/mars-preview) established + T2 verified. Unblocked for visual tasks.
+- **Current task:** Task 5 — procedural terrain + matching trimesh collider
+- **Next concrete action:** implement Terrain.jsx (displaced plane + trimesh collider + regolith texture); verify via `npm run build` in mars-preview.
 - **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
 
 ---
@@ -52,13 +51,13 @@ section at the bottom of this file too.
   - [x] T1.2 lazy branch in `App.jsx` on `pathname.startsWith('/mars')`
   - [x] T1.3 verify — compile (`vite build` ok) + SPA serves `/mars`; on-screen visual pending real browser
   - [x] T1.4 commit
-- [~] **T2** Rapier dep (v1, pinned) + R3F canvas stub — CROSS-REPO (code done; visual/chunk verify deferred to dev-harness decision)
+- [x] **T2** Rapier dep (v1) + R3F canvas stub — CROSS-REPO (verified via mars-preview harness)
   - [x] T2.1 `npm install @react-three/rapier@^1` in platform app; verified 1.5.0
   - [x] T2.2 declare Rapier optional peer in `packages/space/package.json`
   - [x] T2.3 `MarsSurface.jsx` stub (Canvas + `preserveDrawingBuffer` + Physics + cube)
   - [x] T2.4 lazy-load MarsSurface from MarsRoute; `touch-action:none` root
   - [ ] T2.5 verify red cube at `/mars`, no WASM errors — BLOCKED on dev-harness decision
-  - [ ] T2.6 build check — Mars is a separate lazy chunk — BLOCKED (platform builds vendored copy, not worktree)
+  - [x] T2.6 build check — MarsSurface splits into its own 2.9MB lazy chunk (mars-preview build)
   - [x] T2.7 commit (TWO commits: platform + discovery-quest)
 
 ### M1 — World config
