@@ -4,6 +4,7 @@ import { RigidBody, CapsuleCollider } from '@react-three/rapier';
 import * as THREE from 'three';
 import { input, installInput } from '../input/inputStore.js';
 import { marsStore, useMarsState } from '../store/marsStore.js';
+import { telemetry } from '../telemetry.js';
 import Luna from './Luna.jsx';
 
 const SPEED = 5;        // m/s walk
@@ -55,6 +56,11 @@ export default function Player() {
 
     // Drive the camera.
     const t = rb.translation();
+
+    // Telemetry for the HUD (movement confirmation).
+    telemetry.x = t.x; telemetry.y = t.y; telemetry.z = t.z;
+    telemetry.speed = Math.hypot(vx, vz);
+    telemetry.grounded = grounded;
     if (marsStore.getState().view === 'first') {
       camera.position.set(t.x, t.y + EYE, t.z);
       camera.quaternion.setFromEuler(new THREE.Euler(input.pitch, yaw, 0, 'YXZ'));

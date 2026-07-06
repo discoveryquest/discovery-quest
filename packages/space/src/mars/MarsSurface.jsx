@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { marsConfig } from './world/marsConfig.js';
 import Terrain from './scene/Terrain.jsx';
+import ScatterRocks from './scene/ScatterRocks.jsx';
 import SkyDome from './scene/SkyDome.jsx';
 import Player from './player/Player.jsx';
 
@@ -23,6 +24,7 @@ export default function MarsSurface() {
       <hemisphereLight args={['#d9a06b', '#3a1e12', 0.5]} />
       <directionalLight position={[8, 10, 4]} intensity={1.5} color="#fff2e0" />
       <SkyDome top={marsConfig.sky.top} horizon={marsConfig.sky.horizon} />
+      <ScatterRocks />
       <Physics gravity={[0, -marsConfig.gravity, 0]}>
         <Terrain />
         <Player />

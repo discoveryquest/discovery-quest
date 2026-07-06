@@ -7,15 +7,19 @@ import * as THREE from 'three';
 // player walks exactly on what they see — no foot sliding/floating (plan M5).
 // Deterministic displacement keeps it stable. The regolith texture arrives in T6;
 // until then a flat rusty color stands in.
+// Shared surface height so anything placed on the ground (boulders, spawns)
+// matches the mesh exactly. DRY: the mesh displacement uses this too.
+export function terrainHeight(x, z) {
+  return Math.sin(x * 0.05) * Math.cos(z * 0.05) * 0.8
+       + Math.sin(x * 0.13 + 1.7) * 0.3;
+}
+
 function makeGeometry(size, segments) {
   const g = new THREE.PlaneGeometry(size, size, segments, segments);
   g.rotateX(-Math.PI / 2);
   const pos = g.attributes.position;
   for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i), z = pos.getZ(i);
-    const h = Math.sin(x * 0.05) * Math.cos(z * 0.05) * 0.8
-            + Math.sin(x * 0.13 + 1.7) * 0.3;
-    pos.setY(i, h);
+    pos.setY(i, terrainHeight(pos.getX(i), pos.getZ(i)));
   }
   g.computeVertexNormals();
   return g;

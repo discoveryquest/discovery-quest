@@ -5,6 +5,7 @@ import { Suspense, lazy } from 'react';
 // context/decisions/app-shell-state-routing-profile-gate.md). The 3D scene is a
 // second lazy boundary so it splits from the (later) loading UI; touchAction:none
 // stops mobile Safari page-scroll from fighting the look-drag.
+import Hud from './ui/Hud.jsx';
 const MarsSurface = lazy(() => import('./MarsSurface.jsx'));
 
 export default function MarsRoute() {
@@ -21,6 +22,7 @@ export default function MarsRoute() {
       >
         <MarsSurface />
       </Suspense>
+      <Hud />
     </div>
   );
 }
