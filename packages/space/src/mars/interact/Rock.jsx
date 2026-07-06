@@ -1,7 +1,30 @@
-import { forwardRef } from 'react';
+import { forwardRef, useMemo } from 'react';
 import { BallCollider, RigidBody } from '@react-three/rapier';
+import { useGLTF } from '@react-three/drei';
+import * as THREE from 'three';
 import { telemetry } from '../telemetry.js';
 import { playThud } from '../audio/marsAudio.js';
+
+const ROCK_URL = '/mars/meshy/rock-a.glb';
+
+// The Meshy Mars rock glb, cloned + centred + scaled so its widest extent ≈ the
+// rock's diameter (it sits inside the BallCollider). One glb reused across all
+// spawns with per-rock scale + a stable random tumble so they don't look identical.
+function RockMesh({ radius, seed }) {
+  const { scene } = useGLTF(ROCK_URL);
+  const model = useMemo(() => {
+    const clone = scene.clone(true);
+    clone.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+    const box = new THREE.Box3().setFromObject(clone);
+    const size = box.getSize(new THREE.Vector3());
+    const c = box.getCenter(new THREE.Vector3());
+    clone.position.sub(c);
+    clone.scale.setScalar((radius * 2.05) / (Math.max(size.x, size.y, size.z) || 1));
+    clone.rotation.set(seed * 1.7, seed * 2.3, seed * 0.9);
+    return clone;
+  }, [scene, radius, seed]);
+  return <primitive object={model} />;
+}
 
 // Impact SFX: on a new contact, scale a thud by the rock's speed (resting rocks
 // read ~0 so settling is silent) and pan by where it landed relative to the
@@ -17,9 +40,9 @@ function onRockImpact({ target }) {
   playThud(Math.min(1, speed / 11), Math.max(-1, Math.min(1, (t.x - telemetry.x) / 10)));
 }
 
-// Placeholder throwable rock. The visual is intentionally cheap (an icosahedron)
-// so the POC proves the physics/learning loop first; Meshy rocks can replace the
-// mesh behind this component in T22 without changing the interaction contract.
+// Throwable rock: the Meshy Mars-rock glb inside a ball collider. The interaction
+// contract (props, ref, collider) is unchanged from the placeholder — only the
+// visual mesh was swapped (T22).
 const Rock = forwardRef(function Rock(
   {
     id,
@@ -31,7 +54,7 @@ const Rock = forwardRef(function Rock(
   },
   ref,
 ) {
-  const color = interesting ? '#6f7f87' : '#5d2b1d';
+  const seed = useMemo(() => (id ? [...id].reduce((a, c) => a + c.charCodeAt(0), 0) : 0), [id]);
   return (
     <RigidBody
       ref={ref}
@@ -50,20 +73,12 @@ const Rock = forwardRef(function Rock(
       ccd
     >
       <BallCollider args={[radius * 0.82]} />
-      <mesh castShadow receiveShadow>
-        <icosahedronGeometry args={[radius, 1]} />
-        <meshStandardMaterial
-          color={color}
-          roughness={1}
-          flatShading
-          emissive={selected || held ? '#ff9d4a' : '#000000'}
-          emissiveIntensity={held ? 0.45 : selected ? 0.28 : 0}
-        />
-      </mesh>
+      <RockMesh radius={radius} seed={seed} />
+      {/* selection / held highlight ring around the rock */}
       {(selected || held) && (
-        <mesh scale={1.18}>
-          <icosahedronGeometry args={[radius, 1]} />
-          <meshBasicMaterial color="#ffb15d" wireframe transparent opacity={held ? 0.35 : 0.22} />
+        <mesh scale={radius * 1.25}>
+          <icosahedronGeometry args={[1, 1]} />
+          <meshBasicMaterial color="#ffb15d" wireframe transparent opacity={held ? 0.4 : 0.25} />
         </mesh>
       )}
     </RigidBody>
@@ -71,3 +86,4 @@ const Rock = forwardRef(function Rock(
 });
 
 export default Rock;
+useGLTF.preload(ROCK_URL);
