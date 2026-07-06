@@ -95,7 +95,7 @@ section at the bottom of this file too.
 - [x] **T21** reduced-motion (DustParticles: thinner static haze, no drift) + Snapshot (📸 one-tap canvas→PNG, watermarked `discoveryquest.app/mars`, shutter flash) → verified non-blank 207KB grab of the clean scene (preserveDrawingBuffer works, canvas untainted) → commit
 
 ### M8 — Meshy assets
-- [ ] **T22** `meshy_check_balance` → rigged Luna + rocks → swap behind components → commit(s) (get user OK on look first)
+- [~] **T22** Meshy assets via REST API (no MCP): generated Luna reference-driven glbs (image-to-3D, meshy-6) — `luna-owl.glb` (base owl mascot, reusable for regular courses), `luna-suit.glb` (wearable navy suit), `rock-a.glb` (Mars rock). **Luna swapped into `Luna.jsx`** as modular owl-in-suit + a three.js glass helmet dome (bbox-fit + hand-tuned head offsets; screenshot-verified in-scene). Reference art committed to `packages/engine-ui/assets/luna`. **PENDING:** Pavel's sign-off on the assembled look; swap `rock-a.glb` into `Rock.jsx` (still the icosahedron placeholder); optional rigging/animation (idle/walk/jump/throw); prune the stray sparkle speck on the owl. Not rigged yet (static pose).
 
 ### M9 — Ship
 - [ ] **T23** full test run + build + pre-share checklist (mirror, ignore-check, deploy, curl assets, real-phone loop)
@@ -111,3 +111,4 @@ section at the bottom of this file too.
 - context/candidate/mars-poc-own-webaudio-not-voice-kit.md — /mars uses its own WebAudio graph (gust-modulated gain + SFX), not voice-kit: the non-workspace harness can't resolve voice-kit and voice-kit exposes no gain setter (the escape hatch its own decision allows).
 - context/candidate/elevenlabs-sound-generation-scope.md — ElevenLabs SFX use the /v1/sound-generation endpoint and need the separate `sound_generation` key scope (off by default; distinct from text-to-speech); the live key is math-quest/.env's ELEVENLABS_API_KEY, platform/.env's ELEVEN_LABS_API_KEY was stale.
 - context/candidate/third-person-held-physics-object-anchor.md — third-person held physics objects should anchor to Luna/body space, not camera-forward, or they obscure the character and read as a UI overlay.
+- context/candidate/meshy-rest-pipeline-and-modular-characters.md — Meshy REST (no MCP) image-to-3D from base64 ref; meshy-6 (meshy-4 deprecated, enable_pbr is meshy-5-only, meshy-5 hangs at 49%); Meshy can't do glass → three.js dome; modular character assembly by bbox-fit + hand-tuned head offsets.
