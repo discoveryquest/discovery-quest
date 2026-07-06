@@ -8,6 +8,8 @@
 
 **Tech Stack:** React 18, `@react-three/fiber@8`, `@react-three/drei@9`, `three@0.169`, `@react-three/rapier@^1` (pinned to the fiber-v8 line), `@discoveryquest/voice-kit`, Node's built-in test runner (`node --test`, `*.test.mjs`).
 
+**Review response (fugu `.REVIEW.md`, 2026-07-06):** all seven must-fixes applied — **M1** two-repo ownership section + absolute platform paths + two-commit rule (verified `platform` and `discovery-quest` are separate repos and `platform` is not in this worktree); **M2** `/mars` route lazy-loaded from `App.jsx`; **M3** Rapier declared as an optional peer of `@discoveryquest/space`; **M4** removed the `require()`, top-level ESM imports; **M5** terrain uses a matching trimesh collider (heightfield fallback), never a flat cuboid; **M6** voice-kit has no volume setter, so gust swell uses an owned WebAudio gain (bed stays constant); **M7** `preserveDrawingBuffer` set at Canvas creation + same-origin snapshot note. Refinements folded in: **R1** range/logic validator checks, **R2** spec de-vitest'd, **R3** single shared `JUMP_V0`, **R4** recurring build checks (Tasks 2/7/12/19/21), **R5** safe non-destructive rock respawn, **R6** shared `inputStore`, **R7** pointer-lock gesture + `touch-action:none`, **R8** asset perf targets, **R9** route-unmount audio cleanup, **R10** Meshy is non-blocking polish.
+
 ---
 
 ## Spec
@@ -25,12 +27,24 @@ Source spec: `docs/superpowers/specs/2026-07-06-mars-surface-poc-design.md` (rea
 - **Static-asset gotcha:** `.dockerignore`/`.gitignore` `**/shots`-style patterns have dropped assets before. Mars assets go in `platform/apps/space-quest/public/mars/` — verify they survive ignore patterns before deploy.
 - **Meshy:** `meshy` MCP server is registered and connected (tools `meshy_text_to_3d`, `meshy_rig`, `meshy_animate`, `meshy_download_model`, `meshy_check_balance`, …).
 
+## Repo / Commit Ownership (read before touching files)
+
+**This is two separate git repos.** This plan lives in and the worktree belongs to the open **`discovery-quest`** repo (`/Users/pavel/dev/discoveryquest/discovery-quest`, worktree at `.worktrees/mars-surface`). The **deployed React-18 app is in a *sibling* repo, `platform`** (`/Users/pavel/dev/discoveryquest/platform`) — it is **not** inside this worktree. You cannot `git add` a `platform/...` path from here.
+
+- **`discovery-quest` repo owns (source of truth):** everything under `packages/space/src/mars/**`, `packages/space/package.json`, tests, this plan/spec, and `discovery-quest/scripts/fetch-mars-assets.mjs`.
+- **`platform` repo owns:** `apps/space-quest/package.json` + lockfile (the Rapier dep), `apps/space-quest/public/mars/**` and `apps/space-quest/public/music/mars-wind.mp3` (deploy assets), and deploy verification.
+- **Always use absolute paths for platform**, e.g. `/Users/pavel/dev/discoveryquest/platform/apps/space-quest/...`, and run `git -C /Users/pavel/dev/discoveryquest/platform ...` for its commits.
+- **Cross-repo tasks require two commits** (one per repo), each tagged with the same task number. **Never promise a single atomic commit across both repos.** Tasks 2, 6, 18, 22, 23 are cross-repo.
+- **Asset note:** since the fetch script lives in `discovery-quest`, it *writes into the sibling* `platform/apps/space-quest/public/mars/`; committing those files is a separate `platform`-repo commit.
+
 ## File Structure
 
 All under `packages/space/src/mars/` unless noted. Each file has one responsibility.
 
 ```
 mars/
+  input/
+    inputStore.js          # single source of keyboard/mouse/touch state (R6); consumers subscribe
   world/
     worldConfig.js         # validateWorldConfig(cfg) — runtime validator + JSDoc shape
     worldConfig.test.mjs
@@ -56,13 +70,13 @@ mars/
     Luna.jsx               # astronaut model (placeholder capsule first; Meshy glb later)
     Hands.jsx              # first-person reticle first; gloved-hands glb later (N4)
   scene/
-    Terrain.jsx            # procedural heightmap ground + collider + regolith texture
+    Terrain.jsx            # procedural terrain + MATCHING trimesh/heightfield collider (M5)
     SkyDome.jsx            # NASA panorama skybox + Mars sky tint + sun
     Rover.jsx              # NASA Perseverance glb, static collider, proximity fact card
     Lander.jsx             # spawn-anchor prop
     Pennant.jsx            # small flag; vertex sway driven by wind
   audio/
-    marsSound.js           # ambient wind bed (voice-kit) + positional SFX helpers
+    marsSound.js           # constant wind bed (voice-kit) + OWN WebAudio gain for gust swell + positional SFX (M6)
   ui/
     Hud.jsx                # gravity/temp/wind gauges + view + Mars⇄Earth gravity toggles
     FactCard.jsx           # Luna-brand "did you know" popup
@@ -75,10 +89,15 @@ mars/
   MarsSurface.jsx          # the R3F <Canvas>: lights, fog, physics <World>, mounts scene
   MarsRoute.jsx            # fullscreen entry: LoadingScreen + lazy MarsSurface + UI overlay
 
-# Outside the package:
-platform/apps/space-quest/package.json   # add @react-three/rapier@^1
-platform/apps/space-quest/public/mars/   # downloaded NASA assets + generated Meshy assets
-packages/space/src/App.jsx               # add /mars pathname branch (before profile gate)
+# discovery-quest repo, but outside the mars module:
+packages/space/package.json              # declare @react-three/rapier as (optional) peer (M3)
+packages/space/src/App.jsx               # lazy /mars pathname branch, before profile gate (M2)
+scripts/fetch-mars-assets.mjs            # reproducible NASA fetch (writes into sibling platform)
+
+# SIBLING platform repo (/Users/pavel/dev/discoveryquest/platform) — separate commits:
+apps/space-quest/package.json            # add @react-three/rapier@^1 (pinned, React 18/fiber v8)
+apps/space-quest/public/mars/            # NASA assets + generated Meshy assets
+apps/space-quest/public/music/mars-wind.mp3  # ambient bed
 ```
 
 ## Milestones
@@ -120,23 +139,30 @@ export default function MarsRoute() {
 }
 ```
 
-- [ ] **Step 2: Branch to it at the very top of `App()` in `App.jsx`**
+- [ ] **Step 2: Branch to it at the very top of `App()` in `App.jsx` — and LAZY-load it (M2)**
 
-Add immediately inside the `App` function body, before any hooks that read profiles:
+The whole Mars route (and everything it pulls in: R3F, drei, Rapier WASM, Mars UI) must stay out of the normal Space Quest main bundle. So `App.jsx` imports it via `React.lazy`, not statically:
 
 ```jsx
-import MarsRoute from './mars/MarsRoute.jsx';
+import { lazy, Suspense } from 'react';
+const MarsRoute = lazy(() => import('./mars/MarsRoute.jsx'));
 // ...
 export default function App() {
   // Standalone Mars POC — cold-open link, bypasses the profile gate entirely.
+  // Lazy so none of the 3D stack touches the main Space Quest bundle.
   if (typeof window !== 'undefined' && window.location.pathname.startsWith('/mars')) {
-    return <MarsRoute />;
+    return (
+      <Suspense fallback={null}>
+        <MarsRoute />
+      </Suspense>
+    );
   }
   // ...existing App body unchanged...
 }
 ```
 
 > Note: the early `return` must precede the existing `useState`/`useEffect` calls. Because it is a stable, synchronous branch on `window.location.pathname` (never toggles within a session), it does not violate the rules-of-hooks — the component renders one consistent path for the life of the page. Keep it the first statement.
+> **Bundle-hygiene rule for reviewers:** nothing imported by `App.jsx` at module top-level may pull in `three`/`@react-three/*`. Verify with the Task 2 build check that Mars is its own chunk.
 
 - [ ] **Step 3: Run the app and verify the route renders**
 
@@ -153,31 +179,45 @@ git commit -m "feat(mars): mount /mars fullscreen route, no profile gate"
 
 ---
 
-## Task 2: Add Rapier dependency, pinned + lazy-loaded
+## Task 2: Add Rapier dependency (pinned) + R3F canvas stub — CROSS-REPO
 
 **Files:**
-- Modify: `platform/apps/space-quest/package.json`
-- Modify: `packages/space/src/mars/MarsRoute.jsx`
-- Create: `packages/space/src/mars/MarsSurface.jsx` (stub)
+- **Sibling `platform` repo:** Modify `/Users/pavel/dev/discoveryquest/platform/apps/space-quest/package.json` (+ lockfile)
+- **`discovery-quest` repo:** Modify `packages/space/package.json` (peer decl), `packages/space/src/mars/MarsRoute.jsx`; Create `packages/space/src/mars/MarsSurface.jsx`
 
-- [ ] **Step 1: Install Rapier v1 in the app (matches fiber v8 / React 18)**
+- [ ] **Step 1: Install Rapier v1 in the sibling app (matches fiber v8 / React 18)**
 
-Run: `cd platform/apps/space-quest && npm install @react-three/rapier@^1`
-Then verify the resolved version is 1.x (v2 would signal a React-19 mismatch):
-Run: `npm ls @react-three/rapier`
-Expected: `@react-three/rapier@1.x.x` (NOT 2.x).
+Run: `cd /Users/pavel/dev/discoveryquest/platform/apps/space-quest && npm install @react-three/rapier@^1`
+Verify the resolved version is 1.x (v2 would signal a React-19 mismatch):
+Run: `npm ls @react-three/rapier` → Expected: `@react-three/rapier@1.x.x` (NOT 2.x).
 
-- [ ] **Step 2: Create a MarsSurface stub that imports Rapier**
+- [ ] **Step 2: Declare Rapier at the package boundary (M3)** — `@discoveryquest/space` now *imports* Rapier, so add it to `packages/space/package.json` `peerDependencies` (optional so 2D-only shells don't break):
+
+```json
+"peerDependencies": {
+  "react": "*", "framer-motion": "*", "lucide-react": "*",
+  "three": "*", "@react-three/fiber": "*", "@react-three/drei": "*",
+  "@react-three/rapier": "^1"
+},
+"peerDependenciesMeta": { "@react-three/rapier": { "optional": true } }
+```
+
+- [ ] **Step 3: Create a MarsSurface stub that imports Rapier** — set `preserveDrawingBuffer` now so the Task 21 snapshot works without re-touching Canvas creation (M7):
 
 ```jsx
 // packages/space/src/mars/MarsSurface.jsx
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 
-// Root 3D scene. Physics gravity is set per-world later; -3.72 = Mars for now.
+// Root 3D scene. gl.preserveDrawingBuffer is required for the snapshot feature
+// (Task 21). gravity is per-world/toggle later; -3.72 = Mars for now.
 export default function MarsSurface() {
   return (
-    <Canvas camera={{ position: [0, 1.6, 4], fov: 70 }} style={{ position: 'fixed', inset: 0 }}>
+    <Canvas
+      camera={{ position: [0, 1.6, 4], fov: 70 }}
+      gl={{ preserveDrawingBuffer: true }}
+      style={{ position: 'fixed', inset: 0 }}
+    >
       <ambientLight intensity={0.6} />
       <directionalLight position={[5, 8, 3]} intensity={1.2} />
       <Physics gravity={[0, -3.72, 0]}>
@@ -191,7 +231,7 @@ export default function MarsSurface() {
 }
 ```
 
-- [ ] **Step 3: Lazy-load MarsSurface from MarsRoute (keeps Rapier WASM off the main bundle)**
+- [ ] **Step 4: Lazy-load MarsSurface from MarsRoute** (a second lazy boundary inside the already-lazy route is fine — it splits the Canvas from the loading UI):
 
 ```jsx
 // packages/space/src/mars/MarsRoute.jsx
@@ -200,7 +240,7 @@ const MarsSurface = lazy(() => import('./MarsSurface.jsx'));
 
 export default function MarsRoute() {
   return (
-    <div style={{ position: 'fixed', inset: 0, background: '#0b0602' }}>
+    <div style={{ position: 'fixed', inset: 0, background: '#0b0602', touchAction: 'none' }}>
       <Suspense fallback={<div data-testid="mars-loading" style={{ color: '#e8c9a0' }}>Loading Mars…</div>}>
         <MarsSurface />
       </Suspense>
@@ -209,16 +249,27 @@ export default function MarsRoute() {
 }
 ```
 
-- [ ] **Step 4: Verify a red cube renders in the R3F canvas at `/mars`**
+> `touchAction: 'none'` on the fullscreen root prevents mobile-Safari page-scroll fighting the look-drag (R7).
 
-Run: `cd platform/apps/space-quest && npm run dev` → open `/mars`
-Expected: a lit red/orange cube on a dark background; no console errors about Rapier or WASM.
+- [ ] **Step 5: Verify a red cube renders at `/mars`**
 
-- [ ] **Step 5: Commit**
+Run: `cd /Users/pavel/dev/discoveryquest/platform/apps/space-quest && npm run dev` → open `http://localhost:5173/mars`
+Expected: a lit red/orange cube on a dark background; no console errors about Rapier/WASM.
+
+- [ ] **Step 6: Build check (R4) — confirm Mars is a separate lazy chunk**
+
+Run: `cd /Users/pavel/dev/discoveryquest/platform/apps/space-quest && npm run build`
+Expected: build succeeds; output shows a **separate chunk** for the Mars route (Rapier/three not in the main/index chunk).
+
+- [ ] **Step 7: Commit — TWO commits (cross-repo, M1)**
 
 ```bash
-git add platform/apps/space-quest/package.json platform/apps/space-quest/package-lock.json packages/space/src/mars/MarsSurface.jsx packages/space/src/mars/MarsRoute.jsx
-git commit -m "feat(mars): add @react-three/rapier@1 (lazy) + R3F canvas stub"
+# platform repo (app dependency + lockfile)
+git -C /Users/pavel/dev/discoveryquest/platform add apps/space-quest/package.json apps/space-quest/package-lock.json
+git -C /Users/pavel/dev/discoveryquest/platform commit -m "feat(mars): add @react-three/rapier@1 to space-quest app [task 2]"
+# discovery-quest repo (package peer decl + module stubs)
+git add packages/space/package.json packages/space/src/mars/MarsSurface.jsx packages/space/src/mars/MarsRoute.jsx
+git commit -m "feat(mars): R3F canvas stub + Rapier optional peer [task 2]"
 ```
 
 ---
@@ -270,6 +321,26 @@ test('flags missing asset urls', () => {
   assert.ok(res.errors.some((e) => e.includes('assets.ground')));
   assert.ok(res.errors.some((e) => e.includes('assets.rover')));
 });
+
+// R1: range / logic checks — this validator is the safety rail for Moon later.
+test('flags gravity >= earthGravity (should be a fraction of Earth)', () => {
+  const res = validateWorldConfig({ ...valid, gravity: 12 });
+  assert.equal(res.ok, false);
+  assert.ok(res.errors.some((e) => e.includes('gravity')));
+});
+test('flags implausible temperature', () => {
+  assert.equal(validateWorldConfig({ ...valid, temperatureC: -999 }).ok, false);
+});
+test('flags gustSpeed < baseSpeed', () => {
+  const res = validateWorldConfig({ ...valid, wind: { seed: 1, baseSpeed: 10, gustSpeed: 2 } });
+  assert.equal(res.ok, false);
+  assert.ok(res.errors.some((e) => e.includes('wind.gustSpeed')));
+});
+test('flags a non-same-origin asset path', () => {
+  const res = validateWorldConfig({ ...valid, assets: { ...valid.assets, ground: 'https://evil/x.jpg' } });
+  assert.equal(res.ok, false);
+  assert.ok(res.errors.some((e) => e.includes('assets.ground')));
+});
 ```
 
 - [ ] **Step 2: Run to verify it fails**
@@ -293,26 +364,32 @@ Expected: FAIL — `validateWorldConfig` is not exported.
  */
 const num = (v) => typeof v === 'number' && Number.isFinite(v);
 const str = (v) => typeof v === 'string' && v.length > 0;
+// Same-origin public asset path (leading '/'), not an off-origin URL.
+const asset = (v) => str(v) && v.startsWith('/');
 
 /** Runtime validate a WorldConfig. Returns { ok, errors[] }. This is the guard
- *  that makes "Moon is just another config" safe. */
+ *  that makes "Moon is just another config" safe — types AND ranges/logic (R1). */
 export function validateWorldConfig(cfg) {
   const errors = [];
   const need = (cond, path) => { if (!cond) errors.push(`invalid or missing: ${path}`); };
   need(cfg && typeof cfg === 'object', 'config');
   if (!cfg) return { ok: false, errors };
   need(str(cfg.id), 'id'); need(str(cfg.name), 'name');
-  need(num(cfg.gravity), 'gravity'); need(num(cfg.earthGravity), 'earthGravity');
-  need(num(cfg.temperatureC), 'temperatureC');
+  // gravity must be a positive fraction of Earth's
+  need(num(cfg.earthGravity) && cfg.earthGravity > 0, 'earthGravity');
+  need(num(cfg.gravity) && cfg.gravity > 0 && cfg.gravity < cfg.earthGravity, 'gravity');
+  need(num(cfg.temperatureC) && cfg.temperatureC > -200 && cfg.temperatureC < 100, 'temperatureC');
   need(cfg.sky && str(cfg.sky.top), 'sky.top');
   need(cfg.sky && str(cfg.sky.horizon), 'sky.horizon');
   need(cfg.sky && str(cfg.sky.sunColor), 'sky.sunColor');
   need(cfg.wind && num(cfg.wind.seed), 'wind.seed');
-  need(cfg.wind && num(cfg.wind.baseSpeed), 'wind.baseSpeed');
-  need(cfg.wind && num(cfg.wind.gustSpeed), 'wind.gustSpeed');
-  need(cfg.assets && str(cfg.assets.panorama), 'assets.panorama');
-  need(cfg.assets && str(cfg.assets.ground), 'assets.ground');
-  need(cfg.assets && str(cfg.assets.rover), 'assets.rover');
+  need(cfg.wind && num(cfg.wind.baseSpeed) && cfg.wind.baseSpeed >= 0, 'wind.baseSpeed');
+  need(cfg.wind && num(cfg.wind.gustSpeed) && cfg.wind.gustSpeed >= cfg.wind.baseSpeed, 'wind.gustSpeed');
+  need(cfg.assets && asset(cfg.assets.panorama), 'assets.panorama');
+  need(cfg.assets && asset(cfg.assets.ground), 'assets.ground');
+  need(cfg.assets && asset(cfg.assets.rover), 'assets.rover');
+  // optional assets, but if present must be same-origin paths
+  if (cfg.assets && cfg.assets.lander !== undefined) need(asset(cfg.assets.lander), 'assets.lander');
   need(str(cfg.ambientTrack), 'ambientTrack');
   return { ok: errors.length === 0, errors };
 }
@@ -389,69 +466,76 @@ export const marsConfig = {
 - Create: `packages/space/src/mars/scene/Terrain.jsx`
 - Modify: `packages/space/src/mars/MarsSurface.jsx`
 
-- [ ] **Step 1: Implement Terrain** — a displaced plane with a heightmap-ish noise, a `CuboidCollider`/`HeightfieldCollider` (rapier) matching it, and the regolith texture (falls back to a flat color until Task 6 supplies the file).
+**M5 decision — the collider must MATCH the visible geometry.** A displaced mesh over a flat cuboid collider causes foot sliding/floating and breaks grounded checks in a first-person walker. Use a **`trimesh` auto-collider generated from the exact displaced geometry** (Rapier supports this for `fixed` bodies). All imports are top-level ESM (M4) — no `require()`.
 
 ```jsx
 // Terrain.jsx
 import { useMemo } from 'react';
 import { RigidBody } from '@react-three/rapier';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
-// A bounded, gently undulating regolith patch. Displacement is deterministic
-// value-noise so the collider (a flat cuboid just below the surface) is a fair
-// approximation for a POC (kids won't notice sub-metre mismatch on gentle dunes).
-export default function Terrain({ size = 200, color = '#9c5a33' }) {
-  const geometry = useMemo(() => {
-    const g = new THREE.PlaneGeometry(size, size, 128, 128);
-    g.rotateX(-Math.PI / 2);
-    const pos = g.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i), z = pos.getZ(i);
-      const h = Math.sin(x * 0.05) * Math.cos(z * 0.05) * 0.8
-              + Math.sin(x * 0.13 + 1.7) * 0.3;
-      pos.setY(i, h);
-    }
-    g.computeVertexNormals();
-    return g;
-  }, [size]);
+// Bounded, gently undulating regolith patch. The SAME geometry drives the
+// visible mesh AND a trimesh collider, so the player walks exactly on what they
+// see (no sliding/floating — M5). Deterministic displacement keeps it stable.
+function makeGeometry(size, segments) {
+  const g = new THREE.PlaneGeometry(size, size, segments, segments);
+  g.rotateX(-Math.PI / 2);
+  const pos = g.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), z = pos.getZ(i);
+    const h = Math.sin(x * 0.05) * Math.cos(z * 0.05) * 0.8
+            + Math.sin(x * 0.13 + 1.7) * 0.3;
+    pos.setY(i, h);
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
+export default function Terrain({ size = 200, groundTexture }) {
+  // Keep collider segment count modest (trimesh cost); visual can match for POC.
+  const geometry = useMemo(() => makeGeometry(size, 96), [size]);
+  const tex = useTexture(groundTexture); // regolith; supplied in Task 6
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(size / 8, size / 8);
 
   return (
-    <RigidBody type="fixed" colliders={false}>
+    // Auto-generate a trimesh collider from the child mesh geometry.
+    <RigidBody type="fixed" colliders="trimesh">
       <mesh geometry={geometry} receiveShadow>
-        <meshStandardMaterial color={color} roughness={1} />
+        <meshStandardMaterial map={tex} roughness={1} />
       </mesh>
-      {/* Flat collider just under mean surface height */}
-      <CuboidGround size={size} />
     </RigidBody>
   );
 }
-
-function CuboidGround({ size }) {
-  const { CuboidCollider } = require('@react-three/rapier');
-  return <CuboidCollider args={[size / 2, 0.5, size / 2]} position={[0, -0.5, 0]} />;
-}
 ```
 
-> If `require` is unavailable in the app's build, import `CuboidCollider` at top instead. Prefer the top-level import; the inline form is only shown to keep the collider colocated.
+- [ ] **Step 1: Implement Terrain** as above (top-level imports; trimesh collider from the displaced geometry).
+- [ ] **Step 2: Mount Terrain in MarsSurface** (replace the red cube), passing `marsConfig.assets.ground`.
+- [ ] **Step 3: Verify** at `/mars`: a reddish undulating, textured ground fills the lower view with a horizon line. **Walk-grounding is verified later in Task 9** — here just confirm it renders with no console errors.
+- [ ] **Step 4: Commit** — `feat(mars): procedural regolith terrain + matching trimesh collider [task 5]`.
 
-- [ ] **Step 2: Mount Terrain in MarsSurface** (replace the red cube).
-- [ ] **Step 3: Verify** at `/mars`: a reddish undulating ground plane fills the lower view; camera at eye height sees a horizon line. No console errors.
-- [ ] **Step 4: Commit** — `feat(mars): procedural regolith terrain + collider`.
+> If the trimesh collider proves too heavy on mobile in the Task 9 grounding check, the fallback is a Rapier **heightfield collider** built from the same height function (cheaper, still matches). Do not fall back to a flat cuboid.
 
 ---
 
 ## Task 6: Download NASA assets
 
-**Files:**
-- Create: `platform/apps/space-quest/public/mars/` (panorama.jpg, regolith.jpg, perseverance.glb, lander.glb)
-- Create: `scripts/fetch-mars-assets.mjs` (records exact source URLs so the fetch is reproducible)
+**Files (CROSS-REPO, M1):**
+- **Sibling `platform` repo:** `/Users/pavel/dev/discoveryquest/platform/apps/space-quest/public/mars/` (panorama.jpg, regolith.jpg, perseverance.glb, lander.glb) — committed in the `platform` repo.
+- **`discovery-quest` repo:** `scripts/fetch-mars-assets.mjs` (records exact source URLs + output paths so the fetch is reproducible). The script *writes into* the sibling platform public dir; the fetched binaries are a separate `platform`-repo commit.
+
+**Asset perf targets to record in the fetch script (R8):**
+- Panorama ≤ 4k wide, JPG reasonably compressed; note final px + file size (KTX2/Basis is a fast-follow if VRAM is high).
+- GLBs: apply Draco/meshopt where supported; verify the rover's real-world scale + pivot once on import.
+- Note the dust particle-count cap chosen for mid-range Android.
 
 - [ ] **Step 1: Resolve and download the NASA Perseverance glb** from the pinned source (spec §6): NASA Science 3D Resources "Mars 2020 Perseverance Rover" (`science.nasa.gov/3d-resources/mars-2020-perseverance-rover/`, embed id 25042). Fetch the `.glb` into `public/mars/perseverance.glb`. Verify: `ls -la` shows a multi-MB file; open it once in a glTF viewer or load in a throwaway `<primitive>` to confirm it parses.
 - [ ] **Step 2: Download the Mastcam-Z 360° panorama** (`mars.nasa.gov/resources/25640/`, hi-res `25674`) as an equirectangular JPG → `public/mars/panorama.jpg`. **Downsize to ≤4k wide** and note the final resolution in `fetch-mars-assets.mjs` (VRAM lever, spec §6).
 - [ ] **Step 3: Crop a regolith tile** from rover raw imagery → `public/mars/regolith.jpg` (seamless-ish, ~1k).
 - [ ] **Step 4: Record every source URL + license note (NASA public domain) in `scripts/fetch-mars-assets.mjs`** so a re-fetch is a one-command reproducible step (URLs move over time — spec §6).
-- [ ] **Step 5: Confirm files are not swallowed by ignore patterns** — `git check-ignore -v platform/apps/space-quest/public/mars/perseverance.glb` should print **nothing** (not ignored). If ignored, add a negation and re-verify.
-- [ ] **Step 6: Commit** — `chore(mars): vendor NASA panorama, regolith, Perseverance glb (public domain)`.
+- [ ] **Step 5: Confirm files are not swallowed by ignore patterns** — `git -C /Users/pavel/dev/discoveryquest/platform check-ignore -v apps/space-quest/public/mars/perseverance.glb` should print **nothing** (not ignored). If ignored, add a negation and re-verify.
+- [ ] **Step 6: Commit — TWO commits (M1):** the `fetch-mars-assets.mjs` script in `discovery-quest` (`git add scripts/fetch-mars-assets.mjs`), and the vendored binaries in `platform` (`git -C /Users/pavel/dev/discoveryquest/platform add apps/space-quest/public/mars && git -C ... commit -m "chore(mars): vendor NASA panorama, regolith, Perseverance glb (public domain) [task 6]"`).
 
 ---
 
@@ -526,8 +610,8 @@ export const hangTime = (v0, g) => (2 * v0) / g;            // seconds up+down
 
 **Files:** Create `packages/space/src/mars/player/PlayerController.jsx`, `packages/space/src/mars/store/marsStore.js`; modify `MarsSurface.jsx`.
 
-- [ ] **Step 1: Implement `marsStore`** — a minimal `useSyncExternalStore` store holding `{ view:'first'|'third', gravityMode:'mars'|'earth', wind:0, sampleCount:0 }` with setters. (No new dependency.)
-- [ ] **Step 2: Implement PlayerController** — a rapier capsule `RigidBody` (locked rotations) at spawn near the lander. Reads input (WASD/arrows now; touch joystick wired in Task 20). Applies horizontal velocity; on jump input, if grounded (short downward raycast), sets upward velocity sized to feel right under the active gravity. Physics `<World gravity>` is driven by `gravityMode` (Task 16). Expose player world-position via a ref for camera + interaction.
+- [ ] **Step 1: Implement `inputStore` (R6) and `marsStore`** — `inputStore` is the single source of movement intent (`{ forward, right, jump, look }`) written by keyboard/mouse now and by touch `Controls` in Task 20; every controller *reads* it so no two components attach competing listeners. `marsStore` (minimal `useSyncExternalStore`, no new dependency) holds `{ view:'first'|'third', gravityMode:'mars'|'earth', wind:0 }` with setters.
+- [ ] **Step 2: Implement PlayerController** — a rapier capsule `RigidBody` (locked rotations) at spawn near the lander. Reads movement intent from `inputStore`. Applies horizontal velocity; on jump input, if grounded (short downward raycast), sets upward velocity to a **single shared constant `JUMP_V0`** (R3). **Do NOT scale `JUMP_V0` by gravity mode** — the whole point of the toggle is that the *same* impulse behaves differently under different gravity; scaling per-mode would erase the lesson. Physics `<World gravity>` is driven by `gravityMode` (Task 16). Expose player world-position via a ref for camera + interaction.
 - [ ] **Step 3: Verify** at `/mars`: WASD moves across the terrain; Space produces a floaty jump with visibly long hang time; you cannot fall through the ground.
 - [ ] **Step 4: Commit** — `feat(mars): rapier player capsule with Mars-gravity movement + jump`.
 
@@ -614,7 +698,7 @@ export function pickNearestInRange(player, rocks, maxDist) {
 
 **Files:** Create `packages/space/src/mars/interact/RockField.jsx`.
 
-- [ ] **Step 1:** Spawn N rocks (incl. one "interesting" mineral) at scattered spawn points near the lander. Track each rock's distance from the play area; if a rock has been beyond `RECALL_DIST` for `> RECALL_SECS`, respawn a rock at the player's feet. Prevents a dead-end demo.
+- [ ] **Step 1:** Spawn N rocks (incl. one "interesting" mineral) at scattered spawn points near the lander. Track each rock's distance from the play area; if a rock has been beyond `RECALL_DIST` for `> RECALL_SECS`, respawn it. **Respawn safely (R5):** place it a short distance *in front of* the player at a small height (e.g. 1.5 m ahead, 1 m up), and **zero its linear + angular velocity** before re-enabling dynamics — never at the player's exact feet (a recalled dynamic body there can collide with / launch the capsule).
 - [ ] **Step 2: Verify:** throw all rocks far away; within a few seconds a fresh rock appears near Luna. A "reset rocks" HUD button (added in Task 15) also respawns them.
 - [ ] **Step 3: Commit** — `feat(mars): rock field with auto-respawn (R1)`.
 
@@ -707,10 +791,13 @@ export function gustAt(seed, t) {
 
 **Files:** Create `packages/space/src/mars/audio/marsSound.js`; add audio files to `platform/apps/space-quest/public/`.
 
-- [ ] **Step 1:** Generate/obtain a looping Mars wind bed → `public/music/mars-wind.mp3`; and SFX (footstep crunch, rock clink, impact puff) → `public/mars/sfx/*.mp3`.
-- [ ] **Step 2: marsSound** — start the ambient bed via `playMusic('mars-wind')` on entry (user-gesture-safe: begin on first interaction), modulate its volume by `marsStore.wind`; play positional SFX via three `PositionalAudio` on footstep/pickup/impact events.
-- [ ] **Step 3: Verify:** ambient wind swells with gusts; footsteps/clink/impact fire. **Confirm the mp3s actually load** (Network tab 200s) — silence-on-missing is a trap (spec N2).
-- [ ] **Step 4: Commit** — `feat(mars): ambient wind bed + positional SFX`.
+**M6 decision — voice-kit music has NO public volume/gain setter** (only `playMusic/pauseMusic/resumeMusic/stopMusic/setMusicEnabled/isMusicOn`). So do **not** try to modulate its volume. Approach: `playMusic('mars-wind')` provides a **constant** bed for autoplay/ducking consistency with the rest of the app; the **gust swell is a separate WebAudio graph owned by `marsSound.js`** (its own `<audio>`/buffer → `GainNode` whose `gain.value` tracks `marsStore.wind`). This keeps the shared voice-kit package untouched. (Alternative if you'd rather centralize: add `setMusicIntensity(x)` to voice-kit and test on iOS/desktop — heavier, needs a shared-package change; not the default.)
+
+- [ ] **Step 1:** Generate/obtain a looping Mars wind bed → sibling `platform/apps/space-quest/public/music/mars-wind.mp3`; and SFX (footstep crunch, rock clink, impact puff) → `platform/apps/space-quest/public/mars/sfx/*.mp3`. (These are a **`platform`-repo commit**, M1.)
+- [ ] **Step 2: marsSound** — on entry (first user gesture, autoplay-safe) `playMusic('mars-wind')` as the constant bed; separately load a wind-gust loop into an owned WebAudio `GainNode` and set `gain.value` from `marsStore.wind` each frame. Play positional SFX via three `PositionalAudio` on footstep/pickup/impact events.
+- [ ] **Step 3: Lifecycle cleanup (R9)** — on MarsRoute unmount (and guard against hot-reload duplicates) call `stopMusic()`, stop/disconnect the gust gain graph, and remove SFX listeners so ambient audio never leaks after leaving `/mars`.
+- [ ] **Step 4: Verify:** ambient wind swells with gusts; footsteps/clink/impact fire. **Confirm every mp3 loads** (Network tab 200s) — silence-on-missing is a trap (spec N2). Navigate away/reload → audio stops.
+- [ ] **Step 5: Commit** — `feat(mars): constant wind bed + gain-modulated gust + positional SFX [task 18]` (+ separate platform-repo commit for the audio files).
 
 ---
 
@@ -740,7 +827,7 @@ export function gustAt(seed, t) {
 **Files:** Create `packages/space/src/mars/ui/Snapshot.jsx`; use `usePrefersReducedMotion()` in DustParticles/CameraController.
 
 - [ ] **Step 1: Reduced motion** — when `usePrefersReducedMotion()` is true, dampen camera bob/screen dust/shake (keep the world). Confirm `Esc` exits pointer lock.
-- [ ] **Step 2: Snapshot** — a HUD camera button that renders the Canvas to a PNG (`gl.domElement.toDataURL` / `preserveDrawingBuffer` as needed) with a subtle `discoveryquest.app/mars` watermark, then triggers a download / share.
+- [ ] **Step 2: Snapshot** — a HUD camera button that renders the Canvas to a PNG via `gl.domElement.toDataURL('image/png')` (Canvas already has `preserveDrawingBuffer: true` from Task 2 — M7), draws a subtle `discoveryquest.app/mars` watermark, then triggers download/share. **All Mars assets are served same-origin from `/mars/...`, so the canvas is not tainted** — verify the exported PNG is not blank/black. If `preserveDrawingBuffer` measurably hurts the §1 mobile fps target, gate it behind a "snapshot enabled" flag or use an offscreen render pass instead.
 - [ ] **Step 3: Verify:** OS reduce-motion dampens effects; snapshot button saves a watermarked PNG of the current view.
 - [ ] **Step 4: Commit** — `feat(mars): reduced-motion support + one-tap watermarked snapshot`.
 
@@ -776,4 +863,11 @@ export function gustAt(seed, t) {
 - **TDD applies to the pure modules** (`worldConfig`, `marsConfig`, `gravity`, `selection`, `wind`) — write the test first, watch it fail, implement, watch it pass. **R3F/visual components are verified by running the app and looking** (screenshots), not by unit tests — that is the correct testing philosophy for a 3D scene (spec §9).
 - **Keep files focused** — if any component grows past its one responsibility (e.g. PlayerController accreting camera logic), split it.
 - **DRY the world data** — never hardcode gravity/colors/asset paths in components; read them from `marsConfig`. This is what keeps Moon a config away.
-- **Commit after every task.** End every commit message with the `Claude-Session:` trailer.
+- **Commit after every task.** End every commit message with the `Claude-Session:` trailer. **Cross-repo tasks (2, 6, 18, 22, 23) = two commits**, one per repo, same task number (see Repo/Commit Ownership).
+- **Recurring build check (R4)** — unit tests won't catch bundler-only failures (R3F imports, Rapier WASM, dynamic-import chunks, GLB paths). After Tasks **2, 7, 12, 19, and 21**, run:
+  ```bash
+  cd /Users/pavel/dev/discoveryquest/platform/apps/space-quest && npm run build
+  ```
+  It must succeed, and Mars must remain a **separate lazy chunk**.
+- **Meshy does not block the MVP (R10)** — the branch goal is the gravity/throw/shareable Mars loop. If Meshy quality or credits are bad at Task 22, **ship with the placeholder Luna / reticle / placeholder rocks**. Task 22 is polish, not a gate.
+- **Pointer lock (R7)** — request it only from a user gesture; `Esc` must visibly return to UI mode. The fullscreen Mars root already sets `touch-action: none` (Task 2) so mobile look-drag doesn't scroll the page.

@@ -267,7 +267,8 @@ phone over cellular. These are cheap and directly protect the viral moment:
 
 ## 9. Testing & Verification
 
-**Unit tests** (`vitest`, existing `*.test.mjs` convention) on pure logic:
+**Unit tests** (Node's built-in `node --test`, existing `*.test.mjs` convention —
+**not** vitest) on pure logic:
 - `marsConfig` passes a **runtime `validateWorldConfig()` validator** (a real
   function, not just a `.d.ts` shape) — asserts gravity, sky, asset URLs, wind
   profile, temperature range are all present and well-typed. This validator is
