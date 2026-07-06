@@ -35,11 +35,11 @@ section at the bottom of this file too.
 
 ## Session handoff (update every step)
 
-- **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
-- **Current milestone:** M2 done (terrain + sky). Next M3 — walk & gravity (player, camera, Luna).
-- **Current task:** M3 done + telemetry HUD (X/Z/ALT/SPEED/grounded) + scatter boulders for motion reference (user feedback: featureless terrain). Next M4 rocks (T12/T13).
-- **Next concrete action:** Rock.jsx (rapier dynamic body) + InteractionController (pickup/throw using selection.js); screenshot-verify a rock on the ground.
-- **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
+- **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu (handoff to a fresh session)
+- **Milestones done:** M0 (route+canvas), M1 (config), M2 (terrain+NASA assets+sky), M3 (player+camera+Luna). Plus telemetry HUD + scatter boulders. **Walking/jumping CONFIRMED WORKING by Pavel in-browser.** Tests 19/19 green.
+- **Current task:** M4 — rocks. Next concrete action: `Rock.jsx` (rapier dynamic body) + `InteractionController` (pick up & throw, using the existing pure `interact/selection.js`), then `RockField` (T13, safe respawn). Screenshot-verify a rock on the ground, then a thrown rock arcing in low gravity (the money shot).
+- **After M4:** M5 wind/dust + HUD Mars⇄Earth gravity toggle (viral moment) · M6 rover (real NASA glb) + audio · M7 UX (loading/mobile/snapshot) · M8 swap in Meshy-rigged Luna · M9 ship.
+- **Dev/verify reminder:** harness = standalone `tools/mars-preview` (React18/fiber8/rapier1); `npm run dev` → localhost:5173; screenshot via `node tools/mars-preview/shot.mjs`. Pure logic via `node --test`. Capture learnings as `context/candidate/*.md`.
 
 ---
 
