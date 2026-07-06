@@ -92,7 +92,7 @@ section at the bottom of this file too.
 ### M7 — Cold-visitor UX
 - [x] **T19** branded LoadingScreen (drei useProgress bar + Luna line) + WebGLFallback card (gated in MarsRoute) → harness build green + fallback screenshot-verified (forced no-WebGL) + no scene regression → commit
 - [ ] **T20** mobile touch controls + first-touch hint + orientation → commit
-- [ ] **T21** reduced-motion + Snapshot → build check → commit
+- [x] **T21** reduced-motion (DustParticles: thinner static haze, no drift) + Snapshot (📸 one-tap canvas→PNG, watermarked `discoveryquest.app/mars`, shutter flash) → verified non-blank 207KB grab of the clean scene (preserveDrawingBuffer works, canvas untainted) → commit
 
 ### M8 — Meshy assets
 - [ ] **T22** `meshy_check_balance` → rigged Luna + rocks → swap behind components → commit(s) (get user OK on look first)

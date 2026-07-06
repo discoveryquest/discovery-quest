@@ -9,6 +9,7 @@ import { Suspense, lazy, useState } from 'react';
 import Hud from './ui/Hud.jsx';
 import FactCard from './ui/FactCard.jsx';
 import MarsAudio from './audio/MarsAudio.jsx';
+import Snapshot from './ui/Snapshot.jsx';
 import LoadingScreen from './ui/LoadingScreen.jsx';
 import WebGLFallback from './ui/WebGLFallback.jsx';
 import { hasWebGL } from './ui/webgl.js';
@@ -28,6 +29,7 @@ export default function MarsRoute() {
       <Hud />
       <FactCard />
       <MarsAudio />
+      <Snapshot />
     </div>
   );
 }

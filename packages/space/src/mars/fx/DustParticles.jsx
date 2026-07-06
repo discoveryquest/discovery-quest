@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { windState } from './windState.js';
 import { telemetry } from '../telemetry.js';
+import { prefersReducedMotion } from '../ui/reducedMotion.js';
 
 // Wind-blown regolith haze: a Points cloud that drifts along the wind direction
 // at a speed that swells with gusts, and thickens (opacity up) on the same gust —
@@ -12,18 +13,22 @@ import { telemetry } from '../telemetry.js';
 export default function DustParticles({ count = 420, area = 64 }) {
   const geomRef = useRef();
   const matRef = useRef();
+  // Reduced motion: keep a thin static haze for depth, but stop the drift.
+  const reduced = useMemo(() => prefersReducedMotion(), []);
+  const realCount = reduced ? Math.round(count * 0.35) : count;
 
   const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
+    const arr = new Float32Array(realCount * 3);
+    for (let i = 0; i < realCount; i++) {
       arr[i * 3] = (Math.random() - 0.5) * area;
       arr[i * 3 + 1] = 0.2 + Math.random() * 6;
       arr[i * 3 + 2] = (Math.random() - 0.5) * area;
     }
     return arr;
-  }, [count, area]);
+  }, [realCount, area]);
 
   useFrame((_, dt) => {
+    if (reduced) return; // static haze — no drift
     const geo = geomRef.current;
     if (!geo) return;
     const arr = geo.attributes.position.array;
@@ -32,7 +37,7 @@ export default function DustParticles({ count = 420, area = 64 }) {
     const half = area / 2;
     const vx = windState.dirX * windState.speed * dt;
     const vz = windState.dirZ * windState.speed * dt;
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < realCount; i++) {
       let x = arr[i * 3] + vx;
       let z = arr[i * 3 + 2] + vz;
       // wrap each particle into the box centered on the player
