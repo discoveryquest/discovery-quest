@@ -36,10 +36,11 @@ section at the bottom of this file too.
 ## Session handoff (update every step)
 
 - **Last updated:** 2026-07-06, session_01UuNPTjgu6qHRcfjKrtqiQu
-- **Current milestone:** M0 — Scaffolding & route
-- **Current task:** Task 2 — Rapier dep (v1) + R3F canvas stub (CROSS-REPO)
-- **Next concrete action:** `npm install @react-three/rapier@^1` in `/Users/pavel/dev/discoveryquest/platform/apps/space-quest`, verify resolved 1.x (T2.1)
-- **Blockers / notes:** T1 verified by compile (`vite build` ok, 2600 modules) + SPA serves `/mars`. On-screen visual ("Mars surface — coming online…" renders; `/` still normal) is a pending real-browser check — I'm headless.
+- **Current milestone:** M1 — World config (proceeding on fully-testable modules while a dev-harness decision is pending)
+- **Current task:** Task 3 — WorldConfig validator (TDD, `node --test`, no browser needed)
+- **Next concrete action:** write `worldConfig.test.mjs` failing test (T3.1)
+- **⚠️ OPEN DECISION (needs user, blocks *visual* verify from ~T5):** how to browser-verify 3D. The platform app builds a **vendored `platform/packages/space`**, NOT the open worktree (see candidate `space-3d-dev-verify-path.md`), and the open repo's `space-preview` is React 19 / 2D-only. Options to resolve: (1) add a React-18/fiber-v8/rapier-v1 dev preview to the OPEN repo importing worktree source [recommended]; (2) mirror mars files to platform + build each checkpoint; (3) develop in platform's vendored copy. Pure-logic tasks (T3/T4/T8/T11/T14) are unaffected — they run via `node --test` in the open repo.
+- **T2 status:** code complete (Rapier v1 installed in platform, optional peer declared, MarsSurface + lazy MarsRoute). **Visual/chunk verify deferred** to the dev-harness decision — could NOT confirm in platform because of the vendored-copy issue above.
 
 ---
 
@@ -51,14 +52,14 @@ section at the bottom of this file too.
   - [x] T1.2 lazy branch in `App.jsx` on `pathname.startsWith('/mars')`
   - [x] T1.3 verify — compile (`vite build` ok) + SPA serves `/mars`; on-screen visual pending real browser
   - [x] T1.4 commit
-- [ ] **T2** Rapier dep (v1, pinned) + R3F canvas stub — CROSS-REPO
-  - [ ] T2.1 `npm install @react-three/rapier@^1` in platform app; verify 1.x
-  - [ ] T2.2 declare Rapier optional peer in `packages/space/package.json`
-  - [ ] T2.3 `MarsSurface.jsx` stub (Canvas + `preserveDrawingBuffer` + Physics + cube)
-  - [ ] T2.4 lazy-load MarsSurface from MarsRoute; `touch-action:none` root
-  - [ ] T2.5 verify red cube at `/mars`, no WASM errors
-  - [ ] T2.6 build check — Mars is a separate lazy chunk
-  - [ ] T2.7 commit (TWO commits: platform + discovery-quest)
+- [~] **T2** Rapier dep (v1, pinned) + R3F canvas stub — CROSS-REPO (code done; visual/chunk verify deferred to dev-harness decision)
+  - [x] T2.1 `npm install @react-three/rapier@^1` in platform app; verified 1.5.0
+  - [x] T2.2 declare Rapier optional peer in `packages/space/package.json`
+  - [x] T2.3 `MarsSurface.jsx` stub (Canvas + `preserveDrawingBuffer` + Physics + cube)
+  - [x] T2.4 lazy-load MarsSurface from MarsRoute; `touch-action:none` root
+  - [ ] T2.5 verify red cube at `/mars`, no WASM errors — BLOCKED on dev-harness decision
+  - [ ] T2.6 build check — Mars is a separate lazy chunk — BLOCKED (platform builds vendored copy, not worktree)
+  - [x] T2.7 commit (TWO commits: platform + discovery-quest)
 
 ### M1 — World config
 - [ ] **T3** WorldConfig runtime validator (TDD) — test → fail → impl → pass → commit
@@ -103,4 +104,4 @@ section at the bottom of this file too.
 
 ## Learnings captured (candidates authored)
 
-_None yet. Append `- context/candidate/<slug>.md — one line` as you author them._
+- context/candidate/space-3d-dev-verify-path.md — platform builds a vendored packages/space, not the open worktree; open space-preview is React19/2D-only. Pick 3D dev/verify path deliberately.
