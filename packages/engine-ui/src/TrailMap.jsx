@@ -144,13 +144,20 @@ export default function TrailMap({ worlds, stateOf, starsOf, heroId, heroAvatar,
   const [expanded, setExpanded] = useState(() => new Set()); // world ids manually opened (session-only)
   // Scroll the frontier (hero) station into view on mount — preserves math's heroRef behavior
   // and gives english/EFL the same nicety. data-station is on every node button.
+  // If the hero's world is age-collapsed into a chip, expand it first — coming
+  // back from a finished mission must always land on the next step, even for
+  // older profiles whose early worlds are compacted.
   useEffect(() => {
     if (!heroId) return;
+    const heroWorld = worlds.find((w) => (w.stations ?? []).some((st) => st.id === heroId));
+    if (heroWorld && worlds.indexOf(heroWorld) < collapsedBelow) {
+      setExpanded((s) => (s.has(heroWorld.id) ? s : new Set(s).add(heroWorld.id)));
+    }
     const t = setTimeout(() => {
       document.querySelector(`[data-station="${heroId}"]`)?.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }, 350);
     return () => clearTimeout(t);
-  }, [heroId]);
+  }, [heroId, worlds, collapsedBelow]);
 
   return (
     <main className="relative z-10 flex flex-col gap-8 pb-28 pt-6">

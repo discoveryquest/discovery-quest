@@ -6,16 +6,18 @@
 // english/src/MapScreen.jsx. Painted per-world backgrounds drop in at
 // public/map-art/<id>.webp.
 import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import QuestHeader from '@discoveryquest/engine-ui/QuestHeader';
 import HeroBadge from '@discoveryquest/engine-ui/HeroBadge';
 import TrailMap from '@discoveryquest/engine-ui/TrailMap';
 import StationPopover from '@discoveryquest/engine-ui/StationPopover';
+import StarBreakdownSheet from '@discoveryquest/engine-ui/StarBreakdownSheet';
 import { loadSave } from '@discoveryquest/engine/save';
 import { computeXp, heroProgress } from '@discoveryquest/engine/xp';
 import { ACCOUNT_DASHBOARD_URL } from '@discoveryquest/engine/links';
-import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation } from './curriculum.js';
+import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation, nextStationAfter, playableStationIds } from './curriculum.js';
 
 // Per-world station x-positions (%) tuned to the painted stepping-stones in each map-art
 // panel. Indexed by station order, BOTTOM→TOP (station 0 sits at the bottom). The engine
@@ -27,10 +29,11 @@ const TRAIL_X = {
   'human-element': [56, 46, 42, 50, 48],
 };
 
-export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSwitchPlayer }) {
+export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSwitchPlayer, lastPlayedId }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
+  const [showStars, setShowStars] = useState(false);
   const startWorld = startWorldForAge(profile?.age, worlds.length);
   // Attach the tuned station x-positions so nodes land on each painting's path.
   const mapWorlds = worlds.map((w) => (TRAIL_X[w.id] ? { ...w, trailX: TRAIL_X[w.id] } : w));
@@ -59,11 +62,13 @@ export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSw
         }
         onGrownUps={() => window.location.assign(ACCOUNT_DASHBOARD_URL)}
         onSwitchPlayer={onSwitchPlayer}
-        // Count-only star chip (no /max denominator) to match math/English for cross-course consistency.
+        // Count-only star chip (no /max denominator) to match math/English for cross-course
+        // consistency. Tap it → the "where did my stars come from?" breakdown + Hero badge.
         statsSlot={
-          <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-extrabold text-yellow-300">
+          <button type="button" onClick={() => setShowStars(true)} data-testid="star-chip"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-extrabold text-yellow-300 transition-colors hover:bg-white/10">
             <Star size={15} className="fill-yellow-300/50" />{totalStars(save, worlds)}
-          </span>
+          </button>
         }
       />
       <TrailMap
@@ -74,7 +79,10 @@ export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSw
           return isStationOpen(save, w, k) ? 'open' : 'locked';
         }}
         starsOf={(st) => starsOf(save, st.id)}
-        heroId={frontierStation(save, worlds, startWorld)}
+        // Coming back from a mission, land on the station right after it (even
+        // inside an age-collapsed world — TrailMap expands it); otherwise the
+        // usual at-your-level frontier.
+        heroId={nextStationAfter(save, worlds, lastPlayedId) ?? frontierStation(save, worlds, startWorld)}
         heroAvatar={profile?.avatar || '🚀'}
         onPick={setPicked}
         intro={intro}
@@ -86,6 +94,16 @@ export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSw
         onPlay={(st) => { setPicked(null); onPlay(st); }}
         onLearn={onLearn ? (st) => { setPicked(null); onLearn(st); } : undefined}
       />
+      <AnimatePresence>
+        {showStars && (
+          <StarBreakdownSheet
+            onClose={() => setShowStars(false)}
+            save={save}
+            stationIds={playableStationIds(worlds)}
+            courseLabel="Space"
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

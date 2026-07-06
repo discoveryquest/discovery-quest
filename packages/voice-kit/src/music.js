@@ -16,6 +16,11 @@ import { isSpeaking } from './audio.js';
 const BASE_VOL = 0.22;
 const DUCK_VOL = 0.07;
 
+// Ducked volume while Luna speaks. Overridable so narration-heavy contexts (the
+// course trailer) can push music further under her voice; setDuckVol(null) restores.
+let duckVol = DUCK_VOL;
+export function setDuckVol(v) { duckVol = v == null ? DUCK_VOL : Math.max(0, v); }
+
 let musicEnabled = null;
 const musicOn = () => (musicEnabled ?? (musicEnabled = loadSave().settings.music !== false));
 export const isMusicOn = () => musicOn();
@@ -82,7 +87,7 @@ function startTrack(name) {
   }, 60);
   ducker = setInterval(() => {
     if (current !== a) return;
-    const target = isSpeaking() ? DUCK_VOL : BASE_VOL;
+    const target = isSpeaking() ? duckVol : BASE_VOL;
     setVol(a, getVol(a) + (target - getVol(a)) * 0.3);
   }, 150);
 

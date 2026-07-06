@@ -4,21 +4,24 @@
 // Learn-it lessons, so the popover shows Play only. Painted per-world
 // backgrounds drop in at public/map-art/<id>.webp when they exist.
 import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import QuestHeader from '@discoveryquest/engine-ui/QuestHeader';
 import HeroBadge from '@discoveryquest/engine-ui/HeroBadge';
+import StarBreakdownSheet from '@discoveryquest/engine-ui/StarBreakdownSheet';
 import TrailMap from '@discoveryquest/engine-ui/TrailMap';
 import StationPopover from '@discoveryquest/engine-ui/StationPopover';
 import { loadSave } from '@discoveryquest/engine/save';
 import { computeXp, heroProgress } from '@discoveryquest/engine/xp';
 import { ACCOUNT_DASHBOARD_URL } from '@discoveryquest/engine/links';
-import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation } from './curriculum.js';
+import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation, playableStationIds } from './curriculum.js';
 
 export default function MapScreen({ worlds, save, profile, onPlay, onSwitchPlayer }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
+  const [showStars, setShowStars] = useState(false);
   const startWorld = startWorldForAge(profile?.age, worlds.length);
   const hero = heroProgress(computeXp(loadSave()));
 
@@ -46,9 +49,10 @@ export default function MapScreen({ worlds, save, profile, onPlay, onSwitchPlaye
         onGrownUps={() => window.location.assign(ACCOUNT_DASHBOARD_URL)}
         onSwitchPlayer={onSwitchPlayer}
         statsSlot={
-          <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-extrabold text-yellow-300">
+          <button type="button" onClick={() => setShowStars(true)} data-testid="star-chip"
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm font-extrabold text-yellow-300 transition-colors hover:bg-white/10">
             <Star size={15} className="fill-yellow-300/50" />{totalStars(save, worlds)}
-          </span>
+          </button>
         }
       />
       <TrailMap
@@ -70,6 +74,16 @@ export default function MapScreen({ worlds, save, profile, onPlay, onSwitchPlaye
         onClose={() => setPicked(null)}
         onPlay={(st) => { setPicked(null); onPlay(st); }}
       />
+      <AnimatePresence>
+        {showStars && (
+          <StarBreakdownSheet
+            onClose={() => setShowStars(false)}
+            save={save}
+            stationIds={playableStationIds(worlds)}
+            courseLabel="Logic"
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

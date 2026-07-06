@@ -6,14 +6,56 @@
       "description": "Interactive puzzle practice: the learner solves by manipulating the scene. One band per station; items are an ordered mission list. Luna narrates each prompt via `say`.",
       "content": "practice",
       "item": [
-        { "name": "station", "type": "string", "example": "fix-digit", "note": "descriptive owner id; routing is by band" },
-        { "name": "band", "type": "int", "example": 0, "note": "which station this mission belongs to" },
-        { "name": "kind", "type": "string", "example": "matchstick", "note": "mechanic id; selects the interactive component" },
-        { "name": "say", "type": "string", "example": "pr-fd-5to3", "note": "narration key Luna speaks for the prompt (text must equal `prompt`)" },
-        { "name": "prompt", "type": "string", "example": "Move one match to turn the 5 into a 3." },
-        { "name": "scene", "type": "object", "note": "mechanic scene descriptor (matchstick: { start, moves })" },
-        { "name": "target", "type": "object", "note": "correctness target (matchstick: { goal: digits|equation|largest, accept?: string[] })" },
-        { "name": "feedback", "type": "object", "note": "optional { correctSay, hintSay } narration keys" }
+        {
+          "name": "station",
+          "type": "string",
+          "example": "fix-digit",
+          "note": "descriptive owner id; routing is by band"
+        },
+        {
+          "name": "band",
+          "type": "int",
+          "example": 0,
+          "note": "which station this mission belongs to"
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "example": "matchstick",
+          "note": "mechanic id; selects the interactive component"
+        },
+        {
+          "name": "say",
+          "type": "string",
+          "example": "pr-fd-5to3",
+          "note": "narration key Luna speaks for the prompt (text must equal `prompt`)"
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "example": "Move one match to turn the 5 into a 3."
+        },
+        {
+          "name": "scene",
+          "type": "object",
+          "note": "mechanic scene descriptor (matchstick: { start, moves })"
+        },
+        {
+          "name": "target",
+          "type": "object",
+          "note": "correctness target (matchstick: { goal: digits|equation|largest, accept?: string[] })"
+        },
+        {
+          "name": "feedback",
+          "type": "object",
+          "note": "optional { correctSay, hintSay } narration keys"
+        },
+        {
+          "name": "choices",
+          "type": "string[]",
+          "required": false,
+          "note": "pattern-pick only: the answer tiles (emoji strings)"
+        }
       ]
     }
   ],
@@ -21,17 +63,54 @@
   "content": [
     {
       "id": "practice",
-      "description": "Interactive puzzle missions for the practice board, partitioned by band (one band per station). Ordered: the host plays them in array order. Mechanic `matchstick`: numbers as seven-segment matchstick layouts; scene { start: \"6+0=9\", moves: 1..2 }; target goals — `digits` (final digits must be in `accept`), `equation` (ANY arithmetically true equation counts), `largest` (must equal the BFS-computed maximum reachable number, so every optimal solution counts and no accept list is authored).",
+      "description": "Interactive puzzle missions for the practice board, partitioned by band (one band per station). Ordered: the host plays them in array order. Mechanic `matchstick`: numbers as seven-segment matchstick layouts; scene { start: \"6+0=9\", moves: 1..2 }; target goals \u2014 `digits` (final digits must be in `accept`), `equation` (ANY arithmetically true equation counts), `largest` (must equal the BFS-computed maximum reachable number, so every optimal solution counts and no accept list is authored). Mechanic `shape-count` (Shape Shore): scene { vertices: [[x,y]\u2026] (integer coords), edges: [[i,j]\u2026], find: triangles|squares|rectangles }; target { mode: choose|claim }. The answer key is DERIVED from the figure by src/practice/shapeGeometry.js (composite shapes whose sides span collinear edges are found automatically) \u2014 authors never write counts, so keys can't be wrong; narration -ok lines that mention a number must match the derived count (verify with the geometry module before baking voice). Mechanic `pattern-pick` (Pattern Peaks): scene { layout: sequence|matrix|odd, cells: [emoji strings, '?' = the hole] }; top-level `choices` (emoji list; omit for odd) and target { answer: <choice> } or { index: n } (odd layout \u2014 tap the cell directly). A cell may hold several emoji (growing patterns like \ud83d\udd35\ud83d\udd35\ud83d\udd35). Riddle Rapids mechanics \u2014 `river-cross`: scene { cast: [{id,emoji,label}], forbidden: [[idA,idB]\u2026] }, target { allAcross: true } (boat = farmer + 1; leaving a forbidden pair alone resets the trip). `pour-jugs`: scene { jugs: [caps\u2026] }, target { amount } (fill/empty/pour; built-in BFS knows the optimum and fires the hint after ~2\u00d7 that many actions). `which-fills`: scene { segs: [{id,x1,y1,x2,y2, to:[ids]|cup:id}], blocked: [segIds], cups: [{id,x}] }, target { predict: true } \u2014 the winner is DERIVED by flooding the graph (design puzzles so exactly ONE cup is reachable); kid predicts, water animates and proves it. Logic Lagoon mechanics \u2014 `balance`: scene { scales: [{left,right,heavier:L|R}] (facts as tilted see-saws), items: [{id,emoji,label}] }, target { ask: heaviest|lightest, id }. `logic-grid`: scene { owners, items (both [{id,emoji,label}]), clues: [{a: ownerId, rel: is|not, b: itemId}] }, target { assign: {ownerId: itemId} } \u2014 author MUST verify the clues force the assignment uniquely. `sudoku`: scene { symbols: [4 emoji], solution: [16 x 1..4], given: [16 x 0|1] }, target { complete: true } \u2014 verify the given-mask yields a UNIQUE solution with a solution-counting script before shipping.",
       "collection": "objects",
       "item": [
-        { "name": "station", "type": "string", "required": true },
-        { "name": "band", "type": "number", "required": true },
-        { "name": "kind", "type": "string", "required": true },
-        { "name": "say", "type": "string", "required": true },
-        { "name": "prompt", "type": "string", "required": true },
-        { "name": "scene", "type": "object", "required": true },
-        { "name": "target", "type": "object", "required": true },
-        { "name": "feedback", "type": "object", "required": false }
+        {
+          "name": "station",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "band",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "say",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "scene",
+          "type": "object",
+          "required": true
+        },
+        {
+          "name": "target",
+          "type": "object",
+          "required": true
+        },
+        {
+          "name": "feedback",
+          "type": "object",
+          "required": false
+        },
+        {
+          "name": "choices",
+          "type": "string[]",
+          "required": false
+        }
       ]
     }
   ]

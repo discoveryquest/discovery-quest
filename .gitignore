@@ -14,3 +14,7 @@ dist
 # scratch space (e.g. raw model outputs to vet before integrating)
 scratch/
 examples/space-preview/tutorials-src/
+
+# 3D body textures — downloaded by packages/space/scripts/fetch-textures.mjs, not committed
+packages/space/assets/textures/
+examples/space-preview/public/textures

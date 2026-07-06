@@ -5,11 +5,12 @@
 // The per-question visuals (emoji/images) come later with the real content.
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
-import { mutateSave } from '@discoveryquest/engine/save';
+import { mutateSave, loadSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
+import { totalStars } from './curriculum.js';
 
 const QUEST_LEN = 6;
 const BADGES = ['A', 'B', 'C', 'D'];
@@ -28,6 +29,7 @@ export default function QuizScreen({ station, course, onExit }) {
   const [bubble, setBubble] = useState("Let's explore! Tap the best answer.");
   const mood = useLivelyMood(base);
   const talking = useSpeaking();
+  const [starTotal, setStarTotal] = useState(() => totalStars(loadSave(), course.worlds || []));
 
   const color = course.worlds?.find((w) => w.id === station?.worldId)?.color || '#22d3ee';
   const step = quest[idx].steps[0];
@@ -82,6 +84,7 @@ export default function QuizScreen({ station, course, onExit }) {
     track(station.id, 'missed', QUEST_LEN - correct);
     track(station.id, 'quests', 1);
     track(station.id, 'sec', elapsed);
+    setStarTotal(totalStars(loadSave(), course.worlds || [])); // header ⭐ bumps with the fresh save
   }, [done]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ui = course.meta.ui || {};
@@ -89,15 +92,21 @@ export default function QuizScreen({ station, course, onExit }) {
 
   return (
     <div className="font-display relative mx-auto flex min-h-full w-full max-w-md flex-col px-5 pb-10 pt-4 text-slate-200">
-      {/* header: back + station title + question counter */}
-      <div className="flex items-center gap-3">
-        <button type="button" onClick={() => { hushAll(); onExit(); }} aria-label={ui.backToMap ?? 'Back'}
-          className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
-          <ArrowLeft size={18} />
+      {/* header — math-style quest chrome: labeled Map button + live ⭐ tally */}
+      <div className="flex items-center gap-2.5">
+        <button type="button" onClick={() => { hushAll(); onExit(); }} aria-label={ui.backToMap ?? 'Back to map'}
+          className="flex h-9 shrink-0 touch-manipulation items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 text-sm font-extrabold text-slate-300 transition-colors hover:bg-white/10 hover:text-white">
+          🗺️ <span className="hidden sm:inline">Map</span>
         </button>
         <span className="truncate font-extrabold text-white">{station?.title}</span>
-        <span className="ml-auto text-xs font-bold uppercase tracking-wider text-slate-400">
-          {done ? 'Done' : `Question ${idx + 1} of ${QUEST_LEN}`}
+        <span className="ml-auto shrink-0 font-mono text-xs font-bold text-slate-400">
+          {done ? '✓' : `${idx + 1} / ${QUEST_LEN}`}
+        </span>
+        <span className="flex shrink-0 items-center gap-1 text-yellow-300">
+          <Star size={18} className="fill-yellow-300/40" />
+          <motion.span key={starTotal} initial={{ scale: 1.5 }} animate={{ scale: 1 }} className="font-mono text-lg font-bold">
+            {starTotal}
+          </motion.span>
         </span>
       </div>
 

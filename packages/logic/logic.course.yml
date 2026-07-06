@@ -29,6 +29,50 @@ course:
         - { id: biggest-number, title: Go Big, icon: 💯, sub: build the biggest number, board: practice, bands: [2] }
         - { id: two-move-master, title: Two-Move Master, icon: 🎩, sub: two moves, big magic, board: practice, bands: [3] }
 
+    - id: shape-shore
+      title: Shape Shore
+      emoji: 🔺
+      color: "#22D3EE"
+      blurb: Chalk figures hide extra shapes — spot them, claim them, count them all.
+      stations:
+        - { id: square-search, title: Square Search, icon: 🟨, sub: find every square, board: practice, bands: [4] }
+        - { id: triangle-spotter, title: Triangle Spotter, icon: 🔺, sub: claim triangles corner by corner, board: practice, bands: [5] }
+        - { id: hidden-triangles, title: Hidden Triangles, icon: 🕵️, sub: some triangles hide inside others, board: practice, bands: [6] }
+        - { id: rectangle-hunt, title: Rectangle Hunt, icon: 🖼️, sub: the great rectangle round-up, board: practice, bands: [7] }
+
+    - id: pattern-peaks
+      title: Pattern Peaks
+      emoji: 🌈
+      color: "#A78BFA"
+      blurb: Spot what comes next, what grows, what repeats — and what doesn't belong.
+      stations:
+        - { id: what-comes-next, title: What Comes Next, icon: ➡️, sub: continue the pattern, board: practice, bands: [8] }
+        - { id: growing-patterns, title: Growing Patterns, icon: 🌱, sub: patterns that grow and shrink, board: practice, bands: [9] }
+        - { id: odd-one-out, title: Odd One Out, icon: 🕵️‍♀️, sub: one of these is not like the others, board: practice, bands: [10] }
+        - { id: pattern-grid, title: Pattern Grid, icon: 🔮, sub: crack the three-by-three code, board: practice, bands: [11] }
+
+    - id: riddle-rapids
+      title: Riddle Rapids
+      emoji: 🛶
+      color: "#34D399"
+      blurb: Classic riddles come alive — ferry friends across, measure with jugs, and outsmart the pipes.
+      stations:
+        - { id: river-crossing, title: River Crossing, icon: 🛶, sub: everyone across, nobody eaten, board: practice, bands: [12] }
+        - { id: water-jugs, title: Water Jugs, icon: 🫗, sub: measure the impossible, board: practice, bands: [13] }
+        - { id: which-fills, title: Which Cup Fills, icon: 🚰, sub: predict where the water goes, board: practice, bands: [14] }
+        - { id: riddle-pairs, title: Riddle Pairs, icon: 🔗, sub: dog is to bone as bunny is to…, board: practice, bands: [15] }
+
+    - id: logic-lagoon
+      title: Logic Lagoon
+      emoji: 🐊
+      color: "#2DD4BF"
+      blurb: Pure deduction — tilting scales, who-owns-what mysteries, and pond sudoku.
+      stations:
+        - { id: balance-scales, title: Balance Scales, icon: ⚖️, sub: heavier sinks, lighter rises, board: practice, bands: [16] }
+        - { id: who-owns-what, title: Who Owns What, icon: 🏠, sub: match everyone to theirs, board: practice, bands: [17] }
+        - { id: mini-sudoku, title: Pond Sudoku, icon: 🐸, sub: four friends, no repeats, board: practice, bands: [18] }
+        - { id: detective-case, title: Detective's Case, icon: 🕵️, sub: only NO clues — deduce the YES, board: practice, bands: [19] }
+
   content:
     practice:
       # ── Number Fixer: one move, one digit → another (any valid target accepted) ──
@@ -50,6 +94,62 @@ course:
       - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-60, prompt: "Two moves this time! Make the biggest number you can from 60.", scene: { start: "60", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-60-ok, hintSay: pr-tm-60-hint } }
       - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-68, prompt: "With two moves, push 68 as high as it will go!", scene: { start: "68", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-68-ok, hintSay: pr-tm-68-hint } }
       - { station: two-move-master, band: 3, kind: matchstick, say: pr-tm-26, prompt: "Last one, master puzzler — two moves to make 26 as big as possible!", scene: { start: "26", moves: 2 }, target: { goal: largest }, feedback: { correctSay: pr-tm-26-ok, hintSay: pr-tm-26-hint } }
+
+      # ── Shape Shore: derived-answer shape counting (see shapeGeometry.js) ──
+      - { station: square-search, band: 4, kind: shape-count, say: pr-ss-row, prompt: "How many squares can you find in this strip?", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7]], find: squares }, target: { mode: choose }, feedback: { correctSay: pr-ss-row-ok, hintSay: pr-ss-row-hint } }
+      - { station: square-search, band: 4, kind: shape-count, say: pr-ss-2x2, prompt: "Count every square in this window — big ones count too!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [0, 4], [4, 4], [8, 4], [0, 8], [4, 8], [8, 8]], edges: [[0, 1], [0, 3], [1, 2], [1, 4], [2, 5], [3, 4], [3, 6], [4, 5], [4, 7], [5, 8], [6, 7], [7, 8]], find: squares }, target: { mode: choose }, feedback: { correctSay: pr-ss-2x2-ok, hintSay: pr-ss-2x2-hint } }
+      - { station: square-search, band: 4, kind: shape-count, say: pr-ss-2x3, prompt: "Trickier now! How many squares hide in this grid?", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4], [0, 8], [4, 8], [8, 8], [12, 8]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [4, 8], [5, 6], [5, 9], [6, 7], [6, 10], [7, 11], [8, 9], [9, 10], [10, 11]], find: squares }, target: { mode: choose }, feedback: { correctSay: pr-ss-2x3-ok, hintSay: pr-ss-2x3-hint } }
+      - { station: triangle-spotter, band: 5, kind: shape-count, say: pr-ts-cev, prompt: "Tap three corners to claim each triangle you spot!", scene: { vertices: [[3, 0], [0, 4], [6, 4], [3, 4]], edges: [[0, 1], [0, 2], [1, 3], [3, 2], [0, 3]], find: triangles }, target: { mode: claim }, feedback: { correctSay: pr-ts-cev-ok, hintSay: pr-ts-cev-hint } }
+      - { station: triangle-spotter, band: 5, kind: shape-count, say: pr-ts-sqd, prompt: "The diagonal cuts the square — claim both triangles!", scene: { vertices: [[0, 0], [4, 0], [4, 4], [0, 4]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 2]], find: triangles }, target: { mode: claim }, feedback: { correctSay: pr-ts-sqd-ok, hintSay: pr-ts-sqd-hint } }
+      - { station: triangle-spotter, band: 5, kind: shape-count, say: pr-ts-mid, prompt: "One little triangle rides inside the big one. Claim them both!", scene: { vertices: [[6, 0], [0, 8], [12, 8], [3, 4], [9, 4]], edges: [[0, 3], [3, 1], [1, 2], [2, 4], [4, 0], [3, 4]], find: triangles }, target: { mode: claim }, feedback: { correctSay: pr-ts-mid-ok, hintSay: pr-ts-mid-hint } }
+      - { station: hidden-triangles, band: 6, kind: shape-count, say: pr-ht-2c, prompt: "Count ALL the triangles — some are made of smaller ones!", scene: { vertices: [[6, 0], [0, 6], [4, 6], [8, 6], [12, 6]], edges: [[0, 1], [0, 2], [0, 3], [0, 4], [1, 2], [2, 3], [3, 4]], find: triangles }, target: { mode: choose }, feedback: { correctSay: pr-ht-2c-ok, hintSay: pr-ht-2c-hint } }
+      - { station: hidden-triangles, band: 6, kind: shape-count, say: pr-ht-star, prompt: "The diagonals make a secret X. How many triangles in all?", scene: { vertices: [[0, 0], [4, 0], [4, 4], [0, 4], [2, 2]], edges: [[0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [4, 2], [1, 4], [4, 3]], find: triangles }, target: { mode: choose }, feedback: { correctSay: pr-ht-star-ok, hintSay: pr-ht-star-hint } }
+      - { station: hidden-triangles, band: 6, kind: shape-count, say: pr-ht-3c, prompt: "The master fan! Count every triangle, big and small.", scene: { vertices: [[8, 0], [0, 8], [4, 8], [8, 8], [12, 8], [16, 8]], edges: [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 2], [2, 3], [3, 4], [4, 5]], find: triangles }, target: { mode: choose }, feedback: { correctSay: pr-ht-3c-ok, hintSay: pr-ht-3c-hint } }
+      - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-row, prompt: "How many rectangles in this strip? Squares count too!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-row-ok, hintSay: pr-rh-row-hint } }
+      - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-2x2, prompt: "Count all the rectangles — wide ones, tall ones, square ones!", scene: { vertices: [[0, 0], [4, 0], [8, 0], [0, 4], [4, 4], [8, 4], [0, 8], [4, 8], [8, 8]], edges: [[0, 1], [0, 3], [1, 2], [1, 4], [2, 5], [3, 4], [3, 6], [4, 5], [4, 7], [5, 8], [6, 7], [7, 8]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-2x2-ok, hintSay: pr-rh-2x2-hint } }
+      - { station: rectangle-hunt, band: 7, kind: shape-count, say: pr-rh-2x3, prompt: "The final hunt! Every rectangle in the big grid counts.", scene: { vertices: [[0, 0], [4, 0], [8, 0], [12, 0], [0, 4], [4, 4], [8, 4], [12, 4], [0, 8], [4, 8], [8, 8], [12, 8]], edges: [[0, 1], [0, 4], [1, 2], [1, 5], [2, 3], [2, 6], [3, 7], [4, 5], [4, 8], [5, 6], [5, 9], [6, 7], [6, 10], [7, 11], [8, 9], [9, 10], [10, 11]], find: rectangles }, target: { mode: choose }, feedback: { correctSay: pr-rh-2x3-ok, hintSay: pr-rh-2x3-hint } }
+      # ── Pattern Peaks: sequences / growing / odd-one-out / 3×3 grids ──
+      - { station: what-comes-next, band: 8, kind: pattern-pick, say: pr-wn-ab, prompt: "Apple, banana, apple, banana… what comes next?", scene: { layout: sequence, cells: ["🍎","🍌","🍎","🍌","🍎","?"] }, choices: ["🍌","🍎","🍇"], target: { answer: "🍌" }, feedback: { correctSay: pr-wn-ab-ok, hintSay: pr-wn-ab-hint } }
+      - { station: what-comes-next, band: 8, kind: pattern-pick, say: pr-wn-abb, prompt: "Red, blue, blue… the pattern repeats. What's next?", scene: { layout: sequence, cells: ["🔴","🔵","🔵","🔴","🔵","🔵","🔴","?"] }, choices: ["🔵","🔴","🟡"], target: { answer: "🔵" }, feedback: { correctSay: pr-wn-abb-ok, hintSay: pr-wn-abb-hint } }
+      - { station: what-comes-next, band: 8, kind: pattern-pick, say: pr-wn-abc, prompt: "Dog, cat, mouse, dog, cat… who's next?", scene: { layout: sequence, cells: ["🐶","🐱","🐭","🐶","🐱","?"] }, choices: ["🐭","🐶","🐱"], target: { answer: "🐭" }, feedback: { correctSay: pr-wn-abc-ok, hintSay: pr-wn-abc-hint } }
+      - { station: growing-patterns, band: 9, kind: pattern-pick, say: pr-gp-plus1, prompt: "The dots keep growing! How many come next?", scene: { layout: sequence, cells: ["🔵","🔵🔵","🔵🔵🔵","?"] }, choices: ["🔵🔵🔵🔵","🔵🔵🔵","🔵🔵🔵🔵🔵"], target: { answer: "🔵🔵🔵🔵" }, feedback: { correctSay: pr-gp-plus1-ok, hintSay: pr-gp-plus1-hint } }
+      - { station: growing-patterns, band: 9, kind: pattern-pick, say: pr-gp-plus2, prompt: "One star, three stars, five stars… what comes next?", scene: { layout: sequence, cells: ["⭐","⭐⭐⭐","⭐⭐⭐⭐⭐","?"] }, choices: ["⭐⭐⭐⭐⭐⭐⭐","⭐⭐⭐⭐⭐⭐","⭐⭐⭐⭐⭐⭐⭐⭐"], target: { answer: "⭐⭐⭐⭐⭐⭐⭐" }, feedback: { correctSay: pr-gp-plus2-ok, hintSay: pr-gp-plus2-hint } }
+      - { station: growing-patterns, band: 9, kind: pattern-pick, say: pr-gp-shrink, prompt: "This pattern shrinks! What comes next?", scene: { layout: sequence, cells: ["🟩🟩🟩🟩","🟩🟩🟩","🟩🟩","?"] }, choices: ["🟩","🟩🟩","🟩🟩🟩"], target: { answer: "🟩" }, feedback: { correctSay: pr-gp-shrink-ok, hintSay: pr-gp-shrink-hint } }
+      - { station: odd-one-out, band: 10, kind: pattern-pick, say: pr-oo-fruit, prompt: "Three of these are fruit. Tap the one that doesn't belong!", scene: { layout: odd, cells: ["🍎","🍐","🚗","🍌"] }, target: { index: 2 }, feedback: { correctSay: pr-oo-fruit-ok, hintSay: pr-oo-fruit-hint } }
+      - { station: odd-one-out, band: 10, kind: pattern-pick, say: pr-oo-sea, prompt: "Almost all of these live in the sea. Who doesn't?", scene: { layout: odd, cells: ["🐟","🐬","🦈","🦅"] }, target: { index: 3 }, feedback: { correctSay: pr-oo-sea-ok, hintSay: pr-oo-sea-hint } }
+      - { station: odd-one-out, band: 10, kind: pattern-pick, say: pr-oo-flip, prompt: "Look closely at the triangles. Tap the different one!", scene: { layout: odd, cells: ["🔺","🔺","🔻","🔺"] }, target: { index: 2 }, feedback: { correctSay: pr-oo-flip-ok, hintSay: pr-oo-flip-hint } }
+      - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-latin, prompt: "Every row has a sun, a moon, and a star. What's missing?", scene: { layout: matrix, cells: ["☀️","🌙","⭐","⭐","☀️","🌙","🌙","⭐","?"] }, choices: ["☀️","🌙","⭐"], target: { answer: "☀️" }, feedback: { correctSay: pr-pg-latin-ok, hintSay: pr-pg-latin-hint } }
+      - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-count, prompt: "Each row grows: one, two, three. Finish the last row!", scene: { layout: matrix, cells: ["❤️","❤️❤️","❤️❤️❤️","💙","💙💙","💙💙💙","💚","💚💚","?"] }, choices: ["💚💚💚","💚💚","💚💚💚💚"], target: { answer: "💚💚💚" }, feedback: { correctSay: pr-pg-count-ok, hintSay: pr-pg-count-hint } }
+      - { station: pattern-grid, band: 11, kind: pattern-pick, say: pr-pg-colors, prompt: "The colour code shifts every row. Crack the last square!", scene: { layout: matrix, cells: ["🟥","🟨","🟦","🟨","🟦","🟥","🟦","🟥","?"] }, choices: ["🟨","🟥","🟦"], target: { answer: "🟨" }, feedback: { correctSay: pr-pg-colors-ok, hintSay: pr-pg-colors-hint } }
+
+      # ── Riddle Rapids: animated classic riddles ──
+      - { station: river-crossing, band: 12, kind: river-cross, say: pr-rc-fox, prompt: "Ferry the fox, the chicken and the corn across — but some can't be left alone!", scene: { cast: [ { id: fox, emoji: "🦊", label: Fox }, { id: chicken, emoji: "🐔", label: Chicken }, { id: corn, emoji: "🌽", label: Corn } ], forbidden: [ [fox, chicken], [chicken, corn] ] }, target: { allAcross: true }, feedback: { correctSay: pr-rc-fox-ok, hintSay: pr-rc-fox-hint } }
+      - { station: river-crossing, band: 12, kind: river-cross, say: pr-rc-wolf, prompt: "Now the wolf, the goat and the cabbage. Same river, same rules!", scene: { cast: [ { id: wolf, emoji: "🐺", label: Wolf }, { id: goat, emoji: "🐐", label: Goat }, { id: cabbage, emoji: "🥬", label: Cabbage } ], forbidden: [ [wolf, goat], [goat, cabbage] ] }, target: { allAcross: true }, feedback: { correctSay: pr-rc-wolf-ok, hintSay: pr-rc-wolf-hint } }
+      - { station: river-crossing, band: 12, kind: river-cross, say: pr-rc-cat, prompt: "One more trip: the cat, the mouse and the cheese!", scene: { cast: [ { id: cat, emoji: "🐱", label: Cat }, { id: mouse, emoji: "🐭", label: Mouse }, { id: cheese, emoji: "🧀", label: Cheese } ], forbidden: [ [cat, mouse], [mouse, cheese] ] }, target: { allAcross: true }, feedback: { correctSay: pr-rc-cat-ok, hintSay: pr-rc-cat-hint } }
+      - { station: water-jugs, band: 13, kind: pour-jugs, say: pr-wj-3, prompt: "With a 2-jug and a 5-jug, measure exactly 3!", scene: { jugs: [2, 5] }, target: { amount: 3 }, feedback: { correctSay: pr-wj-3-ok, hintSay: pr-wj-3-hint } }
+      - { station: water-jugs, band: 13, kind: pour-jugs, say: pr-wj-4, prompt: "The famous one: a 3-jug, a 5-jug, and you need exactly 4!", scene: { jugs: [3, 5] }, target: { amount: 4 }, feedback: { correctSay: pr-wj-4-ok, hintSay: pr-wj-4-hint } }
+      - { station: water-jugs, band: 13, kind: pour-jugs, say: pr-wj-1, prompt: "Master level: use the 3-jug and the 5-jug to end with exactly 1!", scene: { jugs: [3, 5] }, target: { amount: 1 }, feedback: { correctSay: pr-wj-1-ok, hintSay: pr-wj-1-hint } }
+      - { station: which-fills, band: 14, kind: which-fills, say: pr-wf-1, prompt: "Water is about to pour! Which cup will it fill? Tap your guess!", scene: { segs: [ { id: s0, x1: 50, y1: 9, x2: 50, y2: 26, to: [s1, s2] }, { id: s1, x1: 50, y1: 26, x2: 25, y2: 42, to: [s3] }, { id: s2, x1: 50, y1: 26, x2: 75, y2: 42, to: [s4] }, { id: s3, x1: 25, y1: 42, x2: 25, y2: 78, cup: a }, { id: s4, x1: 75, y1: 42, x2: 75, y2: 78, cup: b } ], blocked: [s2], cups: [ { id: a, x: 25 }, { id: b, x: 75 } ] }, target: { predict: true }, feedback: { correctSay: pr-wf-1-ok, hintSay: pr-wf-1-hint } }
+      - { station: which-fills, band: 14, kind: which-fills, say: pr-wf-2, prompt: "Three cups this time — follow the pipes past the plugs!", scene: { segs: [ { id: s0, x1: 50, y1: 9, x2: 50, y2: 24, to: [s1, s2] }, { id: s1, x1: 50, y1: 24, x2: 22, y2: 40, to: [s3] }, { id: s2, x1: 50, y1: 24, x2: 78, y2: 40, to: [s4] }, { id: s3, x1: 22, y1: 40, x2: 22, y2: 78, cup: a }, { id: s4, x1: 78, y1: 40, x2: 78, y2: 52, to: [s5, s6] }, { id: s5, x1: 78, y1: 52, x2: 50, y2: 66, to: [s7] }, { id: s6, x1: 78, y1: 52, x2: 78, y2: 78, cup: c }, { id: s7, x1: 50, y1: 66, x2: 50, y2: 78, cup: b } ], blocked: [s1, s6], cups: [ { id: a, x: 22 }, { id: b, x: 50 }, { id: c, x: 78 } ] }, target: { predict: true }, feedback: { correctSay: pr-wf-2-ok, hintSay: pr-wf-2-hint } }
+      - { station: which-fills, band: 14, kind: which-fills, say: pr-wf-3, prompt: "The trickiest pipes yet. Where does the water end up?", scene: { segs: [ { id: s0, x1: 50, y1: 9, x2: 50, y2: 22, to: [s1, s2] }, { id: s1, x1: 50, y1: 22, x2: 25, y2: 36, to: [s3] }, { id: s2, x1: 50, y1: 22, x2: 75, y2: 36, to: [s4] }, { id: s3, x1: 25, y1: 36, x2: 25, y2: 50, to: [s5, s8] }, { id: s4, x1: 75, y1: 36, x2: 75, y2: 50, to: [s6] }, { id: s5, x1: 25, y1: 50, x2: 50, y2: 64, to: [s7] }, { id: s6, x1: 75, y1: 50, x2: 75, y2: 78, cup: c }, { id: s7, x1: 50, y1: 64, x2: 50, y2: 78, cup: b }, { id: s8, x1: 25, y1: 50, x2: 25, y2: 78, cup: a } ], blocked: [s4, s5], cups: [ { id: a, x: 25 }, { id: b, x: 50 }, { id: c, x: 75 } ] }, target: { predict: true }, feedback: { correctSay: pr-wf-3-ok, hintSay: pr-wf-3-hint } }
+      - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-dog, prompt: "Dog goes with bone. What goes with bunny?", scene: { layout: sequence, cells: ["🐶","🦴","🐰","?"] }, choices: ["🥕","🍖","🎾"], target: { answer: "🥕" }, feedback: { correctSay: pr-rp-dog-ok, hintSay: pr-rp-dog-hint } }
+      - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-fish, prompt: "Fish goes with the sea. Where does the bird go?", scene: { layout: sequence, cells: ["🐟","🌊","🐦","?"] }, choices: ["☁️","🌊","🕳️"], target: { answer: "☁️" }, feedback: { correctSay: pr-rp-fish-ok, hintSay: pr-rp-fish-hint } }
+      - { station: riddle-pairs, band: 15, kind: pattern-pick, say: pr-rp-glove, prompt: "A glove goes on a hand. What does a sock go on?", scene: { layout: sequence, cells: ["🧤","🖐️","🧦","?"] }, choices: ["🦶","🖐️","👒"], target: { answer: "🦶" }, feedback: { correctSay: pr-rp-glove-ok, hintSay: pr-rp-glove-hint } }
+
+      # ── Logic Lagoon: deduction (balance / who-owns-what / sudoku) ──
+      - { station: balance-scales, band: 16, kind: balance, say: pr-bs-3, prompt: "The scales never lie! Who is the heaviest of all?", scene: { scales: [ { left: "🐘", right: "🐕", heavier: L }, { left: "🐕", right: "🐁", heavier: L } ], items: [ { id: elephant, emoji: "🐘", label: Elephant }, { id: dog, emoji: "🐕", label: Dog }, { id: mouse, emoji: "🐁", label: Mouse } ] }, target: { ask: heaviest, id: elephant }, feedback: { correctSay: pr-bs-3-ok, hintSay: pr-bs-3-hint } }
+      - { station: balance-scales, band: 16, kind: balance, say: pr-bs-light, prompt: "Now the twist — who is the LIGHTEST of all?", scene: { scales: [ { left: "🐻", right: "🦊", heavier: L }, { left: "🦊", right: "🐿️", heavier: L } ], items: [ { id: bear, emoji: "🐻", label: Bear }, { id: fox, emoji: "🦊", label: Fox }, { id: squirrel, emoji: "🐿️", label: Squirrel } ] }, target: { ask: lightest, id: squirrel }, feedback: { correctSay: pr-bs-light-ok, hintSay: pr-bs-light-hint } }
+      - { station: balance-scales, band: 16, kind: balance, say: pr-bs-4, prompt: "Three scales, four animals. Who outweighs everyone?", scene: { scales: [ { left: "🐊", right: "🐼", heavier: L }, { left: "🐼", right: "🐨", heavier: L }, { left: "🐨", right: "🐧", heavier: L } ], items: [ { id: croc, emoji: "🐊", label: Crocodile }, { id: panda, emoji: "🐼", label: Panda }, { id: koala, emoji: "🐨", label: Koala }, { id: penguin, emoji: "🐧", label: Penguin } ] }, target: { ask: heaviest, id: croc }, feedback: { correctSay: pr-bs-4-ok, hintSay: pr-bs-4-hint } }
+      - { station: who-owns-what, band: 17, kind: logic-grid, say: pr-wo-food, prompt: "Lunch mystery! Use the clues to give everyone the right meal.", scene: { owners: [ { id: fire, emoji: "🧑‍🚒", label: Firefighter }, { id: artist, emoji: "🧑‍🎨", label: Artist }, { id: chef, emoji: "🧑‍🍳", label: Chef } ], items: [ { id: pizza, emoji: "🍕", label: Pizza }, { id: burger, emoji: "🍔", label: Burger }, { id: icecream, emoji: "🍦", label: Ice cream } ], clues: [ { a: fire, rel: is, b: pizza }, { a: artist, rel: not, b: icecream } ] }, target: { assign: { fire: pizza, artist: burger, chef: icecream } }, feedback: { correctSay: pr-wo-food-ok, hintSay: pr-wo-food-hint } }
+      - { station: who-owns-what, band: 17, kind: logic-grid, say: pr-wo-pets, prompt: "Pet mix-up! Whose pet is whose?", scene: { owners: [ { id: girl, emoji: "👧", label: Girl }, { id: boy, emoji: "👦", label: Boy }, { id: baby, emoji: "👶", label: Baby } ], items: [ { id: cat, emoji: "🐱", label: Cat }, { id: dog, emoji: "🐶", label: Dog }, { id: fish, emoji: "🐠", label: Fish } ], clues: [ { a: girl, rel: is, b: cat }, { a: boy, rel: not, b: fish } ] }, target: { assign: { girl: cat, boy: dog, baby: fish } }, feedback: { correctSay: pr-wo-pets-ok, hintSay: pr-wo-pets-hint } }
+      - { station: who-owns-what, band: 17, kind: logic-grid, say: pr-wo-drinks, prompt: "Monster snack time — who drinks what?", scene: { owners: [ { id: vampire, emoji: "🧛", label: Vampire }, { id: ghost, emoji: "👻", label: Ghost }, { id: robot, emoji: "🤖", label: Robot } ], items: [ { id: smoothie, emoji: "🍹", label: Smoothie }, { id: juice, emoji: "🧃", label: Juice }, { id: milk, emoji: "🥛", label: Milk } ], clues: [ { a: vampire, rel: is, b: smoothie }, { a: ghost, rel: not, b: juice } ] }, target: { assign: { vampire: smoothie, ghost: milk, robot: juice } }, feedback: { correctSay: pr-wo-drinks-ok, hintSay: pr-wo-drinks-hint } }
+      - { station: mini-sudoku, band: 18, kind: sudoku, say: pr-su-easy, prompt: "Pond sudoku! Every row, column and box needs all four friends.", scene: { symbols: ["🐟","🐸","🐢","🦆"], solution: [1,2,3,4,3,4,1,2,2,1,4,3,4,3,2,1], given: [1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1] }, target: { complete: true }, feedback: { correctSay: pr-su-easy-ok, hintSay: pr-su-easy-hint } }
+      - { station: mini-sudoku, band: 18, kind: sudoku, say: pr-su-med, prompt: "Fewer clues this time — the pond is trickier!", scene: { symbols: ["🐟","🐸","🐢","🦆"], solution: [1,2,3,4,3,4,1,2,2,1,4,3,4,3,2,1], given: [1,0,0,1,0,0,0,0,0,1,1,1,0,1,0,1] }, target: { complete: true }, feedback: { correctSay: pr-su-med-ok, hintSay: pr-su-med-hint } }
+      - { station: mini-sudoku, band: 18, kind: sudoku, say: pr-su-hard, prompt: "Master pond! Only six clues — deduce the rest.", scene: { symbols: ["🐟","🐸","🐢","🦆"], solution: [1,2,3,4,3,4,1,2,2,1,4,3,4,3,2,1], given: [1,1,0,0,0,0,0,0,1,0,1,0,0,1,1,0] }, target: { complete: true }, feedback: { correctSay: pr-su-hard-ok, hintSay: pr-su-hard-hint } }
+      - { station: detective-case, band: 19, kind: logic-grid, say: pr-dc-hats, prompt: "Detective case: only NO clues! Who wears what?", scene: { owners: [ { id: owl, emoji: "🦉", label: Owl }, { id: penguin, emoji: "🐧", label: Penguin }, { id: flamingo, emoji: "🦩", label: Flamingo } ], items: [ { id: hat, emoji: "🎩", label: Top hat }, { id: scarf, emoji: "🧣", label: Scarf }, { id: glasses, emoji: "👓", label: Glasses } ], clues: [ { a: owl, rel: not, b: hat }, { a: owl, rel: not, b: scarf }, { a: penguin, rel: not, b: hat } ] }, target: { assign: { owl: glasses, penguin: scarf, flamingo: hat } }, feedback: { correctSay: pr-dc-hats-ok, hintSay: pr-dc-hats-hint } }
+      - { station: detective-case, band: 19, kind: logic-grid, say: pr-dc-rides, prompt: "Case two: three friends, three rides, zero YES clues!", scene: { owners: [ { id: monkey, emoji: "🐵", label: Monkey }, { id: frog, emoji: "🐸", label: Frog }, { id: pig, emoji: "🐷", label: Pig } ], items: [ { id: car, emoji: "🚗", label: Car }, { id: bike, emoji: "🚲", label: Bike }, { id: scooter, emoji: "🛴", label: Scooter } ], clues: [ { a: monkey, rel: not, b: scooter }, { a: frog, rel: not, b: car }, { a: frog, rel: not, b: scooter } ] }, target: { assign: { monkey: car, frog: bike, pig: scooter } }, feedback: { correctSay: pr-dc-rides-ok, hintSay: pr-dc-rides-hint } }
+      - { station: detective-case, band: 19, kind: logic-grid, say: pr-dc-berry, prompt: "Final case! Mixed clues — read each one carefully.", scene: { owners: [ { id: bunny, emoji: "🐰", label: Bunny }, { id: hedgehog, emoji: "🦔", label: Hedgehog }, { id: parrot, emoji: "🦜", label: Parrot } ], items: [ { id: strawberry, emoji: "🍓", label: Strawberry }, { id: lemon, emoji: "🍋", label: Lemon }, { id: blueberry, emoji: "🫐", label: Blueberries } ], clues: [ { a: hedgehog, rel: is, b: lemon }, { a: parrot, rel: not, b: strawberry } ] }, target: { assign: { bunny: strawberry, hedgehog: lemon, parrot: blueberry } }, feedback: { correctSay: pr-dc-berry-ok, hintSay: pr-dc-berry-hint } }
+
 
   narration:
     # prompts (must equal each mission's prompt text)
@@ -75,8 +175,8 @@ course:
     pr-bn-50-ok: "Fifty-nine! Moving one match inside the 0 turned it into a 9."
     pr-bn-50-hint: "You can't grow the 5. But that 0 is hiding a bigger digit inside it!"
     pr-bn-16: "Make the biggest number you can from 16 — one move!"
-    pr-bn-16-ok: "Nineteen! The 6 flipped into a 9 — biggest possible."
-    pr-bn-16-hint: "Which digit can become a 9 with one move?"
+    pr-bn-16-ok: "Seventy-five! Move one match off the 6 to make a 5, and onto the 1 to make a 7."
+    pr-bn-16-hint: "A bigger FIRST digit helps most. Can the 1 become a 7? Borrow a match from the 6!"
     pr-bn-23: "One match move — turn 23 into the biggest number possible."
     pr-bn-23-ok: "Thirty-three! Turning the 2 into a 3 beats every other move."
     pr-bn-23-hint: "Try making the FIRST digit bigger — that helps the most!"
@@ -89,6 +189,154 @@ course:
     pr-tm-26: "Last one, master puzzler — two moves to make 26 as big as possible!"
     pr-tm-26-ok: "Maximum reached! You're a true Two-Move Master!"
     pr-tm-26-hint: "Bigger first digit first! Then see what the 6 can turn into."
+    # Shape Shore
+    pr-ss-row: "How many squares can you find in this strip?"
+    pr-ss-row-ok: "Three squares, side by side. Watch them light up!"
+    pr-ss-row-hint: "Count each little square one at a time, left to right."
+    pr-ss-2x2: "Count every square in this window — big ones count too!"
+    pr-ss-2x2-ok: "Five! Four little squares, and the big one made of all four."
+    pr-ss-2x2-hint: "Don't forget: the WHOLE window is a square too!"
+    pr-ss-2x3: "Trickier now! How many squares hide in this grid?"
+    pr-ss-2x3-ok: "Eight! Six little ones, plus two big two-by-two squares hiding inside."
+    pr-ss-2x3-hint: "Count the small squares first. Then look for bigger squares made of four little ones."
+    pr-ts-cev: "Tap three corners to claim each triangle you spot!"
+    pr-ts-cev-ok: "All three claimed! Two small triangles, and the big one holding them both."
+    pr-ts-cev-hint: "That's not one of them — try the two small triangles first, then the big outside one."
+    pr-ts-sqd: "The diagonal cuts the square — claim both triangles!"
+    pr-ts-sqd-ok: "Both halves claimed! One diagonal, two triangles."
+    pr-ts-sqd-hint: "Each triangle uses two square corners and both ends of the diagonal."
+    pr-ts-mid: "One little triangle rides inside the big one. Claim them both!"
+    pr-ts-mid-ok: "Got them! The little triangle at the top, and the big one around it."
+    pr-ts-mid-hint: "The little triangle sits at the very top. The big one uses the three outside corners."
+    pr-ht-2c: "Count ALL the triangles — some are made of smaller ones!"
+    pr-ht-2c-ok: "Six! Three single slices, two doubles, and the whole big triangle."
+    pr-ht-2c-hint: "Count the single slices first, then triangles made of two slices, then the whole thing."
+    pr-ht-star: "The diagonals make a secret X. How many triangles in all?"
+    pr-ht-star-ok: "Eight! Four small ones around the middle, and four bigger halves."
+    pr-ht-star-hint: "Four little triangles touch the centre. Then look for big ones made of two."
+    pr-ht-3c: "The master fan! Count every triangle, big and small."
+    pr-ht-3c-ok: "Ten! Singles, doubles, triples, and the giant one — you counted like a master."
+    pr-ht-3c-hint: "Go by size: four singles, then doubles, then triples, then the whole fan."
+    pr-rh-row: "How many rectangles in this strip? Squares count too!"
+    pr-rh-row-ok: "Six! Three singles, two doubles, and the whole strip."
+    pr-rh-row-hint: "Singles first, then rectangles made of two squares, then the whole strip."
+    pr-rh-2x2: "Count all the rectangles — wide ones, tall ones, square ones!"
+    pr-rh-2x2-ok: "Nine! Four singles, four dominoes, and the big square."
+    pr-rh-2x2-hint: "Squares are rectangles too. Count singles, then two-square dominoes, then the big one."
+    pr-rh-2x3: "The final hunt! Every rectangle in the big grid counts."
+    pr-rh-2x3-ok: "Eighteen! You found every size — the grid held a whole family of rectangles."
+    pr-rh-2x3-hint: "Go size by size: singles, dominoes across and down, rows, big squares… take your time!"
+    # Pattern Peaks
+    pr-wn-ab: "Apple, banana, apple, banana… what comes next?"
+    pr-wn-ab-ok: "Banana! The pattern takes turns: apple, banana, again and again."
+    pr-wn-ab-hint: "Say the pattern out loud — apple, banana, apple, banana, apple…"
+    pr-wn-abb: "Red, blue, blue… the pattern repeats. What's next?"
+    pr-wn-abb-ok: "Blue! The rule is red, then TWO blues — and the blues weren't finished."
+    pr-wn-abb-hint: "Clap it out: red, blue, blue! Red, blue, blue! What follows red?"
+    pr-wn-abc: "Dog, cat, mouse, dog, cat… who's next?"
+    pr-wn-abc-ok: "The mouse! Three friends take turns, and it was mouse's turn."
+    pr-wn-abc-hint: "The parade repeats every three: dog, cat, mouse. Who follows the cat?"
+    pr-gp-plus1: "The dots keep growing! How many come next?"
+    pr-gp-plus1-ok: "Four dots! The pattern grows by one each time: one, two, three, four."
+    pr-gp-plus1-hint: "Count each group: one, two, three… how many should come next?"
+    pr-gp-plus2: "One star, three stars, five stars… what comes next?"
+    pr-gp-plus2-ok: "Seven stars! It jumps by two each time: one, three, five, seven."
+    pr-gp-plus2-hint: "Count the jump: from one to three is two more. From three to five? Keep jumping!"
+    pr-gp-shrink: "This pattern shrinks! What comes next?"
+    pr-gp-shrink-ok: "Just one! The pattern loses a square each step: four, three, two, one."
+    pr-gp-shrink-hint: "It's going DOWN: four, three, two… what's left?"
+    pr-oo-fruit: "Three of these are fruit. Tap the one that doesn't belong!"
+    pr-oo-fruit-ok: "The car! Apples, pears and bananas are fruit — a car definitely isn't."
+    pr-oo-fruit-hint: "Which of these can you NOT eat?"
+    pr-oo-sea: "Almost all of these live in the sea. Who doesn't?"
+    pr-oo-sea-ok: "The eagle! Fish, dolphins and sharks swim — eagles fly."
+    pr-oo-sea-hint: "Think about where each animal lives. Who belongs in the sky?"
+    pr-oo-flip: "Look closely at the triangles. Tap the different one!"
+    pr-oo-flip-ok: "That one points DOWN while the others point up. Sharp eyes!"
+    pr-oo-flip-hint: "They're all triangles… but look at which way each one points."
+    pr-pg-latin: "Every row has a sun, a moon, and a star. What's missing?"
+    pr-pg-latin-ok: "The sun! The last row had a moon and a star — it needed its sun."
+    pr-pg-latin-hint: "Check the last row: moon, star… which of the three friends is missing?"
+    pr-pg-count: "Each row grows: one, two, three. Finish the last row!"
+    pr-pg-count-ok: "Three green hearts! Every row counts up: one, two, three."
+    pr-pg-count-hint: "Look at the red row and the blue row: one, two, three. The green row wants the same!"
+    pr-pg-colors: "The colour code shifts every row. Crack the last square!"
+    pr-pg-colors-ok: "Yellow! Each row slides the colours one step — you cracked the code."
+    pr-pg-colors-hint: "Every row and every column needs all three colours. Which one is missing at the end?"
+    # Riddle Rapids
+    pr-rc-fox: "Ferry the fox, the chicken and the corn across — but some can't be left alone!"
+    pr-rc-fox-ok: "Everyone made it! The secret: take the chicken first, and bring it BACK when you need to."
+    pr-rc-fox-hint: "The fox eats the chicken, and the chicken eats the corn — never leave those pairs alone. Try taking the chicken first!"
+    pr-rc-wolf: "Now the wolf, the goat and the cabbage. Same river, same rules!"
+    pr-rc-wolf-ok: "Across again! You spotted it — it's the same puzzle wearing a different costume."
+    pr-rc-wolf-hint: "Who's the one everyone bothers? The goat! It should ride first — and maybe ride back."
+    pr-rc-cat: "One more trip: the cat, the mouse and the cheese!"
+    pr-rc-cat-ok: "Champion ferry-captain! Three riddles, one clever trick."
+    pr-rc-cat-hint: "The mouse is the troublemaker here — the cat wants it, and it wants the cheese!"
+    pr-wj-3: "With a 2-jug and a 5-jug, measure exactly 3!"
+    pr-wj-3-ok: "Exactly three! Fill the big jug, pour into the small one — what's left is three."
+    pr-wj-3-hint: "Five minus two is three… fill the 5-jug and pour some away into the 2-jug!"
+    pr-wj-4: "The famous one: a 3-jug, a 5-jug, and you need exactly 4!"
+    pr-wj-4-ok: "Four! That riddle has stumped grown-ups for hundreds of years — not you!"
+    pr-wj-4-hint: "Fill the 5, pour into the 3 — that leaves 2. Where could you keep those 2 while you refill?"
+    pr-wj-1: "Master level: use the 3-jug and the 5-jug to end with exactly 1!"
+    pr-wj-1-ok: "Exactly one! Three plus three is six — one more than the big jug holds. Genius!"
+    pr-wj-1-hint: "What happens if you pour a full 3-jug into the 5-jug… twice? The second pour won't all fit!"
+    pr-wf-1: "Water is about to pour! Which cup will it fill? Tap your guess!"
+    pr-wf-1-ok: "You followed the pipes perfectly — the plug sent all the water the other way!"
+    pr-wf-1-hint: "Look for the red plug — water can't get past it. Follow the OPEN pipe with your finger."
+    pr-wf-2: "Three cups this time — follow the pipes past the plugs!"
+    pr-wf-2-ok: "Right again! The water zig-zagged past both plugs, straight to the middle."
+    pr-wf-2-hint: "Start at the funnel and trace down. At every fork, ask: is this pipe plugged?"
+    pr-wf-3: "The trickiest pipes yet. Where does the water end up?"
+    pr-wf-3-ok: "Incredible! You traced every twist — the water had exactly one way down."
+    pr-wf-3-hint: "Two plugs this time. Trace slowly from the top — only one path stays open."
+    pr-rp-dog: "Dog goes with bone. What goes with bunny?"
+    pr-rp-dog-ok: "A carrot! Dogs love bones, bunnies love carrots — that's the pattern."
+    pr-rp-dog-hint: "The bone is the dog's favourite food. What's a bunny's favourite?"
+    pr-rp-fish: "Fish goes with the sea. Where does the bird go?"
+    pr-rp-fish-ok: "The sky! Fish swim in the sea, birds fly in the sky."
+    pr-rp-fish-hint: "The sea is where the fish LIVES. Where do birds spend their day?"
+    pr-rp-glove: "A glove goes on a hand. What does a sock go on?"
+    pr-rp-glove-ok: "A foot! Glove is to hand as sock is to foot — a perfect pair."
+    pr-rp-glove-hint: "Think about where you WEAR each one. Gloves warm hands, socks warm…?"
+    # Logic Lagoon
+    pr-bs-3: "The scales never lie! Who is the heaviest of all?"
+    pr-bs-3-ok: "The elephant! Heavier than the dog, who's heavier than the mouse — the chain tells all."
+    pr-bs-3-hint: "The heavy side always sinks DOWN. Follow the chain: who beats everyone?"
+    pr-bs-light: "Now the twist — who is the LIGHTEST of all?"
+    pr-bs-light-ok: "The squirrel! Lighter than the fox, who's lighter than the bear. You flipped the chain!"
+    pr-bs-light-hint: "Careful — this time you want the side that rises UP! Who never sinks?"
+    pr-bs-4: "Three scales, four animals. Who outweighs everyone?"
+    pr-bs-4-ok: "The crocodile! Croc beats panda, panda beats koala, koala beats penguin. One long chain!"
+    pr-bs-4-hint: "Link the scales into one line, heaviest to lightest. Who starts the line?"
+    pr-wo-food: "Lunch mystery! Use the clues to give everyone the right meal."
+    pr-wo-food-ok: "Solved! The firefighter's pizza was given, and the no-ice-cream clue told you the rest."
+    pr-wo-food-hint: "Start with the heart clue — it's a sure thing. Then the artist can't have ice cream… so who can?"
+    pr-wo-pets: "Pet mix-up! Whose pet is whose?"
+    pr-wo-pets-ok: "The cat purrs for the girl, the dog runs to the boy, and the baby giggles at the fish!"
+    pr-wo-pets-hint: "The girl's cat is certain. The boy says no to the fish — so what's left for him?"
+    pr-wo-drinks: "Monster snack time — who drinks what?"
+    pr-wo-drinks-ok: "The vampire slurps the smoothie, the ghost sips milk, and the robot… juices up!"
+    pr-wo-drinks-hint: "The vampire's drink is given. The ghost refuses juice — so which drink is the ghost's?"
+    pr-su-easy: "Pond sudoku! Every row, column and box needs all four friends."
+    pr-su-easy-ok: "The pond is perfectly balanced — every row, column and box has all four friends!"
+    pr-su-easy-hint: "Two of the same friend are clashing! Find a row or box with a repeat and fix it."
+    pr-su-med: "Fewer clues this time — the pond is trickier!"
+    pr-su-med-ok: "Beautiful deduction! You found every friend's spot with fewer clues."
+    pr-su-med-hint: "Look for a row or box that already has three friends — the fourth spot is forced!"
+    pr-su-hard: "Master pond! Only six clues — deduce the rest."
+    pr-su-hard-ok: "Six clues were enough for you — that's true master deduction!"
+    pr-su-hard-hint: "Don't guess — find the one cell where only ONE friend can legally go, and start there."
+    pr-dc-hats: "Detective case: only NO clues! Who wears what?"
+    pr-dc-hats-ok: "Elementary! Two NOs left the owl only the glasses — and the rest fell into place."
+    pr-dc-hats-hint: "The owl says no to the hat AND the scarf… so what MUST the owl wear?"
+    pr-dc-rides: "Case two: three friends, three rides, zero YES clues!"
+    pr-dc-rides-ok: "Case closed! The frog's two NOs forced the bike, and everything followed."
+    pr-dc-rides-hint: "The frog rejects the car and the scooter. That leaves exactly one ride…"
+    pr-dc-berry: "Final case! Mixed clues — read each one carefully."
+    pr-dc-berry-ok: "Master detective! Lemon for the hedgehog, and the parrot's NO gave the bunny her strawberry."
+    pr-dc-berry-hint: "The hedgehog's lemon is certain. The parrot won't touch the strawberry — so who gets it?"
     # reactions
     praise-0: "Brilliant thinking!"
     praise-1: "You cracked it!"

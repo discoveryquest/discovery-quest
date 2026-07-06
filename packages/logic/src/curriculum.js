@@ -38,6 +38,8 @@ export function isStationOpen(save, world, index) {
 const playableOf = (worlds) => worlds.flatMap((w) => w.stations.filter((s) => !s.soon));
 export const totalStars = (save, worlds) => playableOf(worlds).reduce((n, s) => n + starsOf(save, s.id), 0);
 export const maxStars = (worlds) => playableOf(worlds).length * 3;
+// Station ids that count toward the course Hero badge (every playable station).
+export const playableStationIds = (worlds) => playableOf(worlds).map((s) => s.id);
 
 // Where the hero token sits (and where the map scrolls on mount): the EARLIEST open,
 // unmastered station at or beyond the child's start chapter, in an unlocked world. Scanning

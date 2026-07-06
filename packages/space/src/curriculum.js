@@ -36,6 +36,8 @@ export function isStationOpen(save, world, index) {
 }
 
 const playableOf = (worlds) => worlds.flatMap((w) => w.stations.filter((s) => !s.soon));
+// Station ids that count toward the course Hero badge (every playable station).
+export const playableStationIds = (worlds) => playableOf(worlds).map((s) => s.id);
 export const totalStars = (save, worlds) => playableOf(worlds).reduce((n, s) => n + starsOf(save, s.id), 0);
 export const maxStars = (worlds) => playableOf(worlds).length * 3;
 
@@ -43,6 +45,23 @@ export const maxStars = (worlds) => playableOf(worlds).length * 3;
 // unmastered station at or beyond the child's start chapter, in an unlocked world. Scanning
 // from startWorld keeps the hero at the child's level (not back in a collapsed younger world),
 // and skipping locked worlds keeps it from jumping into a not-yet-unlocked chapter.
+// After finishing a station, the map should land on the NEXT open, unmastered
+// station after it — in ANY world, including age-collapsed ones (TrailMap
+// auto-expands the hero's chip). Falls back to null when the run is done.
+export function nextStationAfter(save, worlds, lastId) {
+  if (!lastId) return null;
+  let found = false;
+  for (const world of worlds) {
+    for (let k = 0; k < world.stations.length; k++) {
+      if (found && !world.stations[k].soon && isStationOpen(save, world, k) && starsOf(save, world.stations[k].id) < 3) {
+        return world.stations[k].id;
+      }
+      if (world.stations[k].id === lastId) found = true;
+    }
+  }
+  return null;
+}
+
 export function frontierStation(save, worlds, startWorld = 0) {
   for (let wIdx = Math.min(startWorld, Math.max(0, worlds.length - 1)); wIdx < worlds.length; wIdx++) {
     if (!isWorldUnlocked(save, worlds, wIdx, startWorld)) continue;

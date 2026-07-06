@@ -14,6 +14,7 @@
     "./ProfileSetup": "./src/ProfileSetup.jsx",
     "./ProfilePicker": "./src/ProfilePicker.jsx",
     "./HeroBadge": "./src/HeroBadge.jsx",
+    "./StarBreakdownSheet": "./src/StarBreakdownSheet.jsx",
     "./QuestSettingsSheet": "./src/QuestSettingsSheet.jsx",
     "./QuestHeader": "./src/QuestHeader.jsx",
     "./interact": "./src/interact/index.js"

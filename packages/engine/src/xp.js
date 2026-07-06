@@ -55,6 +55,20 @@ export function xpByStation(save) {
   return out;
 }
 
+// XP split by source, for the kid-facing "where did my stars come from?" sheet
+// (Pavel's founding request). Sums to computeXp(save). Each field is already-XP
+// (weighted), so the sheet can list them directly.
+export function xpBreakdown(save) {
+  if (!save || typeof save !== 'object') return { correct: 0, stars: 0, reviews: 0, streak: 0, concepts: 0, total: 0 };
+  let correct = 0;
+  for (const corrects of Object.values(correctsByStation(save))) correct += Math.min(corrects, XP.CORRECT_CAP) * XP.CORRECT;
+  const stars = starCount(save) * XP.PER_STAR;
+  const reviews = reviewHits(save) * XP.REVIEW;
+  const streak = activeDays(save) * XP.STREAK;
+  const concepts = conceptCount(save) * XP.CONCEPT;
+  return { correct, stars, reviews, streak, concepts, total: correct + stars + reviews + streak + concepts };
+}
+
 export const totalXp = (xpByCourse) => Object.values(xpByCourse || {}).reduce((a, n) => a + (n || 0), 0);
 export const heroLevel = (xp) => 1 + Math.floor(Math.sqrt(Math.max(0, xp) / XP.PER_LEVEL_K));
 export function heroProgress(xp) {

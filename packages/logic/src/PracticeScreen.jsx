@@ -10,10 +10,26 @@ import { speak, hushAll } from '@discoveryquest/voice-kit/audio';
 import { mutateSave, loadSave } from '@discoveryquest/engine/save';
 import { bump as track } from '@discoveryquest/engine/telemetry';
 import MatchstickPractice from './practice/MatchstickPractice.jsx';
+import ShapeCountPractice from './practice/ShapeCountPractice.jsx';
+import PatternPickPractice from './practice/PatternPickPractice.jsx';
+import RiverCrossPractice from './practice/RiverCrossPractice.jsx';
+import PourJugsPractice from './practice/PourJugsPractice.jsx';
+import WhichFillsPractice from './practice/WhichFillsPractice.jsx';
+import BalancePractice from './practice/BalancePractice.jsx';
+import LogicGridPractice from './practice/LogicGridPractice.jsx';
+import SudokuPractice from './practice/SudokuPractice.jsx';
 import TUTORIALS from './tutorials.json'; // station ids with a recorded "Luna solves it" video
 
 const MECHANICS = {
   matchstick: MatchstickPractice,
+  'shape-count': ShapeCountPractice,
+  'pattern-pick': PatternPickPractice,
+  'river-cross': RiverCrossPractice,
+  'pour-jugs': PourJugsPractice,
+  'which-fills': WhichFillsPractice,
+  balance: BalancePractice,
+  'logic-grid': LogicGridPractice,
+  sudoku: SudokuPractice,
 };
 
 const pick = (arr) => (arr && arr.length ? arr[Math.floor(Math.random() * arr.length)] : null);
