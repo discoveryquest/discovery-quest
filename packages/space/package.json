@@ -28,6 +28,10 @@
     "lucide-react": "*",
     "three": "*",
     "@react-three/fiber": "*",
-    "@react-three/drei": "*"
+    "@react-three/drei": "*",
+    "@react-three/rapier": "^1"
+  },
+  "peerDependenciesMeta": {
+    "@react-three/rapier": { "optional": true }
   }
 }
