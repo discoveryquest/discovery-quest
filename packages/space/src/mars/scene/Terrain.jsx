@@ -45,7 +45,7 @@ export default function Terrain({ size = 200 }) {
           map={ground}
           bumpMap={ground}
           bumpScale={0.12}
-          color="#d69a6a"
+          color="#e6a877"
           roughness={1}
         />
       </mesh>
