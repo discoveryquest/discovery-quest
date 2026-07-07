@@ -42,12 +42,14 @@ export default function MarsSurface() {
       {/* WindProvider runs the single wind clock; dust + pennant read the shared
           windState it writes (also surfaced on the HUD gauge). */}
       <WindProvider>
-        <ScatterRocks />
         <DustParticles />
         <Pennant />
-        <Lander />
         <Physics gravity={[0, -gravity, 0]}>
           <Terrain />
+          {/* Solid props: fixed colliders so the player can't walk through the
+              ship, the boulders, or the rover. */}
+          <ScatterRocks />
+          <Lander />
           <Rover />
           <RockField />
           <Player />
