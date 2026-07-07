@@ -27,9 +27,11 @@ export default function MarsSurface() {
       gl={{ preserveDrawingBuffer: true }}
       style={{ position: 'fixed', inset: 0 }}
     >
-      {/* Scene fog tinted to the sky horizon blends the near terrain into the
-          distant panorama; the sky sphere opts out via fog={false}. */}
-      <fog attach="fog" args={[marsConfig.sky.horizon, 40, 420]} />
+      {/* Scene fog tinted to the sky horizon dissolves the terrain's far edge into
+          atmospheric haze so the ground melts into the distant hills instead of
+          ending on a hard straight silhouette. Pulled in close (terrain is ~100m
+          radius, so full haze must land near its edge). Sky + hills opt out. */}
+      <fog attach="fog" args={[marsConfig.sky.horizon, 22, 130]} />
       {/* Warm, low Martian key light + soft fill so the dunes read. */}
       <hemisphereLight args={['#e8d2ba', '#6b4630', 1.15]} />
       {/* Warm ambient floor so near-camera regolith never crushes to black. */}
