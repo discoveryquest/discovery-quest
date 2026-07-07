@@ -24,7 +24,7 @@ const GROUND_PROBE = 0.18; // metres of snap/coyote allowance over visible terra
 export default function Player() {
   const body = useRef();
   const { camera, gl } = useThree();
-  const { view } = useMarsState();
+  const { view, roverTour } = useMarsState();
   const lastJump = useRef(0);
   const lastGrounded = useRef(0);      // for coyote-time walking detection
   const stepAccum = useRef(STEP_DIST); // primed so the first stride lands a step
@@ -32,6 +32,11 @@ export default function Player() {
   const visualPos = useRef(new THREE.Vector3());
   const visualTarget = useRef(new THREE.Vector3());
   const visualReady = useRef(false);
+  // Rover exploded-view tour camera: eased first-person position that flies from
+  // wherever the player was into Luna's eyes, aimed at the rover.
+  const tourCam = useRef(new THREE.Vector3());
+  const tourReady = useRef(false);
+  const scratch = useRef(new THREE.Vector3());
   // Luna's facing angle θ (the suit model faces (sinθ, cosθ) in world x/z). π = −z
   // = away from the spawn camera. GTA-style: eased toward the movement heading.
   const heading = useRef(Math.PI);
@@ -55,9 +60,15 @@ export default function Player() {
     // Movement relative to camera yaw: forward = (-sin,0,-cos), right = (cos,0,-sin).
     let vx = -sin * input.forward + cos * input.right;
     let vz = -cos * input.forward - sin * input.right;
-    const moving = input.forward !== 0 || input.right !== 0;
+    let moving = input.forward !== 0 || input.right !== 0;
     if (moving) { const l = Math.hypot(vx, vz) || 1; vx = (vx / l) * SPEED; vz = (vz / l) * SPEED; }
     else { vx = 0; vz = 0; }
+
+    // During the rover tour the player is a spectator: freeze walking (the camera
+    // is flown around the floating parts instead) but keep gravity/grounding so
+    // Luna stays planted.
+    const tourActive = marsStore.getState().roverTour !== 'closed';
+    if (tourActive) { vx = 0; vz = 0; moving = false; }
 
     const rawT = rb.translation();
     const cur = rb.linvel();
@@ -113,6 +124,28 @@ export default function Player() {
     } else {
       stepAccum.current = STEP_DIST; // re-arm so moving off again steps immediately
     }
+    if (tourActive) {
+      // Watch the explosion from Luna's own eyes — more dramatic than a detached
+      // diagram view. The camera flies from wherever it was into her head and, on
+      // the first frame, aims at the rover so the blast fills her view; drag-look
+      // then pans around it. (Rover pos from telemetry, which is always fresh.)
+      const eyeX = t.x, eyeY = t.y + EYE, eyeZ = t.z;
+      if (!tourReady.current) {
+        tourCam.current.copy(camera.position);
+        const dx = telemetry.roverX - eyeX;
+        const dy = telemetry.roverY + 1.35 - eyeY;
+        const dz = telemetry.roverZ - eyeZ;
+        const hlen = Math.hypot(dx, dz) || 1;
+        input.yaw = Math.atan2(-dx, -dz);
+        input.pitch = Math.max(-0.5, Math.min(0.9, Math.atan2(dy, hlen)));
+        tourReady.current = true;
+      }
+      tourCam.current.lerp(scratch.current.set(eyeX, eyeY, eyeZ), 1 - Math.exp(-dt * 3.2));
+      camera.position.copy(tourCam.current);
+      camera.quaternion.setFromEuler(new THREE.Euler(input.pitch, input.yaw, 0, 'YXZ'));
+      return; // tour owns the camera; skip the normal follow + GTA heading update
+    }
+    tourReady.current = false; // re-arm the fly-in for the next tour
     if (marsStore.getState().view === 'first') {
       telemetry.facingX = -sin;
       telemetry.facingZ = -cos;
@@ -162,7 +195,7 @@ export default function Player() {
       {/* Luna, third-person only. Her rotation.y is driven each frame in useFrame
           (heading toward movement); the initial π faces her away from the spawn
           camera flash-free. Feet at capsule bottom = center − (halfH + r) = −0.85. */}
-      {view === 'third' && (
+      {view === 'third' && roverTour === 'closed' && (
         <group ref={lunaRef} position={[0, -0.85, 0]} rotation={[0, Math.PI, 0]}>
           <Luna />
         </group>

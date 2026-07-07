@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { telemetry } from '../telemetry.js';
-import { ROVER_POS, FACT_NEAR, FACT_FAR } from '../scene/landmarks.js';
+import { FACT_NEAR, FACT_FAR } from '../scene/landmarks.js';
+import { useMarsState } from '../store/marsStore.js';
 
 // Luna-brand "did you know" popup that appears when the player walks up to the
 // Perseverance rover — the educational payoff of finding a real object on Mars.
@@ -9,13 +10,14 @@ import { ROVER_POS, FACT_NEAR, FACT_FAR } from '../scene/landmarks.js';
 // it can greet them again on a return trip.
 export default function FactCard() {
   const [visible, setVisible] = useState(false);
+  const { roverTour } = useMarsState();
   const dismissed = useRef(false);
 
   useEffect(() => {
     let raf;
     const tick = () => {
-      const dx = telemetry.x - ROVER_POS[0];
-      const dz = telemetry.z - ROVER_POS[2];
+      const dx = telemetry.x - telemetry.roverX;
+      const dz = telemetry.z - telemetry.roverZ;
       const dist = Math.hypot(dx, dz);
       if (dist > FACT_FAR) dismissed.current = false; // re-arm
       setVisible(dist < FACT_NEAR && !dismissed.current);
@@ -25,7 +27,7 @@ export default function FactCard() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  if (!visible) return null;
+  if (!visible || roverTour !== 'closed') return null;
 
   return (
     <div
@@ -54,8 +56,8 @@ export default function FactCard() {
         🚀 You found Perseverance!
       </div>
       <div>
-        This is a real NASA rover exploring Mars <em>right now</em>. It landed in
-        Jezero Crater in 2021, hunting for signs of ancient life.
+        This real NASA rover is slowly driving like it is doing field work. Perseverance
+        landed in Jezero Crater in 2021, hunting for signs of ancient life.
       </div>
       <div style={{ marginTop: 8, opacity: 0.85 }}>
         Fun fact: sunsets on Mars are <strong style={{ color: '#bfe0ff' }}>blue</strong> —

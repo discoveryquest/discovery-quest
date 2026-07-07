@@ -86,6 +86,17 @@ export default function InteractionController({
   }, [releaseTick, rockRefs]);
 
   useFrame((_, dt) => {
+    // While the rover exploded-view tour owns the input (clicks pick parts, not
+    // rocks), swallow the action edges so releasing a click here can't grab/throw
+    // a rock, and skip all rock proximity work.
+    if (marsStore.getState().roverTour !== 'closed') {
+      lastInput.current = {
+        actionTap: input.actionTap,
+        primaryPress: input.primaryPress,
+        primaryRelease: input.primaryRelease,
+      };
+      return;
+    }
     const player = { x: telemetry.x, y: telemetry.y, z: telemetry.z };
     const positions = rocks.map((rock) => {
       if (rock.id === heldId) return { id: rock.id, pos: null };

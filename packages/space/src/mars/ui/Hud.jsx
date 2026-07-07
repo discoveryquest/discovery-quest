@@ -12,7 +12,7 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 const coarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
 
 export default function Hud() {
-  const { gravityMode, interaction } = useMarsState();
+  const { gravityMode, interaction, roverTour } = useMarsState();
   const [t, setT] = useState({ x: 0, y: 0, z: 0, speed: 0, grounded: false, wind: 0, gust: 0 });
 
   useEffect(() => {
@@ -85,11 +85,11 @@ export default function Hud() {
         </div>
         {!coarse && (
           <div style={{ opacity: 0.65, marginTop: 5 }}>
-            WASD move · SPACE jump · E/click rocks · V view
+            WASD move · SPACE jump · E rocks/rover · V view
           </div>
         )}
       </div>
-      {interaction.prompt && !coarse && (
+      {interaction.prompt && !coarse && roverTour === 'closed' && (
         <div
           style={{
             position: 'fixed',

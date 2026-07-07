@@ -2,6 +2,8 @@ import { useEffect, useMemo } from 'react';
 import { RigidBody } from '@react-three/rapier';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { terrainHeight } from './terrainMath.js';
+export { terrainHeight };
 
 // Tileable value noise used both for broad terrain displacement and the generated
 // regolith texture. Keeping it deterministic means rocks/props can ask for the
@@ -48,18 +50,6 @@ function fbmTiled(u, v, baseCells, octaves, seed = 0) {
     amp *= 0.5;
   }
   return sum / (norm || 1);
-}
-
-function valueNoiseWorld(x, z, scale, seed = 0) {
-  const xi = Math.floor(x / scale);
-  const zi = Math.floor(z / scale);
-  const fx = smooth(x / scale - xi);
-  const fz = smooth(z / scale - zi);
-  const a = hash2(xi, zi, seed);
-  const b = hash2(xi + 1, zi, seed);
-  const c = hash2(xi, zi + 1, seed);
-  const d = hash2(xi + 1, zi + 1, seed);
-  return lerp(lerp(a, b, fx), lerp(c, d, fx), fz);
 }
 
 function makeRegolithTexture(res = 1024) {
@@ -149,13 +139,7 @@ function deTile(shader) {
 // until then a flat rusty color stands in.
 // Shared surface height so anything placed on the ground (boulders, spawns)
 // matches the mesh exactly. DRY: the mesh displacement uses this too.
-export function terrainHeight(x, z) {
-  const dunes = Math.sin(x * 0.045) * Math.cos(z * 0.038) * 0.62
-              + Math.sin((x + z) * 0.073 + 1.7) * 0.26;
-  const broad = (valueNoiseWorld(x + 80, z - 40, 18, 101) - 0.5) * 0.74;
-  const ripples = Math.sin(x * 0.42 + Math.sin(z * 0.11) * 1.7) * 0.035;
-  return dunes + broad + ripples;
-}
+// terrainHeight is re-exported from terrainMath.js so non-React modules/tests can share it.
 
 function makeGeometry(size, segments) {
   const g = new THREE.PlaneGeometry(size, size, segments, segments);
