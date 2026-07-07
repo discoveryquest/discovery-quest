@@ -22,6 +22,7 @@ const OWL_SCALE = 0.56;     // owl scale (just the head needs to read)
 const OWL_POS = [0.24, 0.62, -0.12]; // x right / y up / z back — low enough that the
                                      // owl's chest tucks inside the suit collar
 const HEAD = { x: -0.05, y: 1.28, z: 0.15, r: 0.37 };
+const BODY_OFFSET = [0.15, 0, 0]; // shift the whole character to viewer's right
 
 // Fit a glb to a target height and seat its feet at y=0 (centred x/z).
 function useFitted(url, targetHeight) {
@@ -63,21 +64,24 @@ export default function Luna(props) {
 
   return (
     <group {...props}>
-      <pointLight position={[0.4, 1.5, 1.4]} intensity={6} distance={5} color="#fff2e0" />
-      {/* owl first (behind), so the opaque suit covers her body */}
-      <group position={OWL_POS} scale={OWL_SCALE}>
-        <primitive object={owl} />
+      {/* whole-character offset (viewer's right = Luna's left) */}
+      <group position={BODY_OFFSET}>
+        <pointLight position={[0.4, 1.5, 1.4]} intensity={6} distance={5} color="#fff2e0" />
+        {/* owl first (behind), so the opaque suit covers her body */}
+        <group position={OWL_POS} scale={OWL_SCALE}>
+          <primitive object={owl} />
+        </group>
+        <primitive object={suit} />
+        {/* glass helmet dome (the suit already provides the orange collar ring) */}
+        <mesh position={[HEAD.x, HEAD.y, HEAD.z]}>
+          <sphereGeometry args={[HEAD.r, 32, 32]} />
+          <meshPhysicalMaterial
+            transparent opacity={0.15} roughness={0.05} metalness={0}
+            clearcoat={1} clearcoatRoughness={0.06} color="#d3efff"
+            side={THREE.DoubleSide} depthWrite={false}
+          />
+        </mesh>
       </group>
-      <primitive object={suit} />
-      {/* glass helmet dome (the suit already provides the orange collar ring) */}
-      <mesh position={[HEAD.x, HEAD.y, HEAD.z]}>
-        <sphereGeometry args={[HEAD.r, 32, 32]} />
-        <meshPhysicalMaterial
-          transparent opacity={0.15} roughness={0.05} metalness={0}
-          clearcoat={1} clearcoatRoughness={0.06} color="#d3efff"
-          side={THREE.DoubleSide} depthWrite={false}
-        />
-      </mesh>
     </group>
   );
 }
