@@ -87,8 +87,10 @@ export default function Player() {
       camera.position.set(t.x, t.y + EYE, t.z);
       camera.quaternion.setFromEuler(new THREE.Euler(input.pitch, yaw, 0, 'YXZ'));
     } else {
-      // Orbit behind the player (behind = +forward-basis so we look at their back).
-      camera.position.set(t.x + sin * 4.5, t.y + 2.4, t.z + cos * 4.5);
+      // Orbit behind the player: yaw spins the camera around Luna (drag-look, no
+      // walking) and pitch tilts it up/down, always looking at her back.
+      const p = Math.max(-0.5, Math.min(0.9, input.pitch));
+      camera.position.set(t.x + sin * 4.5, t.y + 2.4 + p * 3.4, t.z + cos * 4.5);
       camera.lookAt(t.x, t.y + 1.0, t.z);
     }
   });
@@ -103,10 +105,11 @@ export default function Player() {
       canSleep={false}
     >
       <CapsuleCollider args={[0.5, 0.35]} />
-      {/* Luna faces the player's forward (-z at yaw 0); shown only in third-person.
-          Feet at capsule bottom = center - (halfHeight + radius) = -0.85. */}
+      {/* Luna faces her forward/away from the orbit camera (the suit model faces
+          +z natively, so +π turns her to face travel = -z at yaw 0); third-person
+          only. Feet at capsule bottom = center - (halfHeight + radius) = -0.85. */}
       {view === 'third' && (
-        <group position={[0, -0.85, 0]} rotation={[0, input.yaw, 0]}>
+        <group position={[0, -0.85, 0]} rotation={[0, input.yaw + Math.PI, 0]}>
           <Luna />
         </group>
       )}

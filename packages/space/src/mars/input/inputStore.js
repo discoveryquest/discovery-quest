@@ -15,7 +15,17 @@ export const input = {
 };
 
 const keys = new Set();
-const LOOK = 0.0025;
+const LOOK = 0.0025;       // first-person pointer-locked mouse sensitivity
+const DRAG_LOOK = 0.004;   // third-person click-drag orbit sensitivity
+const DRAG_THRESHOLD = 6;  // px of travel before a press counts as a look-drag (not a click)
+
+// Third-person look-drag state (module-scoped; desktop only). While the left
+// button is held on the canvas we orbit the camera instead of walking; a press
+// that never crosses DRAG_THRESHOLD is treated as a click (pick up / throw).
+let dragActive = false;
+let dragMoved = false;
+let dragStartX = 0;
+let dragStartY = 0;
 
 function recompute() {
   input.forward = (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0)
@@ -36,21 +46,35 @@ export function installInput(onToggleView) {
   };
   const up = (e) => { keys.delete(e.code); recompute(); };
   const move = (e) => {
-    if (!document.pointerLockElement) return;
-    input.yaw -= e.movementX * LOOK;
-    input.pitch = Math.max(-1.2, Math.min(1.2, input.pitch - e.movementY * LOOK));
+    if (document.pointerLockElement) {
+      // First-person: pointer-locked mouse-look.
+      input.yaw -= e.movementX * LOOK;
+      input.pitch = Math.max(-1.2, Math.min(1.2, input.pitch - e.movementY * LOOK));
+      return;
+    }
+    // Third-person: orbit only while dragging the canvas (look without walking).
+    if (!dragActive) return;
+    input.yaw -= e.movementX * DRAG_LOOK;
+    input.pitch = Math.max(-0.5, Math.min(0.9, input.pitch - e.movementY * DRAG_LOOK));
+    if (Math.abs(e.clientX - dragStartX) + Math.abs(e.clientY - dragStartY) > DRAG_THRESHOLD) {
+      dragMoved = true;
+    }
   };
   const pointerDown = (e) => {
     if (e.button !== 0) return;
     if (e.target?.tagName !== 'CANVAS') return;
-    input.primaryDown = true;
-    input.primaryPress += 1;
+    dragActive = true;
+    dragMoved = false;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
   };
   const pointerUp = (e) => {
     if (e.button !== 0) return;
-    if (!input.primaryDown) return;
-    input.primaryDown = false;
-    input.primaryRelease += 1;
+    if (!dragActive) return;
+    dragActive = false;
+    // A press that never became a drag is a click: pick up, or throw if holding
+    // (actionTap is the same edge the E key uses, so aim follows the look dir).
+    if (!dragMoved) input.actionTap += 1;
   };
   window.addEventListener('keydown', down);
   window.addEventListener('keyup', up);

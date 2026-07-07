@@ -12,7 +12,7 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 const coarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
 
 export default function Hud() {
-  const { view, gravityMode, interaction } = useMarsState();
+  const { gravityMode, interaction } = useMarsState();
   const [t, setT] = useState({ x: 0, y: 0, z: 0, speed: 0, grounded: false, wind: 0, gust: 0 });
 
   useEffect(() => {
@@ -78,9 +78,6 @@ export default function Hud() {
           </span>
         </div>
         <div style={{ display: 'flex', gap: 7, marginTop: 8, flexWrap: 'wrap' }}>
-          <button type="button" style={button} onClick={marsStore.toggleView}>
-            {view === 'first' ? '3rd person' : '1st person'}
-          </button>
           <button type="button" style={button} onClick={marsStore.toggleGravity}>
             {gravityMode === 'mars' ? 'Try Earth gravity' : 'Back to Mars gravity'}
           </button>
@@ -92,7 +89,7 @@ export default function Hud() {
           </div>
         )}
       </div>
-      {interaction.prompt && (
+      {interaction.prompt && !coarse && (
         <div
           style={{
             position: 'fixed',
