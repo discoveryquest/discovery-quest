@@ -1,8 +1,27 @@
 import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 import { windState } from './windState.js';
 import { telemetry } from '../telemetry.js';
 import { prefersReducedMotion } from '../ui/reducedMotion.js';
+
+// Soft round mote sprite (radial alpha falloff) so points read as blown dust
+// rather than hard bright squares. Built once on a canvas.
+function makeDustSprite() {
+  const s = 64;
+  const c = document.createElement('canvas');
+  c.width = c.height = s;
+  const ctx = c.getContext('2d');
+  const g = ctx.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.4, 'rgba(255,255,255,0.55)');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, s, s);
+  const tex = new THREE.CanvasTexture(c);
+  tex.needsUpdate = true;
+  return tex;
+}
 
 // Wind-blown regolith haze: a Points cloud that drifts along the wind direction
 // at a speed that swells with gusts, and thickens (opacity up) on the same gust —
@@ -16,6 +35,7 @@ export default function DustParticles({ count = 420, area = 64 }) {
   // Reduced motion: keep a thin static haze for depth, but stop the drift.
   const reduced = useMemo(() => prefersReducedMotion(), []);
   const realCount = reduced ? Math.round(count * 0.35) : count;
+  const sprite = useMemo(makeDustSprite, []);
 
   const positions = useMemo(() => {
     const arr = new Float32Array(realCount * 3);
@@ -49,7 +69,7 @@ export default function DustParticles({ count = 420, area = 64 }) {
       arr[i * 3 + 2] = z;
     }
     geo.attributes.position.needsUpdate = true;
-    if (matRef.current) matRef.current.opacity = 0.12 + windState.gust * 0.45;
+    if (matRef.current) matRef.current.opacity = 0.06 + windState.gust * 0.22;
   });
 
   return (
@@ -59,13 +79,14 @@ export default function DustParticles({ count = 420, area = 64 }) {
       </bufferGeometry>
       <pointsMaterial
         ref={matRef}
-        color="#dcae78"
-        size={0.11}
+        map={sprite}
+        alphaMap={sprite}
+        color="#c99a68"
+        size={0.16}
         sizeAttenuation
         transparent
-        opacity={0.2}
+        opacity={0.1}
         depthWrite={false}
-        fog={false}
       />
     </points>
   );
