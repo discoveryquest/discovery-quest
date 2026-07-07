@@ -8,33 +8,25 @@ import { telemetry } from '../telemetry.js';
 import { marsStore, useMarsState } from '../store/marsStore.js';
 import { ROVER_PARTS, CHASSIS_ID } from './roverParts.js';
 import { roverPoseAt } from './roverMotion.js';
-import { partIdForObject, centroidAngle, fanDir, partOffset } from './explode.js';
-import { terrainHeight } from './terrainMath.js';
-import { roverTour } from './roverTourState.js';
+import { partIdForObject, gallerySlot } from './explode.js';
 
 // The real NASA Perseverance rover (public-domain glb fetched in T6) — the "find
 // a real object on Mars" payoff. It slowly patrols so it feels alive, then, when
 // the player presses E nearby, it becomes the star of an exploded-view tour: the
-// rover freezes, its subsystems fly apart into a floating diagram, the camera
-// flies in, and each floating part can be clicked to read about it. Closing the
-// tour eases the parts home and hands control back (see marsStore roverTour).
+// rover freezes and its subsystems fly out into a camera-facing gallery spread
+// across the screen, with the selected part lifted to a centre spotlight (glowing
+// cyan) and its info card shown. Stepping through parts glides them between their
+// shelf slot and centre. Closing eases everything back home to reassemble.
 const ASSET = '/mars/perseverance.glb';
 const MODEL_SCALE = 0.6;
 const MODEL_YAW_OFFSET = -Math.PI / 4;
-// How high (world metres) above the rover the exploded diagram's orbit center sits.
-const TOUR_CENTER_LIFT = 1.35;
-// Keep dragged parts from being shoved into the regolith (world metres of clearance).
-const PART_CLEARANCE = 0.3;
-// Distance (world metres) in front of the camera the selected part floats to — its
-// "hero" spot at screen centre so it's clear which part the card is describing.
-const HERO_DIST = 3.2;
 const q = new THREE.Quaternion();
 const e = new THREE.Euler(0, 0, 0, 'XYZ');
 const tmpV = new THREE.Vector3();
-const tmpV2 = new THREE.Vector3();
 const camPos = new THREE.Vector3();
-const camDir = new THREE.Vector3();
-const heroLocalTmp = new THREE.Vector3();
+const camRight = new THREE.Vector3();
+const camUp = new THREE.Vector3();
+const camFwd = new THREE.Vector3();
 
 function cloneRover(scene) {
   const clone = scene.clone(true);
@@ -90,18 +82,16 @@ function setRimHighlight(material, on) {
 // (the arm's turret instruments) can fly apart independently and each part is a
 // single pickable subtree. attach() preserves world transforms, so at rest
 // (shell.position = 0) the rover looks byte-identical to the un-exploded model.
+// Each shell records the part's geometric centre and its slot order (the nav /
+// ROVER_PARTS order) so the gallery arc lays parts out left-to-right consistently.
 function buildShells(model) {
   model.updateWorldMatrix(true, true);
   const leaves = [];
   model.traverse((o) => { if (o.isMesh) leaves.push(o); });
 
-  const localOf = new Map();
-  const center = new THREE.Vector3();
   const groups = new Map(); // partId -> { leaves, sum, count }
   for (const leaf of leaves) {
     const local = model.worldToLocal(leaf.getWorldPosition(new THREE.Vector3()));
-    localOf.set(leaf, local);
-    center.add(local);
     const id = partIdForObject(leaf) ?? CHASSIS_ID;
     if (!groups.has(id)) groups.set(id, { leaves: [], sum: new THREE.Vector3(), count: 0 });
     const g = groups.get(id);
@@ -109,30 +99,18 @@ function buildShells(model) {
     g.sum.add(local);
     g.count += 1;
   }
-  center.multiplyScalar(1 / Math.max(1, leaves.length));
-
-  // Order parts by the side of the rover they actually sit on, then fan them out
-  // evenly around a ring so the exploded diagram reads cleanly (no clumping) while
-  // each piece still drifts toward roughly where it belongs.
-  const ordered = [...groups.entries()]
-    .map(([id, g]) => ({ id, g, angle: centroidAngle(g.sum.multiplyScalar(1 / g.count), center) }))
-    .sort((a, b) => a.angle - b.angle);
 
   const shells = [];
-  ordered.forEach(({ id, g }, i) => {
+  for (const [id, g] of groups) {
     const shell = new THREE.Group();
     shell.name = `shell:${id}`;
     shell.userData.partId = id;
-    shell.userData.dir = fanDir(i, ordered.length);
-    shell.userData.bobPhase = i * 1.7;
-    shell.userData.centroid = g.sum.clone();         // part's geometric centre (model-local)
-    shell.userData.dragOffset = new THREE.Vector3(); // player-applied drag, in model space
-    shell.userData.heroTarget = new THREE.Vector3(); // model-local spot to fly to when selected
-    shell.userData.heroBlend = 0;                    // 0 = in the ring, 1 = centre stage
+    shell.userData.orderIndex = Math.max(0, ROVER_PARTS.findIndex((p) => p.id === id));
+    shell.userData.centroid = g.sum.multiplyScalar(1 / g.count).clone();
     model.add(shell);
     for (const leaf of g.leaves) shell.attach(leaf); // keeps world transform
     shells.push(shell);
-  });
+  }
   return shells;
 }
 
@@ -148,21 +126,14 @@ function applyHighlight(shells, selectedId, tourActive) {
 export default function Rover() {
   const body = useRef();
   const { scene } = useGLTF(ASSET);
-  const { camera, raycaster } = useThree();
+  const { camera } = useThree();
   const { roverTour: tour, roverPartIndex } = useMarsState();
   const model = useMemo(() => cloneRover(scene), [scene]);
 
   const shells = useRef(null);
-  const factor = useRef(0);        // 0 assembled → 1 fully exploded
-  const frozen = useRef(null);     // pose captured when the tour opened
+  const factor = useRef(0);      // 0 assembled → 1 fully laid out in the gallery
+  const frozen = useRef(null);   // pose captured when the tour opened
   const prevTour = useRef('closed');
-
-  // Part-drag state: which shell is grabbed, the camera-facing plane it slides on,
-  // and the local-space hit point + drag offset captured at grab time.
-  const dragShell = useRef(null);
-  const dragPlane = useRef(new THREE.Plane());
-  const dragStartLocal = useRef(new THREE.Vector3());
-  const dragStartOffset = useRef(new THREE.Vector3());
 
   const selectedId = ROVER_PARTS[roverPartIndex]?.id ?? null;
 
@@ -171,9 +142,10 @@ export default function Rover() {
     if (shells.current) applyHighlight(shells.current, selectedId, tour !== 'closed');
   }, [selectedId, tour, model]);
 
-  // End a part-drag on release anywhere (the pointer often leaves the part).
+  // Clicking a part sets input.suppressLook so the same press doesn't orbit the
+  // camera; clear it on release.
   useEffect(() => {
-    const up = () => { dragShell.current = null; input.suppressLook = false; };
+    const up = () => { input.suppressLook = false; };
     window.addEventListener('pointerup', up);
     return () => window.removeEventListener('pointerup', up);
   }, []);
@@ -184,27 +156,24 @@ export default function Rover() {
     const t = state.clock.elapsedTime;
     const active = tour !== 'closed';
 
-    // Freeze the rover the instant the tour opens; capture the pose so the model,
-    // the orbit center, and the minimap all agree on where it stopped.
+    // Freeze the rover the instant the tour opens; capture the pose so the model
+    // and the minimap agree on where it stopped.
     if (active && prevTour.current === 'closed') {
       frozen.current = roverPoseAt(t);
       if (!shells.current) shells.current = buildShells(model);
-      // Fresh tour: clear any drag offsets left from a previous inspection.
-      for (const shell of shells.current) shell.userData.dragOffset.set(0, 0, 0);
       applyHighlight(shells.current, selectedId, true);
     }
     prevTour.current = tour;
 
     // Ease the explode factor toward its target (frame-rate independent). Only the
-    // 'open' phase pulls the parts apart; 'closing' still counts as active (rover
-    // frozen, camera framing the parts) but eases them back home to reassemble.
+    // 'open' phase spreads the parts out; 'closing' eases them back home, and once
+    // they've essentially arrived we flip the tour to fully closed.
     const target = tour === 'open' ? 1 : 0;
     factor.current += (target - factor.current) * (1 - Math.exp(-dt * 3.4));
     if (tour === 'closing' && factor.current < 0.004) {
       factor.current = 0;
       marsStore.finishCloseTour();
     }
-    roverTour.factor = factor.current;
 
     // Pose: patrol when closed, hold the frozen pose during the tour.
     const pose = active && frozen.current ? frozen.current : roverPoseAt(t);
@@ -217,103 +186,36 @@ export default function Rover() {
     q.setFromEuler(e);
     rb.setNextKinematicRotation(q);
 
-    // Screen-centre point in front of the camera, in model-local space. The chosen
-    // part glides here so it's clear which part the card describes. We keep tracking
-    // it while the part is still approaching, then lock it (so it doesn't stay glued
-    // to the camera when you look around) — this also survives the camera fly-in.
-    let heroLocal = null;
-    if (shells.current && selectedId) {
-      camera.getWorldPosition(camPos);
-      camera.getWorldDirection(camDir);
-      heroLocalTmp.copy(camPos).addScaledVector(camDir, HERO_DIST);
-      model.worldToLocal(heroLocalTmp);
-      heroLocal = heroLocalTmp;
-    }
-
-    // If a part is being dragged, slide it along the camera-facing plane. Work in
-    // model-local space so the offset composes with the fan animation and scale.
-    if (dragShell.current && shells.current) {
-      raycaster.setFromCamera(state.pointer, camera);
-      const hit = raycaster.ray.intersectPlane(dragPlane.current, tmpV);
-      if (hit) {
-        model.worldToLocal(tmpV); // world hit → model-local
-        dragShell.current.userData.dragOffset
-          .copy(dragStartOffset.current)
-          .add(tmpV)
-          .sub(dragStartLocal.current);
-      }
-    }
-
-    // Drive the exploded offsets: animated fan position + the player's drag, both
-    // scaled by factor so 'closing' collapses drags and fan alike back to assembled.
+    // Lay the parts out in a camera-facing gallery: each part eases to its slot on
+    // the arc (or the centre spotlight if selected). Recomputed against the live
+    // camera basis each frame so the shelf stays spread across the screen as you
+    // look around, and glides ("switch places") when the selection changes.
     if (shells.current && factor.current > 0.0005) {
       const f = factor.current;
+      const n = ROVER_PARTS.length;
+      const k = 1 - Math.exp(-dt * 6);
+      const m = camera.matrixWorld.elements;
+      camera.getWorldPosition(camPos);
+      camRight.set(m[0], m[1], m[2]);
+      camUp.set(m[4], m[5], m[6]);
+      camFwd.set(-m[8], -m[9], -m[10]);
       for (const shell of shells.current) {
-        const off = partOffset(shell.userData.dir, f, t, shell.userData.bobPhase);
-        const d = shell.userData.dragOffset;
-        // Ease this part between its ring slot and centre stage. heroTarget is an
-        // absolute local point, so scale it by f too (everything collapses to the
-        // assembled pose as the tour closes).
-        const selected = shell.userData.partId === selectedId;
-        // Track live screen-centre until the part has arrived, then let it rest.
-        // Offset by the part's centroid so its geometric centre (not the shell
-        // origin) lands on screen — a spread-out part like the wheels centres right.
-        if (selected && heroLocal && (shell.userData.heroBlend < 0.985 || f < 0.985)) {
-          shell.userData.heroTarget.copy(heroLocal).sub(shell.userData.centroid);
-        }
-        shell.userData.heroBlend += ((selected ? 1 : 0) - shell.userData.heroBlend) * (1 - Math.exp(-dt * 4));
-        const hb = shell.userData.heroBlend;
-        const h = shell.userData.heroTarget;
-        shell.position.set(
-          THREE.MathUtils.lerp(off.x, h.x * f, hb) + d.x * f,
-          THREE.MathUtils.lerp(off.y, h.y * f, hb) + d.y * f,
-          THREE.MathUtils.lerp(off.z, h.z * f, hb) + d.z * f,
-        );
-        // Floor the part you're dragging so it can't be pushed underground. Model
-        // rotation is Y-only, so world Y = modelY + localY*scale — bake the lift
-        // back into the drag offset so it stays put after release.
-        if (shell === dragShell.current && f > 0.01) {
-          shell.getWorldPosition(tmpV);
-          const groundY = terrainHeight(tmpV.x, tmpV.z) + PART_CLEARANCE;
-          if (tmpV.y < groundY) {
-            const dyLocal = (groundY - tmpV.y) / MODEL_SCALE;
-            shell.position.y += dyLocal;
-            d.y += dyLocal / f;
-          }
-        }
+        const slot = gallerySlot(shell.userData.orderIndex, n, shell.userData.partId === selectedId);
+        tmpV.copy(camPos)
+          .addScaledVector(camFwd, slot.depth)
+          .addScaledVector(camRight, slot.x)
+          .addScaledVector(camUp, slot.y);
+        model.worldToLocal(tmpV);              // camera-space slot → model-local
+        tmpV.sub(shell.userData.centroid);     // land the part's centre on the slot
+        tmpV.multiplyScalar(f);                // collapse toward assembled as it closes
+        shell.position.lerp(tmpV, k);          // smooth glide (open + switch-places)
       }
     } else if (shells.current) {
       for (const shell of shells.current) shell.position.set(0, 0, 0);
     }
-
-    // Publish the orbit center + focus for Player's tour camera. Center = the rover
-    // body lifted; focus nudges toward the selected floating part so a click frames
-    // it without losing the whole diagram.
-    if (active) {
-      roverTour.centerX = pose.x;
-      roverTour.centerY = pose.y + TOUR_CENTER_LIFT;
-      roverTour.centerZ = pose.z;
-      let fx = roverTour.centerX, fy = roverTour.centerY, fz = roverTour.centerZ;
-      if (selectedId && shells.current) {
-        const shell = shells.current.find((s) => s.userData.partId === selectedId);
-        if (shell) {
-          shell.getWorldPosition(tmpV);
-          tmpV2.set(roverTour.centerX, roverTour.centerY, roverTour.centerZ);
-          tmpV2.lerp(tmpV, 0.6); // frame the part but keep the body in shot
-          fx = tmpV2.x; fy = tmpV2.y; fz = tmpV2.z;
-        }
-      }
-      // Ease the focus so switching parts glides instead of snapping.
-      const k = 1 - Math.exp(-dt * 6);
-      roverTour.focusX += (fx - roverTour.focusX) * k;
-      roverTour.focusY += (fy - roverTour.focusY) * k;
-      roverTour.focusZ += (fz - roverTour.focusZ) * k;
-    }
   });
 
-  // Pressing on a floating part both selects it (shows its card) and grabs it for
-  // dragging. suppressLook + stopPropagation keep the same gesture from orbiting
-  // the camera. A press that doesn't move just selects (drag offset stays put).
+  // Clicking a part selects it (lifts it to centre stage + shows its card).
   const onPointerDown = (event) => {
     if (marsStore.getState().roverTour === 'closed') return;
     let shell = null;
@@ -321,16 +223,9 @@ export default function Rover() {
     if (!shell) return;
     event.stopPropagation();
     event.nativeEvent?.stopPropagation?.();
-    input.suppressLook = true;
-
+    input.suppressLook = true; // don't let this press also orbit the camera
     const i = ROVER_PARTS.findIndex((p) => p.id === shell.userData.partId);
     if (i >= 0) marsStore.setRoverPartIndex(i);
-
-    dragShell.current = shell;
-    camera.getWorldDirection(tmpV2);                                  // plane faces camera
-    dragPlane.current.setFromNormalAndCoplanarPoint(tmpV2, event.point);
-    dragStartLocal.current.copy(model.worldToLocal(event.point.clone()));
-    dragStartOffset.current.copy(shell.userData.dragOffset);
   };
 
   const start = roverPoseAt(0);

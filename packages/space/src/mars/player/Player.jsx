@@ -7,7 +7,6 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 import { telemetry } from '../telemetry.js';
 import { playStep } from '../audio/marsAudio.js';
 import { terrainHeight } from '../scene/Terrain.jsx';
-import { roverTour } from '../scene/roverTourState.js';
 import Luna from './Luna.jsx';
 
 const SPEED = 5;        // m/s walk
@@ -33,8 +32,8 @@ export default function Player() {
   const visualPos = useRef(new THREE.Vector3());
   const visualTarget = useRef(new THREE.Vector3());
   const visualReady = useRef(false);
-  // Rover exploded-view tour camera: eased position that flies from wherever the
-  // player was into an orbit around the floating parts (see roverTourState).
+  // Rover exploded-view tour camera: eased first-person position that flies from
+  // wherever the player was into Luna's eyes, aimed at the rover.
   const tourCam = useRef(new THREE.Vector3());
   const tourReady = useRef(false);
   const scratch = useRef(new THREE.Vector3());
@@ -129,8 +128,7 @@ export default function Player() {
       // Watch the explosion from Luna's own eyes — more dramatic than a detached
       // diagram view. The camera flies from wherever it was into her head and, on
       // the first frame, aims at the rover so the blast fills her view; drag-look
-      // then pans around it. (Rover pos from telemetry, which is always fresh —
-      // roverTour.center isn't populated until Rover's useFrame runs this frame.)
+      // then pans around it. (Rover pos from telemetry, which is always fresh.)
       const eyeX = t.x, eyeY = t.y + EYE, eyeZ = t.z;
       if (!tourReady.current) {
         tourCam.current.copy(camera.position);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { partIdForObject, outwardDir, centroidAngle, fanDir, partOffset, EXPLODE_SPREAD, EXPLODE_LIFT } from './explode.js';
+import { partIdForObject, outwardDir, centroidAngle, fanDir, partOffset, gallerySlot, GALLERY, EXPLODE_SPREAD, EXPLODE_LIFT } from './explode.js';
 
 // Minimal Object3D-like nodes for the ancestor-walk logic.
 const node = (name, parent = null) => ({ name, parent });
@@ -33,6 +33,22 @@ test('outwardDir points from center to the part and is unit length', () => {
 test('outwardDir falls back to straight up for a part at the center', () => {
   const d = outwardDir({ x: 0, y: 0, z: 0 }, { x: 0, y: 0, z: 0 });
   assert.deepEqual(d, { x: 0, y: 1, z: 0 });
+});
+
+test('gallerySlot puts the selected part dead centre, closer than the arc', () => {
+  const s = gallerySlot(3, 10, true);
+  assert.equal(s.x, 0);
+  assert.equal(s.y, GALLERY.spotY);
+  assert.ok(s.depth < GALLERY.homeDepth); // spotlight is nearer than the arc
+});
+
+test('gallerySlot spreads unselected parts left→right across the arc', () => {
+  const left = gallerySlot(0, 10, false);
+  const mid = gallerySlot(5, 10, false);
+  const right = gallerySlot(9, 10, false);
+  assert.ok(left.x < 0 && right.x > 0);          // ends flank the centre
+  assert.ok(Math.abs(mid.x) < Math.abs(right.x)); // middle nearer centre
+  assert.ok(left.depth > mid.depth && right.depth > mid.depth); // ends curve away
 });
 
 test('partOffset collapses to (near) zero when assembled (factor 0)', () => {

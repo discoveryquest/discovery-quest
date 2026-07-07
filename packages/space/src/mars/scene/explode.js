@@ -59,6 +59,32 @@ export function outwardDir(centroid, center) {
   return { x: x / len, y: y / len, z: z / len };
 }
 
+// Camera-facing "gallery" layout. Instead of a 3D ring, parts spread across the
+// screen on a stable arc (ordered by the nav order) and the selected part lifts to
+// a centre spotlight — so it reads like a shelf with the current item front-centre.
+// Returns a camera-space offset {x (right), y (up), depth (forward)} in metres; the
+// caller maps it into world space using the live camera basis.
+export const GALLERY = {
+  arcWidth: 4.4,   // horizontal spread of the arc at home depth
+  arcRise: 0.35,   // how much the middle of the arc lifts (gentle rainbow)
+  homeY: 0.5,      // arc height above the view centre (keeps the card area clear)
+  homeDepth: 3.9,  // distance to the arc
+  arcDepth: 0.8,   // extra distance at the arc ends (curves away)
+  spotY: -0.15,    // spotlight a touch below centre so it dominates
+  spotDepth: 2.7,  // spotlight closer than the arc → bigger, clearly the subject
+};
+
+export function gallerySlot(index, count, isSelected) {
+  if (isSelected) return { x: 0, y: GALLERY.spotY, depth: GALLERY.spotDepth };
+  const t = count > 1 ? index / (count - 1) : 0.5; // 0 = left … 1 = right
+  const edge = Math.abs(t - 0.5);
+  return {
+    x: (t - 0.5) * GALLERY.arcWidth,
+    y: GALLERY.homeY + Math.cos((t - 0.5) * Math.PI) * GALLERY.arcRise,
+    depth: GALLERY.homeDepth + edge * GALLERY.arcDepth,
+  };
+}
+
 // Local-space offset for a part this frame: eased outward drift + lift, plus a
 // slow idle bob so the floating parts feel alive. All scaled by `factor` (0→1) so
 // everything collapses exactly to the assembled pose when the tour closes.
