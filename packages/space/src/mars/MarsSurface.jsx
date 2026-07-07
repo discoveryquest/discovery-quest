@@ -31,9 +31,9 @@ export default function MarsSurface() {
           distant panorama; the sky sphere opts out via fog={false}. */}
       <fog attach="fog" args={[marsConfig.sky.horizon, 40, 420]} />
       {/* Warm, low Martian key light + soft fill so the dunes read. */}
-      <hemisphereLight args={['#f0c199', '#7a4326', 1.15]} />
+      <hemisphereLight args={['#e8d2ba', '#6b4630', 1.15]} />
       {/* Warm ambient floor so near-camera regolith never crushes to black. */}
-      <ambientLight intensity={0.45} color="#e8a56f" />
+      <ambientLight intensity={0.45} color="#d8c0aa" />
       <directionalLight position={[8, 10, 4]} intensity={1.5} color="#fff2e0" />
       <SkyDome top={marsConfig.sky.top} horizon={marsConfig.sky.horizon} />
       <MarsHorizon />
