@@ -135,20 +135,19 @@ export default function Luna(props) {
     t.current += dt;
     const sp = Math.min(telemetry.speed / 5, 1); // 0..1 of full walk speed
     const walking = telemetry.stepping;          // coyote-smoothed (see telemetry.js)
-    if (walking) {
-      stride.current += dt * 8; // step cadence
-      const s = Math.sin(stride.current);
-      g.position.y = Math.abs(s) * 0.035 * sp; // small body bob (legs do the work)
-      g.rotation.z = s * 0.08 * sp;            // rock side to side (waddle)
-      g.rotation.x = 0.08 * sp;                // lean into the walk
-    } else {
-      g.position.y = Math.sin(t.current * 1.8) * 0.015; // gentle breathing
-      g.rotation.z += (0 - g.rotation.z) * 0.12;        // ease back upright
-      g.rotation.x += (0 - g.rotation.x) * 0.12;
-    }
-    // Ease the leg gait in/out so it doesn't pop; only touch geometry while it
-    // (or its tail) is non-zero — idle frames skip the vertex work entirely.
-    legF.current += ((walking ? sp : 0) - legF.current) * 0.25;
+    // Frame-rate independent gait smoothing. The old fixed-per-frame easing made
+    // the suit pop/stick at low FPS and over-animate at high FPS.
+    legF.current += ((walking ? sp : 0) - legF.current) * (1 - Math.exp(-dt * 10));
+    if (walking) stride.current += dt * (5.4 + sp * 3.6);
+    const s = Math.sin(stride.current);
+    const gait = legF.current;
+    const idleBob = Math.sin(t.current * 1.8) * 0.012 * (1 - gait);
+    const walkBob = Math.abs(s) * 0.018 * gait; // keep feet visually closer to ground
+    g.position.y = idleBob + walkBob;
+    g.rotation.z = THREE.MathUtils.damp(g.rotation.z, s * 0.075 * gait, 14, dt);
+    g.rotation.x = THREE.MathUtils.damp(g.rotation.x, 0.075 * gait, 14, dt);
+    // Only touch geometry while the gait (or its tail) is non-zero — idle frames
+    // skip the vertex work entirely, but the final tail still returns boots home.
     if (legF.current > 0.002 || lastF.current > 0.002) step(stride.current, legF.current);
     lastF.current = legF.current;
   });

@@ -22,6 +22,12 @@ function vToObj(v) {
   return { x: v.x, y: v.y, z: v.z };
 }
 
+function lunaFacingInto(target) {
+  target.set(telemetry.facingX || 0, 0, telemetry.facingZ || -1);
+  if (target.lengthSq() < 0.001) target.set(0, 0, -1);
+  return target.normalize();
+}
+
 export default function InteractionController({
   rocks,
   rockRefs,
@@ -98,10 +104,11 @@ export default function InteractionController({
       const rb = rockRefs.current.get(heldId);
       if (rb) {
         if (marsStore.getState().view === 'third') {
-          const sin = Math.sin(input.yaw);
-          const cos = Math.cos(input.yaw);
-          scratch.forward.set(-sin, 0, -cos);
-          scratch.right.set(cos, 0, -sin);
+          // Third-person interactions are body-space, not camera-space. Luna can
+          // orbit the camera independently; rocks should sit near her hand and
+          // release toward the direction her suit is actually facing.
+          lunaFacingInto(scratch.forward);
+          scratch.right.set(-scratch.forward.z, 0, scratch.forward.x);
           scratch.hold
             .set(telemetry.x, telemetry.y + 0.08, telemetry.z)
             .addScaledVector(scratch.forward, 0.62)

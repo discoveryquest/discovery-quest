@@ -24,7 +24,9 @@ export default function MarsSurface() {
   return (
     <Canvas
       camera={{ position: [0, 1.7, 9], fov: 70 }}
-      gl={{ preserveDrawingBuffer: true }}
+      dpr={[1, 2]}
+      shadows
+      gl={{ preserveDrawingBuffer: true, antialias: true, powerPreference: 'high-performance' }}
       style={{ position: 'fixed', inset: 0 }}
     >
       {/* Scene fog tinted to the sky horizon dissolves the terrain's far edge into
@@ -36,7 +38,20 @@ export default function MarsSurface() {
       <hemisphereLight args={['#e8d2ba', '#6b4630', 1.15]} />
       {/* Warm ambient floor so near-camera regolith never crushes to black. */}
       <ambientLight intensity={0.45} color="#d8c0aa" />
-      <directionalLight position={[8, 10, 4]} intensity={1.5} color="#fff2e0" />
+      <directionalLight
+        position={[8, 10, 4]}
+        intensity={1.5}
+        color="#fff2e0"
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-near={1}
+        shadow-camera-far={80}
+        shadow-camera-left={-35}
+        shadow-camera-right={35}
+        shadow-camera-top={35}
+        shadow-camera-bottom={-35}
+      />
       <SkyDome top={marsConfig.sky.top} horizon={marsConfig.sky.horizon} />
       <MarsHorizon />
       {/* WindProvider runs the single wind clock; dust + pennant read the shared
