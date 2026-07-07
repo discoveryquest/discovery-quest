@@ -5,6 +5,7 @@ import Terrain from './scene/Terrain.jsx';
 import ScatterRocks from './scene/ScatterRocks.jsx';
 import RockField from './interact/RockField.jsx';
 import SkyDome from './scene/SkyDome.jsx';
+import MarsHorizon from './scene/MarsHorizon.jsx';
 import Pennant from './scene/Pennant.jsx';
 import Lander from './scene/Lander.jsx';
 import Rover from './scene/Rover.jsx';
@@ -30,9 +31,10 @@ export default function MarsSurface() {
           distant panorama; the sky sphere opts out via fog={false}. */}
       <fog attach="fog" args={[marsConfig.sky.horizon, 40, 420]} />
       {/* Warm, low Martian key light + soft fill so the dunes read. */}
-      <hemisphereLight args={['#d9a06b', '#3a1e12', 0.5]} />
+      <hemisphereLight args={['#e6b483', '#5a2e1a', 0.85]} />
       <directionalLight position={[8, 10, 4]} intensity={1.5} color="#fff2e0" />
       <SkyDome top={marsConfig.sky.top} horizon={marsConfig.sky.horizon} />
+      <MarsHorizon />
       {/* WindProvider runs the single wind clock; dust + pennant read the shared
           windState it writes (also surfaced on the HUD gauge). */}
       <WindProvider>

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { RigidBody } from '@react-three/rapier';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Bounded, gently undulating regolith patch. The SAME displaced geometry drives
@@ -25,13 +26,28 @@ function makeGeometry(size, segments) {
   return g;
 }
 
-export default function Terrain({ size = 200, color = '#8f4a2a' }) {
+export default function Terrain({ size = 200 }) {
   // Modest segment count keeps the trimesh collider cheap on mobile.
   const geometry = useMemo(() => makeGeometry(size, 96), [size]);
+  // Real NASA regolith (cropped from the Mastcam-Z panorama), tiled across the
+  // patch and reused as a bump map for grainy relief. Slight warm tint lifts it
+  // out of shadow under the low Mars key light.
+  const ground = useTexture('/mars/mars-ground.jpg');
+  useMemo(() => {
+    ground.wrapS = ground.wrapT = THREE.RepeatWrapping;
+    ground.repeat.set(size / 9, size / 9);
+    ground.anisotropy = 8;
+  }, [ground, size]);
   return (
     <RigidBody type="fixed" colliders="trimesh">
       <mesh geometry={geometry} receiveShadow>
-        <meshStandardMaterial color={color} roughness={1} />
+        <meshStandardMaterial
+          map={ground}
+          bumpMap={ground}
+          bumpScale={0.12}
+          color="#d69a6a"
+          roughness={1}
+        />
       </mesh>
     </RigidBody>
   );
