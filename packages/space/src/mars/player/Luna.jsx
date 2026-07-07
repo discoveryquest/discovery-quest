@@ -1,6 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { telemetry } from '../telemetry.js';
 
 // Luna — the discovery-quest owl mascot, assembled from modular Meshy glb parts
 // plus a real transparent glass helmet (three.js, since Meshy can't do glass):
@@ -62,10 +64,36 @@ export default function Luna(props) {
   const suit = useFitted(SUIT_URL, SUIT_HEIGHT);
   const owl = useOwl();
 
+  // Procedural life: the Meshy glbs are static (no skeleton), so we animate the
+  // whole assembled body — an idle breathing bob, and a penguin-style waddle
+  // (bounce + side roll + forward lean) that scales with walk speed. Reads
+  // movement from the shared telemetry the Player writes each frame.
+  const anim = useRef();
+  const t = useRef(0);
+  const stride = useRef(0);
+  useFrame((_, dt) => {
+    const g = anim.current;
+    if (!g) return;
+    t.current += dt;
+    const sp = Math.min(telemetry.speed / 5, 1); // 0..1 of full walk speed
+    const walking = telemetry.speed > 0.2 && telemetry.grounded;
+    if (walking) {
+      stride.current += dt * 9; // step cadence
+      const s = Math.sin(stride.current);
+      g.position.y = Math.abs(s) * 0.06 * sp; // bounce up on each step
+      g.rotation.z = s * 0.10 * sp;           // rock side to side (waddle)
+      g.rotation.x = 0.10 * sp;               // lean into the walk
+    } else {
+      g.position.y = Math.sin(t.current * 1.8) * 0.015; // gentle breathing
+      g.rotation.z += (0 - g.rotation.z) * 0.12;        // ease back upright
+      g.rotation.x += (0 - g.rotation.x) * 0.12;
+    }
+  });
+
   return (
     <group {...props}>
       {/* whole-character offset (viewer's right = Luna's left) */}
-      <group position={BODY_OFFSET}>
+      <group ref={anim} position={BODY_OFFSET}>
         <pointLight position={[0.4, 1.5, 1.4]} intensity={6} distance={5} color="#fff2e0" />
         {/* owl first (behind), so the opaque suit covers her body */}
         <group position={OWL_POS} scale={OWL_SCALE}>
