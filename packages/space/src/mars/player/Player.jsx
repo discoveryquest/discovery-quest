@@ -23,6 +23,10 @@ export default function Player() {
   const lastJump = useRef(0);
   const lastGrounded = useRef(0);      // for coyote-time walking detection
   const stepAccum = useRef(STEP_DIST); // primed so the first stride lands a step
+  const lunaRef = useRef();
+  // Luna's facing angle θ (the suit model faces (sinθ, cosθ) in world x/z). π = −z
+  // = away from the spawn camera. GTA-style: eased toward the movement heading.
+  const heading = useRef(Math.PI);
 
   useEffect(() => installInput(marsStore.toggleView), []);
 
@@ -92,6 +96,17 @@ export default function Player() {
       const p = Math.max(-0.5, Math.min(0.9, input.pitch));
       camera.position.set(t.x + sin * 4.5, t.y + 2.4 + p * 3.4, t.z + cos * 4.5);
       camera.lookAt(t.x, t.y + 1.0, t.z);
+
+      // GTA-style turning: Luna rotates to face where she's actually walking (so
+      // forward+right runs diagonally with her body turned, not a locked strafe).
+      // Ease toward the new heading via the shortest angle; keep facing when idle.
+      if (moving) {
+        const target = Math.atan2(vx, vz); // model faces (sinθ,cosθ) = (vx,vz)/|v|
+        let d = target - heading.current;
+        d = Math.atan2(Math.sin(d), Math.cos(d)); // wrap to [−π, π]
+        heading.current += d * Math.min(1, dt * 10);
+      }
+      if (lunaRef.current) lunaRef.current.rotation.y = heading.current;
     }
   });
 
@@ -105,11 +120,11 @@ export default function Player() {
       canSleep={false}
     >
       <CapsuleCollider args={[0.5, 0.35]} />
-      {/* Luna faces her forward/away from the orbit camera (the suit model faces
-          +z natively, so +π turns her to face travel = -z at yaw 0); third-person
-          only. Feet at capsule bottom = center - (halfHeight + radius) = -0.85. */}
+      {/* Luna, third-person only. Her rotation.y is driven each frame in useFrame
+          (heading toward movement); the initial π faces her away from the spawn
+          camera flash-free. Feet at capsule bottom = center − (halfH + r) = −0.85. */}
       {view === 'third' && (
-        <group position={[0, -0.85, 0]} rotation={[0, input.yaw + Math.PI, 0]}>
+        <group ref={lunaRef} position={[0, -0.85, 0]} rotation={[0, Math.PI, 0]}>
           <Luna />
         </group>
       )}
