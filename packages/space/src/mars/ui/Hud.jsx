@@ -85,7 +85,7 @@ export default function Hud() {
         </div>
         {!coarse && (
           <div style={{ opacity: 0.65, marginTop: 5 }}>
-            WASD move · SPACE jump · E/click rocks · V view
+            WASD move · SPACE jump · E rocks/rover · V view
           </div>
         )}
       </div>

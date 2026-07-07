@@ -10,6 +10,8 @@ let state = {
   wind: 0,
   interaction: { selectedId: null, heldId: null, prompt: '' },
   rockResetSeq: 0,
+  roverTourOpen: false,
+  roverPartIndex: 0,
 };
 const listeners = new Set();
 
@@ -21,6 +23,9 @@ export const marsStore = {
   toggleGravity: () => marsStore.set({ gravityMode: state.gravityMode === 'mars' ? 'earth' : 'mars' }),
   setInteraction: (interaction) => marsStore.set({ interaction }),
   resetRocks: () => marsStore.set({ rockResetSeq: state.rockResetSeq + 1 }),
+  openRoverTour: () => marsStore.set({ roverTourOpen: true, roverPartIndex: 0 }),
+  closeRoverTour: () => marsStore.set({ roverTourOpen: false }),
+  setRoverPartIndex: (roverPartIndex) => marsStore.set({ roverPartIndex }),
 };
 
 export function useMarsState() {

@@ -16,4 +16,8 @@ export const telemetry = {
   stepping: false,
   facingX: 0,
   facingZ: -1,
+  roverX: 11,
+  roverY: 0,
+  roverZ: -7,
+  roverHeading: 0,
 };

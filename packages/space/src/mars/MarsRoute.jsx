@@ -11,6 +11,8 @@ import FactCard from './ui/FactCard.jsx';
 import MarsAudio from './audio/MarsAudio.jsx';
 import Snapshot from './ui/Snapshot.jsx';
 import ViewToggle from './ui/ViewToggle.jsx';
+import MiniMap from './ui/MiniMap.jsx';
+import RoverPartsPanel from './ui/RoverPartsPanel.jsx';
 import Controls from './ui/Controls.jsx';
 import ControlsHint from './ui/ControlsHint.jsx';
 import HelmetVisor from './ui/HelmetVisor.jsx';
@@ -35,6 +37,8 @@ export default function MarsRoute() {
       <MarsAudio />
       <Snapshot />
       <ViewToggle />
+      <MiniMap />
+      <RoverPartsPanel />
       <Controls />
       <ControlsHint />
       <HelmetVisor />
