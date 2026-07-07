@@ -19,8 +19,9 @@ const SUIT_URL = '/mars/meshy/luna-suit.glb';
 // the whole owl to seat the head in the neck ring and its body inside the suit.
 const SUIT_HEIGHT = 1.35;   // suit feet→neck-rim height
 const OWL_SCALE = 0.56;     // owl scale (just the head needs to read)
-const OWL_POS = [0.24, 0.8, -0.12]; // x right / y up / z back
-const HEAD = { x: -0.05, y: 1.45, z: 0.15, r: 0.37 };
+const OWL_POS = [0.24, 0.62, -0.12]; // x right / y up / z back — low enough that the
+                                     // owl's chest tucks inside the suit collar
+const HEAD = { x: -0.05, y: 1.28, z: 0.15, r: 0.37 };
 
 // Fit a glb to a target height and seat its feet at y=0 (centred x/z).
 function useFitted(url, targetHeight) {
