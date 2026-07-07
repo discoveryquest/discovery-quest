@@ -98,7 +98,10 @@ section at the bottom of this file too.
 - [~] **T22** Meshy assets via REST API (no MCP): generated Luna reference-driven glbs (image-to-3D, meshy-6) — `luna-owl.glb` (base owl mascot, reusable for regular courses), `luna-suit.glb` (wearable navy suit), `rock-a.glb` (Mars rock). **Luna swapped into `Luna.jsx`** as modular owl-in-suit + a three.js glass helmet dome (bbox-fit + hand-tuned head offsets; screenshot-verified in-scene). Reference art committed to `packages/engine-ui/assets/luna`. `rock-a.glb` now swapped into `Rock.jsx` too (one glb reused across the 4 spawns with per-rock scale + tumble; ball collider + selection highlight unchanged). **PENDING:** Pavel's sign-off on the assembled look; optional rigging/animation (idle/walk/jump/throw — currently static pose); prune the stray sparkle speck on the owl.
 
 ### M9 — Ship
-- [ ] **T23** full test run + build + pre-share checklist (mirror, ignore-check, deploy, curl assets, real-phone loop)
+- [x] **T23** SHIPPED 2026-07-07 — mirrored `packages/space/src/mars` + `/mars` route branch into platform (App.jsx now byte-identical to source); space-quest build green; `/mars` renders in the production build (vite preview) AND live. Deployed `discoveryquest-space` (fly, lhr). Live at **space.discoveryquest.app/mars** — route + all assets (regolith/horizon/panorama/rover/meshy glbs/thud/wind) curl 200; live puppeteer screenshot renders full scene, **zero console errors**.
+  - Realism pass also shipped: NASA-color-picked brown regolith (seamless non-mirror tile), horizon-hills backdrop, fog-hazed horizon, softened dust motes, ambient floor.
+  - Left un-deployed (stale/unused): `apps/space-quest/public/mars/mars-horizon.jpg`, `meshy/luna.glb`.
+  - Remaining polish (not blockers): real-phone loop; optional Luna rigging (still static pose); first-person embodiment (no hands/helmet-rim).
 
 ---
 
