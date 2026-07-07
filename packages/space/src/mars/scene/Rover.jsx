@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { RigidBody, CuboidCollider } from '@react-three/rapier';
 import * as THREE from 'three';
+import { input } from '../input/inputStore.js';
 import { telemetry } from '../telemetry.js';
 import { marsStore, useMarsState } from '../store/marsStore.js';
 import { ROVER_PARTS, CHASSIS_ID } from './roverParts.js';
@@ -43,27 +44,35 @@ function forEachMaterial(object, fn) {
   mats.filter(Boolean).forEach(fn);
 }
 
-function captureOriginalMaterial(material) {
-  if (material.userData.__marsOriginal) return material.userData.__marsOriginal;
-  const original = {
-    emissive: material.emissive?.clone?.() ?? null,
-    emissiveIntensity: material.emissiveIntensity ?? 0,
-  };
-  material.userData.__marsOriginal = original;
-  return original;
-}
+// Cyan edge glow for the selected part. Rather than flooding the part with emissive
+// (which washed out its real texture), we inject a Fresnel rim into the material's
+// shader: the part stays fully visible and gains a glowing cyan border at its
+// silhouette. Toggled per material; customProgramCacheKey keeps the on/off variants
+// as distinct compiled programs (see candidate procedural-regolith-and-detile-shader).
+const RIM_COLOR = new THREE.Color('#3ff0ff');
 
-function setEmissive(material, selected, tourActive) {
-  if (!material.emissive) return;
-  const original = captureOriginalMaterial(material);
-  material.emissive.copy(original.emissive ?? new THREE.Color(0x000000));
-  material.emissiveIntensity = original.emissiveIntensity;
-  if (selected) {
-    material.emissive.set('#ffb35e');
-    material.emissiveIntensity = 1.3;
-  } else if (tourActive) {
-    // Softly knock back the unselected parts so the picked one pops.
-    material.emissiveIntensity = Math.min(material.emissiveIntensity, 0.05);
+function setRimHighlight(material, on) {
+  if (!!material.userData.__rimOn === !!on) return; // no redundant recompiles
+  material.userData.__rimOn = on;
+  if (on) {
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.uRimColor = { value: RIM_COLOR };
+      shader.uniforms.uRimPower = { value: 2.4 };
+      shader.uniforms.uRimStrength = { value: 1.5 };
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          '#include <common>',
+          '#include <common>\nuniform vec3 uRimColor;\nuniform float uRimPower;\nuniform float uRimStrength;',
+        )
+        .replace(
+          '#include <dithering_fragment>',
+          '#include <dithering_fragment>\n  float rim = pow(1.0 - abs(dot(normalize(vNormal), normalize(vViewPosition))), uRimPower);\n  gl_FragColor.rgb += uRimColor * clamp(rim * uRimStrength, 0.0, 1.0);',
+        );
+    };
+    material.customProgramCacheKey = () => 'mars-rim-on';
+  } else {
+    material.onBeforeCompile = () => {};
+    material.customProgramCacheKey = () => 'mars-rim-off';
   }
   material.needsUpdate = true;
 }
@@ -107,6 +116,7 @@ function buildShells(model) {
     shell.userData.partId = id;
     shell.userData.dir = fanDir(i, ordered.length);
     shell.userData.bobPhase = i * 1.7;
+    shell.userData.dragOffset = new THREE.Vector3(); // player-applied drag, in model space
     model.add(shell);
     for (const leaf of g.leaves) shell.attach(leaf); // keeps world transform
     shells.push(shell);
@@ -118,7 +128,7 @@ function applyHighlight(shells, selectedId, tourActive) {
   for (const shell of shells) {
     const selected = tourActive && shell.userData.partId === selectedId;
     shell.traverse((o) => {
-      if (o.isMesh) forEachMaterial(o, (m) => setEmissive(m, selected, tourActive));
+      if (o.isMesh) forEachMaterial(o, (m) => setRimHighlight(m, selected));
     });
   }
 }
@@ -126,6 +136,7 @@ function applyHighlight(shells, selectedId, tourActive) {
 export default function Rover() {
   const body = useRef();
   const { scene } = useGLTF(ASSET);
+  const { camera, raycaster } = useThree();
   const { roverTour: tour, roverPartIndex } = useMarsState();
   const model = useMemo(() => cloneRover(scene), [scene]);
 
@@ -134,12 +145,26 @@ export default function Rover() {
   const frozen = useRef(null);     // pose captured when the tour opened
   const prevTour = useRef('closed');
 
+  // Part-drag state: which shell is grabbed, the camera-facing plane it slides on,
+  // and the local-space hit point + drag offset captured at grab time.
+  const dragShell = useRef(null);
+  const dragPlane = useRef(new THREE.Plane());
+  const dragStartLocal = useRef(new THREE.Vector3());
+  const dragStartOffset = useRef(new THREE.Vector3());
+
   const selectedId = ROVER_PARTS[roverPartIndex]?.id ?? null;
 
   // Re-apply the glow whenever the selection or tour state changes.
   useEffect(() => {
     if (shells.current) applyHighlight(shells.current, selectedId, tour !== 'closed');
   }, [selectedId, tour, model]);
+
+  // End a part-drag on release anywhere (the pointer often leaves the part).
+  useEffect(() => {
+    const up = () => { dragShell.current = null; input.suppressLook = false; };
+    window.addEventListener('pointerup', up);
+    return () => window.removeEventListener('pointerup', up);
+  }, []);
 
   useFrame((state, dt) => {
     const rb = body.current;
@@ -152,6 +177,8 @@ export default function Rover() {
     if (active && prevTour.current === 'closed') {
       frozen.current = roverPoseAt(t);
       if (!shells.current) shells.current = buildShells(model);
+      // Fresh tour: clear any drag offsets left from a previous inspection.
+      for (const shell of shells.current) shell.userData.dragOffset.set(0, 0, 0);
       applyHighlight(shells.current, selectedId, true);
     }
     prevTour.current = tour;
@@ -178,12 +205,31 @@ export default function Rover() {
     q.setFromEuler(e);
     rb.setNextKinematicRotation(q);
 
-    // Drive the exploded offsets. Only touch transforms while there is something to
-    // animate (factor > 0), so a normal patrol pays nothing.
+    // If a part is being dragged, slide it along the camera-facing plane. Work in
+    // model-local space so the offset composes with the fan animation and scale.
+    if (dragShell.current && shells.current) {
+      raycaster.setFromCamera(state.pointer, camera);
+      const hit = raycaster.ray.intersectPlane(dragPlane.current, tmpV);
+      if (hit) {
+        model.worldToLocal(tmpV); // world hit → model-local
+        dragShell.current.userData.dragOffset
+          .copy(dragStartOffset.current)
+          .add(tmpV)
+          .sub(dragStartLocal.current);
+      }
+    }
+
+    // Drive the exploded offsets: animated fan position + the player's drag, both
+    // scaled by factor so 'closing' collapses drags and fan alike back to assembled.
     if (shells.current && factor.current > 0.0005) {
       for (const shell of shells.current) {
         const off = partOffset(shell.userData.dir, factor.current, t, shell.userData.bobPhase);
-        shell.position.set(off.x, off.y, off.z);
+        const d = shell.userData.dragOffset;
+        shell.position.set(
+          off.x + d.x * factor.current,
+          off.y + d.y * factor.current,
+          off.z + d.z * factor.current,
+        );
       }
     } else if (shells.current) {
       for (const shell of shells.current) shell.position.set(0, 0, 0);
@@ -214,16 +260,26 @@ export default function Rover() {
     }
   });
 
-  const onPick = (event) => {
+  // Pressing on a floating part both selects it (shows its card) and grabs it for
+  // dragging. suppressLook + stopPropagation keep the same gesture from orbiting
+  // the camera. A press that doesn't move just selects (drag offset stays put).
+  const onPointerDown = (event) => {
     if (marsStore.getState().roverTour === 'closed') return;
+    let shell = null;
+    for (let o = event.object; o; o = o.parent) { if (o.userData?.partId) { shell = o; break; } }
+    if (!shell) return;
     event.stopPropagation();
-    for (let o = event.object; o; o = o.parent) {
-      if (o.userData?.partId) {
-        const i = ROVER_PARTS.findIndex((p) => p.id === o.userData.partId);
-        if (i >= 0) marsStore.setRoverPartIndex(i);
-        return;
-      }
-    }
+    event.nativeEvent?.stopPropagation?.();
+    input.suppressLook = true;
+
+    const i = ROVER_PARTS.findIndex((p) => p.id === shell.userData.partId);
+    if (i >= 0) marsStore.setRoverPartIndex(i);
+
+    dragShell.current = shell;
+    camera.getWorldDirection(tmpV2);                                  // plane faces camera
+    dragPlane.current.setFromNormalAndCoplanarPoint(tmpV2, event.point);
+    dragStartLocal.current.copy(model.worldToLocal(event.point.clone()));
+    dragStartOffset.current.copy(shell.userData.dragOffset);
   };
 
   const start = roverPoseAt(0);
@@ -235,7 +291,7 @@ export default function Rover() {
       position={[start.x, start.y, start.z]}
       rotation={[0, start.heading + MODEL_YAW_OFFSET, 0]}
     >
-      <primitive object={model} scale={MODEL_SCALE} onClick={onPick} />
+      <primitive object={model} scale={MODEL_SCALE} onPointerDown={onPointerDown} />
       {/* Approximate body collider so Luna and thrown rocks respect the moving rover. */}
       <CuboidCollider args={[1.35, 1.1, 1.55]} position={[0, 1.1, 0]} />
     </RigidBody>

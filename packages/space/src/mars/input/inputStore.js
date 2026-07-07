@@ -12,6 +12,7 @@ export const input = {
   primaryPress: 0,    // pointer button down edge: pick up
   primaryRelease: 0,  // pointer button up edge: throw if holding
   primaryDown: false,
+  suppressLook: false, // set while dragging a rover part so the drag doesn't also orbit the camera
 };
 
 const keys = new Set();
@@ -53,7 +54,7 @@ export function installInput(onToggleView) {
       return;
     }
     // Third-person: orbit only while dragging the canvas (look without walking).
-    if (!dragActive) return;
+    if (!dragActive || input.suppressLook) return;
     input.yaw -= e.movementX * DRAG_LOOK;
     input.pitch = Math.max(-0.5, Math.min(0.9, input.pitch - e.movementY * DRAG_LOOK));
     if (Math.abs(e.clientX - dragStartX) + Math.abs(e.clientY - dragStartY) > DRAG_THRESHOLD) {
@@ -63,6 +64,7 @@ export function installInput(onToggleView) {
   const pointerDown = (e) => {
     if (e.button !== 0) return;
     if (e.target?.tagName !== 'CANVAS') return;
+    if (input.suppressLook) return; // a rover part grabbed this press for dragging
     dragActive = true;
     dragMoved = false;
     dragStartX = e.clientX;
