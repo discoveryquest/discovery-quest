@@ -5,11 +5,13 @@ import * as THREE from 'three';
 import { input, installInput } from '../input/inputStore.js';
 import { marsStore, useMarsState } from '../store/marsStore.js';
 import { telemetry } from '../telemetry.js';
+import { playStep } from '../audio/marsAudio.js';
 import Luna from './Luna.jsx';
 
 const SPEED = 5;        // m/s walk
 const JUMP_V0 = 5.2;    // single shared jump impulse (see gravity.js / plan R3)
 const EYE = 1.15;       // first-person eye height above capsule center
+const STEP_DIST = 1.5;  // metres of grounded travel between footstep crunches
 
 // Owns the physics capsule + reads input + drives the camera (first/third person).
 // Combined here (rather than split controllers) to avoid cross-component ref
@@ -19,6 +21,8 @@ export default function Player() {
   const { camera, gl } = useThree();
   const { view } = useMarsState();
   const lastJump = useRef(0);
+  const lastGrounded = useRef(0);      // for coyote-time walking detection
+  const stepAccum = useRef(STEP_DIST); // primed so the first stride lands a step
 
   useEffect(() => installInput(marsStore.toggleView), []);
 
@@ -61,6 +65,24 @@ export default function Player() {
     telemetry.x = t.x; telemetry.y = t.y; telemetry.z = t.z;
     telemetry.speed = Math.hypot(vx, vz);
     telemetry.grounded = grounded;
+    // Coyote-smoothed walking flag: gentle terrain slopes briefly lift the player,
+    // which would otherwise strobe the gait/footsteps. Treat as "on ground" if we
+    // were grounded within the last 220ms — a real jump lasts far longer, so it
+    // still reads as airborne.
+    if (grounded) lastGrounded.current = now;
+    telemetry.stepping = now - lastGrounded.current < 220 && telemetry.speed > 0.3;
+
+    // Footstep crunches: one every STEP_DIST metres of walking (plays in both
+    // camera views; silent until audio is armed by the first gesture).
+    if (telemetry.stepping) {
+      stepAccum.current += telemetry.speed * dt;
+      if (stepAccum.current >= STEP_DIST) {
+        stepAccum.current = 0;
+        playStep(0.42 + Math.random() * 0.18);
+      }
+    } else {
+      stepAccum.current = STEP_DIST; // re-arm so moving off again steps immediately
+    }
     if (marsStore.getState().view === 'first') {
       camera.position.set(t.x, t.y + EYE, t.z);
       camera.quaternion.setFromEuler(new THREE.Euler(input.pitch, yaw, 0, 'YXZ'));

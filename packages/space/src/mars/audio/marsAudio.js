@@ -15,8 +15,8 @@
 
 const WIND_URL = '/music/mars-wind.mp3';
 const THUD_URL = '/mars/rock-thud.mp3';
-const WIND_BASE = 0.12; // gain at dead calm
-const WIND_GUST = 0.32; // extra gain at full gust
+const WIND_BASE = 0.34; // gain at dead calm (audible bed, not a whisper)
+const WIND_GUST = 0.42; // extra gain at full gust
 
 let ctx = null;
 let windBuffer = null;
@@ -91,6 +91,40 @@ export function playThud(volume = 0.8, pan = 0) {
   }
   node.connect(masterGain);
   src.connect(g);
+  src.start();
+}
+
+// Footstep crunch on regolith — synthesized (no sample needed): a short burst of
+// band-passed noise with a fast decay. Pitch/level jitter so repeated steps don't
+// sound mechanical. Called from the Player's step cadence.
+export function playStep(volume = 0.5, pan = 0) {
+  if (!ctx || !enabled) return;
+  const dur = 0.13;
+  const n = Math.floor(ctx.sampleRate * dur);
+  const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) {
+    const t = i / n;
+    d[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, 2.6); // decaying crunch
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.value = 380 + Math.random() * 240; // gritty, low-mid
+  bp.Q.value = 0.8;
+  const g = ctx.createGain();
+  g.gain.value = Math.max(0, Math.min(1, volume));
+  let node = g;
+  if (ctx.createStereoPanner) {
+    const p = ctx.createStereoPanner();
+    p.pan.value = Math.max(-1, Math.min(1, pan));
+    g.connect(p);
+    node = p;
+  }
+  src.connect(bp);
+  bp.connect(g);
+  node.connect(masterGain);
   src.start();
 }
 
