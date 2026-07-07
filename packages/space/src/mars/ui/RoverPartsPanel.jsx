@@ -42,19 +42,28 @@ export default function RoverPartsPanel() {
 
   useEffect(() => {
     const onKey = (e) => {
-      if (e.code !== 'KeyE' && e.code !== 'Escape' && e.code !== 'ArrowRight' && e.code !== 'ArrowLeft') return;
       const state = marsStore.getState();
-      const isNear = roverDistance() < FACT_NEAR;
       const tourLive = state.roverTour !== 'closed';
-      if (!tourLive && !isNear) return;
 
-      // Capture rover-tour keys before the rock interaction listener sees E.
+      // OPEN only with E, only when near. Arrow keys must NOT open the tour — they
+      // are also Luna's movement keys, so opening on ← / → made the rover explode
+      // the moment you steered past it. Everything else falls through to movement.
+      if (!tourLive) {
+        if (e.code !== 'KeyE') return;
+        if (roverDistance() >= FACT_NEAR) return;
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation?.();
+        marsStore.openRoverTour();
+        return;
+      }
+
+      // Tour is open: E / → next, Shift+E / ← previous, Esc closes.
+      if (e.code !== 'KeyE' && e.code !== 'Escape' && e.code !== 'ArrowRight' && e.code !== 'ArrowLeft') return;
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation?.();
-
       if (e.code === 'Escape') { marsStore.closeRoverTour(); return; }
-      if (!tourLive) { marsStore.openRoverTour(); return; }
       const i = state.roverPartIndex;
       if (e.code === 'ArrowLeft' || e.shiftKey) {
         marsStore.setRoverPartIndex(((i < 0 ? 0 : i) - 1 + ROVER_PARTS.length) % ROVER_PARTS.length);
