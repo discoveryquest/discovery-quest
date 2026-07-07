@@ -101,7 +101,8 @@ section at the bottom of this file too.
 - [x] **T23** SHIPPED 2026-07-07 — mirrored `packages/space/src/mars` + `/mars` route branch into platform (App.jsx now byte-identical to source); space-quest build green; `/mars` renders in the production build (vite preview) AND live. Deployed `discoveryquest-space` (fly, lhr). Live at **space.discoveryquest.app/mars** — route + all assets (regolith/horizon/panorama/rover/meshy glbs/thud/wind) curl 200; live puppeteer screenshot renders full scene, **zero console errors**.
   - Realism pass also shipped: NASA-color-picked brown regolith (seamless non-mirror tile), horizon-hills backdrop, fog-hazed horizon, softened dust motes, ambient floor.
   - Left un-deployed (stale/unused): `apps/space-quest/public/mars/mars-horizon.jpg`, `meshy/luna.glb`.
-  - Remaining polish (not blockers): real-phone loop; optional Luna rigging (still static pose); first-person embodiment (no hands/helmet-rim).
+  - Post-ship polish SHIPPED 2026-07-07 (2nd deploy): **solid collision** on ship/boulders/rover (lander cylinder collider + boulders>=0.32m ball colliders, moved inside `<Physics>`; verified live — player stops at rover face Z-5.2 & lander hull Z-2.1), **procedural Luna animation** (idle breath + penguin walk waddle from telemetry, since Meshy glbs are skeleton-less), **first-person helmet visor** (pointer-transparent DOM vignette shown only in first-person). Mobile controls confirmed rendering under coarse-pointer emulation (joystick + GRAB/JUMP + rotate-to-landscape).
+  - Remaining (needs Pavel's device / optional): real-phone touch *feel* loop; true skeletal Luna rig; first-person gloved hands.
 
 ---
 
