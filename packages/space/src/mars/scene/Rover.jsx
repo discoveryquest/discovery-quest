@@ -9,6 +9,7 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 import { ROVER_PARTS, CHASSIS_ID } from './roverParts.js';
 import { roverPoseAt } from './roverMotion.js';
 import { partIdForObject, centroidAngle, fanDir, partOffset } from './explode.js';
+import { terrainHeight } from './terrainMath.js';
 import { roverTour } from './roverTourState.js';
 
 // The real NASA Perseverance rover (public-domain glb fetched in T6) — the "find
@@ -22,6 +23,8 @@ const MODEL_SCALE = 0.6;
 const MODEL_YAW_OFFSET = -Math.PI / 4;
 // How high (world metres) above the rover the exploded diagram's orbit center sits.
 const TOUR_CENTER_LIFT = 1.35;
+// Keep dragged parts from being shoved into the regolith (world metres of clearance).
+const PART_CLEARANCE = 0.3;
 const q = new THREE.Quaternion();
 const e = new THREE.Euler(0, 0, 0, 'XYZ');
 const tmpV = new THREE.Vector3();
@@ -222,14 +225,23 @@ export default function Rover() {
     // Drive the exploded offsets: animated fan position + the player's drag, both
     // scaled by factor so 'closing' collapses drags and fan alike back to assembled.
     if (shells.current && factor.current > 0.0005) {
+      const f = factor.current;
       for (const shell of shells.current) {
-        const off = partOffset(shell.userData.dir, factor.current, t, shell.userData.bobPhase);
+        const off = partOffset(shell.userData.dir, f, t, shell.userData.bobPhase);
         const d = shell.userData.dragOffset;
-        shell.position.set(
-          off.x + d.x * factor.current,
-          off.y + d.y * factor.current,
-          off.z + d.z * factor.current,
-        );
+        shell.position.set(off.x + d.x * f, off.y + d.y * f, off.z + d.z * f);
+        // Floor the part you're dragging so it can't be pushed underground. Model
+        // rotation is Y-only, so world Y = modelY + localY*scale — bake the lift
+        // back into the drag offset so it stays put after release.
+        if (shell === dragShell.current && f > 0.01) {
+          shell.getWorldPosition(tmpV);
+          const groundY = terrainHeight(tmpV.x, tmpV.z) + PART_CLEARANCE;
+          if (tmpV.y < groundY) {
+            const dyLocal = (groundY - tmpV.y) / MODEL_SCALE;
+            shell.position.y += dyLocal;
+            d.y += dyLocal / f;
+          }
+        }
       }
     } else if (shells.current) {
       for (const shell of shells.current) shell.position.set(0, 0, 0);
