@@ -20,13 +20,24 @@ import { partIdForObject, gallerySlot } from './explode.js';
 const ASSET = '/mars/perseverance.glb';
 const MODEL_SCALE = 0.6;
 const MODEL_YAW_OFFSET = -Math.PI / 4;
+const ROT_SENS = 0.01;   // radians of part spin per pixel of drag
+const ZOOM_MIN = 0.65;   // how far you can push the inspected part away
+const ZOOM_MAX = 2.6;    // how close you can pull it in
+const WORLD_UP = new THREE.Vector3(0, 1, 0);
 const q = new THREE.Quaternion();
 const e = new THREE.Euler(0, 0, 0, 'XYZ');
 const tmpV = new THREE.Vector3();
+const tmpCentroid = new THREE.Vector3();
 const camPos = new THREE.Vector3();
 const camRight = new THREE.Vector3();
 const camUp = new THREE.Vector3();
 const camFwd = new THREE.Vector3();
+const mQuat = new THREE.Quaternion();
+const mQuatInv = new THREE.Quaternion();
+const localQuat = new THREE.Quaternion();
+const idQuat = new THREE.Quaternion();
+const qDelta = new THREE.Quaternion();
+const qPitch = new THREE.Quaternion();
 
 function cloneRover(scene) {
   const clone = scene.clone(true);
@@ -107,6 +118,7 @@ function buildShells(model) {
     shell.userData.partId = id;
     shell.userData.orderIndex = Math.max(0, ROVER_PARTS.findIndex((p) => p.id === id));
     shell.userData.centroid = g.sum.multiplyScalar(1 / g.count).clone();
+    shell.userData.userRot = new THREE.Quaternion(); // player inspection spin (world space)
     model.add(shell);
     for (const leaf of g.leaves) shell.attach(leaf); // keeps world transform
     shells.push(shell);
@@ -134,6 +146,8 @@ export default function Rover() {
   const factor = useRef(0);      // 0 assembled → 1 fully laid out in the gallery
   const frozen = useRef(null);   // pose captured when the tour opened
   const prevTour = useRef('closed');
+  const zoom = useRef(1);        // inspection zoom of the spotlight part
+  const grab = useRef(null);     // { startX, startY, startQuat } while spinning a part
 
   const selectedId = ROVER_PARTS[roverPartIndex]?.id ?? null;
 
@@ -142,12 +156,64 @@ export default function Rover() {
     if (shells.current) applyHighlight(shells.current, selectedId, tour !== 'closed');
   }, [selectedId, tour, model]);
 
-  // Clicking a part sets input.suppressLook so the same press doesn't orbit the
-  // camera; clear it on release.
+  // During the tour, dragging inspects the spotlight part (spin it) rather than
+  // orbiting the camera, so suppress camera-look for the whole tour.
   useEffect(() => {
-    const up = () => { input.suppressLook = false; };
+    input.suppressLook = tour !== 'closed';
+    return () => { input.suppressLook = false; };
+  }, [tour]);
+
+  // A freshly selected part starts unrotated and un-zoomed so each inspection is clean.
+  useEffect(() => {
+    zoom.current = 1;
+    const shell = shells.current?.find((s) => s.userData.partId === selectedId);
+    if (shell) shell.userData.userRot.identity();
+  }, [selectedId]);
+
+  // Drag to spin the spotlight part; wheel/pinch to zoom it in and out. Handled on
+  // window so the gesture works anywhere (on the part or in empty space) and keeps
+  // going if the pointer leaves the part.
+  useEffect(() => {
+    const curShell = () => {
+      const i = marsStore.getState().roverPartIndex;
+      const id = ROVER_PARTS[i]?.id;
+      return shells.current?.find((s) => s.userData.partId === id) ?? null;
+    };
+    const down = (ev) => {
+      if (marsStore.getState().roverTour === 'closed' || ev.button !== 0) return;
+      const shell = curShell();
+      if (!shell) return;
+      grab.current = { startX: ev.clientX, startY: ev.clientY, startQuat: shell.userData.userRot.clone() };
+    };
+    const move = (ev) => {
+      if (!grab.current) return;
+      const shell = curShell();
+      if (!shell) return;
+      const dx = ev.clientX - grab.current.startX;
+      const dy = ev.clientY - grab.current.startY;
+      // World-space turntable: horizontal drag spins around up, vertical tilts
+      // around the camera's right axis. Compose onto the spin captured at grab time.
+      qDelta.setFromAxisAngle(WORLD_UP, -dx * ROT_SENS);
+      qPitch.setFromAxisAngle(camRight, -dy * ROT_SENS);
+      qDelta.multiply(qPitch);
+      shell.userData.userRot.copy(qDelta.multiply(grab.current.startQuat));
+    };
+    const up = () => { grab.current = null; };
+    const wheel = (ev) => {
+      if (marsStore.getState().roverTour === 'closed') return;
+      ev.preventDefault();
+      zoom.current = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom.current * (1 - ev.deltaY * 0.0012)));
+    };
+    window.addEventListener('pointerdown', down);
+    window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
-    return () => window.removeEventListener('pointerup', up);
+    window.addEventListener('wheel', wheel, { passive: false });
+    return () => {
+      window.removeEventListener('pointerdown', down);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('wheel', wheel);
+    };
   }, []);
 
   useFrame((state, dt) => {
@@ -194,24 +260,40 @@ export default function Rover() {
       const f = factor.current;
       const n = ROVER_PARTS.length;
       const k = 1 - Math.exp(-dt * 6);
+      const kq = 1 - Math.exp(-dt * 10);
       const m = camera.matrixWorld.elements;
       camera.getWorldPosition(camPos);
       camRight.set(m[0], m[1], m[2]);
       camUp.set(m[4], m[5], m[6]);
       camFwd.set(-m[8], -m[9], -m[10]);
+      model.getWorldQuaternion(mQuat);
+      mQuatInv.copy(mQuat).invert();
       for (const shell of shells.current) {
-        const slot = gallerySlot(shell.userData.orderIndex, n, shell.userData.partId === selectedId);
+        const isSel = shell.userData.partId === selectedId;
+        const slot = gallerySlot(shell.userData.orderIndex, n, isSel);
+        // The spotlight part can be pulled closer/pushed away (inspection zoom).
+        const depth = isSel ? slot.depth / zoom.current : slot.depth;
+
+        // Ease the part's orientation: the selected part follows the player's
+        // world-space spin (converted into the rover's local frame); others rest
+        // unrotated so they reassemble cleanly.
+        if (isSel) localQuat.copy(mQuatInv).multiply(shell.userData.userRot).multiply(mQuat);
+        else localQuat.copy(idQuat);
+        shell.quaternion.slerp(localQuat, kq);
+
         tmpV.copy(camPos)
-          .addScaledVector(camFwd, slot.depth)
+          .addScaledVector(camFwd, depth)
           .addScaledVector(camRight, slot.x)
           .addScaledVector(camUp, slot.y);
         model.worldToLocal(tmpV);              // camera-space slot → model-local
-        tmpV.sub(shell.userData.centroid);     // land the part's centre on the slot
+        // Land the part's (possibly spun) centre on the slot.
+        tmpCentroid.copy(shell.userData.centroid).applyQuaternion(shell.quaternion);
+        tmpV.sub(tmpCentroid);
         tmpV.multiplyScalar(f);                // collapse toward assembled as it closes
         shell.position.lerp(tmpV, k);          // smooth glide (open + switch-places)
       }
     } else if (shells.current) {
-      for (const shell of shells.current) shell.position.set(0, 0, 0);
+      for (const shell of shells.current) { shell.position.set(0, 0, 0); shell.quaternion.identity(); }
     }
   });
 
@@ -222,10 +304,14 @@ export default function Rover() {
     for (let o = event.object; o; o = o.parent) { if (o.userData?.partId) { shell = o; break; } }
     if (!shell) return;
     event.stopPropagation();
-    event.nativeEvent?.stopPropagation?.();
-    input.suppressLook = true; // don't let this press also orbit the camera
     const i = ROVER_PARTS.findIndex((p) => p.id === shell.userData.partId);
-    if (i >= 0) marsStore.setRoverPartIndex(i);
+    if (i >= 0 && i !== marsStore.getState().roverPartIndex) {
+      shell.userData.userRot.identity(); // new selection starts unrotated
+      zoom.current = 1;
+      marsStore.setRoverPartIndex(i);
+    }
+    // suppressLook is already true for the whole tour; the window drag handler
+    // will spin this part (grabbing starts on the same pointerdown).
   };
 
   const start = roverPoseAt(0);
