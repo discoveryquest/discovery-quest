@@ -31,13 +31,6 @@ export const ROVER_PARTS = [
     detail: 'The arm places tools exactly where scientists want measurements, like a careful space geologist.',
   },
   {
-    id: 'drill',
-    title: 'Coring drill',
-    nodes: ['coring_drill'],
-    summary: 'The drill cuts pencil-sized cores from interesting Mars rocks.',
-    detail: 'Those samples are sealed in tubes so a future mission can try to bring them back to Earth.',
-  },
-  {
     id: 'pixl',
     title: 'PIXL rock scanner',
     nodes: ['PIXL', 'PIXL_cover_01'],

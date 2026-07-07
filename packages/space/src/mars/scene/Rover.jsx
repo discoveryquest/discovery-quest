@@ -25,10 +25,16 @@ const MODEL_YAW_OFFSET = -Math.PI / 4;
 const TOUR_CENTER_LIFT = 1.35;
 // Keep dragged parts from being shoved into the regolith (world metres of clearance).
 const PART_CLEARANCE = 0.3;
+// Distance (world metres) in front of the camera the selected part floats to — its
+// "hero" spot at screen centre so it's clear which part the card is describing.
+const HERO_DIST = 3.2;
 const q = new THREE.Quaternion();
 const e = new THREE.Euler(0, 0, 0, 'XYZ');
 const tmpV = new THREE.Vector3();
 const tmpV2 = new THREE.Vector3();
+const camPos = new THREE.Vector3();
+const camDir = new THREE.Vector3();
+const heroLocalTmp = new THREE.Vector3();
 
 function cloneRover(scene) {
   const clone = scene.clone(true);
@@ -119,7 +125,10 @@ function buildShells(model) {
     shell.userData.partId = id;
     shell.userData.dir = fanDir(i, ordered.length);
     shell.userData.bobPhase = i * 1.7;
+    shell.userData.centroid = g.sum.clone();         // part's geometric centre (model-local)
     shell.userData.dragOffset = new THREE.Vector3(); // player-applied drag, in model space
+    shell.userData.heroTarget = new THREE.Vector3(); // model-local spot to fly to when selected
+    shell.userData.heroBlend = 0;                    // 0 = in the ring, 1 = centre stage
     model.add(shell);
     for (const leaf of g.leaves) shell.attach(leaf); // keeps world transform
     shells.push(shell);
@@ -208,6 +217,19 @@ export default function Rover() {
     q.setFromEuler(e);
     rb.setNextKinematicRotation(q);
 
+    // Screen-centre point in front of the camera, in model-local space. The chosen
+    // part glides here so it's clear which part the card describes. We keep tracking
+    // it while the part is still approaching, then lock it (so it doesn't stay glued
+    // to the camera when you look around) — this also survives the camera fly-in.
+    let heroLocal = null;
+    if (shells.current && selectedId) {
+      camera.getWorldPosition(camPos);
+      camera.getWorldDirection(camDir);
+      heroLocalTmp.copy(camPos).addScaledVector(camDir, HERO_DIST);
+      model.worldToLocal(heroLocalTmp);
+      heroLocal = heroLocalTmp;
+    }
+
     // If a part is being dragged, slide it along the camera-facing plane. Work in
     // model-local space so the offset composes with the fan animation and scale.
     if (dragShell.current && shells.current) {
@@ -229,7 +251,24 @@ export default function Rover() {
       for (const shell of shells.current) {
         const off = partOffset(shell.userData.dir, f, t, shell.userData.bobPhase);
         const d = shell.userData.dragOffset;
-        shell.position.set(off.x + d.x * f, off.y + d.y * f, off.z + d.z * f);
+        // Ease this part between its ring slot and centre stage. heroTarget is an
+        // absolute local point, so scale it by f too (everything collapses to the
+        // assembled pose as the tour closes).
+        const selected = shell.userData.partId === selectedId;
+        // Track live screen-centre until the part has arrived, then let it rest.
+        // Offset by the part's centroid so its geometric centre (not the shell
+        // origin) lands on screen — a spread-out part like the wheels centres right.
+        if (selected && heroLocal && (shell.userData.heroBlend < 0.985 || f < 0.985)) {
+          shell.userData.heroTarget.copy(heroLocal).sub(shell.userData.centroid);
+        }
+        shell.userData.heroBlend += ((selected ? 1 : 0) - shell.userData.heroBlend) * (1 - Math.exp(-dt * 4));
+        const hb = shell.userData.heroBlend;
+        const h = shell.userData.heroTarget;
+        shell.position.set(
+          THREE.MathUtils.lerp(off.x, h.x * f, hb) + d.x * f,
+          THREE.MathUtils.lerp(off.y, h.y * f, hb) + d.y * f,
+          THREE.MathUtils.lerp(off.z, h.z * f, hb) + d.z * f,
+        );
         // Floor the part you're dragging so it can't be pushed underground. Model
         // rotation is Y-only, so world Y = modelY + localY*scale — bake the lift
         // back into the drag offset so it stays put after release.

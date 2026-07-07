@@ -29,7 +29,7 @@ export const marsStore = {
   // Tour phase machine. openRoverTour starts the fly-apart; closeRoverTour begins
   // reassembly; finishCloseTour is called by the animation driver once the parts
   // have eased fully home so control returns to the player exactly on the beat.
-  openRoverTour: () => { if (state.roverTour === 'closed') marsStore.set({ roverTour: 'open', roverPartIndex: -1 }); },
+  openRoverTour: () => { if (state.roverTour === 'closed') marsStore.set({ roverTour: 'open', roverPartIndex: 0 }); },
   closeRoverTour: () => { if (state.roverTour !== 'closed') marsStore.set({ roverTour: 'closing' }); },
   finishCloseTour: () => marsStore.set({ roverTour: 'closed', roverPartIndex: -1 }),
   setRoverPartIndex: (roverPartIndex) => marsStore.set({ roverPartIndex }),

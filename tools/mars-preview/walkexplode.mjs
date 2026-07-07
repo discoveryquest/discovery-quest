@@ -22,16 +22,10 @@ try {
   // Walk toward the rover (spawn faces -z; rover is +x,-z → hold W+D).
   await page.keyboard.down('w');
   await page.keyboard.down('d');
-  for (let i = 0; i < 12; i++) {
-    await sleep(200);
-    const d = await page.evaluate(() => {
-      const t = window.__mars.getState();
-      return null; // distance not in store; read telemetry via dev if present
-    });
-  }
+  await sleep(2900);
   await page.keyboard.up('w');
   await page.keyboard.up('d');
-  await sleep(400);
+  await sleep(500);
 
   const before = await page.evaluate(() => window.__mars.getState().roverTour);
   await page.keyboard.press('e');
