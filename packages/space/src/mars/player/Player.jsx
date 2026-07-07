@@ -7,6 +7,7 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 import { telemetry } from '../telemetry.js';
 import { playStep } from '../audio/marsAudio.js';
 import { terrainHeight } from '../scene/Terrain.jsx';
+import { roverTour } from '../scene/roverTourState.js';
 import Luna from './Luna.jsx';
 
 const SPEED = 5;        // m/s walk
@@ -32,6 +33,11 @@ export default function Player() {
   const visualPos = useRef(new THREE.Vector3());
   const visualTarget = useRef(new THREE.Vector3());
   const visualReady = useRef(false);
+  // Rover exploded-view tour camera: eased position that flies from wherever the
+  // player was into an orbit around the floating parts (see roverTourState).
+  const tourCam = useRef(new THREE.Vector3());
+  const tourReady = useRef(false);
+  const scratch = useRef(new THREE.Vector3());
   // Luna's facing angle θ (the suit model faces (sinθ, cosθ) in world x/z). π = −z
   // = away from the spawn camera. GTA-style: eased toward the movement heading.
   const heading = useRef(Math.PI);
@@ -55,9 +61,15 @@ export default function Player() {
     // Movement relative to camera yaw: forward = (-sin,0,-cos), right = (cos,0,-sin).
     let vx = -sin * input.forward + cos * input.right;
     let vz = -cos * input.forward - sin * input.right;
-    const moving = input.forward !== 0 || input.right !== 0;
+    let moving = input.forward !== 0 || input.right !== 0;
     if (moving) { const l = Math.hypot(vx, vz) || 1; vx = (vx / l) * SPEED; vz = (vz / l) * SPEED; }
     else { vx = 0; vz = 0; }
+
+    // During the rover tour the player is a spectator: freeze walking (the camera
+    // is flown around the floating parts instead) but keep gravity/grounding so
+    // Luna stays planted.
+    const tourActive = marsStore.getState().roverTour !== 'closed';
+    if (tourActive) { vx = 0; vz = 0; moving = false; }
 
     const rawT = rb.translation();
     const cur = rb.linvel();
@@ -113,6 +125,22 @@ export default function Player() {
     } else {
       stepAccum.current = STEP_DIST; // re-arm so moving off again steps immediately
     }
+    if (tourActive) {
+      // Orbit the exploded diagram. Seed from the live camera on the first tour
+      // frame so it flies in from wherever the player was standing, then ease
+      // toward the orbit target every frame (drag-look spins yaw/pitch).
+      const p = Math.max(-0.35, Math.min(0.95, input.pitch));
+      const R = 5.4;
+      const tx = roverTour.centerX + Math.sin(yaw) * R;
+      const tz = roverTour.centerZ + Math.cos(yaw) * R;
+      const ty = roverTour.centerY + 1.4 + p * 3.2;
+      if (!tourReady.current) { tourCam.current.copy(camera.position); tourReady.current = true; }
+      tourCam.current.lerp(scratch.current.set(tx, ty, tz), 1 - Math.exp(-dt * 3.2));
+      camera.position.copy(tourCam.current);
+      camera.lookAt(roverTour.focusX, roverTour.focusY, roverTour.focusZ);
+      return; // tour owns the camera; skip the normal follow + GTA heading update
+    }
+    tourReady.current = false; // re-arm the fly-in for the next tour
     if (marsStore.getState().view === 'first') {
       telemetry.facingX = -sin;
       telemetry.facingZ = -cos;

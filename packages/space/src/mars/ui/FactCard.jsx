@@ -10,7 +10,7 @@ import { useMarsState } from '../store/marsStore.js';
 // it can greet them again on a return trip.
 export default function FactCard() {
   const [visible, setVisible] = useState(false);
-  const { roverTourOpen } = useMarsState();
+  const { roverTour } = useMarsState();
   const dismissed = useRef(false);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function FactCard() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  if (!visible || roverTourOpen) return null;
+  if (!visible || roverTour !== 'closed') return null;
 
   return (
     <div

@@ -72,7 +72,20 @@ export const ROVER_PARTS = [
     summary: 'Antennas send rover messages through Mars orbiters and back to Earth.',
     detail: 'Commands from Earth and science data from Mars travel across millions of kilometres.',
   },
+  {
+    // Catch-all: any mesh not claimed by a named subsystem above (the main body,
+    // instrument deck, brackets and wiring). Stays near the center as the anchor
+    // the other parts fly off of. nodes:[] flags it as the fallback owner.
+    id: 'chassis',
+    title: 'Body & instrument deck',
+    nodes: [],
+    summary: 'The car-sized body is a warm, protected box that holds the rover’s computer and electronics.',
+    detail: 'Everything else bolts onto this chassis. Heaters keep the brain-box cosy through freezing Martian nights.',
+  },
 ];
+
+// The fallback part that owns any mesh not matched to a named subsystem.
+export const CHASSIS_ID = 'chassis';
 
 export function partIndexById(id) {
   return Math.max(0, ROVER_PARTS.findIndex((p) => p.id === id));

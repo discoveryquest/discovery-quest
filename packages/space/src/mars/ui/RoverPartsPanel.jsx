@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { telemetry } from '../telemetry.js';
 import { marsStore, useMarsState } from '../store/marsStore.js';
-import { FACT_FAR, FACT_NEAR } from '../scene/landmarks.js';
+import { FACT_NEAR } from '../scene/landmarks.js';
 import { ROVER_PARTS } from '../scene/roverParts.js';
 
 function roverDistance() {
@@ -15,14 +15,15 @@ const button = {
 };
 
 export default function RoverPartsPanel() {
-  const { roverTourOpen, roverPartIndex } = useMarsState();
+  const { roverTour, roverPartIndex } = useMarsState();
+  const open = roverTour !== 'closed';
   const [near, setNear] = useState(false);
   const [dist, setDist] = useState(999);
-  const part = ROVER_PARTS[roverPartIndex] ?? ROVER_PARTS[0];
+  const part = roverPartIndex >= 0 ? ROVER_PARTS[roverPartIndex] : null;
 
   const setIndex = (i) => marsStore.setRoverPartIndex((i + ROVER_PARTS.length) % ROVER_PARTS.length);
-  const next = () => setIndex(roverPartIndex + 1);
-  const prev = () => setIndex(roverPartIndex - 1);
+  const next = () => setIndex(roverPartIndex < 0 ? 0 : roverPartIndex + 1);
+  const prev = () => setIndex(roverPartIndex < 0 ? ROVER_PARTS.length - 1 : roverPartIndex - 1);
 
   useEffect(() => {
     let raf;
@@ -30,7 +31,9 @@ export default function RoverPartsPanel() {
       const d = roverDistance();
       setDist(d);
       setNear(d < FACT_NEAR);
-      if (d > FACT_FAR && marsStore.getState().roverTourOpen) marsStore.closeRoverTour();
+      // No walk-away auto-close: the player is frozen for the whole exploded-view
+      // tour, so distance can't grow — closing is Esc / × only. (Auto-close here
+      // used to race the explode open and slam the tour shut on the first frame.)
       raf = requestAnimationFrame(tick);
     };
     tick();
@@ -42,7 +45,8 @@ export default function RoverPartsPanel() {
       if (e.code !== 'KeyE' && e.code !== 'Escape' && e.code !== 'ArrowRight' && e.code !== 'ArrowLeft') return;
       const state = marsStore.getState();
       const isNear = roverDistance() < FACT_NEAR;
-      if (!state.roverTourOpen && !isNear) return;
+      const tourLive = state.roverTour !== 'closed';
+      if (!tourLive && !isNear) return;
 
       // Capture rover-tour keys before the rock interaction listener sees E.
       e.preventDefault();
@@ -50,18 +54,19 @@ export default function RoverPartsPanel() {
       e.stopImmediatePropagation?.();
 
       if (e.code === 'Escape') { marsStore.closeRoverTour(); return; }
-      if (!state.roverTourOpen) { marsStore.openRoverTour(); return; }
+      if (!tourLive) { marsStore.openRoverTour(); return; }
+      const i = state.roverPartIndex;
       if (e.code === 'ArrowLeft' || e.shiftKey) {
-        marsStore.setRoverPartIndex((state.roverPartIndex - 1 + ROVER_PARTS.length) % ROVER_PARTS.length);
+        marsStore.setRoverPartIndex(((i < 0 ? 0 : i) - 1 + ROVER_PARTS.length) % ROVER_PARTS.length);
       } else {
-        marsStore.setRoverPartIndex((state.roverPartIndex + 1) % ROVER_PARTS.length);
+        marsStore.setRoverPartIndex((i < 0 ? 0 : i + 1) % ROVER_PARTS.length);
       }
     };
     window.addEventListener('keydown', onKey, { capture: true });
     return () => window.removeEventListener('keydown', onKey, { capture: true });
   }, []);
 
-  if (!roverTourOpen) {
+  if (!open) {
     if (!near) return null;
     return (
       <div
@@ -95,15 +100,15 @@ export default function RoverPartsPanel() {
           style={{ position: 'absolute', top: 10, right: 12, appearance: 'none', border: 'none', background: 'transparent', color: '#ffb877', fontSize: 20, cursor: 'pointer', lineHeight: 1 }}
         >×</button>
         <div style={{ color: '#ff9e5a', fontWeight: 800, letterSpacing: 0.4, paddingRight: 28 }}>🔎 Perseverance parts tour</div>
-        <div style={{ opacity: 0.75, fontSize: 12, marginTop: 2 }}>E / → next · Shift+E / ← previous · Esc close · {dist.toFixed(0)}m away</div>
+        <div style={{ opacity: 0.75, fontSize: 12, marginTop: 2 }}>Click a floating part · → / E next · Esc close · {dist.toFixed(0)}m away</div>
       </div>
       <div style={{ padding: '14px 15px 13px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 9 }}>
-          <div style={{ color: '#ffcc8a', fontWeight: 800, fontSize: 18, lineHeight: 1.2 }}>{part.title}</div>
-          <div style={{ marginLeft: 'auto', color: '#2a1007', background: '#ffb35e', borderRadius: 999, padding: '3px 8px', fontWeight: 800, fontSize: 11 }}>{roverPartIndex + 1}/{ROVER_PARTS.length}</div>
+          <div style={{ color: '#ffcc8a', fontWeight: 800, fontSize: 18, lineHeight: 1.2 }}>{part ? part.title : 'Tap a floating part'}</div>
+          {part && <div style={{ marginLeft: 'auto', color: '#2a1007', background: '#ffb35e', borderRadius: 999, padding: '3px 8px', fontWeight: 800, fontSize: 11 }}>{roverPartIndex + 1}/{ROVER_PARTS.length}</div>}
         </div>
-        <div>{part.summary}</div>
-        <div style={{ marginTop: 9, opacity: 0.86 }}>{part.detail}</div>
+        <div>{part ? part.summary : 'The rover has come apart into its subsystems. Click any floating piece — or use the arrows — to learn what it does.'}</div>
+        {part && <div style={{ marginTop: 9, opacity: 0.86 }}>{part.detail}</div>}
         <div style={{ display: 'flex', gap: 8, marginTop: 13 }}>
           <button type="button" style={button} onClick={prev}>← Previous</button>
           <button type="button" style={{ ...button, background: 'rgba(255,179,94,0.22)' }} onClick={next}>Next part →</button>
