@@ -80,6 +80,20 @@ export const ROVER_PARTS = [
 // The fallback part that owns any mesh not matched to a named subsystem.
 export const CHASSIS_ID = 'chassis';
 
+// Kid-friendly icon per part for the game-style info card.
+export const PART_EMOJI = {
+  wheels: '🛞',
+  mastcam: '📷',
+  hazcams: '👀',
+  arm: '🦾',
+  pixl: '🔬',
+  watson: '🔎',
+  rimfax: '📡',
+  power: '🔋',
+  antennas: '📶',
+  chassis: '🤖',
+};
+
 export function partIndexById(id) {
   return Math.max(0, ROVER_PARTS.findIndex((p) => p.id === id));
 }
