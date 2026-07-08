@@ -3,7 +3,7 @@
 // stations, lessons, narration) comes from the loaded course (./course.js, from the
 // validated space.course.yml). Saves under its own 'sq-save' key; profiles are the
 // shared device-wide registry, so a hero from Math/English is offered here too.
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import { setSaveKey, loadSave } from '@discoveryquest/engine/save';
 import { ensureRegistry, loadRegistry, resolveActiveProfile, createProfile, setActiveProfile } from '@discoveryquest/engine/profiles';
 import { hushAll } from '@discoveryquest/voice-kit/audio';
@@ -16,11 +16,6 @@ import CourseLesson from './CourseLesson.jsx';
 import Trailer from './Trailer.jsx';
 import { playMusic, trackForWorld, MAP_TRACK } from './music.js';
 import { course } from './course.js';
-
-// Standalone "walk on Mars" POC (space.discoveryquest.app/mars). Lazy so none of
-// the 3D stack (three/@react-three/*, Rapier WASM) enters the main Space Quest
-// bundle. Nothing imported here at module top-level may pull in three.
-const MarsRoute = lazy(() => import('./mars/MarsRoute.jsx'));
 
 const COURSE_ID = 'space';
 const SAVE_KEY = 'sq-save';
@@ -41,16 +36,6 @@ function Shell({ children }) {
 }
 
 export default function App() {
-  // Cold-open Mars route — bypasses the profile gate entirely. Must be the first
-  // statement (a stable, synchronous pathname branch — one consistent render path
-  // for the life of the page, so it does not violate rules-of-hooks).
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/mars')) {
-    return (
-      <Suspense fallback={null}>
-        <MarsRoute />
-      </Suspense>
-    );
-  }
   const storage = globalThis.localStorage;
   const [reg, setReg] = useState(() => ensureRegistry(storage, [{ key: SAVE_KEY, courseId: COURSE_ID }]));
   const [route, setRoute] = useState(() => resolveActiveProfile(COURSE_ID, reg)); // { mode, profileId? }
