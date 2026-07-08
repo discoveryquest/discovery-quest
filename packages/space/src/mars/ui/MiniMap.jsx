@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { telemetry } from '../telemetry.js';
+import { useMarsState } from '../store/marsStore.js';
 
 const SIZE = 136;
 const CENTER = SIZE / 2;
@@ -14,6 +15,7 @@ function clampToCircle(x, y, r) {
 }
 
 export default function MiniMap() {
+  const { zoomMode } = useMarsState();
   const [snap, setSnap] = useState(() => ({ ...telemetry }));
 
   useEffect(() => {
@@ -25,6 +27,9 @@ export default function MiniMap() {
     tick();
     return () => cancelAnimationFrame(raf);
   }, []);
+
+  // The minimap is for navigating to landmarks — hidden in any zoom-in focus mode.
+  if (zoomMode) return null;
 
   const dx = snap.roverX - snap.x;
   const dz = snap.roverZ - snap.z;

@@ -12,7 +12,7 @@ import { marsStore, useMarsState } from '../store/marsStore.js';
 const coarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
 
 export default function Hud() {
-  const { gravityMode, interaction, roverTour } = useMarsState();
+  const { gravityMode, interaction, roverTour, zoomMode } = useMarsState();
   const [t, setT] = useState({ x: 0, y: 0, z: 0, speed: 0, grounded: false, wind: 0, gust: 0 });
 
   useEffect(() => {
@@ -59,7 +59,8 @@ export default function Hud() {
           mixBlendMode: 'screen',
         }}
       />
-      <div style={box}>
+      {/* Stats are travel gear — hidden in any zoom-in focus mode. */}
+      {!zoomMode && <div style={box}>
         <div style={{ color: '#ff9e5a', fontWeight: 700 }}>◉ MARS · {gravityMode.toUpperCase()} GRAVITY</div>
         <div>X {t.x.toFixed(1)}m&nbsp;&nbsp;Z {t.z.toFixed(1)}m&nbsp;&nbsp;ALT {t.y.toFixed(1)}m</div>
         <div>SPEED {t.speed.toFixed(1)} m/s&nbsp;&nbsp;{t.grounded ? 'GROUNDED' : '✦ AIRBORNE'}</div>
@@ -88,7 +89,7 @@ export default function Hud() {
             WASD move · SPACE jump · E rocks/rover · V view
           </div>
         )}
-      </div>
+      </div>}
       {interaction.prompt && !coarse && roverTour === 'closed' && (
         <div
           style={{
