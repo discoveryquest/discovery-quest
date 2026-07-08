@@ -20,6 +20,11 @@ import { partIdForObject, gallerySlot } from './explode.js';
 const ASSET = '/mars/perseverance.glb';
 const MODEL_SCALE = 0.6;
 const MODEL_YAW_OFFSET = -Math.PI / 4;
+// On touch devices the info card sits over the scene, so nudge the spotlight part
+// clear of it: up (portrait bottom-sheet) or left (landscape right-panel).
+const COARSE = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+const SPOT_LIFT_TOUCH = 0.7;
+const SPOT_SHIFT_TOUCH = 1.15;
 const ROT_SENS = 0.01;   // radians of part spin per pixel of drag
 const ZOOM_MIN = 0.65;   // how far you can push the inspected part away
 const ZOOM_MAX = 2.6;    // how close you can pull it in
@@ -147,7 +152,6 @@ export default function Rover() {
   const frozen = useRef(null);   // pose captured when the tour opened
   const prevTour = useRef('closed');
   const zoom = useRef(1);        // inspection zoom of the spotlight part
-  const grab = useRef(null);     // { startX, startY, startQuat } while spinning a part
 
   const selectedId = ROVER_PARTS[roverPartIndex]?.id ?? null;
 
@@ -170,48 +174,76 @@ export default function Rover() {
     if (shell) shell.userData.userRot.identity();
   }, [selectedId]);
 
-  // Drag to spin the spotlight part; wheel/pinch to zoom it in and out. Handled on
-  // window so the gesture works anywhere (on the part or in empty space) and keeps
-  // going if the pointer leaves the part.
+  // Inspect the spotlight part: one finger / mouse drag spins it (turntable), two
+  // fingers pinch to zoom (mouse wheel on desktop). Pointer events unify mouse and
+  // touch; tracked on window so a gesture keeps going if it leaves the part.
   useEffect(() => {
+    const pointers = new Map(); // pointerId -> { x, y }
+    const g = { mode: 'none', startX: 0, startY: 0, startQuat: new THREE.Quaternion(), startDist: 1, startZoom: 1 };
     const curShell = () => {
-      const i = marsStore.getState().roverPartIndex;
-      const id = ROVER_PARTS[i]?.id;
+      const id = ROVER_PARTS[marsStore.getState().roverPartIndex]?.id;
       return shells.current?.find((s) => s.userData.partId === id) ?? null;
     };
+    const spanDist = () => {
+      const [a, b] = [...pointers.values()];
+      return Math.hypot(a.x - b.x, a.y - b.y) || 1;
+    };
+    // Recompute the gesture whenever the number of active pointers changes, so
+    // 2→1 (end pinch) cleanly re-baselines the one-finger spin without a jump.
+    const rebase = () => {
+      if (marsStore.getState().roverTour === 'closed') { g.mode = 'none'; return; }
+      if (pointers.size >= 2) {
+        g.mode = 'pinch';
+        g.startDist = spanDist();
+        g.startZoom = zoom.current;
+      } else if (pointers.size === 1) {
+        const shell = curShell();
+        const p = [...pointers.values()][0];
+        g.mode = 'spin';
+        g.startX = p.x; g.startY = p.y;
+        g.startQuat.copy(shell ? shell.userData.userRot : idQuat);
+      } else {
+        g.mode = 'none';
+      }
+    };
     const down = (ev) => {
-      if (marsStore.getState().roverTour === 'closed' || ev.button !== 0) return;
-      const shell = curShell();
-      if (!shell) return;
-      grab.current = { startX: ev.clientX, startY: ev.clientY, startQuat: shell.userData.userRot.clone() };
+      if (marsStore.getState().roverTour === 'closed' || ev.pointerType === 'mouse' && ev.button !== 0) return;
+      pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      rebase();
     };
     const move = (ev) => {
-      if (!grab.current) return;
-      const shell = curShell();
-      if (!shell) return;
-      const dx = ev.clientX - grab.current.startX;
-      const dy = ev.clientY - grab.current.startY;
-      // World-space turntable: horizontal drag spins around up, vertical tilts
-      // around the camera's right axis. Compose onto the spin captured at grab time.
-      qDelta.setFromAxisAngle(WORLD_UP, -dx * ROT_SENS);
-      qPitch.setFromAxisAngle(camRight, -dy * ROT_SENS);
-      qDelta.multiply(qPitch);
-      shell.userData.userRot.copy(qDelta.multiply(grab.current.startQuat));
+      if (!pointers.has(ev.pointerId)) return;
+      pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (g.mode === 'pinch') {
+        setZoom(g.startZoom * (spanDist() / g.startDist));
+      } else if (g.mode === 'spin') {
+        const shell = curShell();
+        if (!shell) return;
+        // World-space turntable: horizontal spins around up, vertical tilts around
+        // the camera's right axis. Compose onto the spin captured at gesture start.
+        qDelta.setFromAxisAngle(WORLD_UP, -(ev.clientX - g.startX) * ROT_SENS);
+        qPitch.setFromAxisAngle(camRight, -(ev.clientY - g.startY) * ROT_SENS);
+        qDelta.multiply(qPitch);
+        shell.userData.userRot.copy(qDelta.multiply(g.startQuat));
+      }
     };
-    const up = () => { grab.current = null; };
+    const up = (ev) => { if (pointers.delete(ev.pointerId)) rebase(); };
     const wheel = (ev) => {
       if (marsStore.getState().roverTour === 'closed') return;
       ev.preventDefault();
-      zoom.current = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoom.current * (1 - ev.deltaY * 0.0012)));
+      setZoom(zoom.current * (1 - ev.deltaY * 0.0012));
     };
+    const setZoom = (z) => { zoom.current = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z)); };
     window.addEventListener('pointerdown', down);
     window.addEventListener('pointermove', move);
     window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
     window.addEventListener('wheel', wheel, { passive: false });
     return () => {
       window.removeEventListener('pointerdown', down);
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
       window.removeEventListener('wheel', wheel);
     };
   }, []);
@@ -271,6 +303,12 @@ export default function Rover() {
       for (const shell of shells.current) {
         const isSel = shell.userData.partId === selectedId;
         const slot = gallerySlot(shell.userData.orderIndex, n, isSel);
+        if (isSel && COARSE) {
+          // Portrait card is a bottom sheet (lift up); landscape is a right panel
+          // (shift left) — keep the inspected part clear of it either way.
+          if (window.innerHeight >= window.innerWidth) slot.y += SPOT_LIFT_TOUCH;
+          else slot.x -= SPOT_SHIFT_TOUCH;
+        }
         // The spotlight part can be pulled closer/pushed away (inspection zoom).
         const depth = isSel ? slot.depth / zoom.current : slot.depth;
 

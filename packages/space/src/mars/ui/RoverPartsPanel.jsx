@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { telemetry } from '../telemetry.js';
 import { marsStore, useMarsState } from '../store/marsStore.js';
-import { FACT_NEAR } from '../scene/landmarks.js';
+import { FACT_NEAR, FACT_FAR } from '../scene/landmarks.js';
 import { ROVER_PARTS } from '../scene/roverParts.js';
 
 function roverDistance() {
   return Math.hypot(telemetry.x - telemetry.roverX, telemetry.z - telemetry.roverZ);
 }
 
+const coarse = typeof window !== 'undefined' && window.matchMedia?.('(pointer: coarse)').matches;
+
 const button = {
   appearance: 'none', border: '1px solid rgba(255,178,96,0.38)', borderRadius: 999,
-  background: 'rgba(255,145,72,0.12)', color: '#ffe9d0', padding: '6px 10px',
-  font: '12px system-ui, sans-serif', cursor: 'pointer',
+  background: 'rgba(255,145,72,0.12)', color: '#ffe9d0',
+  padding: coarse ? '11px 16px' : '6px 10px', font: `${coarse ? 14 : 12}px system-ui, sans-serif`,
+  cursor: 'pointer', touchAction: 'manipulation',
 };
 
 export default function RoverPartsPanel() {
@@ -19,6 +22,9 @@ export default function RoverPartsPanel() {
   const open = roverTour !== 'closed';
   const [near, setNear] = useState(false);
   const [dist, setDist] = useState(999);
+  const [landscape, setLandscape] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth > window.innerHeight,
+  );
   const part = roverPartIndex >= 0 ? ROVER_PARTS[roverPartIndex] : null;
 
   const setIndex = (i) => marsStore.setRoverPartIndex((i + ROVER_PARTS.length) % ROVER_PARTS.length);
@@ -30,7 +36,10 @@ export default function RoverPartsPanel() {
     const tick = () => {
       const d = roverDistance();
       setDist(d);
-      setNear(d < FACT_NEAR);
+      // Hysteresis: the rover patrols, so a plain "d < 7" made the inspect prompt
+      // flicker as it drifted past you. Latch on when near, off only once clearly
+      // away, so the prompt stays put and is easy to tap on mobile.
+      setNear((prev) => (d < FACT_NEAR ? true : d > FACT_FAR ? false : prev));
       // No walk-away auto-close: the player is frozen for the whole exploded-view
       // tour, so distance can't grow — closing is Esc / × only. (Auto-close here
       // used to race the explode open and slam the tour shut on the first frame.)
@@ -38,6 +47,16 @@ export default function RoverPartsPanel() {
     };
     tick();
     return () => cancelAnimationFrame(raf);
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setLandscape(window.innerWidth > window.innerHeight);
+    window.addEventListener('resize', onResize);
+    window.addEventListener('orientationchange', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -77,6 +96,25 @@ export default function RoverPartsPanel() {
 
   if (!open) {
     if (!near) return null;
+    // Touch: a big tappable button to open the tour (there's no E key). Desktop:
+    // a passive hint.
+    if (coarse) {
+      return (
+        <button
+          type="button"
+          onClick={marsStore.openRoverTour}
+          style={{
+            position: 'fixed', left: '50%', bottom: 185, transform: 'translateX(-50%)', zIndex: 8,
+            appearance: 'none', padding: '13px 22px', color: '#2a1007', fontWeight: 800,
+            font: '700 16px system-ui, sans-serif', letterSpacing: 0.2, cursor: 'pointer',
+            background: 'linear-gradient(180deg, #ffc27a, #ff9e4f)', border: 'none', borderRadius: 999,
+            boxShadow: '0 10px 26px rgba(0,0,0,0.4)', touchAction: 'manipulation', pointerEvents: 'auto',
+          }}
+        >
+          🔍 Inspect the rover
+        </button>
+      );
+    }
     return (
       <div
         style={{
@@ -92,13 +130,28 @@ export default function RoverPartsPanel() {
     );
   }
 
+  const shell = !coarse
+    ? { position: 'fixed', right: 18, bottom: 96, zIndex: 5, width: 360, maxWidth: 'calc(100vw - 36px)', borderRadius: 18, border: '1px solid rgba(255,178,96,0.55)' }
+    : landscape
+      ? {
+          // Landscape phone: a right-side panel, leaving the left of the wide
+          // screen for the inspected part (which shifts left to match).
+          position: 'fixed', right: 10, bottom: 10, zIndex: 5, width: 'min(44vw, 380px)',
+          maxHeight: 'calc(100vh - 76px)', borderRadius: 18, border: '1px solid rgba(255,178,96,0.55)',
+        }
+      : {
+          // Portrait phone: a centered bottom sheet (max-width so text isn't too wide).
+          position: 'fixed', left: '50%', bottom: 0, transform: 'translateX(-50%)', zIndex: 5,
+          width: 'min(94vw, 540px)', maxHeight: '58vh',
+          borderRadius: '20px 20px 0 0', border: '1px solid rgba(255,178,96,0.55)', borderBottom: 'none',
+        };
   return (
     <div
       style={{
-        position: 'fixed', right: 18, bottom: 96, zIndex: 5, width: 360, maxWidth: 'calc(100vw - 36px)',
-        color: '#fff1df', background: 'linear-gradient(160deg, rgba(40,16,8,0.94), rgba(22,8,4,0.94))',
-        border: '1px solid rgba(255,178,96,0.55)', borderRadius: 18, boxShadow: '0 16px 50px rgba(0,0,0,0.45)',
-        backdropFilter: 'blur(4px)', font: '14px system-ui, sans-serif', lineHeight: 1.45, overflow: 'hidden',
+        ...shell,
+        color: '#fff1df', background: 'linear-gradient(160deg, rgba(40,16,8,0.95), rgba(22,8,4,0.96))',
+        boxShadow: '0 -8px 40px rgba(0,0,0,0.5)', backdropFilter: 'blur(6px)',
+        font: '14px system-ui, sans-serif', lineHeight: 1.45, overflow: coarse ? 'auto' : 'hidden',
       }}
     >
       <div style={{ padding: '13px 15px 10px', borderBottom: '1px solid rgba(255,178,96,0.22)' }}>
@@ -106,31 +159,38 @@ export default function RoverPartsPanel() {
           type="button"
           onClick={marsStore.closeRoverTour}
           aria-label="Close rover parts tour"
-          style={{ position: 'absolute', top: 10, right: 12, appearance: 'none', border: 'none', background: 'transparent', color: '#ffb877', fontSize: 20, cursor: 'pointer', lineHeight: 1 }}
+          style={{ position: 'absolute', top: 6, right: 8, appearance: 'none', border: 'none', background: 'transparent', color: '#ffb877', fontSize: coarse ? 30 : 20, cursor: 'pointer', lineHeight: 1, padding: coarse ? 8 : 0, touchAction: 'manipulation' }}
         >×</button>
-        <div style={{ color: '#ff9e5a', fontWeight: 800, letterSpacing: 0.4, paddingRight: 28 }}>🔎 Perseverance parts tour</div>
-        <div style={{ opacity: 0.75, fontSize: 12, marginTop: 2 }}>Click a floating part · → / E next · Esc close · {dist.toFixed(0)}m away</div>
+        <div style={{ color: '#ff9e5a', fontWeight: 800, letterSpacing: 0.4, paddingRight: 34 }}>🔎 Perseverance parts tour</div>
+        <div style={{ opacity: 0.75, fontSize: 12, marginTop: 2 }}>
+          {coarse ? 'Tap a part · drag to spin · pinch to zoom · ✕ to close' : `Click a floating part · → / E next · Esc close · ${dist.toFixed(0)}m away`}
+        </div>
       </div>
       <div style={{ padding: '14px 15px 13px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 9 }}>
           <div style={{ color: '#ffcc8a', fontWeight: 800, fontSize: 18, lineHeight: 1.2 }}>{part ? part.title : 'Tap a floating part'}</div>
           {part && <div style={{ marginLeft: 'auto', color: '#2a1007', background: '#ffb35e', borderRadius: 999, padding: '3px 8px', fontWeight: 800, fontSize: 11 }}>{roverPartIndex + 1}/{ROVER_PARTS.length}</div>}
         </div>
-        <div>{part ? part.summary : 'The rover has come apart into its subsystems. Click any floating piece — or use the arrows — to learn what it does.'}</div>
-        {part && <div style={{ marginTop: 9, opacity: 0.86 }}>{part.detail}</div>}
+        {/* On short landscape phones, cap the text so Previous/Next stay in view. */}
+        <div style={coarse ? { maxHeight: '20vh', overflowY: 'auto' } : undefined}>
+          <div>{part ? part.summary : 'The rover has come apart into its subsystems. Tap any floating piece — or use the arrows — to learn what it does.'}</div>
+          {part && <div style={{ marginTop: 9, opacity: 0.86 }}>{part.detail}</div>}
+        </div>
         <div style={{ display: 'flex', gap: 8, marginTop: 13 }}>
           <button type="button" style={button} onClick={prev}>← Previous</button>
           <button type="button" style={{ ...button, background: 'rgba(255,179,94,0.22)' }} onClick={next}>Next part →</button>
         </div>
-        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginTop: 12 }}>
+        <div style={{ display: 'flex', gap: coarse ? 10 : 5, flexWrap: 'wrap', marginTop: 12 }}>
           {ROVER_PARTS.map((p, i) => (
             <button
               key={p.id}
               type="button"
               onClick={() => setIndex(i)}
+              aria-label={p.title}
               title={p.title}
               style={{
-                width: 9, height: 9, borderRadius: '50%', border: 'none', padding: 0, cursor: 'pointer',
+                width: coarse ? 15 : 9, height: coarse ? 15 : 9, borderRadius: '50%', border: 'none',
+                padding: 0, cursor: 'pointer', touchAction: 'manipulation',
                 background: i === roverPartIndex ? '#ffb35e' : 'rgba(255,230,200,0.28)',
                 boxShadow: i === roverPartIndex ? '0 0 8px rgba(255,179,94,0.8)' : 'none',
               }}

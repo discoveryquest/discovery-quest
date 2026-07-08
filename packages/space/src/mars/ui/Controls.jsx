@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { input } from '../input/inputStore.js';
+import { useMarsState } from '../store/marsStore.js';
 
 // Touch controls for phones (spec R5). They write into the SAME `input` object the
 // keyboard/mouse path uses, so the Player/InteractionController need no changes:
@@ -118,7 +119,10 @@ const btn = {
 
 export default function Controls() {
   const [show] = useState(coarsePointer);
-  if (!show) return null;
+  const { roverTour } = useMarsState();
+  // Hide the move/look/jump/grab controls during the rover tour: movement is
+  // frozen and the whole screen is dedicated to spinning/pinching the part.
+  if (!show || roverTour !== 'closed') return null;
   return (
     <>
       <LookPad />
