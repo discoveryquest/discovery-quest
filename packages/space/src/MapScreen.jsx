@@ -14,8 +14,7 @@ import HeroBadge from '@discoveryquest/engine-ui/HeroBadge';
 import TrailMap from '@discoveryquest/engine-ui/TrailMap';
 import StationPopover from '@discoveryquest/engine-ui/StationPopover';
 import StarBreakdownSheet from '@discoveryquest/engine-ui/StarBreakdownSheet';
-import { loadSave } from '@discoveryquest/engine/save';
-import { computeXp, heroProgress } from '@discoveryquest/engine/xp';
+import { buildHeroProgress } from '@discoveryquest/engine/heroProgress';
 import { ACCOUNT_DASHBOARD_URL } from '@discoveryquest/engine/links';
 import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation, nextStationAfter, playableStationIds } from './curriculum.js';
 
@@ -29,15 +28,15 @@ const TRAIL_X = {
   'human-element': [56, 46, 42, 50, 48],
 };
 
-export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, onLearn, onSwitchPlayer, lastPlayedId }) {
+export default function MapScreen({ worlds, save, profile, accountSlot, progressBundle, onPlay, onLearn, onSwitchPlayer, lastPlayedId }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
   const [showStars, setShowStars] = useState(false);
   const startWorld = startWorldForAge(profile?.age, worlds.length);
+  const progress = progressBundle || buildHeroProgress({ courseId: 'space' });
   // Attach the tuned station x-positions so nodes land on each painting's path.
   const mapWorlds = worlds.map((w) => (TRAIL_X[w.id] ? { ...w, trailX: TRAIL_X[w.id] } : w));
-  const hero = heroProgress(computeXp(loadSave()));
 
   const intro = (
     <div className="mx-auto flex w-full max-w-md flex-col items-center px-5">
@@ -53,7 +52,7 @@ export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, 
     <div className="font-display relative min-h-full text-slate-200">
       <QuestHeader
         brand={<>Space <span className="text-cyan-300">Quest</span></>}
-        heroSlot={<HeroBadge level={hero.level} pct={hero.pct} />}
+        heroSlot={<HeroBadge level={progress.level} pct={progress.pct} />}
         accountSlot={accountSlot ?? (
           <a href={ACCOUNT_DASHBOARD_URL}
             className="flex h-9 shrink-0 items-center rounded-xl border border-white/10 bg-white/5 px-2.5 text-sm font-extrabold text-slate-300 transition-colors hover:bg-white/10">
@@ -101,6 +100,7 @@ export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, 
             save={save}
             stationIds={playableStationIds(worlds)}
             courseLabel="Space"
+            progressBundle={progress}
           />
         )}
       </AnimatePresence>

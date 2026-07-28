@@ -34,7 +34,7 @@ function Shell({ children }) {
   );
 }
 
-export default function App({ accountSlot = null, signInSlot = null, onProgressSaved } = {}) {
+export default function App({ accountSlot = null, signInSlot = null, onProgressSaved, progressBundle } = {}) {
   const storage = globalThis.localStorage;
   const [reg, setReg] = useState(() => ensureRegistry(storage, COURSE_SOURCES));
   const [route, setRoute] = useState(() => resolveActiveProfile(COURSE_ID, reg));
@@ -104,6 +104,7 @@ export default function App({ accountSlot = null, signInSlot = null, onProgressS
       ) : (
         <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile}
           accountSlot={accountSlot}
+          progressBundle={progressBundle}
           onPlay={(st) => { setStation(st); setScreen('quest'); }}
           onSwitchPlayer={() => { hushAll(); setRoute({ mode: 'picker' }); }} />
       )}

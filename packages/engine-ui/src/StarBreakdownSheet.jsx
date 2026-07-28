@@ -22,7 +22,7 @@ export default function StarBreakdownSheet({
   save,
   stationIds = [],
   courseLabel = 'this quest',
-  crossCourse = null, // signed-in: { xpByCourse:{id:xp}, badgesByCourse:{id:badge}, courseNames:{id:name} }
+  progressBundle = null,
 }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
@@ -32,12 +32,13 @@ export default function StarBreakdownSheet({
 
   const breakdown = xpBreakdown(save);
   const badge = courseBadge(save, stationIds);
-  // Level/progress: own-course XP signed-out, cross-course roster sum signed-in.
-  const xp = crossCourse
-    ? Object.values(crossCourse.xpByCourse || {}).reduce((a, n) => a + (n || 0), 0)
-    : computeXp(save);
-  const { level, pct } = heroProgress(xp);
-  const sup = crossCourse ? superHero(crossCourse.badgesByCourse || {}) : null;
+  const fallbackXp = computeXp(save);
+  const progress = progressBundle || { xp: fallbackXp, ...heroProgress(fallbackXp) };
+  const { xp, level, pct } = progress;
+  const badgeLedger = progress.badgesByCourse || {};
+  const sup = progress.isCrossCourse && Object.keys(badgeLedger).length
+    ? superHero(badgeLedger)
+    : null;
   const rows = SOURCES.filter((s) => breakdown[s.key] > 0);
 
   return (
@@ -66,7 +67,7 @@ export default function StarBreakdownSheet({
             <span className="block h-full rounded-full bg-gradient-to-r from-yellow-300 to-amber-400"
               style={{ width: `${Math.round(Math.max(0, Math.min(1, pct)) * 100)}%` }} />
           </span>
-          {crossCourse && <span className="text-[11px] font-bold text-slate-400">across all your quests</span>}
+          {progress.isCrossCourse && <span className="text-[11px] font-bold text-slate-400">across all your quests</span>}
         </div>
 
         {/* XP by source */}
@@ -110,7 +111,7 @@ export default function StarBreakdownSheet({
             </div>
           </div>
         )}
-        {!crossCourse && (
+        {!progress.isCrossCourse && (
           <p className="mt-3 text-center text-[11px] font-bold text-slate-500">Sign in to earn XP across every quest and become a Super Hero!</p>
         )}
       </motion.div>

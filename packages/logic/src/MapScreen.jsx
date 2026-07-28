@@ -12,18 +12,17 @@ import HeroBadge from '@discoveryquest/engine-ui/HeroBadge';
 import StarBreakdownSheet from '@discoveryquest/engine-ui/StarBreakdownSheet';
 import TrailMap from '@discoveryquest/engine-ui/TrailMap';
 import StationPopover from '@discoveryquest/engine-ui/StationPopover';
-import { loadSave } from '@discoveryquest/engine/save';
-import { computeXp, heroProgress } from '@discoveryquest/engine/xp';
+import { buildHeroProgress } from '@discoveryquest/engine/heroProgress';
 import { ACCOUNT_DASHBOARD_URL } from '@discoveryquest/engine/links';
 import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation, playableStationIds } from './curriculum.js';
 
-export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, onSwitchPlayer }) {
+export default function MapScreen({ worlds, save, profile, accountSlot, progressBundle, onPlay, onSwitchPlayer }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
   const [showStars, setShowStars] = useState(false);
   const startWorld = startWorldForAge(profile?.age, worlds.length);
-  const hero = heroProgress(computeXp(loadSave()));
+  const progress = progressBundle || buildHeroProgress({ courseId: 'logic' });
 
   const intro = (
     <div className="mx-auto flex w-full max-w-md flex-col items-center px-5">
@@ -39,7 +38,7 @@ export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, 
     <div className="font-display relative min-h-full text-slate-200">
       <QuestHeader
         brand={<>Logic <span className="text-amber-300">Quest</span></>}
-        heroSlot={<HeroBadge level={hero.level} pct={hero.pct} />}
+        heroSlot={<HeroBadge level={progress.level} pct={progress.pct} />}
         accountSlot={accountSlot ?? (
           <a href={ACCOUNT_DASHBOARD_URL}
             className="flex h-9 shrink-0 items-center rounded-xl border border-white/10 bg-white/5 px-2.5 text-sm font-extrabold text-slate-300 transition-colors hover:bg-white/10">
@@ -81,6 +80,7 @@ export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, 
             save={save}
             stationIds={playableStationIds(worlds)}
             courseLabel="Logic"
+            progressBundle={progress}
           />
         )}
       </AnimatePresence>
