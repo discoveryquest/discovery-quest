@@ -12,3 +12,7 @@ export const COURSE_SOURCES = Object.freeze([
 export function courseSource(courseId) {
   return COURSE_SOURCES.find((source) => source.courseId === courseId) || null;
 }
+
+export function courseIdForSaveKey(saveKey) {
+  return COURSE_SOURCES.find((source) => source.key === saveKey)?.courseId || null;
+}

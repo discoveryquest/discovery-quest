@@ -6,7 +6,8 @@
   "description": "Learning Quest voice toolkit: the narration playback queue (one utterance at a time, priority + ducking) shared by every quest app. Content-agnostic — the actual voice lines + active voice live in each app.",
   "exports": {
     "./audio": "./src/audio.js",
-    "./music": "./src/music.js"
+    "./music": "./src/music.js",
+    "./preferences": "./src/preferences.js"
   },
   "dependencies": {
     "@discoveryquest/engine": "*"

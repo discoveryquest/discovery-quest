@@ -10,8 +10,12 @@
 // they touch it. `paused` (e.g. tutorial videos) suppresses playback without
 // losing the desired track or its position.
 
-import { loadSave } from '@discoveryquest/engine/save';
 import { isSpeaking } from './audio.js';
+import {
+  getAudioPreferences,
+  PREFERENCES_CHANGED_EVENT,
+  setCourseAudioPreferences,
+} from './preferences.js';
 
 const BASE_VOL = 0.22;
 const DUCK_VOL = 0.07;
@@ -21,8 +25,11 @@ const DUCK_VOL = 0.07;
 let duckVol = DUCK_VOL;
 export function setDuckVol(v) { duckVol = v == null ? DUCK_VOL : Math.max(0, v); }
 
-let musicEnabled = null;
-const musicOn = () => (musicEnabled ?? (musicEnabled = loadSave().settings.music !== false));
+const musicPreferences = () => getAudioPreferences().effective;
+const musicOn = () => musicPreferences().musicEnabled;
+const scaledVolume = (volume) => volume * musicPreferences().musicVolume;
+const baseVolume = () => scaledVolume(BASE_VOL);
+const duckVolume = () => Math.min(baseVolume(), scaledVolume(duckVol));
 export const isMusicOn = () => musicOn();
 
 let current = null; // the <audio> element, if any
@@ -81,13 +88,14 @@ function startTrack(name) {
   let v = 0;
   const fade = setInterval(() => {
     if (current !== a) { clearInterval(fade); return; }
-    v = Math.min(BASE_VOL, v + 0.02);
+    const target = baseVolume();
+    v = Math.min(target, v + 0.02);
     setVol(a, v);
-    if (v >= BASE_VOL) clearInterval(fade);
+    if (v >= target) clearInterval(fade);
   }, 60);
   ducker = setInterval(() => {
     if (current !== a) return;
-    const target = isSpeaking() ? duckVol : BASE_VOL;
+    const target = isSpeaking() ? duckVolume() : baseVolume();
     setVol(a, getVol(a) + (target - getVol(a)) * 0.3);
   }, 150);
 
@@ -135,8 +143,8 @@ export function stopMusic() {
 }
 
 export function setMusicEnabled(v) {
-  musicEnabled = v;
-  if (!v) {
+  setCourseAudioPreferences({ musicEnabled: Boolean(v) });
+  if (!musicOn()) {
     if (current) current.pause(); // keep `desired` so re-enabling resumes the right track
   } else {
     reconcile();
@@ -153,4 +161,11 @@ if (typeof window !== 'undefined') {
   for (const e of ['pointerdown', 'keydown', 'touchstart']) {
     window.addEventListener(e, onGesture, { passive: true });
   }
+  window.addEventListener(PREFERENCES_CHANGED_EVENT, () => {
+    if (!musicOn()) {
+      if (current) current.pause();
+    } else {
+      reconcile();
+    }
+  });
 }

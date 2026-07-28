@@ -12,7 +12,11 @@
 //               other, but politely skip while anything important speaks
 //               (the chime SFX already gave instant feedback).
 
-import { loadSave } from '@discoveryquest/engine/save';
+import {
+  getAudioPreferences,
+  PREFERENCES_CHANGED_EVENT,
+  setCourseAudioPreferences,
+} from './preferences.js';
 
 // Which /voice/<folder>/ to pull clips from. Apps call setActiveVoice() at
 // startup; defaults keep a single-voice app working with no setup.
@@ -32,14 +36,19 @@ function getAudio(key) {
   return a;
 }
 
-// master switch, persisted in the save; lazily read on first use
-let soundEnabled = null;
-const soundOn = () => (soundEnabled ?? (soundEnabled = loadSave().settings.sound));
+const soundPreferences = () => getAudioPreferences().effective;
+const soundOn = () => soundPreferences().soundEnabled;
 export function setSoundEnabled(v) {
-  soundEnabled = v;
+  setCourseAudioPreferences({ soundEnabled: Boolean(v) });
   if (!v) hushAll();
 }
 export const isSoundOn = () => soundOn();
+
+function prepareAudio(a) {
+  const preferences = soundPreferences();
+  a.volume = preferences.narrationVolume;
+  a.playbackRate = preferences.playbackRate;
+}
 
 // An "utterance" is a sequence of clips played back to back — a single
 // pre-recorded sentence, or stitched fragments like
@@ -89,6 +98,7 @@ async function playSeq(keys, important) {
     if (utterance?.token !== token) return; // interrupted
     const a = getAudio(keys[i]);
     a.currentTime = 0;
+    prepareAudio(a);
     playingAudio = a;
     try {
       await a.play();
@@ -133,6 +143,7 @@ export function playWords(keys, { onWord, onDone } = {}) {
     const a = getAudio(keys[i]);
     cur = a;
     a.currentTime = 0;
+    prepareAudio(a);
     const onEnd = () => {
       a.removeEventListener('ended', onEnd);
       if (stopped || paused) return;
@@ -145,7 +156,7 @@ export function playWords(keys, { onWord, onDone } = {}) {
   if (soundOn()) playOne(); else onDone?.();
   return {
     pause() { if (stopped || paused) return; paused = true; cur?.pause(); },
-    resume() { if (stopped || !paused) return; paused = false; if (cur && !cur.ended) cur.play().catch(() => {}); else playOne(); },
+    resume() { if (stopped || !paused) return; paused = false; if (cur && !cur.ended) { prepareAudio(cur); cur.play().catch(() => {}); } else playOne(); },
     stop() { stopped = true; cur?.pause(); if (cur) cur.currentTime = 0; },
     isPaused: () => paused,
   };
@@ -185,6 +196,10 @@ if (typeof window !== 'undefined') {
   };
   window.addEventListener('pointerdown', replay);
   window.addEventListener('keydown', replay);
+  window.addEventListener(PREFERENCES_CHANGED_EVENT, () => {
+    if (!soundOn()) hushAll();
+    else if (playingAudio) prepareAudio(playingAudio);
+  });
 }
 
 // Tiny cute synth chimes (WebAudio, no assets) layered under the voice.
@@ -192,6 +207,7 @@ let actx;
 export function sfx(kind, { pitch = 1 } = {}) {
   if (!soundOn()) return;
   try {
+    const volume = soundPreferences().sfxVolume;
     actx = actx || new (window.AudioContext || window.webkitAudioContext)();
     if (actx.state === 'suspended') actx.resume();
     const t = actx.currentTime;
@@ -201,7 +217,7 @@ export function sfx(kind, { pitch = 1 } = {}) {
       o.type = type;
       o.frequency.setValueAtTime(freq, t + start);
       gn.gain.setValueAtTime(0, t + start);
-      gn.gain.linearRampToValueAtTime(gain, t + start + 0.015);
+      gn.gain.linearRampToValueAtTime(gain * volume, t + start + 0.015);
       gn.gain.exponentialRampToValueAtTime(0.0001, t + start + dur);
       o.connect(gn).connect(actx.destination);
       o.start(t + start);

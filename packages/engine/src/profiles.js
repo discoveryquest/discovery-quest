@@ -119,6 +119,22 @@ function mergeXpByCourse(a = {}, b = {}) {
   return out;
 }
 
+function mergePreferences(older, newer) {
+  if (!older && !newer) return null;
+  return {
+    ...(older || {}),
+    ...(newer || {}),
+    global: {
+      ...(older?.global || {}),
+      ...(newer?.global || {}),
+    },
+    courses: {
+      ...(older?.courses || {}),
+      ...(newer?.courses || {}),
+    },
+  };
+}
+
 // Pure roster merge for sync (runs identically on client + server). Union by id;
 // per-field last-write-wins by updatedAt. lastUsedByCourse is device-local and
 // intentionally dropped from the merged result (never synced).
@@ -129,7 +145,12 @@ export function mergeRoster(a, b) {
   for (const p of [...ap, ...bp]) {
     const cur = byId.get(p.id);
     if (!cur) { byId.set(p.id, { ...p }); continue; }
-    const winner = (p.updatedAt || 0) >= (cur.updatedAt || 0) ? { ...cur, ...p } : { ...p, ...cur };
+    const incomingWins = (p.updatedAt || 0) >= (cur.updatedAt || 0);
+    const winner = incomingWins ? { ...cur, ...p } : { ...p, ...cur };
+    const preferences = incomingWins
+      ? mergePreferences(cur.preferences, p.preferences)
+      : mergePreferences(p.preferences, cur.preferences);
+    if (preferences) winner.preferences = preferences; else delete winner.preferences;
     const xp = mergeXpByCourse(cur.xpByCourse, p.xpByCourse);
     if (Object.keys(xp).length) winner.xpByCourse = xp; else delete winner.xpByCourse;
     byId.set(p.id, winner);

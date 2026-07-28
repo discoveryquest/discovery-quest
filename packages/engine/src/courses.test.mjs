@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { COURSE_SOURCES, courseSource } from './courses.js';
+import { COURSE_SOURCES, courseIdForSaveKey, courseSource } from './courses.js';
 
 test('catalog contains every shipped course with a unique id and save key', () => {
   assert.deepEqual(
@@ -14,4 +14,9 @@ test('catalog contains every shipped course with a unique id and save key', () =
 test('courseSource resolves known courses and rejects unknown ones', () => {
   assert.deepEqual(courseSource('logic'), { courseId: 'logic', key: 'lq-save' });
   assert.equal(courseSource('geography'), null);
+});
+
+test('courseIdForSaveKey resolves legacy save slots back to their course', () => {
+  assert.equal(courseIdForSaveKey('sq-save'), 'space');
+  assert.equal(courseIdForSaveKey('missing-save'), null);
 });

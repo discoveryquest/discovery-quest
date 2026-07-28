@@ -12,6 +12,7 @@
     "./courses": "./src/courses.js",
     "./heroProgress": "./src/heroProgress.js",
     "./links": "./src/links.js",
+    "./preferences": "./src/preferences.js",
     "./save": "./src/save.js",
     "./reviewDeck": "./src/reviewDeck.js",
     "./telemetry": "./src/telemetry.js",

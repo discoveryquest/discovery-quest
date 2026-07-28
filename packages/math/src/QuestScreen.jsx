@@ -17,7 +17,8 @@ import { VOICE_LINES, voiceKey, numClips } from './voiceLines.js';
 import { speak, sfx, hushAll, setSoundEnabled } from '@discoveryquest/voice-kit/audio';
 import { LunaOwl, useLivelyMood, useSpeaking } from '@discoveryquest/engine-ui/LunaOwl';
 import Emoji from '@discoveryquest/engine-ui/Emoji';
-import { playMusic, trackForWorld, setMusicEnabled, isMusicOn } from './music.js';
+import { playMusic, trackForWorld, setMusicEnabled } from './music.js';
+import { getAudioPreferences } from '@discoveryquest/voice-kit/preferences';
 import { brandOwner } from './brand.js';
 import { loadSave, mutateSave } from '@discoveryquest/engine/save';
 import { enrollStation, bumpQuestCount, dueReviews, recordReview } from '@discoveryquest/engine/reviewDeck';
@@ -977,8 +978,8 @@ export default function QuestScreen({ station, onExit }) {
   const [toast, setToast] = useState(null);
   const rank = 1 + rivals.filter((r) => r.score > score).length;
 
-  const [soundOn, setSoundOn] = useState(() => loadSave().settings.sound);
-  const [musicOn, setMusicOnState] = useState(() => isMusicOn());
+  const [soundOn, setSoundOn] = useState(() => getAudioPreferences().course.soundEnabled);
+  const [musicOn, setMusicOnState] = useState(() => getAudioPreferences().course.musicEnabled);
   const [audioMenu, setAudioMenu] = useState(false);
   const [hintAid, setHintAid] = useState(null); // active interactive hint descriptor
 
@@ -1084,9 +1085,6 @@ export default function QuestScreen({ station, onExit }) {
     const next = !musicOn;
     setMusicOnState(next);
     setMusicEnabled(next);
-    mutateSave((s) => {
-      s.settings.music = next;
-    });
     if (next && station) playMusic(trackForWorld(worldOfStation(station.id)?.world.id));
   }
 
@@ -1094,9 +1092,6 @@ export default function QuestScreen({ station, onExit }) {
     const next = !soundOn;
     setSoundOn(next);
     setSoundEnabled(next);
-    mutateSave((s) => {
-      s.settings.sound = next;
-    });
     if (next) speak(voiceKey('praise', 4)); // a quick "Woohoo!" confirms sound is back
   }
 

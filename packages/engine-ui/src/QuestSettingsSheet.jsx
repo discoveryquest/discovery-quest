@@ -9,6 +9,12 @@ import { X, Volume2, VolumeX, Copy, Check, RotateCcw } from 'lucide-react';
 import { loadSave, mutateSave, persistSave, getSaveKey } from '@discoveryquest/engine/save';
 import { loadRegistry, editProfile } from '@discoveryquest/engine/profiles';
 import { setSoundEnabled } from '@discoveryquest/voice-kit/audio';
+import { setMusicEnabled } from '@discoveryquest/voice-kit/music';
+import {
+  getAudioPreferences,
+  setCourseAudioPreferences,
+  setGlobalAudioPreferences,
+} from '@discoveryquest/voice-kit/preferences';
 
 const AVATARS = ['🦊', '🐰', '🐸', '🦖', '🐱', '🐼', '🚀', '🌟'];
 const encodeSave = (save) => btoa(unescape(encodeURIComponent(JSON.stringify(save))));
@@ -16,7 +22,14 @@ const decodeSave = (str) => JSON.parse(decodeURIComponent(escape(atob(str.trim()
 
 export default function QuestSettingsSheet({ onClose, onGrownUps, onSwitchPlayer, extras = null, soundLabel = "Luna's voice & sounds" }) {
   const [save] = useState(() => loadSave());
-  const [sound, setSound] = useState(save.settings.sound);
+  const [initialAudio] = useState(() => getAudioPreferences());
+  const [muted, setMuted] = useState(initialAudio.global.muted);
+  const [masterVolume, setMasterVolume] = useState(initialAudio.global.masterVolume);
+  const [sound, setSound] = useState(initialAudio.course.soundEnabled);
+  const [soundVolume, setSoundVolume] = useState(initialAudio.course.narrationVolume);
+  const [music, setMusic] = useState(initialAudio.course.musicEnabled);
+  const [musicVolume, setMusicVolume] = useState(initialAudio.course.musicVolume);
+  const musicAvailable = initialAudio.course.musicAvailable !== false;
   const [name, setName] = useState(save.profile.name || '');
   const [avatar, setAvatar] = useState(save.profile.avatar);
   const [importStr, setImportStr] = useState('');
@@ -34,7 +47,33 @@ export default function QuestSettingsSheet({ onClose, onGrownUps, onSwitchPlayer
     const next = !sound;
     setSound(next);
     setSoundEnabled(next);
-    mutateSave((s) => { s.settings.sound = next; });
+  }
+
+  function toggleMusic() {
+    const next = !music;
+    setMusic(next);
+    setMusicEnabled(next);
+  }
+
+  function toggleMuted() {
+    const next = !muted;
+    setMuted(next);
+    setGlobalAudioPreferences({ muted: next });
+  }
+
+  function changeMasterVolume(value) {
+    setMasterVolume(value);
+    setGlobalAudioPreferences({ masterVolume: value });
+  }
+
+  function changeSoundVolume(value) {
+    setSoundVolume(value);
+    setCourseAudioPreferences({ narrationVolume: value, sfxVolume: value });
+  }
+
+  function changeMusicVolume(value) {
+    setMusicVolume(value);
+    setCourseAudioPreferences({ musicVolume: value });
   }
 
   function saveProfile() {
@@ -101,13 +140,62 @@ export default function QuestSettingsSheet({ onClose, onGrownUps, onSwitchPlayer
             </button>
           </div>
 
-          <button type="button" onClick={toggleSound} className="flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3 font-bold text-slate-200 transition-colors hover:bg-white/8">
+          <h4 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Every quest</h4>
+          <button type="button" onClick={toggleMuted} className="mt-2 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3 font-bold text-slate-200 transition-colors hover:bg-white/8">
+            {muted ? <VolumeX size={20} className="text-slate-500" /> : <Volume2 size={20} className="text-cyan-300" />}
+            All quest audio
+            <span className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-extrabold ${muted ? 'bg-white/10 text-slate-500' : 'bg-cyan-400/15 text-cyan-300'}`}>
+              {muted ? 'MUTED' : 'SOUND ON'}
+            </span>
+          </button>
+          <label className="mt-3 block rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm font-bold text-slate-300">
+            <span className="flex items-center justify-between">
+              Master volume
+              <span className="text-xs text-slate-500">{Math.round(masterVolume * 100)}%</span>
+            </span>
+            <input type="range" min="0" max="1" step="0.05" value={masterVolume}
+              onChange={(e) => changeMasterVolume(Number(e.target.value))}
+              className="mt-2 w-full accent-cyan-300" />
+          </label>
+
+          <h4 className="mt-5 text-xs font-extrabold uppercase tracking-wider text-slate-400">This quest</h4>
+          <button type="button" onClick={toggleSound} className="mt-2 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3 font-bold text-slate-200 transition-colors hover:bg-white/8">
             {sound ? <Volume2 size={20} className="text-cyan-300" /> : <VolumeX size={20} className="text-slate-500" />}
             {soundLabel}
             <span className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-extrabold ${sound ? 'bg-cyan-400/15 text-cyan-300' : 'bg-white/10 text-slate-500'}`}>
               {sound ? 'ON' : 'OFF'}
             </span>
           </button>
+          <label className="mt-2 block rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm font-bold text-slate-300">
+            <span className="flex items-center justify-between">
+              Voice & sounds volume
+              <span className="text-xs text-slate-500">{Math.round(soundVolume * 100)}%</span>
+            </span>
+            <input type="range" min="0" max="1" step="0.05" value={soundVolume}
+              onChange={(e) => changeSoundVolume(Number(e.target.value))}
+              className="mt-2 w-full accent-cyan-300" />
+          </label>
+
+          {musicAvailable && (
+            <>
+              <button type="button" onClick={toggleMusic} className="mt-2 flex w-full items-center gap-3 rounded-2xl border border-white/10 bg-white/4 px-4 py-3 font-bold text-slate-200 transition-colors hover:bg-white/8">
+                <span aria-hidden="true" className="text-lg">🎵</span>
+                Background music
+                <span className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-extrabold ${music ? 'bg-cyan-400/15 text-cyan-300' : 'bg-white/10 text-slate-500'}`}>
+                  {music ? 'ON' : 'OFF'}
+                </span>
+              </button>
+              <label className="mt-2 block rounded-2xl border border-white/10 bg-white/4 px-4 py-3 text-sm font-bold text-slate-300">
+                <span className="flex items-center justify-between">
+                  Music volume
+                  <span className="text-xs text-slate-500">{Math.round(musicVolume * 100)}%</span>
+                </span>
+                <input type="range" min="0" max="1" step="0.05" value={musicVolume}
+                  onChange={(e) => changeMusicVolume(Number(e.target.value))}
+                  className="mt-2 w-full accent-cyan-300" />
+              </label>
+            </>
+          )}
 
           {extras}
 

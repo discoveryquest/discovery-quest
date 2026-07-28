@@ -133,6 +133,38 @@ test('mergeRoster merges xpByCourse per-key by max (not clobbered by LWW spread)
   assert.deepEqual(m.xpByCourse, { math: 300, english: 50, 'english-ru': 70 }); // per-key max + union
 });
 
+test('mergeRoster preserves preferences from other courses while newer fields win', () => {
+  const older = {
+    profiles: [{
+      id: 'p1',
+      updatedAt: 3,
+      preferences: {
+        version: 1,
+        global: { captions: true, muted: false },
+        courses: { math: { musicEnabled: false } },
+      },
+    }],
+  };
+  const newer = {
+    profiles: [{
+      id: 'p1',
+      updatedAt: 9,
+      preferences: {
+        version: 1,
+        global: { muted: true },
+        courses: { english: { soundEnabled: false } },
+      },
+    }],
+  };
+  const preferences = mergeRoster(older, newer).profiles[0].preferences;
+  assert.deepEqual(preferences.global, { captions: true, muted: true });
+  assert.deepEqual(preferences.courses, {
+    math: { musicEnabled: false },
+    english: { soundEnabled: false },
+  });
+  assert.deepEqual(mergeRoster(newer, older).profiles[0].preferences, preferences);
+});
+
 test('mergeRoster xpByCourse is order-independent + idempotent', () => {
   const a = { profiles: [{ id: 'p1', updatedAt: 1, xpByCourse: { math: 300 } }] };
   const b = { profiles: [{ id: 'p1', updatedAt: 9, xpByCourse: { math: 100 } }] };
