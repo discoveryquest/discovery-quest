@@ -5,6 +5,7 @@
 // shared device-wide registry, so a hero from Math/English is offered here too.
 import { useState, useEffect } from 'react';
 import { setSaveKey, loadSave } from '@discoveryquest/engine/save';
+import { COURSE_SOURCES } from '@discoveryquest/engine/courses';
 import { ensureRegistry, loadRegistry, resolveActiveProfile, createProfile, setActiveProfile } from '@discoveryquest/engine/profiles';
 import { hushAll } from '@discoveryquest/voice-kit/audio';
 import ProfileSetup from '@discoveryquest/engine-ui/ProfileSetup';
@@ -35,9 +36,9 @@ function Shell({ children }) {
   );
 }
 
-export default function App() {
+export default function App({ accountSlot = null, signInSlot = null, onProgressSaved } = {}) {
   const storage = globalThis.localStorage;
-  const [reg, setReg] = useState(() => ensureRegistry(storage, [{ key: SAVE_KEY, courseId: COURSE_ID }]));
+  const [reg, setReg] = useState(() => ensureRegistry(storage, COURSE_SOURCES));
   const [route, setRoute] = useState(() => resolveActiveProfile(COURSE_ID, reg)); // { mode, profileId? }
   const [screen, setScreen] = useState('map'); // 'map' | 'quest'
   const [station, setStation] = useState(null);
@@ -85,7 +86,12 @@ export default function App() {
         <ProfileSetup
           avatars={SPACE_AVATARS}
           labels={SETUP_LABELS}
-          onSubmit={(fields) => { createProfile(storage, { courseId: COURSE_ID, saveKey: SAVE_KEY, fields }); refresh(); }}
+          authSlot={signInSlot}
+          onSubmit={(fields) => {
+            createProfile(storage, { courseId: COURSE_ID, saveKey: SAVE_KEY, fields });
+            onProgressSaved?.();
+            refresh();
+          }}
           onCancel={reg.profiles.length ? () => setRoute({ mode: 'picker' }) : undefined}
         />
       </Shell>
@@ -96,7 +102,12 @@ export default function App() {
       <Shell>
         <ProfilePicker
           profiles={reg.profiles}
-          onPick={(id) => { setActiveProfile(storage, { reg, courseId: COURSE_ID, saveKey: SAVE_KEY, profileId: id }); refresh(); }}
+          authSlot={signInSlot}
+          onPick={(id) => {
+            setActiveProfile(storage, { reg, courseId: COURSE_ID, saveKey: SAVE_KEY, profileId: id });
+            onProgressSaved?.();
+            refresh();
+          }}
           onNew={() => setRoute({ mode: 'setup' })}
         />
       </Shell>
@@ -118,9 +129,14 @@ export default function App() {
   return (
     <Shell>
       {screen === 'quest' ? (
-        <Quest key={station?.id} station={station} course={course} onExit={() => { setSaveTick((t) => t + 1); setScreen('map'); }} />
+        <Quest key={station?.id} station={station} course={course} onExit={() => {
+          setSaveTick((t) => t + 1);
+          setScreen('map');
+          onProgressSaved?.();
+        }} />
       ) : (
         <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile} onPlay={onPlay} onLearn={onLearn}
+          accountSlot={accountSlot}
           lastPlayedId={station?.id}
           onSwitchPlayer={() => { hushAll(); setRoute({ mode: 'picker' }); }} />
       )}

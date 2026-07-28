@@ -29,7 +29,7 @@ const TRAIL_X = {
   'human-element': [56, 46, 42, 50, 48],
 };
 
-export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSwitchPlayer, lastPlayedId }) {
+export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, onLearn, onSwitchPlayer, lastPlayedId }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
@@ -54,12 +54,12 @@ export default function MapScreen({ worlds, save, profile, onPlay, onLearn, onSw
       <QuestHeader
         brand={<>Space <span className="text-cyan-300">Quest</span></>}
         heroSlot={<HeroBadge level={hero.level} pct={hero.pct} />}
-        accountSlot={
+        accountSlot={accountSlot ?? (
           <a href={ACCOUNT_DASHBOARD_URL}
             className="flex h-9 shrink-0 items-center rounded-xl border border-white/10 bg-white/5 px-2.5 text-sm font-extrabold text-slate-300 transition-colors hover:bg-white/10">
             Parents
           </a>
-        }
+        )}
         onGrownUps={() => window.location.assign(ACCOUNT_DASHBOARD_URL)}
         onSwitchPlayer={onSwitchPlayer}
         // Count-only star chip (no /max denominator) to match math/English for cross-course

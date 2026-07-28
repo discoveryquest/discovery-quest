@@ -17,7 +17,7 @@ import { computeXp, heroProgress } from '@discoveryquest/engine/xp';
 import { ACCOUNT_DASHBOARD_URL } from '@discoveryquest/engine/links';
 import { starsOf, isStationOpen, isWorldUnlocked, startWorldForAge, totalStars, frontierStation, playableStationIds } from './curriculum.js';
 
-export default function MapScreen({ worlds, save, profile, onPlay, onSwitchPlayer }) {
+export default function MapScreen({ worlds, save, profile, accountSlot, onPlay, onSwitchPlayer }) {
   const mood = useLivelyMood('idle');
   const talking = useSpeaking();
   const [picked, setPicked] = useState(null);
@@ -40,12 +40,12 @@ export default function MapScreen({ worlds, save, profile, onPlay, onSwitchPlaye
       <QuestHeader
         brand={<>Logic <span className="text-amber-300">Quest</span></>}
         heroSlot={<HeroBadge level={hero.level} pct={hero.pct} />}
-        accountSlot={
+        accountSlot={accountSlot ?? (
           <a href={ACCOUNT_DASHBOARD_URL}
             className="flex h-9 shrink-0 items-center rounded-xl border border-white/10 bg-white/5 px-2.5 text-sm font-extrabold text-slate-300 transition-colors hover:bg-white/10">
             Parents
           </a>
-        }
+        )}
         onGrownUps={() => window.location.assign(ACCOUNT_DASHBOARD_URL)}
         onSwitchPlayer={onSwitchPlayer}
         statsSlot={
