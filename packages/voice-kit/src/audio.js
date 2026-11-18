@@ -61,6 +61,7 @@ let utteranceToken = 0;
 let playingAudio = null; // the clip currently playing, for duration-aware callers
 const voiceBusy = () => utterance !== null;
 export const isSpeaking = voiceBusy;
+export const currentClipTime = () => playingAudio?.currentTime ?? null;
 // Duration (seconds) of the clip playing right now, once its metadata has loaded;
 // null when silent or not yet known. Lets the lesson engine advance a beat off the
 // clip's real length (with `ended` as the precise early-out) instead of a flat cap.
@@ -104,7 +105,9 @@ async function playSeq(keys, important) {
       await a.play();
     } catch {
       // autoplay blocked — keep the rest for the first user gesture
-      if (utterance?.token === token) { utterance = null; playingAudio = null; }
+      if (utterance?.token !== token) return; // a newer line or hush superseded this request
+      utterance = null;
+      playingAudio = null;
       pendingSeq = { keys: keys.slice(i), important };
       return;
     }

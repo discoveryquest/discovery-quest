@@ -263,6 +263,26 @@
         "title": {
           "type": "string"
         },
+        "activity": {
+          "description": "Optional activity rendered by a supporting player. The lesson also works on its own.",
+          "type": "object",
+          "required": [
+            "kind",
+            "label"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "mars-hammer"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
         "sections": {
           "type": "array",
           "items": {

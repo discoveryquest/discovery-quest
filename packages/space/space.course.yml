@@ -162,6 +162,7 @@ course:
             - { say: se-5, caption: "Drag Earth around its orbit to walk through the four seasons!", advance: hold, view: { kind: scrub, key: se-explore, base: { kind: seasons }, states: [ { id: spring, label: Spring, say: se-x-spring, caption: "Spring — neither hemisphere tilts much toward the Sun; days grow longer." }, { id: summer, label: Summer, say: se-x-summer, caption: "Summer — your hemisphere tilts toward the Sun; long days and strong sunlight." }, { id: autumn, label: Autumn, say: se-x-autumn, caption: "Autumn — your hemisphere tilts away again; days shorten and cool." }, { id: winter, label: Winter, say: se-x-winter, caption: "Winter — your hemisphere tilts away the most; short days and weak sunlight." } ] } }
     gravity:
       title: Gravity
+      activity: { kind: mars-hammer, label: Try the hammer on Mars }
       sections:
         - id: ask
           label: The question

@@ -144,6 +144,16 @@ function buildSchema(appDir, cap) {
         required: ['title', 'sections'],
         properties: {
           title: { type: 'string' },
+          ...(cap.activities?.length ? {
+            activity: {
+              description: 'Optional activity rendered by a supporting player. The lesson also works on its own.',
+              type: 'object', required: ['kind', 'label'], additionalProperties: false,
+              properties: {
+                kind: { enum: cap.activities.map((activity) => activity.kind) },
+                label: { type: 'string', minLength: 1 },
+              },
+            },
+          } : {}),
           sections: { type: 'array', items: { $ref: '#/$defs/section' } },
         },
       },

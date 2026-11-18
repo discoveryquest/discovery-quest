@@ -264,6 +264,22 @@ authoring against it:
 - Answer keys stay derived where possible (planet order comes from real
   orbital distance) — never author a key a script can compute.
 
+### Optional activities in a Space lesson
+
+Set the lesson’s `activity` to a kind from `packages/space/engine.capabilities.json`.
+For example, this line in the Gravity lesson offers the hammer experiment on Mars.
+
+```yaml
+activity: { kind: mars-hammer, label: Try the hammer on Mars }
+```
+
+The host supplies the renderer. A player with that renderer shows the button,
+opens the experiment and returns the explorer to the same lesson beat. A player
+without it offers the lesson and its usual practice. Keep each lesson playable
+on its own. A self-hosted Space player can pass an `activityRenderers` Map to
+`App`, keyed by activity kind. Each component receives `lessonTitle` and
+`onReturn`. Call `onReturn()` when the learner finishes or leaves early.
+
 ## 9. Profiles, XP & Hero badges (platform rules)
 
 - One child profile spans all courses; cross-course continuity **requires an
