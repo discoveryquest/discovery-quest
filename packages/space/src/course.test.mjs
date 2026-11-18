@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import yaml from 'js-yaml';
+import Ajv from 'ajv';
 import { loadCourse } from '@discoveryquest/course-loader';
 import { genPractice, genQuiz, BOARD_GENERATORS } from './boardGenerators.js';
 
@@ -54,6 +55,34 @@ test('every station resolves to a lesson the course knows', () => {
   for (const [id, st] of course.stationsById) {
     assert.ok(course.lessonsById[st.lessonId], `${id}: lesson "${st.lessonId}" exists`);
   }
+});
+
+test('the YAML activity is optional, validates its kind and label, and preserves Gravity practice', () => {
+  const schema = JSON.parse(readFileSync(new URL('../course.schema.json', import.meta.url), 'utf8'));
+  const lessonSchema = { $defs: schema.$defs, $ref: '#/$defs/lesson' };
+  const valid = new Ajv({ strict: false }).compile(lessonSchema);
+  const { activity, ...lesson } = course.lessonsById.gravity;
+
+  assert.equal(activity.kind, 'mars-hammer');
+  assert.ok(valid({ ...lesson, activity }));
+  assert.ok(valid(lesson));
+  assert.equal(valid({ ...lesson, activity: { ...activity, kind: 'unknown' } }), false);
+  assert.equal(valid({ ...lesson, activity: { kind: activity.kind } }), false);
+  assert.equal(course.stationsById.get('gravity').generate().steps[0].kind, 'compare-strength');
+});
+
+test('the open experiment supplies the lesson visit, full lab, and a gradeable question', () => {
+  const kind = course.lessonsById.gravity.activity.kind;
+  const experiment = course.activities[kind];
+  assert.deepEqual(experiment, doc.course.activities[kind]);
+
+  const schema = JSON.parse(readFileSync(new URL('../course.schema.json', import.meta.url), 'utf8'));
+  const valid = new Ajv({ strict: false }).compile(schema.$defs.course.properties.activities);
+  assert.ok(valid(course.activities));
+  assert.ok(experiment.question.choices.includes(experiment.question.answer));
+  assert.equal(valid({ [kind]: { ...experiment, sections: [] } }), false);
+  assert.equal(valid({ [kind]: { ...experiment, sections: experiment.sections.map((s) => ({ ...s, fieldTrip: false })) } }), false);
+  assert.equal(valid({ [kind]: { ...experiment, question: { ...experiment.question, explain: '' } } }), false);
 });
 
 test('genQuiz is pure: keeps the answer, shuffles only the given choices', () => {

@@ -12,32 +12,33 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X, Pause, Play, RotateCcw } from 'lucide-react';
-import { speak, hushAll, isSpeaking, currentClipDuration } from '@discoveryquest/voice-kit/audio';
+import { speak, hushAll, isSpeaking, currentClipTime } from '@discoveryquest/voice-kit/audio';
 
 // onDone   — the learner is finished and wants to practice (parent starts the board).
 // onClose  — the learner backs out (X); just close, don't start practice. Falls back to onDone.
 // autoAdvance — once the lesson has played through, fill the CTA (Waze-style) and
 //   auto-start practice unless the learner cancels (replays a section, or closes).
 const AUTO_ADVANCE_MS = 4000;
-export default function LessonScreen({ lesson, renderView, onDone, onClose, autoAdvance = false }) {
+export default function LessonScreen({ lesson, renderView, onDone, onClose, autoAdvance = false, initialPosition, fieldTrip }) {
   const reduce = useReducedMotion();
   // flatten beats, remembering each beat's section index for the scrub bar
   const beats = [];
   (lesson?.sections || []).forEach((s, si) => (s.beats || []).forEach((b) => beats.push({ ...b, si })));
 
-  const [i, setI] = useState(0);
-  const [done, setDone] = useState(false);
-  const [paused, setPaused] = useState(false);
+  const [i, setI] = useState(initialPosition?.beat ?? 0);
+  const [replay, setReplay] = useState(0);
+  const [done, setDone] = useState(initialPosition?.done ?? false);
+  const [paused, setPaused] = useState(initialPosition?.paused ?? false);
   const [autoRunning, setAutoRunning] = useState(false); // Waze-style auto-advance in progress
 
   // narrate the current beat (also runs on replay/jump). Hush first so a beat's line
   // always starts fresh — never queues behind a previous line that ran long.
   useEffect(() => {
-    if (!beats.length) return;
     hushAll();
+    if (!beats.length || paused || done) return;
     speak(beats[i].say, { important: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i]);
+  }, [i, paused, done, replay]);
 
   // advance when this beat's narration finishes (or after a fixed ms for silent beats)
   useEffect(() => {
@@ -49,18 +50,21 @@ export default function LessonScreen({ lesson, renderView, onDone, onClose, auto
     const fixed = typeof beat.advance === 'number' ? beat.advance : null;
     const startedAt = Date.now();
     const MIN = 1100; // even a one-word beat lingers a touch
-    const HARD_MAX = 16000; // absolute safety net if duration never resolves
+    let lastTime = currentClipTime();
+    let lastProgress = startedAt;
     let advanceT;
     const poll = setInterval(() => {
       const el = Date.now() - startedAt;
-      // Primary: when narration ENDS (isSpeaking flips false on the clip's 'ended').
-      // Fallback: the clip's known duration + a breath — so a beat advances close to
-      // the end of the line even if the 'ended' event never fires (e.g. no audio
-      // device, or a clip that fails to load), instead of waiting a flat cap.
-      const durMs = (currentClipDuration() || 0) * 1000;
-      const byDuration = durMs > 0 && el >= durMs + 600;
-      const ready = fixed != null ? el >= fixed : el > MIN && (!isSpeaking() || byDuration);
-      if (ready || el > HARD_MAX) {
+      // Respect the actual playback rate and buffering. Elapsed wall time
+      // can overtake a perfectly healthy clip when a learner slows Luna down.
+      const mediaTime = currentClipTime();
+      if (mediaTime !== lastTime) {
+        lastTime = mediaTime;
+        lastProgress = Date.now();
+      }
+      const stalled = Date.now() - lastProgress > 16000;
+      const ready = fixed != null ? el >= fixed : el > MIN && (!isSpeaking() || stalled);
+      if (ready) {
         clearInterval(poll);
         advanceT = setTimeout(() => (i < beats.length - 1 ? setI(i + 1) : setDone(true)), reduce ? 120 : 320);
       }
@@ -70,7 +74,7 @@ export default function LessonScreen({ lesson, renderView, onDone, onClose, auto
       clearTimeout(advanceT);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [i, paused, done]);
+  }, [i, paused, done, replay]);
 
   // clean up audio on unmount
   useEffect(() => () => hushAll(), []);
@@ -100,12 +104,12 @@ export default function LessonScreen({ lesson, renderView, onDone, onClose, auto
     setI(0);
     setDone(false);
     setPaused(false);
-    // re-narrate beat 0 even if already there
-    setTimeout(() => speak(beats[0].say, { important: true }), 0);
+    setReplay((n) => n + 1);
   }
   function jumpToSection(si) {
     const target = beats.findIndex((b) => b.si === si);
     if (target < 0) return;
+    setReplay((n) => n + 1);
     setI(target);
     setDone(false);
     setPaused(false);
@@ -123,7 +127,7 @@ export default function LessonScreen({ lesson, renderView, onDone, onClose, auto
           initial={{ scale: 0.8, y: 30, opacity: 0 }}
           animate={{ scale: 1, y: 0, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 280, damping: 24 }}
-          className="relative w-full max-w-[480px] rounded-3xl border-2 border-cyan-300/30 bg-[#14171f] p-5 text-slate-200 shadow-2xl"
+          className="relative max-h-full w-full max-w-[480px] overflow-y-auto rounded-3xl border-2 border-cyan-300/30 bg-[#14171f] p-5 text-slate-200 shadow-2xl"
         >
           <button
             type="button"
@@ -153,19 +157,11 @@ export default function LessonScreen({ lesson, renderView, onDone, onClose, auto
 
           {/* caption — the line being spoken, for readers */}
           <div className="mt-3 flex min-h-[40px] items-center justify-center">
-            <AnimatePresence mode="wait">
-              {beat.caption && (
-                <motion.p
-                  key={i}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center text-sm font-bold leading-snug text-slate-300"
-                >
-                  {beat.caption}
-                </motion.p>
-              )}
-            </AnimatePresence>
+            {beat.caption && (
+              <p className="text-center text-sm font-bold leading-snug text-slate-300">
+                {beat.caption}
+              </p>
+            )}
           </div>
 
           {/* control + section scrub bar */}
@@ -200,6 +196,13 @@ export default function LessonScreen({ lesson, renderView, onDone, onClose, auto
             </div>
           </div>
 
+          {fieldTrip && (
+            <button type="button" autoFocus={Boolean(initialPosition)}
+              onClick={() => fieldTrip.start({ beat: i, paused, done })}
+              className="mt-3 w-full rounded-xl border border-cyan-300/50 py-2 font-bold text-cyan-200 hover:bg-white/10">
+              {fieldTrip.label}
+            </button>
+          )}
           <motion.button
             type="button"
             onClick={onDone}

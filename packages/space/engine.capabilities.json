@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "activities": [
+    {
+      "kind": "mars-hammer",
+      "description": "Compare the same hammer swing under Mars and Earth gravity, then return to the lesson."
+    }
+  ],
   "boards": [
     {
       "kind": "quiz",

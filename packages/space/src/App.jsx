@@ -15,9 +15,10 @@ import PracticeScreen from './PracticeScreen.jsx';
 import MapScreen from './MapScreen.jsx';
 import CourseLesson from './CourseLesson.jsx';
 import Trailer from './Trailer.jsx';
-import { playMusic, trackForWorld, MAP_TRACK } from './music.js';
+import { pauseMusic, playMusic, trackForWorld, MAP_TRACK } from './music.js';
 import { course } from './course.js';
 
+const DEFAULT_ACTIVITIES = new Map(); // Hosts register optional renderers by their YAML kind.
 const COURSE_ID = 'space';
 const SAVE_KEY = 'sq-save';
 setSaveKey(SAVE_KEY); // Space Quest's own save slot (never collides with math/english)
@@ -28,7 +29,7 @@ const SETUP_LABELS = { hero: 'Pick your explorer', name: 'Your explorer name', a
 function Shell({ children }) {
   return (
     <div
-      className="min-h-full"
+      className="min-h-full overflow-x-clip"
       style={{ background: 'radial-gradient(120% 90% at 50% -10%, #1b2550 0%, rgba(27,37,80,0) 55%), linear-gradient(180deg, #0b1026 0%, #05060f 100%)' }}
     >
       <div className="mx-auto w-full max-w-3xl px-4 py-8">{children}</div>
@@ -36,13 +37,14 @@ function Shell({ children }) {
   );
 }
 
-export default function App({ accountSlot = null, signInSlot = null, onProgressSaved } = {}) {
+export default function App({ accountSlot = null, signInSlot = null, onProgressSaved, activityRenderers = DEFAULT_ACTIVITIES } = {}) {
   const storage = globalThis.localStorage;
   const [reg, setReg] = useState(() => ensureRegistry(storage, COURSE_SOURCES));
   const [route, setRoute] = useState(() => resolveActiveProfile(COURSE_ID, reg)); // { mode, profileId? }
   const [screen, setScreen] = useState('map'); // 'map' | 'quest'
   const [station, setStation] = useState(null);
   const [lesson, setLesson] = useState(null); // { id, then }
+  const [inActivity, setInActivity] = useState(false);
   const [saveTick, setSaveTick] = useState(0);
   // "What will we learn?" trailer — opened by ?trailer=1 (the landing-site course
   // card deep-links here). Plays over everything, before the onboarding gate.
@@ -62,8 +64,9 @@ export default function App({ accountSlot = null, signInSlot = null, onProgressS
   // (Engine auto-ducks under Luna's narration; missing tracks are silent.)
   useEffect(() => {
     if (route.mode !== 'game') return;
+    if (inActivity) { pauseMusic(); return; }
     playMusic(screen === 'quest' && station ? trackForWorld(station.worldId) : MAP_TRACK);
-  }, [route.mode, screen, station]);
+  }, [route.mode, screen, station, inActivity]);
 
   // Re-read the registry + recompute the route (used after create/pick). Called from the
   // profile submit/pick handlers, i.e. inside a user gesture — so starting music here
@@ -126,25 +129,40 @@ export default function App({ accountSlot = null, signInSlot = null, onProgressS
   // Replaying Learn it should still let the final "Let's practice!" CTA launch practice.
   const onLearn = (st) => setLesson({ id: st.lessonId, then: () => startQuest(st) });
 
+  const currentLesson = lesson && course.lessonsById[lesson.id];
+  const activity = currentLesson?.activity;
+  const Activity = activity && activityRenderers.get(activity.kind);
+
   return (
     <Shell>
-      {screen === 'quest' ? (
-        <Quest key={station?.id} station={station} course={course} onExit={() => {
-          setSaveTick((t) => t + 1);
-          setScreen('map');
-          onProgressSaved?.();
-        }} />
-      ) : (
-        <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile} onPlay={onPlay} onLearn={onLearn}
-          accountSlot={accountSlot}
-          lastPlayedId={station?.id}
-          onSwitchPlayer={() => { hushAll(); setRoute({ mode: 'picker' }); }} />
-      )}
-
-      {lesson && course.lessonsById[lesson.id] && (
+      <div className={lesson ? 'invisible' : undefined}>
+        {screen === 'quest' ? (
+          <Quest key={station?.id} station={station} course={course} onExit={() => {
+            setSaveTick((t) => t + 1);
+            setScreen('map');
+            onProgressSaved?.();
+          }} />
+        ) : (
+          <MapScreen key={saveTick} worlds={course.worlds} save={save} profile={profile} onPlay={onPlay} onLearn={onLearn}
+            accountSlot={accountSlot}
+            lastPlayedId={station?.id}
+            onSwitchPlayer={() => { hushAll(); setRoute({ mode: 'picker' }); }} />
+        )}
+      </div>
+      {inActivity && Activity && <Activity content={course.activities[activity.kind]} lessonTitle={currentLesson.title} onReturn={() => setInActivity(false)} />}
+      {!inActivity && currentLesson && (
         <CourseLesson
-          lesson={course.lessonsById[lesson.id]}
+          lesson={currentLesson}
           narration={course.narration}
+          initialPosition={lesson.position}
+          fieldTrip={Activity ? {
+            label: activity.label,
+            start: (position) => {
+              hushAll();
+              setLesson({ ...lesson, position });
+              setInActivity(true);
+            },
+          } : undefined}
           onDone={() => { const then = lesson.then; hushAll(); setLesson(null); then?.(); }}
           onClose={() => { hushAll(); setLesson(null); }}
         />

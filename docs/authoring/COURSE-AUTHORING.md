@@ -264,6 +264,31 @@ authoring against it:
 - Answer keys stay derived where possible (planet order comes from real
   orbital distance) — never author a key a script can compute.
 
+### Optional activities in a Space lesson
+
+The Gravity lesson links to the experiment by kind.
+
+```yaml
+activity: { kind: mars-hammer, label: Try the hammer on Mars }
+```
+
+In [the Space course YAML](../../packages/space/space.course.yml), edit
+`course.activities.mars-hammer` to change the experiment. Its `hints` give the
+gesture instructions. Each section has a title and an ordered list of spoken
+`bubbles`. The full lab reads all sections. The lesson visit reads the sections
+marked `fieldTrip: true`, in file order.
+
+The `question` contains the prompt, choices, correct answer text, and explanation.
+Keep the answer identical to one choice, including after translation. Section IDs
+and line positions identify the recordings. Regenerate affected recordings when
+you edit spoken text or change its order.
+
+A host can register a renderer in the Space player's `activityRenderers` Map,
+keyed by activity kind. It receives `content` (the corresponding entry from
+`course.activities`), `lessonTitle`, and `onReturn`. Call `onReturn()` when the
+learner finishes or leaves early to resume the same lesson beat. A player without
+a renderer offers the regular lesson and practice.
+
 ## 9. Profiles, XP & Hero badges (platform rules)
 
 - One child profile spans all courses; cross-course continuity **requires an

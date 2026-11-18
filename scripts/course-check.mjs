@@ -109,6 +109,17 @@ if (!Array.isArray(course.worlds) || !course.worlds.length) E('course.worlds mus
 const lessons = course.lessons || {};
 const narration = course.narration || {};
 
+// Section IDs address the recorded lines. The answer must survive choice reordering.
+const hammer = course.activities?.['mars-hammer'];
+if (Array.isArray(hammer?.sections)) {
+  const ids = hammer.sections.map((section) => section?.id);
+  if (new Set(ids).size !== ids.length) E('activities/mars-hammer: section IDs must be unique');
+}
+if (Array.isArray(hammer?.question?.choices) && !hammer.question.choices.includes(hammer.question.answer)) {
+  E('activities/mars-hammer: the answer must match one of the choices');
+}
+
+
 // authored content collections: known ones are shape-validated by the schema above; flag any
 // the engine doesn't model so a maintainer notices it went unvalidated.
 if (contentIds && contentIds.size) {
