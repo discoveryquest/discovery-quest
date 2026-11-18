@@ -61,6 +61,124 @@
             "$ref": "#/$defs/world"
           }
         },
+        "activities": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mars-hammer": {
+              "type": "object",
+              "required": [
+                "hints",
+                "sections",
+                "question"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "hints": {
+                  "type": "object",
+                  "required": [
+                    "fieldTrip",
+                    "freeRoam"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "fieldTrip": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "freeRoam": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "sections": {
+                  "type": "array",
+                  "minItems": 1,
+                  "contains": {
+                    "type": "object",
+                    "required": [
+                      "fieldTrip"
+                    ],
+                    "properties": {
+                      "fieldTrip": {
+                        "const": true
+                      }
+                    }
+                  },
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "title",
+                      "bubbles"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+                      },
+                      "title": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "fieldTrip": {
+                        "type": "boolean"
+                      },
+                      "bubbles": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      }
+                    }
+                  }
+                },
+                "question": {
+                  "type": "object",
+                  "required": [
+                    "title",
+                    "prompt",
+                    "choices",
+                    "answer",
+                    "explain"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "prompt": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "answer": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "explain": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "choices": {
+                      "type": "array",
+                      "minItems": 2,
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "lessons": {
           "type": "object",
           "additionalProperties": {

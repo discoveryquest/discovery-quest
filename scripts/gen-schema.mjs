@@ -75,6 +75,39 @@ function contentSchema(c) {
   return {}; // unknown collection kind → unconstrained
 }
 
+// A narrated experiment can be reused by a lesson, a standalone scene, or a custom player.
+function experimentSchema() {
+  const text = { type: 'string', minLength: 1 };
+  return {
+    type: 'object', required: ['hints', 'sections', 'question'], additionalProperties: false,
+    properties: {
+      hints: {
+        type: 'object', required: ['fieldTrip', 'freeRoam'], additionalProperties: false,
+        properties: { fieldTrip: text, freeRoam: text },
+      },
+      sections: {
+        type: 'array', minItems: 1,
+        contains: { type: 'object', required: ['fieldTrip'], properties: { fieldTrip: { const: true } } },
+        items: {
+          type: 'object', required: ['id', 'title', 'bubbles'], additionalProperties: false,
+          properties: {
+            id: { type: 'string', pattern: '^[a-z0-9]+(-[a-z0-9]+)*$' },
+            title: text, fieldTrip: { type: 'boolean' },
+            bubbles: { type: 'array', minItems: 1, items: text },
+          },
+        },
+      },
+      question: {
+        type: 'object', required: ['title', 'prompt', 'choices', 'answer', 'explain'], additionalProperties: false,
+        properties: {
+          title: text, prompt: text, answer: text, explain: text,
+          choices: { type: 'array', minItems: 2, uniqueItems: true, items: text },
+        },
+      },
+    },
+  };
+}
+
 function buildSchema(appDir, cap) {
   const boardKinds = cap.boards.map((b) => b.kind);
   const viewKinds = cap.views.map((v) => v.kind);
@@ -106,6 +139,12 @@ function buildSchema(appDir, cap) {
           ui: { type: 'object' },
           reactions: { type: 'object' },
           worlds: { type: 'array', minItems: 1, items: { $ref: '#/$defs/world' } },
+          ...(cap.activities?.some(({ kind }) => kind === 'mars-hammer') ? {
+            activities: {
+              type: 'object', additionalProperties: false,
+              properties: { 'mars-hammer': experimentSchema() },
+            },
+          } : {}),
           lessons: { type: 'object', additionalProperties: { $ref: '#/$defs/lesson' } },
           narration: { type: 'object', additionalProperties: { type: 'string' } },
           // known collections are validated by item shape; unknown keys are permitted

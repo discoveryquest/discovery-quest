@@ -149,7 +149,7 @@ export default function App({ accountSlot = null, signInSlot = null, onProgressS
             onSwitchPlayer={() => { hushAll(); setRoute({ mode: 'picker' }); }} />
         )}
       </div>
-      {inActivity && Activity && <Activity lessonTitle={currentLesson.title} onReturn={() => setInActivity(false)} />}
+      {inActivity && Activity && <Activity content={course.activities[activity.kind]} lessonTitle={currentLesson.title} onReturn={() => setInActivity(false)} />}
       {!inActivity && currentLesson && (
         <CourseLesson
           lesson={currentLesson}

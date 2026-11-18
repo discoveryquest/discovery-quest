@@ -66,6 +66,49 @@ course:
         - { id: spacewalks, title: Spacewalks, icon: 🧑‍🚀, sub: working outside the ship, board: practice, bands: [18], lesson: spacewalks, concept: spacesuits }
         - { id: mars-base, title: Mars Base, icon: 🔴, sub: living on another world, board: practice, bands: [19], lesson: mars-base, concept: living-off-earth }
 
+  activities:
+    mars-hammer:
+      hints:
+        fieldTrip: Drag down, then let go!
+        freeRoam: 🔨 Hold and drag ⬇ to wind up — release to SMASH!
+      sections:
+        - id: welcome
+          title: Welcome to the Gravity Lab
+          bubbles:
+            - Welcome to the Gravity Lab! 🪨
+            - Mars is smaller than Earth.
+            - So it pulls on you much less — only about a third!
+            - Scientists call that pull gravity.
+        - id: hammer
+          title: Swing the hammer
+          fieldTrip: true
+          bubbles:
+            - See the variable-gravity impact rig? 🔨
+            - Grab the hammer and drag it back…
+            - The bigger your swing, the harder it smashes!
+            - Ring the bell — six metres up!
+        - id: earth
+          title: Try Earth gravity
+          fieldTrip: true
+          bubbles:
+            - See the little lever on the booth? Flip it! 🌍
+            - That switches us to Earth gravity — almost three times stronger!
+            - Swing again — your best smash barely reaches the door!
+            - That’s the pull you feel every day at home!
+        - id: leap
+          title: Gravity expert
+          bubbles:
+            - Flip the lever back to Mars — feel lighter? 🔴
+            - One more experiment for when you step outside…
+            - JUMP! You can leap almost three times higher here! 🦘
+            - Gravity Lab complete — you’re a gravity expert!
+      question:
+        title: Make a prediction
+        prompt: The same hammer is lifted on Earth and Mars. Where does it feel lighter?
+        choices: [Earth, It feels identical, Mars]
+        answer: Mars
+        explain: Mars has about 38% of Earth’s surface gravity, so the hammer weighs less there even though its mass is unchanged.
+
   lessons:
     moon-phases:
       title: Moon Phases

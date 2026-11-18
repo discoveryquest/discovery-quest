@@ -71,6 +71,20 @@ test('the YAML activity is optional, validates its kind and label, and preserves
   assert.equal(course.stationsById.get('gravity').generate().steps[0].kind, 'compare-strength');
 });
 
+test('the open experiment supplies the lesson visit, full lab, and a gradeable question', () => {
+  const kind = course.lessonsById.gravity.activity.kind;
+  const experiment = course.activities[kind];
+  assert.deepEqual(experiment, doc.course.activities[kind]);
+
+  const schema = JSON.parse(readFileSync(new URL('../course.schema.json', import.meta.url), 'utf8'));
+  const valid = new Ajv({ strict: false }).compile(schema.$defs.course.properties.activities);
+  assert.ok(valid(course.activities));
+  assert.ok(experiment.question.choices.includes(experiment.question.answer));
+  assert.equal(valid({ [kind]: { ...experiment, sections: [] } }), false);
+  assert.equal(valid({ [kind]: { ...experiment, sections: experiment.sections.map((s) => ({ ...s, fieldTrip: false })) } }), false);
+  assert.equal(valid({ [kind]: { ...experiment, question: { ...experiment.question, explain: '' } } }), false);
+});
+
 test('genQuiz is pure: keeps the answer, shuffles only the given choices', () => {
   const { steps } = genQuiz([{ question: 'q', answer: 'a', distractors: ['b', 'c'], band: 0 }], {}, () => 0);
   assert.equal(steps[0].expected, 'a');

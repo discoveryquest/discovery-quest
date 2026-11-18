@@ -52,6 +52,7 @@ export function loadCourse(doc, registry) {
       id: c.id, title: c.title, subject: c.subject, companion: c.companion,
       voice: c.voice, lowercase: c.lowercase, ui: c.ui, reactions: c.reactions,
     },
+    activities: c.activities || {},
     worlds, stationsById, lessonsById: c.lessons || {}, narration: c.narration || {},
   };
 }
